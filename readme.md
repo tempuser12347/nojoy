@@ -16,6 +16,10 @@ dho joy 에 올라간 정보를 오프라인으로 서버를 직접 띄워서 �
 https://www.python.org/downloads/windows/ 에서 윈도우 설치 파일 받아서 설치
 
 
+### 코드 다운로드
+
+git clone 혹은 zip 파일 다운로드.
+
 
 ### python 필수 패키지 설치
 
