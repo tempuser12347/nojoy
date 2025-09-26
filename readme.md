@@ -43,4 +43,4 @@ python run.py
 
 가져온 db에서 한글 column 을 영어로 바꾸는 작업, 추가 table 대충이라도 생성하는 등의 수정을 가했습니다.
 
-db 파일은 `/backend/dhoDatabase.sqlite3` 파일입니다.
+db 파일은 `dhoDatabase.sqlite3` 파일입니다.
