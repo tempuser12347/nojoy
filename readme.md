@@ -20,6 +20,14 @@ https://www.python.org/downloads/windows/ 에서 윈도우 설치 파일 받아�
 
 git clone 혹은 zip 파일 다운로드.
 
+```
+git clone https://github.com/tempuser12347/nojoy
+```
+
+OR
+
+zip download url: https://github.com/tempuser12347/nojoy/archive/refs/heads/main.zip
+
 
 ### python 필수 패키지 설치
 
