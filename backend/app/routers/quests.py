@@ -20,7 +20,8 @@ def read_quests(
     # query = db.query('select *, json_each.value as skill_elem from quests, json_each(quests.skills)')
     results = db.execute(
         text(
-            """WITH skill_arr AS (
+            """
+            WITH skill_arr AS (
     SELECT
         q.id AS quest_id,
         q.name AS quest_name,
@@ -41,20 +42,27 @@ def read_quests(
 )
 SELECT 
     l.*,
-    r.skills AS grouped_skills
+    r.skills AS grouped_skills,
+    CASE 
+        WHEN ad.id IS NULL OR ad.id = '' THEN NULL
+        ELSE json_object(
+            'id', ad.id,
+            'name', ad.name
+            -- ,'category', ad.category  -- add if needed
+        )
+    END AS destination_json
 FROM quest l
 LEFT JOIN skill_arr r
     ON l.id = r.quest_id
+LEFT JOIN allData ad
+    ON CAST(l.destination AS INTEGER) = ad.id;
+
                       """
         )
     ).fetchall()
 
     if search:
-        results = [
-            row
-            for row in results
-            if search.lower() in row.name.lower()
-        ]
+        results = [row for row in results if search.lower() in row.name.lower()]
 
     quests = results[skip : skip + limit]
 
@@ -70,6 +78,7 @@ LEFT JOIN skill_arr r
         "discovery",
         "preceding_discovery_quest",
         "grouped_skills",
+        "destination_json"
     ]
 
     ret_list = []
@@ -79,11 +88,12 @@ LEFT JOIN skill_arr r
         ret = {
             field: getattr(quest, field, None)
             for field in return_fields
-            if field != "skills"
+            if field not in  ["skills", 'destination_json']
         }
         # The SQL query aliases the computed skills array as 'grouped_skills'.
         # We map it to the 'skills' key in the response.
         ret["skills"] = json.loads(quest.grouped_skills) if quest.grouped_skills else []
+        ret['destination'] = json.loads(quest.destination_json) if quest.destination_json else None
         del ret["grouped_skills"]
         ret_list.append(ret)
 

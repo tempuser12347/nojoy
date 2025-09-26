@@ -42,7 +42,7 @@ const Quests: React.FC = () => {
     { id: 'type', label: '종류', minWidth: 100 },
     { id: 'difficulty', label: '난이도', minWidth: 100 },
     { id: 'location', label: '의뢰장소', minWidth: 170 },
-    { id: 'destination', label: '목적지', minWidth: 170 },
+    { id: 'destination', label: '목적지', minWidth: 170, format: (value: any) => <Typography>{value ? value.name : ''}</Typography> },
     { id: 'skills', label: '필요스킬', minWidth: 200, format: (value: Skill[]) => renderObjectsToChips(value, navigate) },
   ];
 

@@ -9,7 +9,6 @@ export function renderObjectsToChips(
   navigate?: NavigateFunction
 ) {
   if (!data) return null;
-  console.log("renderChips data:", data);
   return data.map((item, index) => {
     const hasLink = item.link && navigate;
     return (
