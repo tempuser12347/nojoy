@@ -1,5 +1,6 @@
 *.sqlite3
 !backend/app/dhoDatabase.sqlite3
+!dhoDatabase.sqlite3
 .venv
 **/__pycache__
 note.md
