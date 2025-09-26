@@ -31,7 +31,7 @@ app.include_router(treasuremaps.router)
 app.include_router(consumables.router)
 
 
-dist_dir = "../frontend/dist"
+dist_dir = "dist"
 app.mount("/assets", StaticFiles(directory=os.path.join(dist_dir, "assets")), name="assets")
 
 @app.get("/")
