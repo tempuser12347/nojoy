@@ -16,8 +16,10 @@ dho joy 에 올라간 정보를 오프라인으로 서버를 직접 띄워서 �
 https://www.python.org/downloads/windows/ 에서 윈도우 설치 파일 받아서 설치
 
 
+
 ### python 필수 패키지 설치
 
+powershell 열어서 작업
 
 ```
 cd backend
@@ -42,6 +44,3 @@ python run.py
 가져온 db에서 한글 column 을 영어로 바꾸는 작업, 추가 table 대충이라도 생성하는 등의 수정을 가했습니다.
 
 db 파일은 `/backend/dhoDatabase.sqlite3` 파일입니다.
-
-## development
-
