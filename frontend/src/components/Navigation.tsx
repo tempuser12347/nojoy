@@ -1,0 +1,140 @@
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Tabs, Tab, Box, Menu, MenuItem } from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
+const sections = {
+  '발견물': [
+    '발견물', '퀘스트', '보물지도', '침몰선', '유적던전', '레거시 테마',
+    '레거시', '레거시 피스', '트레저 헌트 테마', '렐릭', '렐릭 피스',
+    '논전 콤보', '메모리얼 앨범', '발견물 우대보고'
+  ],
+  '아이템': [
+    '장비품', '교역품', '소비품', '추천장', '가구', '장식품', '타로카드',
+    '레시피 책', '레시피', '변성 연금', '아이템 효과', '장비효과',
+    '장식품 설치 효과', '가호', '황제 선거 콤보 보상', '아이템 샵',
+    '트레져박스'
+  ],
+  '선박': [
+    '선박', '선박 재료', '선박스킬', '선박 기본 재질', '그레이드 성능',
+    '그레이드 보너스', '대포', '보조돛', '선수상', '추가장갑', '특수장비',
+    '선원 장비', '문장', '선박 데코', '돛 도료'
+  ],
+  '캐릭터': [
+    '스킬', '스킬 연성 효과', '연구', '전공', '연구 행동', '테크닉',
+    '직업', '호칭', '작위', '부관', '애완동물'
+  ],
+  'NPC': [
+    '육상 npc', '해상 npc', '가나돌', '도시 인물', '판매 npc'
+  ],
+  '세계': [
+    '이벤트', '역사적 사건', '지역', '필드', '해역', '도시', '개인 농장',
+    '국가', '문화', '입항허가', '정기선'
+  ]
+};
+
+const Navigation: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [value, setValue] = React.useState(0);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [openSection, setOpenSection] = React.useState<string | null>(null);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const section = Object.keys(sections)[newValue];
+    
+    // If clicking the same tab when menu is closed, open it
+    if (value === newValue && !anchorEl) {
+      console.log('same tab, open menu');
+      handleOpenMenu(event as React.MouseEvent<HTMLElement>, section);
+    }
+    // If clicking a different tab, or if menu is already open, update everything
+    else {
+      setValue(newValue);
+      handleOpenMenu(event as React.MouseEvent<HTMLElement>, section);
+    }
+  };
+
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, section: string) => {
+    setAnchorEl(event.currentTarget);
+    setOpenSection(section);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+    setOpenSection(null);
+  };
+
+  const handleSubsectionClick = (subsection: string) => {
+    handleCloseMenu();
+    navigate(`/${subsection}`);
+  };
+
+
+  React.useEffect(() => {
+    // Update the tab value based on the current route
+    const path = location.pathname.substring(1);
+    const index = Object.keys(sections).findIndex(
+      section => section.toLowerCase() === path
+    );
+    if (index !== -1) {
+      setValue(index);
+    }
+  }, [location]);
+
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <Tabs
+        value={value}
+        sx={{
+          minHeight: 64,
+          '& .MuiTab-root': {
+            color: 'white',
+            opacity: 0.7,
+            '&.Mui-selected': {
+              opacity: 1,
+              color: 'white',
+              fontWeight: 'bold'
+            }
+          }
+        }}
+      >
+        {Object.keys(sections).map((section, index) => (
+          <Tab
+          onClick={e=>handleChange(e, index)}
+            key={index}
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {section}
+                <ArrowDropDownIcon sx={{ ml: 0.5 }} />
+              </Box>
+            }
+          />
+        ))}
+      </Tabs>
+      {Object.keys(sections).map((section) => (
+        <Menu
+          key={section}
+          anchorEl={anchorEl}
+          open={openSection === section}
+          onClose={handleCloseMenu}
+          MenuListProps={{
+            'aria-labelledby': `${section}-button`,
+          }}
+          sx={{ mt: 1 }}
+        >
+          {sections[section as keyof typeof sections].map((subsection) => (
+            <MenuItem
+              key={subsection}
+              onClick={() => handleSubsectionClick(subsection)}
+            >
+              {subsection}
+            </MenuItem>
+          ))}
+        </Menu>
+      ))}
+    </Box>
+  );
+};
+
+export default Navigation;

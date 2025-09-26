@@ -1,0 +1,89 @@
+# objective
+
+- create web front and backend to show data in `dhoDatabase.sqlite3` db file
+- for backend use python fastapi
+- for frontend, use react
+
+## frontend requirements
+
+- at the top there should be tabs to navigate to each section. in each top tab will be a dropdownlist, showing a list of subsections. the section and its subsections are:
+  - 발견물
+    - 발견물
+    - 퀘스트
+    - 보물지도
+    - 침몰선
+    - 유적던전
+    - 레거시 테마
+    - 레거시
+    - 레거시 피스
+    - 트레저 헌트 테마
+    - 렐릭
+    - 렐릭 피스
+    - 논전 콤보
+    - 메모리얼 앨범
+    - 발견물 우대보고
+  - 아이템
+    - 장비품
+    - 교역품
+    - 소비품
+    - 추천장
+    - 가구
+    - 장식품
+    - 타로카드
+    - 레시피 책
+    - 레시피
+    - 변성 연금
+    - 아이템 효과
+    - 장비효과
+    - 장식품 설치 효과
+    - 가호
+    - 황제 선거 콤보 보상
+    - 아이템 샵
+    - 트레져박스
+  - 선박
+    - 선박
+    - 선박 재료
+    - 선박스킬
+    - 선박 기본 재질
+    - 그레이드 성능
+    - 그레이드 보너스
+    - 대포
+    - 보조돛
+    - 선수상
+    - 추가장갑
+    - 특수장비
+    - 선원 장비
+    - 문장
+    - 선박 데코
+    - 돛 도료
+  - 캐릭터
+    - 스킬
+    - 스킬 연성 효과
+    - 연구
+    - 전공
+    - 연구 행동
+    - 테크닉
+    - 직업
+    - 호칭
+    - 작위
+    - 부관
+    - 애완동물
+  - npc
+    - 육상 npc
+    - 해상 npc
+    - 가나돌
+    - 도시 인물
+    - 판매 npc
+  - 세계
+    - 이벤트
+    - 역사적 사건
+    - 지역
+    - 필드
+    - 해역
+    - 도시
+    - 개인 농장
+    - 국가
+    - 문화
+    - 입항허가
+    - 정기선
+- when subsection is clicked, it will show a table view of relevant data. and above that table view will be a container where major filter options will be placed(check boxes, text search filter, etc.)
