@@ -126,10 +126,20 @@ def read_quest(quest_id: int, db: Session = Depends(get_db)):
 )
 SELECT 
     l.*,
-    r.skills AS grouped_skills
+    r.skills AS grouped_skills,
+    CASE 
+        WHEN ad.id IS NULL OR ad.id = '' THEN NULL
+        ELSE json_object(
+            'id', ad.id,
+            'name', ad.name
+            -- ,'category', ad.category  -- add if needed
+        )
+    END AS destination_json
 FROM quest l
 LEFT JOIN skill_arr r
     ON l.id = r.quest_id
+LEFT JOIN allData ad
+    ON CAST(l.destination AS INTEGER) = ad.id
 WHERE l.id = :quest_id
                       """
         ),
@@ -149,7 +159,6 @@ WHERE l.id = :quest_id
         "era",
         "category",
         "location",
-        "destination",
         "destination_coordinates",
         "discovery",
         "preceding_discovery_quest",
@@ -180,7 +189,8 @@ WHERE l.id = :quest_id
         "reward_immigrants",
         "reward_techniques",
         "reward_title",
-        "grouped_skills",
+        # "grouped_skills",
+        "destination_json"
     ]
     ret = {
         field: getattr(result, field, None)
@@ -188,26 +198,6 @@ WHERE l.id = :quest_id
         if field != "skills"
     }
     ret["skills"] = json.loads(result.grouped_skills) if result.grouped_skills else []
-    del ret["grouped_skills"]
+    ret['destination'] = json.loads(result.destination_json) if result.destination_json else None   
+    # del ret["grouped_skills"]
     return ret
-
-    # quest = db.query(models.Quest).filter(models.Quest.id == quest_id).first()
-
-    # if quest is None:
-    #     raise HTTPException(status_code=404, detail="Quest not found")
-
-    # return_fields = [
-    #     "id", "type", "name", "additional_name", "description", "series",
-    #     "difficulty", "era", "category", "location", "destination",
-    #     "destination_coordinates", "discovery", "preceding_discovery_quest",
-    #     "deadline", "required_items", "guide", "progress",
-    #     "previous_continuous_quest_id", "episode", "one_time_only", "rare",
-    #     "association_required", "skills", "additional_skills",
-    #     "association_skills", "sophia_rank", "sophia_points", "nationality",
-    #     "occupation", "port_permission", "reputation", "other",
-    #     "reward_money", "advance_payment", "report_experience",
-    #     "report_reputation", "reward_items", "reward_immigrants",
-    #     "reward_techniques", "reward_title"
-    # ]
-
-    # return {field: getattr(quest, field, None) for field in return_fields}

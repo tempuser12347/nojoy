@@ -15,7 +15,7 @@ interface Quest {
   era: string;
   category: string;
   location: string;
-  destination: string;
+  destination: { id: number; name: string } | null;
   destination_coordinates: string;
   discovery: string;
   preceding_discovery_quest: string;
@@ -111,7 +111,7 @@ export default function QuestDetail() {
             <DetailItem label="난이도" value={quest.difficulty} />
             <DetailItem label="시대" value={quest.era} />
             <DetailItem label="의뢰장소" value={quest.location} />
-            <DetailItem label="목적지" value={quest.destination} />
+            <DetailItem label="목적지" value={quest.destination?.name} />
             <DetailItem label="시리즈" value={quest.series} />
             <DetailItem label="마감일" value={quest.deadline} />
             <DetailItem label="발견물" value={quest.discovery} />
