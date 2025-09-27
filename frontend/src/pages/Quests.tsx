@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Box,
   TextField,
@@ -41,15 +41,47 @@ const sampleSkills: Skill[] = QUEST_FILTER_SKILL_ARRAY.map((skill, index) => ({
 
 const Quests: React.FC = () => {
   const navigate = useNavigate();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [name_search, setName_search] = React.useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // State initialization from URL search params
+  const page = parseInt(searchParams.get("page") || "0", 10);
+  const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
+  const name_search = searchParams.get("name_search") || "";
+  const location_search_names = (searchParams.get("location_search") || "")
+    .split(",")
+    .filter(Boolean);
+  const destination_search_id = searchParams.get("destination_search") || null;
+  const skills_search_ids = (searchParams.get("skills_search") || "")
+    .split(",")
+    .filter(Boolean)
+    .map(Number);
+
+  // Component state for inputs
   const [searchInput, setSearchInput] = React.useState("");
-  const [locationSearch, setLocationSearch] = React.useState<City[]>([]);
-  const [destinationSearch, setDestinationSearch] = React.useState<City | null>(
-    null
+
+  // Derived state for Autocomplete components
+  const locationSearch = sampleCities.filter((c) =>
+    location_search_names.includes(c.name)
   );
-  const [skillsSearch, setSkillsSearch] = React.useState<Skill[]>([]);
+  const destinationSearch =
+    sampleCities.find((c) => c.id === Number(destination_search_id)) || null;
+  const skillsSearch = sampleSkills.filter((s) =>
+    skills_search_ids.includes(s.id)
+  );
+
+  // Sync search input with name_search from URL on mount/change
+  useEffect(() => {
+    setSearchInput(name_search);
+  }, [name_search]);
+
+  // Helper to update search params
+  const updateSearchParams = (newParams: Record<string, any>) => {
+    const currentParams = new URLSearchParams(searchParams);
+    Object.entries(newParams).forEach(([key, value]) => {
+      value ? currentParams.set(key, value) : currentParams.delete(key);
+    });
+    setSearchParams(currentParams);
+  };
 
   const { data, isLoading } = useQuery({
     queryKey: [
@@ -57,17 +89,17 @@ const Quests: React.FC = () => {
       page,
       rowsPerPage,
       name_search,
-      locationSearch,
-      destinationSearch,
-      skillsSearch,
+      location_search_names,
+      destination_search_id,
+      skills_search_ids,
     ],
     queryFn: async () => {
       const response = await api.get("/api/quests", {
         params: {
           name_search,
-          location_search: locationSearch.map((l) => l.name).join(","),
-          destination_search: destinationSearch?.id,
-          skills_search: skillsSearch.map((s) => s.id).join(","),
+          location_search: location_search_names.join(","),
+          destination_search: destination_search_id,
+          skills_search: skills_search_ids.join(","),
           skip: page * rowsPerPage,
           limit: rowsPerPage,
         },
@@ -106,17 +138,34 @@ const Quests: React.FC = () => {
   };
 
   const handleSearch = () => {
-    setName_search(searchInput);
-    setPage(0);
+    updateSearchParams({ name_search: searchInput, page: 0 });
   };
 
   const resetFilters = () => {
-    setName_search("");
     setSearchInput("");
-    setLocationSearch([]);
-    setDestinationSearch(null);
-    setSkillsSearch([]);
-    setPage(0);
+    setSearchParams({});
+  };
+
+  const handlePageChange = (newPage: number) => {
+    updateSearchParams({ page: newPage });
+  };
+
+  const handleRowsPerPageChange = (newRowsPerPage: number) => {
+    updateSearchParams({ rowsPerPage: newRowsPerPage, page: 0 });
+  };
+
+  const handleLocationChange = (_: any, newValue: City[]) => {
+    const names = newValue.map((l) => l.name).join(",");
+    updateSearchParams({ location_search: names, page: 0 });
+  };
+
+  const handleDestinationChange = (_: any, newValue: City | null) => {
+    updateSearchParams({ destination_search: newValue?.id, page: 0 });
+  };
+
+  const handleSkillsChange = (_: any, newValue: Skill[]) => {
+    const ids = newValue.map((s) => s.id).join(",");
+    updateSearchParams({ skills_search: ids, page: 0 });
   };
 
   return (
@@ -142,10 +191,7 @@ const Quests: React.FC = () => {
           options={sampleCities}
           getOptionLabel={(option) => option.name}
           value={locationSearch}
-          onChange={(_, newValue) => {
-            setLocationSearch(newValue);
-            setPage(0);
-          }}
+          onChange={handleLocationChange}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -169,10 +215,7 @@ const Quests: React.FC = () => {
           options={sampleCities}
           getOptionLabel={(option) => option.name}
           value={destinationSearch}
-          onChange={(_, newValue) => {
-            setDestinationSearch(newValue);
-            setPage(0);
-          }}
+          onChange={handleDestinationChange}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -188,10 +231,7 @@ const Quests: React.FC = () => {
           options={sampleSkills}
           getOptionLabel={(option) => option.name}
           value={skillsSearch}
-          onChange={(_, newValue) => {
-            setSkillsSearch(newValue);
-            setPage(0);
-          }}
+          onChange={handleSkillsChange}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -225,8 +265,8 @@ const Quests: React.FC = () => {
         total={data?.total || 0}
         page={page}
         rowsPerPage={rowsPerPage}
-        onPageChange={setPage}
-        onRowsPerPageChange={setRowsPerPage}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
         onRowClick={(row) => navigate(`/퀘스트/${row.id}`)}
       />
     </Box>
