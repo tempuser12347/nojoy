@@ -9,6 +9,7 @@ import {
   Paper,
   TablePagination,
   Box,
+  TableSortLabel,
   LinearProgress,
 } from '@mui/material';
 
@@ -29,6 +30,9 @@ interface DataTableProps {
   onPageChange: (newPage: number) => void;
   onRowsPerPageChange: (newRowsPerPage: number) => void;
   onRowClick?: (row: any) => void;
+  sortColumn?: string;
+  sortDirection?: 'asc' | 'desc';
+  onSortChange?: (columnId: string) => void;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -41,6 +45,9 @@ const DataTable: React.FC<DataTableProps> = ({
   onPageChange,
   onRowsPerPageChange,
   onRowClick,
+  sortColumn,
+  sortDirection,
+  onSortChange,
 }) => {
   const handleChangePage = (_event: unknown, newPage: number) => {
     onPageChange(newPage);
@@ -48,6 +55,12 @@ const DataTable: React.FC<DataTableProps> = ({
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     onRowsPerPageChange(parseInt(event.target.value, 10));
+  };
+
+  const createSortHandler = (property: string) => () => {
+    if (onSortChange) {
+      onSortChange(property);
+    }
   };
 
   return (
@@ -61,9 +74,18 @@ const DataTable: React.FC<DataTableProps> = ({
                 {columns.map((column) => (
                   <TableCell
                     key={column.id}
+                    sortDirection={sortColumn === column.id ? sortDirection : false}
                     style={{ minWidth: column.minWidth }}
                   >
-                    {column.label}
+                    {onSortChange ? (
+                      <TableSortLabel
+                        active={sortColumn === column.id}
+                        direction={sortColumn === column.id ? sortDirection : 'asc'}
+                        onClick={createSortHandler(column.id)}
+                      >
+                        {column.label}
+                      </TableSortLabel>
+                    ) : column.label}
                   </TableCell>
                 ))}
               </TableRow>

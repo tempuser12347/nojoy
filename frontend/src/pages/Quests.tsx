@@ -55,6 +55,8 @@ const Quests: React.FC = () => {
     .split(",")
     .filter(Boolean)
     .map(Number);
+  const sort_by = searchParams.get("sort_by") || "id";
+  const sort_order = (searchParams.get("sort_order") as 'asc' | 'desc') || "desc";
 
   // Component state for inputs
   const [searchInput, setSearchInput] = React.useState(name_search);
@@ -77,7 +79,7 @@ const Quests: React.FC = () => {
     setDestinationSearch(
       sampleCities.find((c) => c.id === Number(destination_search_id)) || null
     );
-    setSkillsSearch(sampleSkills.filter((s) => skills_search_ids.includes(s.id)));
+    setSkillsSearch(sampleSkills.filter((s) => skills_search_ids.includes(s.id))); // eslint-disable-next-line
   }, [name_search, location_search_names.join(','), destination_search_id, skills_search_ids.join(',')]);
 
   // Helper to update search params
@@ -98,6 +100,8 @@ const Quests: React.FC = () => {
       location_search_names,
       destination_search_id,
       skills_search_ids,
+      sort_by,
+      sort_order,
     ],
     queryFn: async () => {
       const response = await api.get("/api/quests", {
@@ -106,6 +110,8 @@ const Quests: React.FC = () => {
           location_search: location_search_names.join(","),
           destination_search: destination_search_id,
           skills_search: skills_search_ids.join(","),
+          sort_by,
+          sort_order,
           skip: page * rowsPerPage,
           limit: rowsPerPage,
         },
@@ -168,6 +174,15 @@ const Quests: React.FC = () => {
 
   const handleRowsPerPageChange = (newRowsPerPage: number) => {
     updateSearchParams({ rowsPerPage: newRowsPerPage, page: 0 });
+  };
+
+  const handleSortChange = (columnId: string) => {
+    const isAsc = sort_by === columnId && sort_order === 'asc';
+    updateSearchParams({
+      sort_by: columnId,
+      sort_order: isAsc ? 'desc' : 'asc',
+      page: 0,
+    });
   };
 
   const handleLocationChange = (_: any, newValue: City[]) => {
@@ -281,6 +296,9 @@ const Quests: React.FC = () => {
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
+        sortColumn={sort_by}
+        sortDirection={sort_order}
+        onSortChange={handleSortChange}
         onRowClick={(row) => navigate(`/퀘스트/${row.id}`)}
       />
     </Box>

@@ -24,12 +24,10 @@ def read_quests(
     location_search: str = Query(None, description="Location search term"),
     destination_search: str = Query(None, description="Destination search term"),
     skills_search: str = Query(None, description="Skills search term"),
+    sort_by: str = Query("id", description="Column to sort by"),
+    sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
 ):
-
-    print(name_search, location_search, destination_search, skills_search)
-    print("skills_search type:", type(skills_search))
-    print("skills search value:", skills_search)
 
     results = db.execute(
         text(
@@ -110,6 +108,24 @@ LEFT JOIN allData ad
                 for skill_id in skill_terms
             )
         ]
+
+    # Sorting logic
+    if results:
+        # Determine if the sort order is descending
+        reverse = sort_order.lower() == "desc"
+
+        # Define a sorting key function
+        def sort_key(row):
+            # Get the value of the sort_by attribute from the row
+            value = getattr(row, sort_by, None)
+            # Handle None values to prevent errors during sorting
+            if value is None:
+                # Treat None as a very small number for numeric types or an empty string for others
+                # This ensures they are sorted at the beginning (for asc) or end (for desc)
+                return (0, "") if isinstance(getattr(results[0], sort_by, None), (int, float)) else ""
+            return value
+
+        results.sort(key=sort_key, reverse=reverse)
 
     total = len(results)
     quests = results[skip : skip + limit]
