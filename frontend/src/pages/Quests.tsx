@@ -5,6 +5,7 @@ import {
   Box,
   TextField,
   Typography,
+  Button,
 } from '@mui/material';
 import DataTable from '../components/DataTable';
 import api from '../api';
@@ -21,6 +22,7 @@ const Quests: React.FC = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [name_search, setName_search] = React.useState('');
+  const [searchInput, setSearchInput] = React.useState('');
 
   const { data, isLoading } = useQuery({
     queryKey: ['quests', page, rowsPerPage, name_search],
@@ -47,8 +49,12 @@ const Quests: React.FC = () => {
   ];
 
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName_search(event.target.value);
+  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(event.target.value);
+  };
+
+  const handleSearch = () => {
+    setName_search(searchInput);
     setPage(0);
   };
 
@@ -59,10 +65,11 @@ const Quests: React.FC = () => {
         <TextField
           label="검색"
           variant="outlined"
-          value={name_search}
-          onChange={handleSearchChange}
+          value={searchInput}
+          onChange={handleSearchInputChange}
           sx={{ minWidth: 200 }}
         />
+        <Button variant="contained" onClick={handleSearch}>검색</Button>
       </Box>
 
       <DataTable
