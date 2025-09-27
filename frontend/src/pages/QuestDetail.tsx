@@ -104,7 +104,7 @@ export default function QuestDetail() {
       <Typography variant="h4" gutterBottom>{quest.name}{quest.additional_name && ` (${quest.additional_name})`}</Typography>
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' } }}>
+          <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr' } }}>
             <Box sx={{ gridColumn: '1 / -1' }}><DetailItem label="설명" value={quest.description} /></Box>
             <DetailItem label="종류" value={quest.type} />
             <DetailItem label="카테고리" value={quest.category} />
