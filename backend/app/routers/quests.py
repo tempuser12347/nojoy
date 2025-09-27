@@ -7,9 +7,11 @@ from .. import models
 from ..database import get_db
 import json
 
+
 class QuestResponse(BaseModel):
     items: List[dict]
     total: int
+
 
 router = APIRouter(prefix="/api/quests", tags=["quests"])
 
@@ -24,6 +26,11 @@ def read_quests(
     skills_search: str = Query(None, description="Skills search term"),
     db: Session = Depends(get_db),
 ):
+
+    print(name_search, location_search, destination_search, skills_search)
+    print("skills_search type:", type(skills_search))
+    print("skills search value:", skills_search)
+
     results = db.execute(
         text(
             """
@@ -78,22 +85,30 @@ LEFT JOIN allData ad
             for row in results
             if any(term in (row.location or "").lower() for term in loc_terms)
         ]
-    
+
     if destination_search:
-        # destination is a id value. single. 
+        # destination is a id value. single.
         results = [
             row
             for row in results
-            if row.destination_json and destination_search.lower() in (row.destination_json or {}).get('name', '').lower()
-        ]   
+            if row.destination_json
+            and destination_search.lower()
+            in (row.destination_json or {}).get("name", "").lower()
+        ]
 
     if skills_search:
-        # split skills search by commas and trim spaces. contains skill ids
+        # split skills search by commas and trim spaces. contains skill ids. all search skill ids must be present in quest skills
         skill_terms = [term.strip() for term in skills_search.split(",")]
+        print("Filtering skills with terms:", skill_terms)
         results = [
             row
             for row in results
-            if row.grouped_skills and any(str(skill.get('id')) in skill_terms for skill in json.loads(row.grouped_skills))
+            if row.grouped_skills
+            and all(
+                str(skill_id)
+                in [str(skill.get("id")) for skill in json.loads(row.grouped_skills)]
+                for skill_id in skill_terms
+            )
         ]
 
     total = len(results)
@@ -267,8 +282,8 @@ WHERE l.id = :quest_id;
         "reward_techniques",
         "reward_title",
         "destination_json",
-        'grouped_rewards',
-        'grouped_required_items'
+        "grouped_rewards",
+        "grouped_required_items",
     ]
     ret = {
         field: getattr(result, field, None)
@@ -279,6 +294,12 @@ WHERE l.id = :quest_id;
     ret["destination"] = (
         json.loads(result.destination_json) if result.destination_json else None
     )
-    ret['reward_items'] = json.loads(result.grouped_rewards) if result.grouped_rewards else []
-    ret['required_items'] = json.loads(result.grouped_required_items) if result.grouped_required_items else []
+    ret["reward_items"] = (
+        json.loads(result.grouped_rewards) if result.grouped_rewards else []
+    )
+    ret["required_items"] = (
+        json.loads(result.grouped_required_items)
+        if result.grouped_required_items
+        else []
+    )
     return ret
