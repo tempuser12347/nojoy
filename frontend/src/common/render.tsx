@@ -22,3 +22,26 @@ export function renderObjectsToChips(
     );
   });
 }
+
+export function renderItemsWithAmount(data: { name: string; value: number; id?: number; link?: string }[] | null, navigate?: NavigateFunction) {
+  if (!data) return null;
+  return data.map((item, index) => {
+    const hasLink = item.link && navigate;
+    return (
+        // render <span> text with the name in it and  add 'x 1' like to show the amount. if link is presend, make the name only link and clickable, not the 'x 1' part.
+        <span key={index} style={{ marginRight: 8 }}>
+          {hasLink ? (
+            <Chip
+              label={item.name}
+              sx={{ margin: 0.5, cursor: 'pointer' }}
+              onClick={() => navigate!(item.link!)}
+              clickable
+            />
+          ) : (
+            <Chip label={item.name} sx={{ margin: 0.5 }} />
+          )}
+          <span style={{ marginLeft: 4 }}>x {item.value}</span>
+        </span>
+    );
+  });
+}

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, Card, CardContent, CircularProgress } from '@mui/material';
 import api from '../api';
-import { renderObjectsToChips } from '../common/render';
+import { renderObjectsToChips, renderItemsWithAmount } from '../common/render';
 
 interface Quest {
   id: number;
@@ -42,7 +42,7 @@ interface Quest {
   advance_payment: number;
   report_experience: string;
   report_reputation: string;
-  reward_items: string;
+  reward_items: {id:number, name:string, value:number}[];
   reward_immigrants: string;
   reward_techniques: string;
   reward_title: string;
@@ -136,7 +136,7 @@ export default function QuestDetail() {
             <DetailItem label="선금" value={quest.advance_payment} />
             <DetailItem label="보고 경험치" value={quest.report_experience} />
             <DetailItem label="보고 평판" value={quest.report_reputation} />
-            <DetailItem label="보상 (아이템)" value={quest.reward_items} />
+            <DetailItem label="보상 (아이템)" value={renderItemsWithAmount(quest.reward_items, navigate)} />
             <Box sx={{ gridColumn: '1 / -1' }}><DetailItem label="공략" value={quest.guide} /></Box>
             <Box sx={{ gridColumn: '1 / -1' }}><DetailItem label="진행" value={quest.progress} /></Box>
             {/* <DetailItem label="진행" value={quest.progress} /> */}

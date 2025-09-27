@@ -105,7 +105,8 @@ def read_quest(quest_id: int, db: Session = Depends(get_db)):
 
     result = db.execute(
         text(
-            """WITH skill_arr AS (
+            """
+WITH skill_arr AS (
     SELECT
         q.id AS quest_id,
         q.name AS quest_name,
@@ -121,12 +122,31 @@ def read_quest(quest_id: int, db: Session = Depends(get_db)):
         ON 1=1
     LEFT JOIN skill s
         ON s.id = CAST(je.key AS INTEGER)
-    WHERE q.skills != '' and q.id = :quest_id
+    WHERE q.skills != '' AND q.id = :quest_id
     GROUP BY q.id, q.name
+),
+reward_arr AS (
+    SELECT
+        q.id AS quest_id,
+        json_group_array(
+            json_object(
+                'id', CAST(je.key AS INTEGER),
+                'name', COALESCE(ad.name, ''),
+                'value', COALESCE(CAST(je.value AS INTEGER), 0)
+            )
+        ) AS rewards
+    FROM quest q
+    JOIN json_each(q.reward_items) AS je
+        ON 1=1
+    LEFT JOIN allData ad
+        ON ad.id = CAST(je.key AS INTEGER)
+    WHERE q.reward_items != '' AND q.id = :quest_id
+    GROUP BY q.id
 )
 SELECT 
     l.*,
     r.skills AS grouped_skills,
+    rw.rewards AS grouped_rewards,
     CASE 
         WHEN ad.id IS NULL OR ad.id = '' THEN NULL
         ELSE json_object(
@@ -138,9 +158,12 @@ SELECT
 FROM quest l
 LEFT JOIN skill_arr r
     ON l.id = r.quest_id
+LEFT JOIN reward_arr rw
+    ON l.id = rw.quest_id
 LEFT JOIN allData ad
     ON CAST(l.destination AS INTEGER) = ad.id
-WHERE l.id = :quest_id
+WHERE l.id = :quest_id;
+
                       """
         ),
         {"quest_id": quest_id},
@@ -185,11 +208,11 @@ WHERE l.id = :quest_id
         "advance_payment",
         "report_experience",
         "report_reputation",
-        "reward_items",
         "reward_immigrants",
         "reward_techniques",
         "reward_title",
         "destination_json",
+        'grouped_rewards'
     ]
     ret = {
         field: getattr(result, field, None)
@@ -200,4 +223,5 @@ WHERE l.id = :quest_id
     ret["destination"] = (
         json.loads(result.destination_json) if result.destination_json else None
     )
+    ret['reward_items'] = json.loads(result.grouped_rewards) if result.grouped_rewards else []
     return ret
