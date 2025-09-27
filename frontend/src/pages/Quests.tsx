@@ -46,7 +46,9 @@ const Quests: React.FC = () => {
   const [name_search, setName_search] = React.useState("");
   const [searchInput, setSearchInput] = React.useState("");
   const [locationSearch, setLocationSearch] = React.useState<City[]>([]);
-  const [destinationSearch, setDestinationSearch] = React.useState<string>("");
+  const [destinationSearch, setDestinationSearch] = React.useState<City | null>(
+    null
+  );
   const [skillsSearch, setSkillsSearch] = React.useState<Skill[]>([]);
 
   const { data, isLoading } = useQuery({
@@ -64,7 +66,7 @@ const Quests: React.FC = () => {
         params: {
           name_search,
           location_search: locationSearch.map((l) => l.name).join(","),
-          destination_search: destinationSearch,
+          destination_search: destinationSearch?.id,
           skills_search: skillsSearch.map((s) => s.id).join(","),
           skip: page * rowsPerPage,
           limit: rowsPerPage,
@@ -112,13 +114,14 @@ const Quests: React.FC = () => {
     setName_search("");
     setSearchInput("");
     setLocationSearch([]);
-    setDestinationSearch("");
+    setDestinationSearch(null);
     setSkillsSearch([]);
     setPage(0);
   };
 
   return (
-    <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
+    // <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
+      <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}> 
       <Typography variant="h4" gutterBottom>
         퀘스트
       </Typography>
@@ -131,14 +134,8 @@ const Quests: React.FC = () => {
           sx={{ minWidth: 200 }}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
-        <Button variant="contained" onClick={handleSearch}>
-          검색
-        </Button>
-        <Button variant="outlined" onClick={resetFilters}>
-          초기화
-        </Button>
-      </Box>
-      <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
+      {/* </Box>
+      <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}> */}
         <Autocomplete
           multiple
           id="location-filter"
@@ -167,15 +164,23 @@ const Quests: React.FC = () => {
             ))
           }
         />
-        <TextField
-          label="목적지"
-          variant="outlined"
+        <Autocomplete
+          id="destination-filter"
+          options={sampleCities}
+          getOptionLabel={(option) => option.name}
           value={destinationSearch}
-          onChange={(e) => {
-            setDestinationSearch(e.target.value);
+          onChange={(_, newValue) => {
+            setDestinationSearch(newValue);
             setPage(0);
           }}
-          sx={{ minWidth: 200 }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="outlined"
+              label="목적지"
+              sx={{ minWidth: 200 }}
+            />
+          )}
         />
         <Autocomplete
           multiple
@@ -205,6 +210,12 @@ const Quests: React.FC = () => {
             ))
           }
         />
+        <Button variant="contained" onClick={handleSearch}>
+          검색
+        </Button>
+        <Button variant="outlined" onClick={resetFilters}>
+          초기화
+        </Button>
       </Box>
 
       <DataTable
