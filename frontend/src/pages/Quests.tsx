@@ -33,7 +33,7 @@ const sampleCities: City[] = QUEST_FILTER_LOCATION_ARRAY.map((city) => ({
   name: city.name,
 }));
 
-const sampleSkills: Skill[] = QUEST_FILTER_SKILL_ARRAY.map((skill, index) => ({
+const sampleSkills: Skill[] = QUEST_FILTER_SKILL_ARRAY.map((skill) => ({
   id: skill.id,
   name: skill.name,
   value: 0,

@@ -15,6 +15,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             DHO Database
           </Typography>
           <Navigation />
+          <Box sx={{ flexGrow: 1 }} />
+          <Typography variant="caption" sx={{ color: 'white', opacity: 0.7, mr: 2 }}>
+            v{import.meta.env.VITE_APP_VERSION}
+          </Typography>
         </Toolbar>
       </AppBar>
       <Container component="main" sx={{ mt: 8, mb: 4, flex: 1 }}>
