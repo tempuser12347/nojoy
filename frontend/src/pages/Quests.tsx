@@ -10,6 +10,7 @@ import {
 import DataTable from '../components/DataTable';
 import api from '../api';
 import { renderObjectsToChips } from '../common/render';
+import { QUEST_FILTER_SKILL_ARRAY } from '../constants/listvalues';
 
 interface Skill {
   id: number;
@@ -32,16 +33,25 @@ const sampleCities: City[] = [
 ];
 
 // The 'value' field is not used for filtering but is part of the Skill type.
-const sampleSkills: Skill[] = [
-  { id: 1, name: '돛 조종', value: 0 },
-  { id: 2, name: '회계', value: 0 },
-  { id: 3, name: '몸짓', value: 0 },
-  { id: 4, name: '사교', value: 0 },
-  { id: 5, name: '탐색', value: 0 },
-  { id: 6, name: '인식', value: 0 },
-  { id: 7, name: '자물쇠 따기', value: 0 },
-];
+// const sampleSkills: Skill[] = [
+//   { id: 1, name: '돛 조종', value: 0 },
+//   { id: 2, name: '회계', value: 0 },
+//   { id: 3, name: '몸짓', value: 0 },
+//   { id: 4, name: '사교', value: 0 },
+//   { id: 5, name: '탐색', value: 0 },
+//   { id: 6, name: '인식', value: 0 },
+//   { id: 7, name: '자물쇠 따기', value: 0 },
+// ];
 
+// convert QUEST_FILTER_SKILL_ARRAY to Skill[]
+const sampleSkills: Skill[] = QUEST_FILTER_SKILL_ARRAY.map((skill, index) => ({
+  id: skill.id,
+  name: skill.name,
+  value: 0,
+}));
+
+
+// const sampleSkills: Skill[] = QUEST_FILTER_SKILL_ARRAY;
 
 const Quests: React.FC = () => {
   const navigate = useNavigate();
