@@ -57,22 +57,28 @@ const Quests: React.FC = () => {
     .map(Number);
 
   // Component state for inputs
-  const [searchInput, setSearchInput] = React.useState("");
-
-  // Derived state for Autocomplete components
-  const locationSearch = sampleCities.filter((c) =>
-    location_search_names.includes(c.name)
+  const [searchInput, setSearchInput] = React.useState(name_search);
+  const [locationSearch, setLocationSearch] = React.useState<City[]>(
+    sampleCities.filter((c) => location_search_names.includes(c.name))
   );
-  const destinationSearch =
-    sampleCities.find((c) => c.id === Number(destination_search_id)) || null;
-  const skillsSearch = sampleSkills.filter((s) =>
-    skills_search_ids.includes(s.id)
+  const [destinationSearch, setDestinationSearch] = React.useState<City | null>(
+    sampleCities.find((c) => c.id === Number(destination_search_id)) || null
+  );
+  const [skillsSearch, setSkillsSearch] = React.useState<Skill[]>(
+    sampleSkills.filter((s) => skills_search_ids.includes(s.id))
   );
 
-  // Sync search input with name_search from URL on mount/change
+  // Sync local state with URL search params on mount/change
   useEffect(() => {
     setSearchInput(name_search);
-  }, [name_search]);
+    setLocationSearch(
+      sampleCities.filter((c) => location_search_names.includes(c.name))
+    );
+    setDestinationSearch(
+      sampleCities.find((c) => c.id === Number(destination_search_id)) || null
+    );
+    setSkillsSearch(sampleSkills.filter((s) => skills_search_ids.includes(s.id)));
+  }, [name_search, location_search_names.join(','), destination_search_id, skills_search_ids.join(',')]);
 
   // Helper to update search params
   const updateSearchParams = (newParams: Record<string, any>) => {
@@ -138,12 +144,22 @@ const Quests: React.FC = () => {
   };
 
   const handleSearch = () => {
-    updateSearchParams({ name_search: searchInput, page: 0 });
+    const newParams: Record<string, any> = {
+      name_search: searchInput,
+      location_search: locationSearch.map((l) => l.name).join(","),
+      destination_search: destinationSearch?.id,
+      skills_search: skillsSearch.map((s) => s.id).join(","),
+      page: 0,
+    };
+    updateSearchParams(newParams);
   };
 
   const resetFilters = () => {
     setSearchInput("");
-    setSearchParams({});
+    setLocationSearch([]);
+    setDestinationSearch(null);
+    setSkillsSearch([]);
+    setSearchParams({ rowsPerPage: searchParams.get("rowsPerPage") || "10" });
   };
 
   const handlePageChange = (newPage: number) => {
@@ -155,17 +171,15 @@ const Quests: React.FC = () => {
   };
 
   const handleLocationChange = (_: any, newValue: City[]) => {
-    const names = newValue.map((l) => l.name).join(",");
-    updateSearchParams({ location_search: names, page: 0 });
+    setLocationSearch(newValue);
   };
 
   const handleDestinationChange = (_: any, newValue: City | null) => {
-    updateSearchParams({ destination_search: newValue?.id, page: 0 });
+    setDestinationSearch(newValue);
   };
 
   const handleSkillsChange = (_: any, newValue: Skill[]) => {
-    const ids = newValue.map((s) => s.id).join(",");
-    updateSearchParams({ skills_search: ids, page: 0 });
+    setSkillsSearch(newValue);
   };
 
   return (
