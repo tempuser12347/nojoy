@@ -16,8 +16,6 @@ def read_quests(
     search: str = Query(None, description="Search term"),
     db: Session = Depends(get_db),
 ):
-    # query = db.query(models.Quest)
-    # query = db.query('select *, json_each.value as skill_elem from quests, json_each(quests.skills)')
     results = db.execute(
         text(
             """
@@ -78,7 +76,7 @@ LEFT JOIN allData ad
         "discovery",
         "preceding_discovery_quest",
         "grouped_skills",
-        "destination_json"
+        "destination_json",
     ]
 
     ret_list = []
@@ -88,12 +86,14 @@ LEFT JOIN allData ad
         ret = {
             field: getattr(quest, field, None)
             for field in return_fields
-            if field not in  ["skills", 'destination_json']
+            if field not in ["skills", "destination_json"]
         }
         # The SQL query aliases the computed skills array as 'grouped_skills'.
         # We map it to the 'skills' key in the response.
         ret["skills"] = json.loads(quest.grouped_skills) if quest.grouped_skills else []
-        ret['destination'] = json.loads(quest.destination_json) if quest.destination_json else None
+        ret["destination"] = (
+            json.loads(quest.destination_json) if quest.destination_json else None
+        )
         del ret["grouped_skills"]
         ret_list.append(ret)
 
@@ -189,8 +189,7 @@ WHERE l.id = :quest_id
         "reward_immigrants",
         "reward_techniques",
         "reward_title",
-        # "grouped_skills",
-        "destination_json"
+        "destination_json",
     ]
     ret = {
         field: getattr(result, field, None)
@@ -198,6 +197,7 @@ WHERE l.id = :quest_id
         if field != "skills"
     }
     ret["skills"] = json.loads(result.grouped_skills) if result.grouped_skills else []
-    ret['destination'] = json.loads(result.destination_json) if result.destination_json else None   
-    # del ret["grouped_skills"]
+    ret["destination"] = (
+        json.loads(result.destination_json) if result.destination_json else None
+    )
     return ret
