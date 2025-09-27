@@ -65,6 +65,35 @@ LEFT JOIN allData ad
     if name_search:
         results = [row for row in results if name_search.lower() in row.name.lower()]
 
+    if location_search:
+        # split location search by commas and trim spaces
+        loc_terms = [term.strip().lower() for term in location_search.split(",")]
+        results = [
+            row
+            for row in results
+            if any(term in (row.location or "").lower() for term in loc_terms)
+        ]
+    
+    if destination_search:
+        # destination is a id value. single. 
+        results = [
+            row
+            for row in results
+            if row.destination_json and destination_search.lower() in (row.destination_json or {}).get('name', '').lower()
+        ]   
+
+    if skills_search:
+        # split skills search by commas and trim spaces. contains skill ids
+        skill_terms = [term.strip() for term in skills_search.split(",")]
+        results = [
+            row
+            for row in results
+            if row.grouped_skills and any(str(skill.get('id')) in skill_terms for skill in json.loads(row.grouped_skills))
+        ]
+
+    # Apply pagination
+
+
     quests = results[skip : skip + limit]
 
     return_fields = [
