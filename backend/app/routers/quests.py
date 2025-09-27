@@ -13,7 +13,10 @@ router = APIRouter(prefix="/api/quests", tags=["quests"])
 def read_quests(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit the number of records returned"),
-    search: str = Query(None, description="Search term"),
+    name_search: str = Query(None, description="Search term"),
+    location_search: str = Query(None, description="Location search term"),
+    destination_search: str = Query(None, description="Destination search term"),
+    skills_search: str = Query(None, description="Skills search term"),
     db: Session = Depends(get_db),
 ):
     results = db.execute(
@@ -59,8 +62,8 @@ LEFT JOIN allData ad
         )
     ).fetchall()
 
-    if search:
-        results = [row for row in results if search.lower() in row.name.lower()]
+    if name_search:
+        results = [row for row in results if name_search.lower() in row.name.lower()]
 
     quests = results[skip : skip + limit]
 

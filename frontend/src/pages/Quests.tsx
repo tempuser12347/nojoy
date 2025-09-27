@@ -20,14 +20,14 @@ const Quests: React.FC = () => {
   const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [search, setSearch] = React.useState('');
+  const [name_search, setName_search] = React.useState('');
 
   const { data, isLoading } = useQuery({
-    queryKey: ['quests', page, rowsPerPage, search],
+    queryKey: ['quests', page, rowsPerPage, name_search],
     queryFn: async () => {
       const response = await api.get('/api/quests', {
         params: {
-          search,
+          name_search,
           skip: page * rowsPerPage,
           limit: rowsPerPage,
         },
@@ -48,7 +48,7 @@ const Quests: React.FC = () => {
 
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
+    setName_search(event.target.value);
     setPage(0);
   };
 
@@ -59,7 +59,7 @@ const Quests: React.FC = () => {
         <TextField
           label="검색"
           variant="outlined"
-          value={search}
+          value={name_search}
           onChange={handleSearchChange}
           sx={{ minWidth: 200 }}
         />
