@@ -63,7 +63,7 @@ const Quests: React.FC = () => {
       <Typography variant="h4" gutterBottom>퀘스트</Typography>
       <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <TextField
-          label="검색"
+          label="이름검색"
           variant="outlined"
           value={searchInput}
           onChange={handleSearchInputChange}
