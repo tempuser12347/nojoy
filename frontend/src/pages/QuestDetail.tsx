@@ -20,7 +20,7 @@ interface Quest {
   discovery: string;
   preceding_discovery_quest: string;
   deadline: string;
-  required_items: any;
+  required_items: {id:number, name:string, value:number}[] | null;
   guide: string;
   progress: string;
   previous_continuous_quest_id: string;
@@ -117,7 +117,7 @@ export default function QuestDetail() {
             <DetailItem label="발견물" value={quest.discovery} />
             <DetailItem label="선행 발견 퀘스트" value={quest.preceding_discovery_quest} />
             <DetailItem label="목적지 좌표" value={quest.destination_coordinates} />
-            <DetailItem label="필요 아이템" value={quest.required_items} />
+            <DetailItem label="필요 아이템" value={renderItemsWithAmount(quest.required_items)} />
             <DetailItem label="이전 연속 퀘스트 ID" value={quest.previous_continuous_quest_id} />
             <DetailItem label="에피소드" value={quest.episode} />
             <DetailItem label="1회 한정" value={quest.one_time_only ? 'Yes' : 'No'} />

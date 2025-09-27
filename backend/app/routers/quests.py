@@ -142,11 +142,30 @@ reward_arr AS (
         ON ad.id = CAST(je.key AS INTEGER)
     WHERE q.reward_items != '' AND q.id = :quest_id
     GROUP BY q.id
+),
+required_arr AS (
+    SELECT
+        q.id AS quest_id,
+        json_group_array(
+            json_object(
+                'id', CAST(je.key AS INTEGER),
+                'name', COALESCE(ad.name, ''),
+                'value', COALESCE(CAST(je.value AS INTEGER), 0)
+            )
+        ) AS required_items
+    FROM quest q
+    JOIN json_each(q.required_items) AS je
+        ON 1=1
+    LEFT JOIN allData ad
+        ON ad.id = CAST(je.key AS INTEGER)
+    WHERE q.required_items != '' AND q.id = :quest_id
+    GROUP BY q.id
 )
 SELECT 
     l.*,
     r.skills AS grouped_skills,
     rw.rewards AS grouped_rewards,
+    rq.required_items AS grouped_required_items,
     CASE 
         WHEN ad.id IS NULL OR ad.id = '' THEN NULL
         ELSE json_object(
@@ -160,6 +179,8 @@ LEFT JOIN skill_arr r
     ON l.id = r.quest_id
 LEFT JOIN reward_arr rw
     ON l.id = rw.quest_id
+LEFT JOIN required_arr rq
+    ON l.id = rq.quest_id
 LEFT JOIN allData ad
     ON CAST(l.destination AS INTEGER) = ad.id
 WHERE l.id = :quest_id;
@@ -186,7 +207,6 @@ WHERE l.id = :quest_id;
         "discovery",
         "preceding_discovery_quest",
         "deadline",
-        "required_items",
         "guide",
         "progress",
         "previous_continuous_quest_id",
@@ -212,7 +232,8 @@ WHERE l.id = :quest_id;
         "reward_techniques",
         "reward_title",
         "destination_json",
-        'grouped_rewards'
+        'grouped_rewards',
+        'grouped_required_items'
     ]
     ret = {
         field: getattr(result, field, None)
@@ -224,4 +245,5 @@ WHERE l.id = :quest_id;
         json.loads(result.destination_json) if result.destination_json else None
     )
     ret['reward_items'] = json.loads(result.grouped_rewards) if result.grouped_rewards else []
+    ret['required_items'] = json.loads(result.grouped_required_items) if result.grouped_required_items else []
     return ret
