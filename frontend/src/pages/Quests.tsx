@@ -50,7 +50,7 @@ const Quests: React.FC = () => {
   const location_search_names = (searchParams.get("location_search") || "")
     .split(",")
     .filter(Boolean);
-  const destination_search_id = searchParams.get("destination_search") || null;
+  const destination_search = searchParams.get("destination_search") || "";
   const skills_search_ids = (searchParams.get("skills_search") || "")
     .split(",")
     .filter(Boolean)
@@ -63,9 +63,7 @@ const Quests: React.FC = () => {
   const [locationSearch, setLocationSearch] = React.useState<City[]>(
     sampleCities.filter((c) => location_search_names.includes(c.name))
   );
-  const [destinationSearch, setDestinationSearch] = React.useState<City | null>(
-    sampleCities.find((c) => c.id === Number(destination_search_id)) || null
-  );
+  const [destinationInput, setDestinationInput] = React.useState(destination_search);
   const [skillsSearch, setSkillsSearch] = React.useState<Skill[]>(
     sampleSkills.filter((s) => skills_search_ids.includes(s.id))
   );
@@ -76,11 +74,9 @@ const Quests: React.FC = () => {
     setLocationSearch(
       sampleCities.filter((c) => location_search_names.includes(c.name))
     );
-    setDestinationSearch(
-      sampleCities.find((c) => c.id === Number(destination_search_id)) || null
-    );
+    setDestinationInput(destination_search);
     setSkillsSearch(sampleSkills.filter((s) => skills_search_ids.includes(s.id))); // eslint-disable-next-line
-  }, [name_search, location_search_names.join(','), destination_search_id, skills_search_ids.join(',')]);
+  }, [name_search, location_search_names.join(','), destination_search, skills_search_ids.join(',')]);
 
   // Helper to update search params
   const updateSearchParams = (newParams: Record<string, any>) => {
@@ -98,7 +94,7 @@ const Quests: React.FC = () => {
       rowsPerPage,
       name_search,
       location_search_names,
-      destination_search_id,
+      destination_search,
       skills_search_ids,
       sort_by,
       sort_order,
@@ -108,7 +104,7 @@ const Quests: React.FC = () => {
         params: {
           name_search,
           location_search: location_search_names.join(","),
-          destination_search: destination_search_id,
+          destination_search: destination_search,
           skills_search: skills_search_ids.join(","),
           sort_by,
           sort_order,
@@ -153,7 +149,7 @@ const Quests: React.FC = () => {
     const newParams: Record<string, any> = {
       name_search: searchInput,
       location_search: locationSearch.map((l) => l.name).join(","),
-      destination_search: destinationSearch?.id,
+      destination_search: destinationInput,
       skills_search: skillsSearch.map((s) => s.id).join(","),
       page: 0,
     };
@@ -163,7 +159,7 @@ const Quests: React.FC = () => {
   const resetFilters = () => {
     setSearchInput("");
     setLocationSearch([]);
-    setDestinationSearch(null);
+    setDestinationInput("");
     setSkillsSearch([]);
     setSearchParams({ rowsPerPage: searchParams.get("rowsPerPage") || "10" });
   };
@@ -189,8 +185,8 @@ const Quests: React.FC = () => {
     setLocationSearch(newValue);
   };
 
-  const handleDestinationChange = (_: any, newValue: City | null) => {
-    setDestinationSearch(newValue);
+  const handleDestinationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDestinationInput(event.target.value);
   };
 
   const handleSkillsChange = (_: any, newValue: Skill[]) => {
@@ -239,20 +235,13 @@ const Quests: React.FC = () => {
             ))
           }
         />
-        <Autocomplete
-          id="destination-filter"
-          options={sampleCities}
-          getOptionLabel={(option) => option.name}
-          value={destinationSearch}
+        <TextField
+          label="목적지"
+          variant="outlined"
+          value={destinationInput}
           onChange={handleDestinationChange}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              variant="outlined"
-              label="목적지"
-              sx={{ minWidth: 200 }}
-            />
-          )}
+          sx={{ minWidth: 200 }}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
         <Autocomplete
           multiple
