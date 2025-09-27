@@ -87,13 +87,13 @@ LEFT JOIN allData ad
         ]
 
     if destination_search:
-        # destination is a id value. single.
+        # destination is a string value. single. check if search term is in destination name
         results = [
             row
             for row in results
             if row.destination_json
             and destination_search.lower()
-            in (row.destination_json or {}).get("name", "").lower()
+            in (json.loads(row.destination_json) or {}).get("name", "").lower()
         ]
 
     if skills_search:

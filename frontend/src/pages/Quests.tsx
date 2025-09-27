@@ -46,9 +46,7 @@ const Quests: React.FC = () => {
   const [name_search, setName_search] = React.useState("");
   const [searchInput, setSearchInput] = React.useState("");
   const [locationSearch, setLocationSearch] = React.useState<City[]>([]);
-  const [destinationSearch, setDestinationSearch] = React.useState<City | null>(
-    null
-  );
+  const [destinationSearch, setDestinationSearch] = React.useState<string>("");
   const [skillsSearch, setSkillsSearch] = React.useState<Skill[]>([]);
 
   const { data, isLoading } = useQuery({
@@ -66,7 +64,7 @@ const Quests: React.FC = () => {
         params: {
           name_search,
           location_search: locationSearch.map((l) => l.name).join(","),
-          destination_search: destinationSearch?.id,
+          destination_search: destinationSearch,
           skills_search: skillsSearch.map((s) => s.id).join(","),
           skip: page * rowsPerPage,
           limit: rowsPerPage,
@@ -114,7 +112,7 @@ const Quests: React.FC = () => {
     setName_search("");
     setSearchInput("");
     setLocationSearch([]);
-    setDestinationSearch(null);
+    setDestinationSearch("");
     setSkillsSearch([]);
     setPage(0);
   };
@@ -169,23 +167,15 @@ const Quests: React.FC = () => {
             ))
           }
         />
-        <Autocomplete
-          id="destination-filter"
-          options={sampleCities}
-          getOptionLabel={(option) => option.name}
+        <TextField
+          label="목적지"
+          variant="outlined"
           value={destinationSearch}
-          onChange={(_, newValue) => {
-            setDestinationSearch(newValue);
+          onChange={(e) => {
+            setDestinationSearch(e.target.value);
             setPage(0);
           }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              variant="outlined"
-              label="목적지"
-              sx={{ minWidth: 200 }}
-            />
-          )}
+          sx={{ minWidth: 200 }}
         />
         <Autocomplete
           multiple
