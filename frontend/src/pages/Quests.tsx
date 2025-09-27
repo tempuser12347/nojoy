@@ -67,8 +67,8 @@ const Quests: React.FC = () => {
         },
       });
       
-      console.log(response.data)
-      return response.data;
+      console.log(response.data);
+      return response.data; // Expecting { items: [], total: 0 }
     },
   });
 
@@ -165,9 +165,9 @@ const Quests: React.FC = () => {
 
       <DataTable
         columns={columns}
-        data={data}
+        data={data?.items || []}
         loading={isLoading}
-        total={data?.length || 0}
+        total={data?.total || 0}
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={setPage}

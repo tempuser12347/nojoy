@@ -1,15 +1,20 @@
 from typing import List
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
 from sqlalchemy import text
 from .. import models
 from ..database import get_db
 import json
 
+class QuestResponse(BaseModel):
+    items: List[dict]
+    total: int
+
 router = APIRouter(prefix="/api/quests", tags=["quests"])
 
 
-@router.get("/", response_model=List[dict])
+@router.get("/", response_model=QuestResponse)
 def read_quests(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit the number of records returned"),
@@ -91,9 +96,7 @@ LEFT JOIN allData ad
             if row.grouped_skills and any(str(skill.get('id')) in skill_terms for skill in json.loads(row.grouped_skills))
         ]
 
-    # Apply pagination
-
-
+    total = len(results)
     quests = results[skip : skip + limit]
 
     return_fields = [
@@ -129,7 +132,7 @@ LEFT JOIN allData ad
         del ret["grouped_skills"]
         ret_list.append(ret)
 
-    return ret_list
+    return {"items": ret_list, "total": total}
 
 
 @router.get("/{quest_id}", response_model=dict)
