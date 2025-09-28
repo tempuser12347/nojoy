@@ -2,9 +2,11 @@ from typing import List
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+from sqlalchemy import text
 
 from .. import models
 from ..database import get_db
+import json
 
 
 class JobResponse(BaseModel):
@@ -23,19 +25,84 @@ def read_jobs(
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
 ):
-    query = db.query(models.Job)
+    
+
+    result = db.execute(text("""
+SELECT
+    j.id,
+    j.name,
+    j.description,
+    j.category,
+    j.cost,
+    j.requirements,
+    
+    -- preferred_skills as JSON array of objects
+    COALESCE(
+        (
+            SELECT json_group_array(
+                json_object(
+                    'id', s.id,
+                    'name', s.name
+                )
+            )
+            FROM json_each(j.preferred_skills) je
+            LEFT JOIN skill s ON s.id = je.value
+        ),
+        '[]'
+    ) AS preferred_skills,
+
+    -- reference_letter as JSON object
+    CASE
+        WHEN ad.id IS NOT NULL THEN json_object(
+            'id', ad.id,
+            'name', ad.name
+        )
+        ELSE NULL
+    END AS reference_letter_json
+
+FROM job j
+LEFT JOIN allData ad ON ad.id = j.reference_letter
+                             """)).fetchall()
 
     # Sorting logic
-    if hasattr(models.Job, sort_by):
-        if sort_order.lower() == "desc":
-            query = query.order_by(getattr(models.Job, sort_by).desc())
-        else:
-            query = query.order_by(getattr(models.Job, sort_by).asc())
+    # reverse = sort_order.lower() == "desc"
+    # if sort_by in ['name', 'category']:
+    #     result.sort(key=lambda x: (x[sort_by] is None, x[sort_by].lower() if x[sort_by] else ''), reverse=reverse)
+    # elif sort_by in ['cost']:
+    #     result.sort(key=lambda x: (x[sort_by] is None, x[sort_by] if x[sort_by] is not None else float('-inf')), reverse=reverse)
+    # else:
+    #     result.sort(key=lambda x: (x[sort_by] is None, x[sort_by] if x[sort_by] is not None else float('-inf')), reverse=reverse)
 
-    total = query.count()
-    jobs = query.offset(skip).limit(limit).all()
+    # result is a list
+    total = len(result  )
+    jobs = result[skip : skip + limit]
 
-    return {"items": jobs, "total": total}
+    # fields to extract
+    target_field_list = ['name', 'cost', 'category', ('preferred_skills', json.loads), ('reference_letter', json.loads)]
+
+    # convert each job to dict with only target fields
+    ret = []
+    for job in jobs:
+        print(job)
+        ret_obj = {}
+        for field in target_field_list:
+            if isinstance(field, tuple):
+                field_name, transform = field
+                value = getattr(job, field_name, None)
+                if value is not None:
+                    ret_obj[field_name] = transform(value)
+            elif isinstance(field, str):
+                field_name = field
+                value = getattr(job, field_name, None)
+                if value is not None:
+                    ret_obj[field_name] = value
+            else:
+                value = getattr(job, field_name, None)
+                ret_obj[field_name] = value
+
+        ret.append(ret_obj)
+
+    return {"items": ret, "total": total}
 
 
 @router.get("/{job_id}", response_model=dict)
