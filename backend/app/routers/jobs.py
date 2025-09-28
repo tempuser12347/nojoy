@@ -23,6 +23,9 @@ def read_jobs(
     limit: int = Query(10, description="Limit the number of records returned"),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
+    name_search: str = Query(None, description="Search term"),
+    category_search: str = Query(None, description="Category search term"),
+    prefered_skill_search: str = Query(None, description="Preferred skill search term"),
     db: Session = Depends(get_db),
 ):
     
@@ -63,6 +66,32 @@ SELECT
 FROM job j
 LEFT JOIN allData ad ON ad.id = j.reference_letter
                              """)).fetchall()
+    
+
+    # do filtering
+    if name_search:
+        result = [job for job in result if job.name and name_search.lower() in job.name.lower()]
+    if category_search:
+        result = [job for job in result if job.category and category_search.lower() in job.category.lower()]
+    if prefered_skill_search:
+        # split by comma and strip whitespace
+        search_terms = [term.strip().lower() for term in prefered_skill_search.split(',')]
+        print('search_terms:', search_terms)
+
+        # filter jobs where its preferred_skills contains all of search terms
+        def job_matches(job):
+            if not job.preferred_skills:
+                return False
+            try:
+                skills = json.loads(job.preferred_skills)
+            except json.JSONDecodeError:
+                return False
+            skill_names = {skill['name'].lower() for skill in skills if 'name' in skill and skill['name']}
+            return all(term in skill_names for term in search_terms)
+
+        result = [job for job in result if job_matches(job)]
+
+
 
     # Sorting logic
     # reverse = sort_order.lower() == "desc"
@@ -83,7 +112,6 @@ LEFT JOIN allData ad ON ad.id = j.reference_letter
     # convert each job to dict with only target fields
     ret = []
     for job in jobs:
-        print(job)
         ret_obj = {}
         for field in target_field_list:
             if isinstance(field, tuple):

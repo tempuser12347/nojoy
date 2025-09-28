@@ -17,13 +17,13 @@ import {
 import DataTable from "../components/DataTable";
 import api from "../api";
 import { renderObjectsToChips } from "../common/render";
-import { QUEST_FILTER_SKILL_ARRAY } from "../constants/listvalues";
+import { JOB_PREFERRED_SKILL_OPTION_ARRAY } from "../constants/listvalues";
 
-const JOB_CATEGORIES = ["모험", "상인", "군인"];
-const JOB_SKILLS_ARRAY = QUEST_FILTER_SKILL_ARRAY.map((skill) => ({
+const JOB_CATEGORIES = ["모험", "교역", "전투"];
+const JOB_SKILLS_ARRAY = JOB_PREFERRED_SKILL_OPTION_ARRAY.map((skill) => ({
   id: skill.id,
   name: skill.name,
-  value: 0,
+  // value: 0,
 }));
 
 const Jobs: React.FC = () => {
@@ -79,7 +79,7 @@ const Jobs: React.FC = () => {
         params: {
           name_search,
           category_search,
-          skills_search: skills_search_ids.join(","),
+          preferred_skill_search: skills_search_ids.join(","),
           sort_by,
           sort_order,
           skip: page * rowsPerPage,
@@ -123,7 +123,7 @@ const Jobs: React.FC = () => {
     const newParams: Record<string, any> = {
       name_search: searchInput,
       category_search: categorySearch,
-      skills_search: skillsSearch.map((s) => s.id).join(","),
+      preferred_skill_search: skillsSearch.map((s) => s.id).join(","),
       page: 0,
     };
     updateSearchParams(newParams);
