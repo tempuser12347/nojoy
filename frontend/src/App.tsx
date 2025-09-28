@@ -20,6 +20,8 @@ import ConsumableDetail from './pages/ConsumableDetail';
 import ShipDetail from './pages/ShipDetail';
 import TreasureMaps from './pages/TreasureMaps';
 import TreasureMapDetail from './pages/TreasureMapDetail';
+import Jobs from './pages/Jobs';
+import JobDetail from './pages/JobDetail';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -49,6 +51,8 @@ function App() {
               <Route path="/선박/:id" element={<ShipDetail />} />
               <Route path="/보물지도" element={<TreasureMaps />} />
               <Route path="/보물지도/:id" element={<TreasureMapDetail />} />
+              <Route path="/직업" element={<Jobs />} />
+              <Route path="/직업/:id" element={<JobDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
