@@ -76,6 +76,7 @@ const Jobs: React.FC = () => {
           limit: rowsPerPage,
         },
       });
+      console.log(response.data);
       return response.data;
     },
   });

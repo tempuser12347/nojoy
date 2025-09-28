@@ -2,16 +2,17 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Typography, Card, CardContent, CircularProgress } from '@mui/material';
 import api from '../api';
+import { renderObjectsToChips } from '../common/render';
 
 interface Job {
   id: number;
   name: string;
   description: string;
   category: string;
-  reference_letter: string;
-  cost: number;
-  preferred_skills: string;
-  requirements: string;
+  reference_letter: {id: number, name: string} | null;
+  cost: number | null;
+  preferred_skills: {id: number, name: string}[] | null;
+  requirements: any;
 }
 
 const DetailItem = ({ label, value }: { label: string; value: React.ReactNode }) => (
@@ -28,6 +29,7 @@ export default function JobDetail() {
     const fetchJob = async () => {
       try {
         const response = await api.get(`/api/jobs/${id}`);
+        console.log('Job detail response:', response.data);
         setJob(response.data);
       } catch (err) {
         setError('Failed to load job details');
@@ -72,10 +74,10 @@ export default function JobDetail() {
           <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr' } }}>
             <Box sx={{ gridColumn: '1 / -1' }}><DetailItem label="설명" value={job.description} /></Box>
             <DetailItem label="카테고리" value={job.category} />
-            <DetailItem label="소개장" value={job.reference_letter} />
+            <DetailItem label="추천장" value={job.reference_letter?.name || null} />
             <DetailItem label="비용" value={job.cost} />
-            <DetailItem label="우대 스킬" value={job.preferred_skills} />
-            <DetailItem label="요구 사항" value={job.requirements} />
+            <DetailItem label="우대 스킬" value={renderObjectsToChips(job.preferred_skills)} />
+            <DetailItem label="요구 사항" value={JSON.stringify(job.requirements)} />
           </Box>
         </CardContent>
       </Card>

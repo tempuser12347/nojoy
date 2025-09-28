@@ -116,7 +116,7 @@ LEFT JOIN allData ad ON ad.id = j.reference_letter
     jobs = result[skip: skip + limit]
 
     # fields to extract
-    target_field_list = ['name', 'cost', 'category', ('preferred_skills', json.loads), ('reference_letter', json.loads)]
+    target_field_list = ['id','name', 'cost', 'category', ('preferred_skills', json.loads), ('reference_letter', json.loads)]
 
     # convert each job to dict with only target fields
     ret = []
@@ -144,7 +144,67 @@ LEFT JOIN allData ad ON ad.id = j.reference_letter
 
 @router.get("/{job_id}", response_model=dict)
 def read_job(job_id: int, db: Session = Depends(get_db)):
-    job = db.query(models.Job).filter(models.Job.id == job_id).first()
-    if job is None:
+
+    results = db.execute(text("""
+SELECT
+    j.id,
+    j.name,
+    j.description,
+    j.category,
+    j.cost,
+    j.requirements,
+    
+    -- preferred_skills as JSON array of objects
+    COALESCE(
+        (
+            SELECT json_group_array(
+                json_object(
+                    'id', s.id,
+                    'name', s.name
+                )
+            )
+            FROM json_each(j.preferred_skills) je
+            LEFT JOIN skill s ON s.id = je.value
+        ),
+        '[]'
+    ) AS preferred_skills,
+
+    -- reference_letter as JSON object
+    CASE
+        WHEN ad.id IS NOT NULL THEN json_object(
+            'id', ad.id,
+            'name', ad.name
+        )
+        ELSE NULL
+    END AS reference_letter_json
+
+FROM job j
+LEFT JOIN allData ad ON ad.id = j.reference_letter
+WHERE j.id = :job_id
+
+                              """), {"job_id": job_id}).fetchone()
+
+    if not results:
         raise HTTPException(status_code=404, detail="Job not found")
+
+    # convert to dict
+    job = {
+        "id": results.id,
+        "name": results.name,
+        "description": results.description,
+        "category": results.category,
+        "cost": results.cost,
+        "requirements": json.loads(results.requirements),
+        "preferred_skills": json.loads(results.preferred_skills),
+        "reference_letter": json.loads(results.reference_letter_json) if results.reference_letter_json else None
+    }
+
     return job
+
+
+
+
+    # job = db.query(models.Job).filter(models.Job.id == job_id).first()
+    # if job is None:
+    #     raise HTTPException(status_code=404, detail="Job not found")
+    # return job
