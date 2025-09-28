@@ -277,20 +277,6 @@ class TreasureMap(Base):
     strategy = Column(String)
 
 
-"""
-add model for job that uses 'job' table
-and has schema like this
-CREATE TABLE job (
-        id INTEGER PRIMARY KEY,
-        name TEXT,
-        description TEXT,
-        category TEXT,
-        reference_letter TEXT,
-        cost INTEGER,
-        preferred_skills TEXT,
-        requirements TEXT
-    );
-"""
 class Job(Base):
     __tablename__ = "job"
 
