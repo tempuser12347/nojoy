@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Card, CardContent, CircularProgress } from '@mui/material';
+import { Box, Typography, Card, CardContent, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import api from '../api';
 import { renderObjectsToChips } from '../common/render';
 
@@ -18,6 +18,29 @@ interface Job {
 const DetailItem = ({ label, value }: { label: string; value: React.ReactNode }) => (
   value ? <Box><Typography variant="h6" color="text.secondary">{label}</Typography><Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>{value}</Typography></Box> : null
 );
+
+const RequirementsTable = ({ requirements }: { requirements: any }) => {
+  if (!requirements || typeof requirements !== 'object' || Object.keys(requirements).length === 0) {
+    return null;
+  }
+
+  return (
+    <TableContainer component={Paper}>
+      <Table size="small" aria-label="requirements table">
+        <TableBody>
+          {Object.entries(requirements).map(([key, value]) => (
+            <TableRow key={key}>
+              <TableCell component="th" scope="row">
+                {key}
+              </TableCell>
+              <TableCell>{typeof value === 'string' ? value : JSON.stringify(value)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
 
 export default function JobDetail() {
   const { id } = useParams<{ id: string }>();
@@ -77,7 +100,12 @@ export default function JobDetail() {
             <DetailItem label="추천장" value={job.reference_letter?.name || null} />
             <DetailItem label="비용" value={job.cost} />
             <DetailItem label="우대 스킬" value={renderObjectsToChips(job.preferred_skills)} />
-            <DetailItem label="요구 사항" value={JSON.stringify(job.requirements)} />
+            {job.requirements && Object.keys(job.requirements).length > 0 &&
+              <Box sx={{ gridColumn: '1 / -1' }}>
+                  <Typography variant="h6" color="text.secondary">요구 사항</Typography>
+                  <RequirementsTable requirements={job.requirements} />
+              </Box>
+            }
           </Box>
         </CardContent>
       </Card>
