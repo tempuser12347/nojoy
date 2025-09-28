@@ -275,3 +275,30 @@ class TreasureMap(Base):
     reward_dukat = Column(Integer)
     reward_item = Column(String)
     strategy = Column(String)
+
+
+"""
+add model for job that uses 'job' table
+and has schema like this
+CREATE TABLE job (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        description TEXT,
+        category TEXT,
+        reference_letter TEXT,
+        cost INTEGER,
+        preferred_skills TEXT,
+        requirements TEXT
+    );
+"""
+class Job(Base):
+    __tablename__ = "job"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    description = Column(String)
+    category = Column(String)
+    reference_letter = Column(String)
+    cost = Column(Integer)
+    preferred_skills = Column(String)
+    requirements = Column(String)
