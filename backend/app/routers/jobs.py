@@ -103,17 +103,17 @@ LEFT JOIN allData ad ON ad.id = j.reference_letter
 
 
     # Sorting logic
-    # reverse = sort_order.lower() == "desc"
-    # if sort_by in ['name', 'category']:
-    #     result.sort(key=lambda x: (x[sort_by] is None, x[sort_by].lower() if x[sort_by] else ''), reverse=reverse)
-    # elif sort_by in ['cost']:
-    #     result.sort(key=lambda x: (x[sort_by] is None, x[sort_by] if x[sort_by] is not None else float('-inf')), reverse=reverse)
-    # else:
-    #     result.sort(key=lambda x: (x[sort_by] is None, x[sort_by] if x[sort_by] is not None else float('-inf')), reverse=reverse)
+    reverse = sort_order.lower() == "desc"
+    if sort_by in ['name', 'category']:
+        result.sort(key=lambda x: (getattr(x, sort_by, None) is not None, getattr(x, sort_by, '').lower()), reverse=reverse)
+    elif sort_by in ['cost']:
+        result.sort(key=lambda x: (getattr(x, sort_by, None) is not None, getattr(x, sort_by, float('-inf'))), reverse=reverse)
+    else:
+        result.sort(key=lambda x: (getattr(x, sort_by, None) is not None, getattr(x, sort_by, float('-inf'))), reverse=reverse)
 
     # result is a list
-    total = len(result  )
-    jobs = result[skip : skip + limit]
+    total = len(result)
+    jobs = result[skip: skip + limit]
 
     # fields to extract
     target_field_list = ['name', 'cost', 'category', ('preferred_skills', json.loads), ('reference_letter', json.loads)]
