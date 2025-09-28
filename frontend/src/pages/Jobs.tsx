@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import DataTable from "../components/DataTable";
 import api from "../api";
+import { renderObjectsToChips } from "../common/render";
 
 const Jobs: React.FC = () => {
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ const Jobs: React.FC = () => {
           limit: rowsPerPage,
         },
       });
+      console.log(response.data);
       return response.data;
     },
   });
@@ -62,6 +64,8 @@ const Jobs: React.FC = () => {
     { id: "name", label: "이름", minWidth: 170 },
     { id: "category", label: "카테고리", minWidth: 100 },
     { id: "cost", label: "비용", minWidth: 100 },
+    { id: "preferred_skills", label: "우대 스킬", minWidth: 200 , format: (value: {id: number, name: string, value: number}[] | null) => renderObjectsToChips(value)},
+    // { id: "reference_letter", label: "추천서", minWidth: 200, format: (value: {id:number, name: string} | null) => value?.name },
   ];
 
   const handleSearchInputChange = (
