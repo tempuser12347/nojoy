@@ -25,7 +25,7 @@ def read_jobs(
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     name_search: str = Query(None, description="Search term"),
     category_search: str = Query(None, description="Category search term"),
-    prefered_skill_search: str = Query(None, description="Preferred skill search term"),
+    preferred_skill_search: str = Query(None, description="Preferred skill search term"),
     db: Session = Depends(get_db),
 ):
     
@@ -73,9 +73,9 @@ LEFT JOIN allData ad ON ad.id = j.reference_letter
         result = [job for job in result if job.name and name_search.lower() in job.name.lower()]
     if category_search:
         result = [job for job in result if job.category and category_search.lower() in job.category.lower()]
-    if prefered_skill_search:
+    if preferred_skill_search:
         # split by comma and strip whitespace
-        search_terms = [term.strip().lower() for term in prefered_skill_search.split(',')]
+        search_terms = [int(term.strip()) for term in preferred_skill_search.split(',')]
         print('search_terms:', search_terms)
 
         # filter jobs where its preferred_skills contains all of search terms
@@ -84,10 +84,19 @@ LEFT JOIN allData ad ON ad.id = j.reference_letter
                 return False
             try:
                 skills = json.loads(job.preferred_skills)
+                print('skills:', skills)
             except json.JSONDecodeError:
                 return False
-            skill_names = {skill['name'].lower() for skill in skills if 'name' in skill and skill['name']}
-            return all(term in skill_names for term in search_terms)
+            for t in search_terms:
+                # check if t is in row skill's id
+                t_found = False
+                for skill in skills:
+                    if skill.get('id') == t:
+                        t_found = True  
+                        break
+                if not t_found:
+                    return False
+            return True
 
         result = [job for job in result if job_matches(job)]
 

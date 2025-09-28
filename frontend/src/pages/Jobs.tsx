@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -34,7 +33,7 @@ const Jobs: React.FC = () => {
   const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
   const name_search = searchParams.get("name_search") || "";
   const category_search = searchParams.get("category_search") || "";
-  const skills_search_ids = (searchParams.get("skills_search") || "")
+  const skills_search_ids = (searchParams.get("preferred_skill_search") || "")
     .split(",")
     .filter(Boolean)
     .map(Number);
@@ -53,7 +52,7 @@ const Jobs: React.FC = () => {
     setSkillsSearch(
       JOB_SKILLS_ARRAY.filter((s) => skills_search_ids.includes(s.id))
     );
-  }, [name_search, category_search, skills_search_ids.join(",")]);
+  }, [searchParams.toString()]);
 
   const updateSearchParams = (newParams: Record<string, any>) => {
     const currentParams = new URLSearchParams(searchParams);
@@ -64,29 +63,19 @@ const Jobs: React.FC = () => {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: [
-      "jobs",
-      page,
-      rowsPerPage,
-      name_search,
-      category_search,
-      skillsSearch,
-      sort_by,
-      sort_order,
-    ],
+    queryKey: ["jobs", searchParams.toString()],
     queryFn: async () => {
       const response = await api.get("/api/jobs", {
         params: {
           name_search,
           category_search,
-          preferred_skill_search: skillsSearch.map((s) => s.id).join(","),
+          preferred_skill_search: skills_search_ids.join(","),
           sort_by,
           sort_order,
           skip: page * rowsPerPage,
           limit: rowsPerPage,
         },
       });
-      console.log(response.data);
       return response.data;
     },
   });
