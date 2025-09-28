@@ -70,7 +70,7 @@ const Jobs: React.FC = () => {
       rowsPerPage,
       name_search,
       category_search,
-      skills_search_ids,
+      skillsSearch,
       sort_by,
       sort_order,
     ],
@@ -79,7 +79,7 @@ const Jobs: React.FC = () => {
         params: {
           name_search,
           category_search,
-          preferred_skill_search: skills_search_ids.join(","),
+          preferred_skill_search: skillsSearch.map((s) => s.id).join(","),
           sort_by,
           sort_order,
           skip: page * rowsPerPage,
