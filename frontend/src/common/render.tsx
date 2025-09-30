@@ -1,3 +1,4 @@
+import "./render.css";
 // import mui chip
 import { Chip, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -97,18 +98,8 @@ export function renderLink(
 
   return (
     <span
-      style={{
-        cursor: "pointer",
-        color: "#1f2937", // neutral text
-        backgroundColor: "#fef08a", // Tailwind's yellow-200
-        padding: "2px 6px",
-        borderRadius: "6px",
-        fontSize: "0.875rem",
-        transition: "background-color 0.2s ease",
-      }}
+      className="highlight-link"
       onClick={() => navigate?.(url ?? "")}
-      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#fde047")} // yellow-300
-      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#fef08a")}
     >
       {text}
     </span>
