@@ -6,6 +6,11 @@ import {
   TextField,
   Typography,
   Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
 } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
@@ -17,6 +22,16 @@ interface Skill {
   value: number;
 }
 
+const classificationOptions = [
+  "무기",
+  "장신구",
+  "머리",
+  "몸",
+  "도구",
+  "다리",
+  "팔",
+];
+
 const Equipments: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,14 +42,18 @@ const Equipments: React.FC = () => {
   const name_search = searchParams.get("name_search") || "";
   const sort_by = searchParams.get("sort_by") || "id";
   const sort_order = (searchParams.get("sort_order") as 'asc' | 'desc') || "desc";
+  const classification = searchParams.get("classification")?.split(",") || [];
 
   // Component state for inputs
   const [searchInput, setSearchInput] = React.useState(name_search);
+  const [classificationFilter, setClassificationFilter] =
+    React.useState<string[]>(classification);
 
   // Sync local state with URL search params on mount/change
   useEffect(() => {
     setSearchInput(name_search);
-  }, [name_search]);
+    setClassificationFilter(classification);
+  }, [name_search, searchParams]);
 
   // Helper to update search params
   const updateSearchParams = (newParams: Record<string, any>) => {
@@ -57,6 +76,7 @@ const Equipments: React.FC = () => {
       name_search,
       sort_by,
       sort_order,
+      classification,
     ],
     queryFn: async () => {
       const response = await api.get("/api/equipment", {
@@ -66,6 +86,7 @@ const Equipments: React.FC = () => {
           sort_order,
           skip: page * rowsPerPage,
           limit: rowsPerPage,
+          classification: classification.join(","),
         },
       });
       return response.data; // Expecting { items: [], total: 0 }
@@ -74,10 +95,10 @@ const Equipments: React.FC = () => {
 
   const columns = [
     { id: "name", label: "이름", minWidth: 170 },
-    { id: "classification", label: "분류",  },
-    { id: "attack_power", label: "공격력",  },
-    { id: "defense_power", label: "방어력",  },
-    { id: "durability", label: "내구도",  },
+    { id: "classification", label: "분류" },
+    { id: "attack_power", label: "공격력" },
+    { id: "defense_power", label: "방어력" },
+    { id: "durability", label: "내구도" },
     { id: "attire", label: "복장예절", minWidth: 100 },
     { id: "disguise", label: "변장도", minWidth: 100 },
     {
@@ -111,12 +132,26 @@ const Equipments: React.FC = () => {
     setSearchInput(event.target.value);
   };
 
+  const handleClassificationChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, checked } = event.target;
+    setClassificationFilter((prev) =>
+      checked ? [...prev, name] : prev.filter((item) => item !== name)
+    );
+  };
+
   const handleSearch = () => {
-    updateSearchParams({ name_search: searchInput, page: 0 });
+    updateSearchParams({
+      name_search: searchInput,
+      page: 0,
+      classification: classificationFilter.join(","),
+    });
   };
 
   const resetFilters = () => {
     setSearchInput("");
+    setClassificationFilter([]);
     setSearchParams({ rowsPerPage: searchParams.get("rowsPerPage") || "10" });
   };
 
@@ -129,20 +164,28 @@ const Equipments: React.FC = () => {
   };
 
   const handleSortChange = (columnId: string) => {
-    const isAsc = sort_by === columnId && sort_order === 'asc';
+    const isAsc = sort_by === columnId && sort_order === "asc";
     updateSearchParams({
       sort_by: columnId,
-      sort_order: isAsc ? 'desc' : 'asc',
+      sort_order: isAsc ? "desc" : "asc",
       page: 0,
     });
   };
 
   return (
-      <Box sx={{ display: "flex", flexDirection: 'column', gap: 2, mb: 2, flexWrap: "wrap" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        mb: 2,
+        flexWrap: "wrap",
+      }}
+    >
       <Typography variant="h4" gutterBottom>
         장비품
       </Typography>
-      <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+      <Box sx={{ display: "flex", gap: 2, mb: 2, alignItems: "center" }}>
         <TextField
           label="장비품 이름 검색"
           variant="outlined"
@@ -151,6 +194,26 @@ const Equipments: React.FC = () => {
           sx={{ minWidth: 200 }}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
+        <FormControl component="fieldset">
+          <FormLabel component="legend">분류</FormLabel>
+          <FormGroup row>
+            {classificationOptions.map((option) => (
+              <FormControlLabel
+                key={option}
+                control={
+                  <Checkbox
+                    checked={classificationFilter.includes(option)}
+                    onChange={handleClassificationChange}
+                    name={option}
+                  />
+                }
+                label={option}
+              />
+            ))}
+          </FormGroup>
+        </FormControl>
+      </Box>
+      <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
         <Button variant="contained" onClick={handleSearch}>
           검색
         </Button>
@@ -178,3 +241,4 @@ const Equipments: React.FC = () => {
 };
 
 export default Equipments;
+

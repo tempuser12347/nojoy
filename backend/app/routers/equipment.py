@@ -23,6 +23,7 @@ def read_equipments(
     name_search: str = Query(None, description="Search term"),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
+    classification: str = Query(None, description="Classification filter"),
     db: Session = Depends(get_db),
 ):
 
@@ -41,6 +42,13 @@ def read_equipments(
 
     if name_search:
         results = [row for row in results if name_search.lower() in row.name.lower()]
+
+    if classification:
+        classifications = [c.strip() for c in classification.split(",") if c.strip()]
+        if classifications:
+            results = [
+                row for row in results if row.classification != None and row.classification.split('>')[0] in classifications
+            ]
 
     # Sorting logic
     if results:
