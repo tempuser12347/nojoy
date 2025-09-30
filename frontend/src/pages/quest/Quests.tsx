@@ -56,14 +56,16 @@ const Quests: React.FC = () => {
     .filter(Boolean)
     .map(Number);
   const sort_by = searchParams.get("sort_by") || "id";
-  const sort_order = (searchParams.get("sort_order") as 'asc' | 'desc') || "desc";
+  const sort_order =
+    (searchParams.get("sort_order") as "asc" | "desc") || "desc";
 
   // Component state for inputs
   const [searchInput, setSearchInput] = React.useState(name_search);
   const [locationSearch, setLocationSearch] = React.useState<City[]>(
     sampleCities.filter((c) => location_search_names.includes(c.name))
   );
-  const [destinationInput, setDestinationInput] = React.useState(destination_search);
+  const [destinationInput, setDestinationInput] =
+    React.useState(destination_search);
   const [skillsSearch, setSkillsSearch] = React.useState<Skill[]>(
     sampleSkills.filter((s) => skills_search_ids.includes(s.id))
   );
@@ -75,8 +77,15 @@ const Quests: React.FC = () => {
       sampleCities.filter((c) => location_search_names.includes(c.name))
     );
     setDestinationInput(destination_search);
-    setSkillsSearch(sampleSkills.filter((s) => skills_search_ids.includes(s.id))); // eslint-disable-next-line
-  }, [name_search, location_search_names.join(','), destination_search, skills_search_ids.join(',')]);
+    setSkillsSearch(
+      sampleSkills.filter((s) => skills_search_ids.includes(s.id))
+    ); // eslint-disable-next-line
+  }, [
+    name_search,
+    location_search_names.join(","),
+    destination_search,
+    skills_search_ids.join(","),
+  ]);
 
   // Helper to update search params
   const updateSearchParams = (newParams: Record<string, any>) => {
@@ -119,14 +128,12 @@ const Quests: React.FC = () => {
   });
 
   const columns = [
-    { id: "name", label: "이름", minWidth: 170 },
-    { id: "type", label: "종류", minWidth: 100 },
-    { id: "difficulty", label: "난이도", minWidth: 100 },
-    { id: "location", label: "의뢰장소", minWidth: 170 },
+    { id: "name", label: "이름" },
+    { id: "difficulty", label: "난이도" },
+    { id: "location", label: "의뢰장소" },
     {
       id: "destination",
       label: "목적지",
-      minWidth: 170,
       format: (value: any) => (
         <Typography>{value ? value.name : ""}</Typography>
       ),
@@ -134,7 +141,6 @@ const Quests: React.FC = () => {
     {
       id: "skills",
       label: "필요스킬",
-      minWidth: 200,
       format: (value: Skill[]) => renderObjectsToChips(value, navigate),
     },
   ];
@@ -173,10 +179,10 @@ const Quests: React.FC = () => {
   };
 
   const handleSortChange = (columnId: string) => {
-    const isAsc = sort_by === columnId && sort_order === 'asc';
+    const isAsc = sort_by === columnId && sort_order === "asc";
     updateSearchParams({
       sort_by: columnId,
-      sort_order: isAsc ? 'desc' : 'asc',
+      sort_order: isAsc ? "desc" : "asc",
       page: 0,
     });
   };
@@ -185,7 +191,9 @@ const Quests: React.FC = () => {
     setLocationSearch(newValue);
   };
 
-  const handleDestinationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDestinationChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setDestinationInput(event.target.value);
   };
 
@@ -194,12 +202,11 @@ const Quests: React.FC = () => {
   };
 
   return (
-    // <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
-      <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}> 
+    <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
       <Typography variant="h4" gutterBottom>
         퀘스트
       </Typography>
-      <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+      <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
         <TextField
           label="퀘스트 이름 검색"
           variant="outlined"
@@ -208,8 +215,6 @@ const Quests: React.FC = () => {
           sx={{ minWidth: 200 }}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
-      {/* </Box>
-      <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}> */}
         <Autocomplete
           multiple
           id="location-filter"
