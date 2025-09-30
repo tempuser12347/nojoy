@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, Card, CardContent, CircularProgress } from '@mui/material';
 import api from '../../api';
-import { renderObjectsToChips, renderItemsWithAmount } from '../../common/render';
+import { renderObjectsToChips, renderItemsWithAmount, renderLink } from '../../common/render';
 
 interface Quest {
   id: number;
@@ -115,7 +115,7 @@ export default function QuestDetail() {
             <DetailItem label="목적지" value={quest.destination?.name} />
             <DetailItem label="시리즈" value={quest.series} />
             <DetailItem label="마감일" value={quest.deadline} />
-            <DetailItem label="발견물" value={quest.discovery?.name} />
+            <DetailItem label="발견물" value={renderLink(quest.discovery?.name)} />
             <DetailItem label="선행 발견 퀘스트" value={quest.preceding_discovery_quest} />
             <DetailItem label="목적지 좌표" value={quest.destination_coordinates} />
             <DetailItem label="필요 아이템" value={renderItemsWithAmount(quest.required_items)} />
