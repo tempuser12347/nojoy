@@ -1,50 +1,66 @@
-import { useEffect, useState } from 'react';
-import { Box, Typography, TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import DataTable from '../../components/DataTable';
-import api from '../../api';
+import React, { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+} from "@mui/material";
+import DataTable from "../../components/DataTable";
+import api from "../../api";
 
-interface Shipwreck {
-  id: number;
-  type: string;
-  name: string;
-  difficulty: string;
-  sea_area: string;
-  destination: string;
-  skill: string;
-}
-
-export default function Shipwrecks() {
-  const [shipwrecks, setShipwrecks] = useState<Shipwreck[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [search, setSearch] = useState('');
+const Shipwrecks: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  // State initialization from URL search params
+  const page = parseInt(searchParams.get("page") || "0", 10);
+  const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
+  const name_search = searchParams.get("name_search") || "";
+  const sort_by = searchParams.get("sort_by") || "id";
+  const sort_order =
+    (searchParams.get("sort_order") as "asc" | "desc") || "desc";
+
+  // Component state for inputs
+  const [searchInput, setSearchInput] = React.useState(name_search);
+
+  // Sync local state with URL search params on mount/change
   useEffect(() => {
-    const fetchShipwrecks = async () => {
-      try {
-        const response = await api.get('/api/shipwrecks', {
-          params: {
-            search,
-            skip: page * rowsPerPage,
-            limit: rowsPerPage,
-          },
-        });
-        console.log(response.data);
-        setShipwrecks(response.data);
-      } catch (err) {
-        setError('Failed to load shipwrecks');
-        console.error('Error fetching shipwrecks:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    setSearchInput(name_search);
+  }, [name_search]);
 
-    fetchShipwrecks();
-  }, [search, page, rowsPerPage]);
+  // Helper to update search params
+  const updateSearchParams = (newParams: Record<string, any>) => {
+    const currentParams = new URLSearchParams(searchParams);
+    Object.entries(newParams).forEach(([key, value]) => {
+      value ? currentParams.set(key, value) : currentParams.delete(key);
+    });
+    setSearchParams(currentParams);
+  };
+
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      "shipwrecks",
+      page,
+      rowsPerPage,
+      name_search,
+      sort_by,
+      sort_order,
+    ],
+    queryFn: async () => {
+      const response = await api.get("/api/shipwrecks", {
+        params: {
+          name_search,
+          sort_by,
+          sort_order,
+          skip: page * rowsPerPage,
+          limit: rowsPerPage,
+        },
+      });
+      return response.data; // Expecting { items: [], total: 0 }
+    },
+  });
 
   const columns = [
     { id: 'name', label: '이름' },
@@ -54,45 +70,80 @@ export default function Shipwrecks() {
     { id: 'skill', label: '필요스킬' },
   ];
 
-  if (error) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Typography color="error">{error}</Typography>
-      </Box>
-    );
-  }
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchInput(event.target.value);
+  };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
-    setPage(0);
+  const handleSearch = () => {
+    const newParams: Record<string, any> = {
+      name_search: searchInput,
+      page: 0,
+    };
+    updateSearchParams(newParams);
+  };
+
+  const resetFilters = () => {
+    setSearchInput("");
+    setSearchParams({ rowsPerPage: searchParams.get("rowsPerPage") || "10" });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    updateSearchParams({ page: newPage });
+  };
+
+  const handleRowsPerPageChange = (newRowsPerPage: number) => {
+    updateSearchParams({ rowsPerPage: newRowsPerPage, page: 0 });
+  };
+
+  const handleSortChange = (columnId: string) => {
+    const isAsc = sort_by === columnId && sort_order === "asc";
+    updateSearchParams({
+      sort_by: columnId,
+      sort_order: isAsc ? "desc" : "asc",
+      page: 0,
+    });
   };
 
   return (
-    <Box sx={{ p: 3, height: 'calc(100vh - 100px)' }}>
-      <Typography variant="h4" gutterBottom>침몰선</Typography>
-      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+    <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
+      <Typography variant="h4" gutterBottom>
+        침몰선
+      </Typography>
+      <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
         <TextField
-          label="이름검색"
+          label="침몰선 이름 검색"
           variant="outlined"
-          value={search}
-          onChange={handleSearchChange}
+          value={searchInput}
+          onChange={handleSearchInputChange}
           sx={{ minWidth: 200 }}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
+        <Button variant="contained" onClick={handleSearch}>
+          검색
+        </Button>
+        <Button variant="outlined" onClick={resetFilters}>
+          초기화
+        </Button>
       </Box>
+
       <DataTable
         columns={columns}
-        data={shipwrecks}
-        loading={loading}
-        onRowClick={(row) => navigate(`/침몰선/${row.id}`)}
+        data={data?.items || []}
+        loading={isLoading}
+        total={data?.total || 0}
         page={page}
         rowsPerPage={rowsPerPage}
-        total={shipwrecks.length}
-        onPageChange={setPage}
-        onRowsPerPageChange={(newRowsPerPage) => {
-          setPage(0);
-          setRowsPerPage(newRowsPerPage);
-        }}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        sortColumn={sort_by}
+        sortDirection={sort_order}
+        onSortChange={handleSortChange}
+        onRowClick={(row) => navigate(`/침몰선/${row.id}`)}
       />
     </Box>
   );
-}
+};
+
+export default Shipwrecks;
