@@ -21,7 +21,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container component="main" sx={{ mt: 8, mb: 4, flex: 1 }}>
+      <Container component="main" maxWidth={false} sx={{ mt: 8, mb: 4, flex: 1 }}>
         {children}
       </Container>
     </Box>
