@@ -29,14 +29,27 @@ def read_equipments(
 
     results = db.execute(
         text(
+            # """
+            # SELECT
+            #     e.*,
+            #     json_group_array(je.value) as skills_json
+            # FROM equipment e
+            # LEFT JOIN json_each(e.skills) je ON 1=1
+            # GROUP BY e.id
+            # """
             """
-            SELECT
-                e.*,
-                json_group_array(je.value) as skills_json
-            FROM equipment e
-            LEFT JOIN json_each(e.skills) je ON 1=1
-            GROUP BY e.id
-            """
+SELECT
+    e.*,
+    CASE
+        WHEN COUNT(je.value) = 0 THEN NULL
+        ELSE json_group_array(je.value)
+    END AS skills_json
+FROM equipment e
+LEFT JOIN json_each(e.skills) je
+    ON je.value IS NOT NULL
+GROUP BY e.id;
+
+"""
         )
     ).fetchall()
 
@@ -47,7 +60,10 @@ def read_equipments(
         classifications = [c.strip() for c in classification.split(",") if c.strip()]
         if classifications:
             results = [
-                row for row in results if row.classification != None and row.classification.split('>')[0] in classifications
+                row
+                for row in results
+                if row.classification != None
+                and row.classification.split(">")[0] in classifications
             ]
 
     # Sorting logic
@@ -85,7 +101,7 @@ def read_equipments(
         "requirements",
         "skills_json",
     ]
-
+    print(equipments)
     ret_list = []
     for equipment in equipments:
         ret = {
@@ -93,9 +109,15 @@ def read_equipments(
             for field in return_fields
             if field not in ["skills_json"]
         }
-        ret["skills"] = json.loads(equipment.skills_json) if equipment.skills_json else []
-        ret['use_effect'] = json.loads(equipment.use_effect) if equipment.use_effect else None
-        ret['equipped_effect'] = json.loads(equipment.equipped_effect) if equipment.equipped_effect else None
+        ret["skills"] = (
+            json.loads(equipment.skills_json) if equipment.skills_json else []
+        )
+        ret["use_effect"] = (
+            json.loads(equipment.use_effect) if equipment.use_effect else None
+        )
+        ret["equipped_effect"] = (
+            json.loads(equipment.equipped_effect) if equipment.equipped_effect else None
+        )
         ret_list.append(ret)
 
     return {"items": ret_list, "total": total}

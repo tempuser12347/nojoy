@@ -89,6 +89,7 @@ const Equipments: React.FC = () => {
           classification: classification.join(","),
         },
       });
+      console.log(response.data)
       return response.data; // Expecting { items: [], total: 0 }
     },
   });
