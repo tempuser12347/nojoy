@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Typography, Card, CardContent, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
-import api from '../api';
-import { renderObjectsToChips } from '../common/render';
+import api from '../../api';
+import { renderObjectsToChips } from '../../common/render';
 
 interface Job {
   id: number;

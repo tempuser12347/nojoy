@@ -13,10 +13,10 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import DataTable from "../components/DataTable";
-import api from "../api";
-import { renderObjectsToChips } from "../common/render";
-import { JOB_PREFERRED_SKILL_OPTION_ARRAY } from "../constants/listvalues";
+import DataTable from "../../components/DataTable";
+import api from "../../api";
+import { renderObjectsToChips } from "../../common/render";
+import { JOB_PREFERRED_SKILL_OPTION_ARRAY } from "../../constants/listvalues";
 
 const JOB_CATEGORIES = ["모험", "교역", "전투"];
 const JOB_SKILLS_ARRAY = JOB_PREFERRED_SKILL_OPTION_ARRAY.map((skill) => ({

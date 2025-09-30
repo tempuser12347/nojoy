@@ -9,13 +9,13 @@ import {
   Chip,
   Autocomplete,
 } from "@mui/material";
-import DataTable from "../components/DataTable";
-import api from "../api";
-import { renderObjectsToChips } from "../common/render";
+import DataTable from "../../components/DataTable";
+import api from "../../api";
+import { renderObjectsToChips } from "../../common/render";
 import {
   QUEST_FILTER_LOCATION_ARRAY,
   QUEST_FILTER_SKILL_ARRAY,
-} from "../constants/listvalues";
+} from "../../constants/listvalues";
 
 interface Skill {
   id: number;

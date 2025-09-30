@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, Card, CardContent } from '@mui/material';
-import api from '../api';
-import { renderObjectsToChips } from '../common/render';
+import api from '../../api';
+import { renderObjectsToChips } from '../../common/render';
 
 interface Recipe {
   id: number;

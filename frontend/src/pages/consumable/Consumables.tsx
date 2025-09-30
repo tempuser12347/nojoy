@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Box, Typography, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import DataTable from '../components/DataTable';
-import api from '../api';
+import DataTable from '../../components/DataTable';
+import api from '../../api';
 
 interface Consumable {
   id: number;
