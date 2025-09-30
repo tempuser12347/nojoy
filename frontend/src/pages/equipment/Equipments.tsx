@@ -229,40 +229,42 @@ const Equipments: React.FC = () => {
           sx={{ minWidth: 200 }}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
-        <FormControl component="fieldset">
-          <FormLabel component="legend">분류</FormLabel>
+      </Box>
+      <FormControl component="fieldset">
+        <FormLabel component="legend">분류</FormLabel>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
           <FormGroup row>
-            <FormControl component="fieldset">
-              <FormControlLabel
-                label="무기"
-                control={
-                  <Checkbox
-                    checked={selectedWeaponsCount === weaponOptions.length}
-                    indeterminate={
-                      selectedWeaponsCount > 0 &&
-                      selectedWeaponsCount < weaponOptions.length
-                    }
-                    onChange={handleWeaponChange}
-                    name="무기"
-                  />
-                }
-              />
-              <Box sx={{ display: "flex", flexDirection: "row", ml: 3 }}>
-                {weaponOptions.map((option) => (
-                  <FormControlLabel
-                    key={option}
-                    control={
-                      <Checkbox
-                        checked={classificationFilter.includes(option)}
-                        onChange={handleWeaponChange}
-                        name={option}
-                      />
-                    }
-                    label={option}
-                  />
-                ))}
-              </Box>
-            </FormControl>
+            <FormControlLabel
+              label="무기"
+              control={
+                <Checkbox
+                  checked={selectedWeaponsCount === weaponOptions.length}
+                  indeterminate={
+                    selectedWeaponsCount > 0 &&
+                    selectedWeaponsCount < weaponOptions.length
+                  }
+                  onChange={handleWeaponChange}
+                  name="무기"
+                />
+              }
+            />
+            <Box sx={{ display: "flex", flexDirection: "row", ml: 3 }}>
+              {weaponOptions.map((option) => (
+                <FormControlLabel
+                  key={option}
+                  control={
+                    <Checkbox
+                      checked={classificationFilter.includes(option)}
+                      onChange={handleWeaponChange}
+                      name={option}
+                    />
+                  }
+                  label={option}
+                />
+              ))}
+            </Box>
+          </FormGroup>
+          <FormGroup row>
             {classificationOptions.map((option) => (
               <FormControlLabel
                 key={option}
@@ -277,9 +279,9 @@ const Equipments: React.FC = () => {
               />
             ))}
           </FormGroup>
-        </FormControl>
-      </Box>
-      <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+        </Box>
+      </FormControl>
+      <Box sx={{ display: "flex", gap: 2, mt: 2, mb: 2 }}>
         <Button variant="contained" onClick={handleSearch}>
           검색
         </Button>
