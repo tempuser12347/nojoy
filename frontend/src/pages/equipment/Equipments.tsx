@@ -234,15 +234,7 @@ const Equipments: React.FC = () => {
   ).length;
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        mb: 2,
-        flexWrap: "wrap",
-      }}
-    >
+    <Box sx={{ width: "100%", p: 3}}>
       <Typography variant="h4" gutterBottom>
         장비품
       </Typography>

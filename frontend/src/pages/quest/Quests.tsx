@@ -202,7 +202,8 @@ const Quests: React.FC = () => {
   };
 
   return (
-    <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
+    // <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
+    <Box sx={{ width: "100%", p: 3 }}>
       <Typography variant="h4" gutterBottom>
         퀘스트
       </Typography>
