@@ -6,8 +6,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import DataTable from '../components/DataTable';
-import api from '../api';
+import DataTable from '../../components/DataTable';
+import api from '../../api';
 
 const columns = [
   { id: 'name', label: '도시명', minWidth: 170 },

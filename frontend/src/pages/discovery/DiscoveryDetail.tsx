@@ -1,7 +1,7 @@
 import { Box, Typography, Card, CardContent, CircularProgress } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import api from '../api';
+import api from '../../api';
 
 interface Discovery {
   id: number;

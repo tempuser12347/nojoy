@@ -11,8 +11,8 @@ import {
   Typography
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
-import DataTable from '../components/DataTable';
-import api from '../api';
+import DataTable from '../../components/DataTable';
+import api from '../../api';
 
 const columns = [
   { id: 'name', label: '이름', minWidth: 170 },
