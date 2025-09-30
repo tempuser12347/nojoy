@@ -58,6 +58,7 @@ GROUP BY e.id;
 
     if classification:
         classifications = [c.strip() for c in classification.split(",") if c.strip()]
+        print("Filtering by classifications:", classifications)
         if classifications:
             results = [
                 row

@@ -154,15 +154,18 @@ const Equipments: React.FC = () => {
 
   const handleWeaponChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = event.target;
+    console.log(name, checked)
     if (name === "무기") {
       if (checked) {
+        let prefixedWeaponObjects = weaponOptions.map(option => '무기>'+option)
         setClassificationFilter((prev) => [
-          ...prev.filter((item) => !weaponOptions.includes(item)),
-          ...weaponOptions,
+          ...prev.filter((item) => !prefixedWeaponObjects.includes(item)),
+          ...prefixedWeaponObjects,
         ]);
       } else {
+        let prefixedWeaponObjects = weaponOptions.map(option => '무기>'+option)
         setClassificationFilter((prev) =>
-          prev.filter((item) => !weaponOptions.includes(item))
+          prev.filter((item) => !prefixedWeaponObjects.includes(item))
         );
       }
     } else {
@@ -204,7 +207,7 @@ const Equipments: React.FC = () => {
   };
 
   const selectedWeaponsCount = classificationFilter.filter((c) =>
-    weaponOptions.includes(c)
+    weaponOptions.map(option => '무기>'+option).includes(c)
   ).length;
 
   return (
@@ -254,9 +257,9 @@ const Equipments: React.FC = () => {
                   key={option}
                   control={
                     <Checkbox
-                      checked={classificationFilter.includes(option)}
+                      checked={classificationFilter.includes('무기>' + option)}
                       onChange={handleWeaponChange}
-                      name={option}
+                      name={'무기>' + option}
                     />
                   }
                   label={option}
