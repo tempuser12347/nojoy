@@ -107,7 +107,6 @@ export default function QuestDetail() {
         <CardContent>
           <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr' } }}>
             <Box sx={{ gridColumn: '1 / -1' }}><DetailItem label="설명" value={quest.description} /></Box>
-            <DetailItem label="종류" value={quest.type} />
             <DetailItem label="카테고리" value={quest.category} />
             <DetailItem label="난이도" value={quest.difficulty} />
             <DetailItem label="시대" value={quest.era} />
