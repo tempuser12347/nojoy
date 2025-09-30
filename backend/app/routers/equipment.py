@@ -64,7 +64,7 @@ GROUP BY e.id;
                 row
                 for row in results
                 if row.classification != None
-                and row.classification.split(">")[0] in classifications
+                and row.classification in classifications
             ]
 
     # Sorting logic
