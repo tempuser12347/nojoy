@@ -1,5 +1,13 @@
 // import mui chip
-import { Chip } from "@mui/material";
+import {
+  Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 type NavigateFunction = ReturnType<typeof useNavigate>;
@@ -67,4 +75,23 @@ export function renderItemsWithAmount(
       </span>
     );
   });
+}
+
+export function renderRequirementsTable(
+  data: { type: string; content: any }[] | null
+) {
+  if (!data) return null;
+  // render table with two columns. first is 'type' second is 'content'. and then show data as rows
+  return (
+    <Table>
+      <TableBody>
+        {data.map((item, index) => (
+          <TableRow key={index}>
+            <TableCell align="center">{item.type}</TableCell>
+            <TableCell align="left">{item.content}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
 }

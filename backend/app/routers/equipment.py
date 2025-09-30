@@ -188,4 +188,5 @@ def read_equipment(equipment_id: int, db: Session = Depends(get_db)):
     ret["equipped_effect"] = (
         json.loads(result.equipped_effect) if result.equipped_effect else None
     )
+    ret['requirements']= json.loads(result.requirements) if result.requirements else None
     return ret
