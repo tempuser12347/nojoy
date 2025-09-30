@@ -18,8 +18,7 @@ import api from '../../api';
 
 const columns = [
   { id: 'name', label: '이름', minWidth: 170 },
-  { id: 'type', label: '종류', minWidth: 100 },
-  { id: 'category', label: '분류', minWidth: 100 },
+  { id: 'category', label: '카테고리', minWidth: 100 },
   { id: 'difficulty', label: '난이도', minWidth: 100 },
   { id: 'discovery_method', label: '발견 방법', minWidth: 170 },
 ];
@@ -30,16 +29,16 @@ const Discoveries: React.FC = () => {
 
   const page = parseInt(searchParams.get('page') || '0', 10);
   const rowsPerPage = parseInt(searchParams.get('rowsPerPage') || '10', 10);
-  const type = searchParams.get('type') || '';
+  const category = searchParams.get('category') || '';
   const search = searchParams.get('search') || '';
 
-  const [typeInput, setTypeInput] = React.useState(type);
+  const [categoryInput, setCategoryInput] = React.useState(category);
   const [searchInput, setSearchInput] = React.useState(search);
 
   useEffect(() => {
-    setTypeInput(type);
+    setCategoryInput(category);
     setSearchInput(search);
-  }, [type, search]);
+  }, [category, search]);
 
   const updateSearchParams = (newParams: Record<string, any>) => {
     const currentParams = new URLSearchParams(searchParams);
@@ -54,11 +53,11 @@ const Discoveries: React.FC = () => {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ['discoveries', page, rowsPerPage, type, search],
+    queryKey: ['discoveries', page, rowsPerPage, category, search],
     queryFn: async () => {
       const response = await api.get('/api/discoveries', {
         params: {
-          type,
+          category,
           search,
           skip: page * rowsPerPage,
           limit: rowsPerPage,
@@ -68,8 +67,8 @@ const Discoveries: React.FC = () => {
     },
   });
 
-  const handleTypeChange = (event: SelectChangeEvent) => {
-    setTypeInput(event.target.value);
+  const handleCategoryChange = (event: SelectChangeEvent) => {
+    setCategoryInput(event.target.value);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,14 +77,14 @@ const Discoveries: React.FC = () => {
 
   const handleSearch = () => {
     updateSearchParams({
-      type: typeInput,
+      category: categoryInput,
       search: searchInput,
       page: 0,
     });
   };
 
   const resetFilters = () => {
-    setTypeInput('');
+    setCategoryInput('');
     setSearchInput('');
     setSearchParams({ rowsPerPage: searchParams.get('rowsPerPage') || '10' });
   };
@@ -103,13 +102,28 @@ const Discoveries: React.FC = () => {
       <Typography variant="h4" gutterBottom>발견물</Typography>
       <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
         <FormControl sx={{ minWidth: 200 }}>
-          <InputLabel>종류</InputLabel>
-          <Select value={typeInput} onChange={handleTypeChange} label="종류">
+          <InputLabel>카테고리</InputLabel>
+          <Select value={categoryInput} onChange={handleCategoryChange} label="카테고리">
             <MenuItem value="">전체</MenuItem>
-            <MenuItem value="발견물">발견물</MenuItem>
-            <MenuItem value="퀘스트">퀘스트</MenuItem>
-            <MenuItem value="보물지도">보물지도</MenuItem>
-            <MenuItem value="침몰선">침몰선</MenuItem>
+            <MenuItem value="역사유물">역사유물</MenuItem>
+            <MenuItem value="종교유물">종교유물</MenuItem>
+            <MenuItem value="미술품">미술품</MenuItem>
+            <MenuItem value="천문">천문</MenuItem>
+            <MenuItem value="해양생물">해양생물</MenuItem>
+            <MenuItem value="보물">보물</MenuItem>
+            <MenuItem value="조류">조류</MenuItem>
+            <MenuItem value="식물">식물</MenuItem>
+            <MenuItem value="항구-마을">항구-마을</MenuItem>
+            <MenuItem value="중형생물">중형생물</MenuItem>
+            <MenuItem value="지리">지리</MenuItem>
+            <MenuItem value="화석">화석</MenuItem>
+            <MenuItem value="대형생물">대형생물</MenuItem>
+            <MenuItem value="소형생물">소형생물</MenuItem>
+            <MenuItem value="기상 현상">기상 현상</MenuItem>
+            <MenuItem value="곤충">곤충</MenuItem>
+            <MenuItem value="사적">사적</MenuItem>
+            <MenuItem value="종교건축물">종교건축물</MenuItem>
+            <MenuItem value="전승">전승</MenuItem>
           </Select>
         </FormControl>
         <TextField
