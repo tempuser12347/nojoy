@@ -22,6 +22,8 @@ import TreasureMaps from './pages/treasuremap/TreasureMaps';
 import TreasureMapDetail from './pages/treasuremap/TreasureMapDetail';
 import Jobs from './pages/job/Jobs';
 import JobDetail from './pages/job/JobDetail';
+import Equipments from './pages/equipment/Equipments';
+import EquipmentDetail from './pages/equipment/EquipmentDetail';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -53,6 +55,8 @@ function App() {
               <Route path="/보물지도/:id" element={<TreasureMapDetail />} />
               <Route path="/직업" element={<Jobs />} />
               <Route path="/직업/:id" element={<JobDetail />} />
+              <Route path="/장비품" element={<Equipments />} />
+              <Route path="/장비품/:id" element={<EquipmentDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
