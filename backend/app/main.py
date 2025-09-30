@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from app.routers import discoveries, items, ships, technics, npcs, quests, cities, recipes, shipwrecks, treasuremaps, consumables, jobs
+from app.routers import discoveries, items, ships, technics, npcs, quests, cities, recipes, shipwrecks, treasuremaps, consumables, jobs, equipment
 import os
 
 app = FastAPI(title="DHO Database API")
