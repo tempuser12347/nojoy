@@ -122,7 +122,11 @@ LEFT JOIN allData ad
             if value is None:
                 # Treat None as a very small number for numeric types or an empty string for others
                 # This ensures they are sorted at the beginning (for asc) or end (for desc)
-                return (0, "") if isinstance(getattr(results[0], sort_by, None), (int, float)) else ""
+                return (
+                    (0, "")
+                    if isinstance(getattr(results[0], sort_by, None), (int, float))
+                    else ""
+                )
             return value
 
         results.sort(key=sort_key, reverse=reverse)
@@ -142,7 +146,6 @@ LEFT JOIN allData ad
         "discovery",
         "preceding_discovery_quest",
         "grouped_skills",
-        "destination_json",
     ]
 
     ret_list = []
@@ -152,7 +155,7 @@ LEFT JOIN allData ad
         ret = {
             field: getattr(quest, field, None)
             for field in return_fields
-            if field not in ["skills", "destination_json"]
+            if field not in ["skills", "destination"]
         }
         # The SQL query aliases the computed skills array as 'grouped_skills'.
         # We map it to the 'skills' key in the response.
