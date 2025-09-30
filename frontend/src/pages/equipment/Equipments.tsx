@@ -74,11 +74,32 @@ const Equipments: React.FC = () => {
 
   const columns = [
     { id: "name", label: "이름", minWidth: 170 },
-    { id: "type", label: "종류", minWidth: 100 },
     { id: "classification", label: "분류", minWidth: 100 },
     { id: "attack_power", label: "공격력", minWidth: 100 },
     { id: "defense_power", label: "방어력", minWidth: 100 },
     { id: "durability", label: "내구도", minWidth: 100 },
+    { id: "attire", label: "복장예절", minWidth: 100 },
+    { id: "disguise", label: "변장도", minWidth: 100 },
+    {
+      id: "use_effect",
+      label: "사용효과",
+      minWidth: 200,
+      format: (value: { [key: string]: any } | null) => {
+        if (!value) return "";
+        return Object.entries(value)
+          .map(([key, value]) => `${key} ${value}`)
+          .join(", ");
+      },
+    },
+    {
+      id: "equipped_effect",
+      label: "장비효과",
+      minWidth: 200,
+      format: (value: { [key: string]: any } | null) => {
+        if (!value) return "";
+        return value?.name;
+      },
+    },
     {
       id: "skills",
       label: "필요스킬",
@@ -153,7 +174,7 @@ const Equipments: React.FC = () => {
         sortColumn={sort_by}
         sortDirection={sort_order}
         onSortChange={handleSortChange}
-        onRowClick={(row) => navigate(`/장비/${row.id}`)}
+        onRowClick={(row) => navigate(`/장비품/${row.id}`)}
       />
     </Box>
   );
