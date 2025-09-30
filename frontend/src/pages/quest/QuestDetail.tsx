@@ -23,7 +23,7 @@ interface Quest {
   required_items: {id:number, name:string, value:number}[] | null;
   guide: string;
   progress: string;
-  previous_continuous_quest_id: string;
+  previous_continuous_quest: {id: number, name: string}|null;
   episode: number;
   one_time_only: number;
   rare: number;
@@ -118,7 +118,7 @@ export default function QuestDetail() {
             <DetailItem label="선행 발견 퀘스트" value={quest.preceding_discovery_quest} />
             <DetailItem label="목적지 좌표" value={quest.destination_coordinates} />
             <DetailItem label="필요 아이템" value={renderItemsWithAmount(quest.required_items)} />
-            <DetailItem label="이전 연속 퀘스트 ID" value={quest.previous_continuous_quest_id} />
+            <DetailItem label="이전 연속 퀘스트" value={renderLink(quest.previous_continuous_quest?.name)} />
             <DetailItem label="에피소드" value={quest.episode} />
             <DetailItem label="1회 한정" value={quest.one_time_only ? 'Yes' : 'No'} />
             <DetailItem label="희귀" value={quest.rare ? 'Yes' : 'No'} />
@@ -139,7 +139,6 @@ export default function QuestDetail() {
             <DetailItem label="보상 (아이템)" value={renderItemsWithAmount(quest.reward_items, navigate)} />
             <Box sx={{ gridColumn: '1 / -1' }}><DetailItem label="공략" value={quest.guide} /></Box>
             <Box sx={{ gridColumn: '1 / -1' }}><DetailItem label="진행" value={quest.progress} /></Box>
-            {/* <DetailItem label="진행" value={quest.progress} /> */}
           </Box>
         </CardContent>
       </Card>

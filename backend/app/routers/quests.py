@@ -248,7 +248,14 @@ SELECT
             'id', ad2.id,
             'name', ad2.name
         )
-    END AS discovery_json
+    END AS discovery_json,
+    CASE 
+        WHEN pq.id IS NULL THEN NULL
+        ELSE json_object(
+            'id', pq.id,
+            'name', pq.name
+        )
+    END AS previous_continuous_quest_json
 FROM quest l
 LEFT JOIN skill_arr r
     ON l.id = r.quest_id
@@ -260,6 +267,8 @@ LEFT JOIN allData ad
     ON CAST(l.destination AS INTEGER) = ad.id
 LEFT JOIN allData ad2
     ON CAST(l.discovery AS INTEGER) = ad2.id
+LEFT JOIN quest pq
+    ON CAST(l.previous_continuous_quest_id AS INTEGER) = pq.id
 WHERE l.id = :quest_id;
 
                       """
@@ -330,4 +339,6 @@ WHERE l.id = :quest_id;
         else []
     )
     ret['discovery'] = json.loads(result.discovery_json) if result.discovery_json else None
+    ret['previous_continuous_quest'] = json.loads(result.previous_continuous_quest_json) if result.previous_continuous_quest_json else None
+
     return ret
