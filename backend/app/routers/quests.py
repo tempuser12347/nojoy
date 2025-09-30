@@ -240,9 +240,15 @@ SELECT
         ELSE json_object(
             'id', ad.id,
             'name', ad.name
-            -- ,'category', ad.category  -- add if needed
         )
-    END AS destination_json
+    END AS destination_json,
+    CASE 
+        WHEN ad2.id IS NULL OR ad2.id = '' THEN NULL
+        ELSE json_object(
+            'id', ad2.id,
+            'name', ad2.name
+        )
+    END AS discovery_json
 FROM quest l
 LEFT JOIN skill_arr r
     ON l.id = r.quest_id
@@ -252,6 +258,8 @@ LEFT JOIN required_arr rq
     ON l.id = rq.quest_id
 LEFT JOIN allData ad
     ON CAST(l.destination AS INTEGER) = ad.id
+LEFT JOIN allData ad2
+    ON CAST(l.discovery AS INTEGER) = ad2.id
 WHERE l.id = :quest_id;
 
                       """
@@ -321,4 +329,5 @@ WHERE l.id = :quest_id;
         if result.grouped_required_items
         else []
     )
+    ret['discovery'] = json.loads(result.discovery_json) if result.discovery_json else None
     return ret

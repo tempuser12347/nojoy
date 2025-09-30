@@ -17,7 +17,7 @@ interface Quest {
   location: string;
   destination: { id: number; name: string } | null;
   destination_coordinates: string;
-  discovery: string;
+  discovery: {id: number, name: string}|null;
   preceding_discovery_quest: string;
   deadline: string;
   required_items: {id:number, name:string, value:number}[] | null;
@@ -63,6 +63,7 @@ export default function QuestDetail() {
     const fetchQuest = async () => {
       try {
         const response = await api.get(`/api/quests/${id}`);
+        console.log(response.data)
         setQuest(response.data);
       } catch (err) {
         setError('Failed to load quest details');
@@ -114,7 +115,7 @@ export default function QuestDetail() {
             <DetailItem label="목적지" value={quest.destination?.name} />
             <DetailItem label="시리즈" value={quest.series} />
             <DetailItem label="마감일" value={quest.deadline} />
-            <DetailItem label="발견물" value={quest.discovery} />
+            <DetailItem label="발견물" value={quest.discovery?.name} />
             <DetailItem label="선행 발견 퀘스트" value={quest.preceding_discovery_quest} />
             <DetailItem label="목적지 좌표" value={quest.destination_coordinates} />
             <DetailItem label="필요 아이템" value={renderItemsWithAmount(quest.required_items)} />
