@@ -30,6 +30,7 @@ app.include_router(shipwrecks.router)
 app.include_router(treasuremaps.router)
 app.include_router(consumables.router)
 app.include_router(jobs.router)
+app.include_router(equipment.router)
 
 
 dist_dir = "dist"
