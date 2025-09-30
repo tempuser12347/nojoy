@@ -29,14 +29,6 @@ def read_equipments(
 
     results = db.execute(
         text(
-            # """
-            # SELECT
-            #     e.*,
-            #     json_group_array(je.value) as skills_json
-            # FROM equipment e
-            # LEFT JOIN json_each(e.skills) je ON 1=1
-            # GROUP BY e.id
-            # """
             """
 SELECT
     e.*,
