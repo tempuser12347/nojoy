@@ -22,14 +22,7 @@ interface Skill {
   value: number;
 }
 
-const classificationOptions = [
-  "장신구",
-  "머리",
-  "몸",
-  "도구",
-  "다리",
-  "팔",
-];
+const classificationOptions = ["장신구", "머리", "몸", "도구", "다리", "팔"];
 
 const weaponOptions = [
   "검",
@@ -52,7 +45,8 @@ const Equipments: React.FC = () => {
   const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
   const name_search = searchParams.get("name_search") || "";
   const sort_by = searchParams.get("sort_by") || "id";
-  const sort_order = (searchParams.get("sort_order") as 'asc' | 'desc') || "desc";
+  const sort_order =
+    (searchParams.get("sort_order") as "asc" | "desc") || "desc";
   const classification = searchParams.get("classification")?.split(",") || [];
 
   // Component state for inputs
@@ -125,7 +119,8 @@ const Equipments: React.FC = () => {
     {
       id: "skills",
       label: "스킬",
-      format: (value: Skill[]) => renderObjectsToChips(value, navigate),
+      format: (value: Skill[]) =>
+        renderObjectsToChips(value, navigate, (v) => "+" + v),
     },
     {
       id: "equipped_effect",
@@ -154,16 +149,20 @@ const Equipments: React.FC = () => {
 
   const handleWeaponChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = event.target;
-    console.log(name, checked)
+    console.log(name, checked);
     if (name === "무기") {
       if (checked) {
-        let prefixedWeaponObjects = weaponOptions.map(option => '무기>'+option)
+        let prefixedWeaponObjects = weaponOptions.map(
+          (option) => "무기>" + option
+        );
         setClassificationFilter((prev) => [
           ...prev.filter((item) => !prefixedWeaponObjects.includes(item)),
           ...prefixedWeaponObjects,
         ]);
       } else {
-        let prefixedWeaponObjects = weaponOptions.map(option => '무기>'+option)
+        let prefixedWeaponObjects = weaponOptions.map(
+          (option) => "무기>" + option
+        );
         setClassificationFilter((prev) =>
           prev.filter((item) => !prefixedWeaponObjects.includes(item))
         );
@@ -207,7 +206,7 @@ const Equipments: React.FC = () => {
   };
 
   const selectedWeaponsCount = classificationFilter.filter((c) =>
-    weaponOptions.map(option => '무기>'+option).includes(c)
+    weaponOptions.map((option) => "무기>" + option).includes(c)
   ).length;
 
   return (
@@ -257,9 +256,9 @@ const Equipments: React.FC = () => {
                   key={option}
                   control={
                     <Checkbox
-                      checked={classificationFilter.includes('무기>' + option)}
+                      checked={classificationFilter.includes("무기>" + option)}
                       onChange={handleWeaponChange}
-                      name={'무기>' + option}
+                      name={"무기>" + option}
                     />
                   }
                   label={option}
@@ -312,4 +311,3 @@ const Equipments: React.FC = () => {
 };
 
 export default Equipments;
-
