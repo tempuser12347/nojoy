@@ -21,7 +21,11 @@ async def get_discoveries(
         query = query.filter(models.Discovery.type == type)
     if search:
         query = query.filter(models.Discovery.name.ilike(f"%{search}%"))
-    return query.offset(skip).limit(limit).all()
+    
+    total = query.count()
+    items = query.offset(skip).limit(limit).all()
+    
+    return {"items": items, "total": total}
 
 
 @router.get("/{discovery_id}")
