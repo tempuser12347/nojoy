@@ -1,50 +1,66 @@
-import { useEffect, useState } from 'react';
-import { Box, Typography, TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import DataTable from '../../components/DataTable';
-import api from '../../api';
+import React, { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+} from "@mui/material";
+import DataTable from "../../components/DataTable";
+import api from "../../api";
 
-interface Ship {
-  id: number;
-  name: string;
-  type: string;
-  size: string;
-  category: string;
-  lv_adventure: number;
-  lv_trade: number;
-  lv_battle: number;
-}
-
-export default function Ships() {
-  const [ships, setShips] = useState<Ship[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [search, setSearch] = useState('');
+const Ships: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  // State initialization from URL search params
+  const page = parseInt(searchParams.get("page") || "0", 10);
+  const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
+  const name_search = searchParams.get("name_search") || "";
+  const sort_by = searchParams.get("sort_by") || "id";
+  const sort_order =
+    (searchParams.get("sort_order") as "asc" | "desc") || "desc";
+
+  // Component state for inputs
+  const [searchInput, setSearchInput] = React.useState(name_search);
+
+  // Sync local state with URL search params on mount/change
   useEffect(() => {
-    const fetchShips = async () => {
-      try {
-        const response = await api.get('/api/ships', {
-          params: {
-            search,
-            skip: page * rowsPerPage,
-            limit: rowsPerPage,
-          },
-        });
-        setShips(response.data);
-      } catch (err) {
-        setError('Failed to load ships');
-        console.error('Error fetching ships:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    setSearchInput(name_search);
+  }, [name_search]);
 
-    fetchShips();
-  }, [search, page, rowsPerPage]);
+  // Helper to update search params
+  const updateSearchParams = (newParams: Record<string, any>) => {
+    const currentParams = new URLSearchParams(searchParams);
+    Object.entries(newParams).forEach(([key, value]) => {
+      value ? currentParams.set(key, value) : currentParams.delete(key);
+    });
+    setSearchParams(currentParams);
+  };
+
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      "ships",
+      page,
+      rowsPerPage,
+      name_search,
+      sort_by,
+      sort_order,
+    ],
+    queryFn: async () => {
+      const response = await api.get("/api/ships", {
+        params: {
+          name_search,
+          sort_by,
+          sort_order,
+          skip: page * rowsPerPage,
+          limit: rowsPerPage,
+        },
+      });
+      return response.data; // Expecting { items: [], total: 0 }
+    },
+  });
 
   const columns = [
     { id: 'name', label: '이름' },
@@ -56,33 +72,80 @@ export default function Ships() {
     { id: 'lv_battle', label: '전투' },
   ];
 
-  if (error) {
-    return <Typography color="error">{error}</Typography>;
-  }
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchInput(event.target.value);
+  };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
-    setPage(0);
+  const handleSearch = () => {
+    const newParams: Record<string, any> = {
+      name_search: searchInput,
+      page: 0,
+    };
+    updateSearchParams(newParams);
+  };
+
+  const resetFilters = () => {
+    setSearchInput("");
+    setSearchParams({ rowsPerPage: searchParams.get("rowsPerPage") || "10" });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    updateSearchParams({ page: newPage });
+  };
+
+  const handleRowsPerPageChange = (newRowsPerPage: number) => {
+    updateSearchParams({ rowsPerPage: newRowsPerPage, page: 0 });
+  };
+
+  const handleSortChange = (columnId: string) => {
+    const isAsc = sort_by === columnId && sort_order === "asc";
+    updateSearchParams({
+      sort_by: columnId,
+      sort_order: isAsc ? "desc" : "asc",
+      page: 0,
+    });
   };
 
   return (
-    <Box sx={{ p: 3, height: 'calc(100vh - 100px)' }}>
-      <Typography variant="h4" gutterBottom>선박</Typography>
-      <TextField label="이름검색" variant="outlined" value={search} onChange={handleSearchChange} sx={{ mb: 2, minWidth: 200 }} />
+    <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
+      <Typography variant="h4" gutterBottom>
+        선박
+      </Typography>
+      <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+        <TextField
+          label="선박 이름 검색"
+          variant="outlined"
+          value={searchInput}
+          onChange={handleSearchInputChange}
+          sx={{ minWidth: 200 }}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+        />
+        <Button variant="contained" onClick={handleSearch}>
+          검색
+        </Button>
+        <Button variant="outlined" onClick={resetFilters}>
+          초기화
+        </Button>
+      </Box>
+
       <DataTable
         columns={columns}
-        data={ships}
-        loading={loading}
-        onRowClick={(row) => navigate(`/선박/${row.id}`)}
+        data={data?.items || []}
+        loading={isLoading}
+        total={data?.total || 0}
         page={page}
         rowsPerPage={rowsPerPage}
-        total={ships.length} // Note: This should be updated to use a total count from the API for proper pagination.
-        onPageChange={setPage}
-        onRowsPerPageChange={(newRowsPerPage) => {
-          setPage(0);
-          setRowsPerPage(newRowsPerPage);
-        }}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        sortColumn={sort_by}
+        sortDirection={sort_order}
+        onSortChange={handleSortChange}
+        onRowClick={(row) => navigate(`/선박/${row.id}`)}
       />
     </Box>
   );
-}
+};
+
+export default Ships;
