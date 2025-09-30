@@ -17,7 +17,7 @@ import {
 import DataTable from "../../components/DataTable";
 import api from "../../api";
 import { renderObjectsToChips } from "../../common/render";
-import { QUEST_FILTER_SKILL_ARRAY } from "../../constants/listvalues";
+import { EQUIPMENT_SKILL_OPTION_ARRAY } from "../../constants/listvalues";
 
 interface Skill {
   id: number;
@@ -25,7 +25,7 @@ interface Skill {
   value: number;
 }
 
-const sampleSkills: Skill[] = QUEST_FILTER_SKILL_ARRAY.map((skill) => ({
+const sampleSkills: Skill[] = EQUIPMENT_SKILL_OPTION_ARRAY.map((skill) => ({
   id: skill.id,
   name: skill.name,
   value: 0,

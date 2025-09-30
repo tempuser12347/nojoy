@@ -24,6 +24,7 @@ def read_equipments(
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     classification: str = Query(None, description="Classification filter"),
+    skills_search: str = Query(None, description="Skills search term"),
     db: Session = Depends(get_db),
 ):
 
@@ -50,7 +51,7 @@ GROUP BY e.id;
 
     if classification:
         classifications = [c.strip() for c in classification.split(",") if c.strip()]
-        print("Filtering by classifications:", classifications)
+        # print("Filtering by classifications:", classifications)
         if classifications:
             results = [
                 row
@@ -58,6 +59,20 @@ GROUP BY e.id;
                 if row.classification != None
                 and row.classification in classifications
             ]
+
+    if skills_search:
+        skill_terms = [int(term.strip()) for term in skills_search.split(",")]
+        print("Filtering skills with terms:", skill_terms)
+        results = [
+            row
+            for row in results
+            if row.skills_json
+            and all(
+                skill_id in [skill.get("id") for skill in json.loads(row.skills_json)]
+                for skill_id in skill_terms
+            )
+        ]
+
 
     # Sorting logic
     if results:
@@ -94,7 +109,6 @@ GROUP BY e.id;
         "requirements",
         "skills_json",
     ]
-    print(equipments)
     ret_list = []
     for equipment in equipments:
         ret = {
