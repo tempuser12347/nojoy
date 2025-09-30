@@ -23,13 +23,24 @@ interface Skill {
 }
 
 const classificationOptions = [
-  "무기",
   "장신구",
   "머리",
   "몸",
   "도구",
   "다리",
   "팔",
+];
+
+const weaponOptions = [
+  "검",
+  "창",
+  "던지는 나이프",
+  "곤봉 지팡이",
+  "총",
+  "도끼",
+  "활",
+  "권총",
+  "크로스보우",
 ];
 
 const Equipments: React.FC = () => {
@@ -89,7 +100,6 @@ const Equipments: React.FC = () => {
           classification: classification.join(","),
         },
       });
-      console.log(response.data)
       return response.data; // Expecting { items: [], total: 0 }
     },
   });
@@ -142,6 +152,26 @@ const Equipments: React.FC = () => {
     );
   };
 
+  const handleWeaponChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+    if (name === "무기") {
+      if (checked) {
+        setClassificationFilter((prev) => [
+          ...prev.filter((item) => !weaponOptions.includes(item)),
+          ...weaponOptions,
+        ]);
+      } else {
+        setClassificationFilter((prev) =>
+          prev.filter((item) => !weaponOptions.includes(item))
+        );
+      }
+    } else {
+      setClassificationFilter((prev) =>
+        checked ? [...prev, name] : prev.filter((item) => item !== name)
+      );
+    }
+  };
+
   const handleSearch = () => {
     updateSearchParams({
       name_search: searchInput,
@@ -173,6 +203,10 @@ const Equipments: React.FC = () => {
     });
   };
 
+  const selectedWeaponsCount = classificationFilter.filter((c) =>
+    weaponOptions.includes(c)
+  ).length;
+
   return (
     <Box
       sx={{
@@ -198,6 +232,37 @@ const Equipments: React.FC = () => {
         <FormControl component="fieldset">
           <FormLabel component="legend">분류</FormLabel>
           <FormGroup row>
+            <FormControl component="fieldset">
+              <FormControlLabel
+                label="무기"
+                control={
+                  <Checkbox
+                    checked={selectedWeaponsCount === weaponOptions.length}
+                    indeterminate={
+                      selectedWeaponsCount > 0 &&
+                      selectedWeaponsCount < weaponOptions.length
+                    }
+                    onChange={handleWeaponChange}
+                    name="무기"
+                  />
+                }
+              />
+              <Box sx={{ display: "flex", flexDirection: "row", ml: 3 }}>
+                {weaponOptions.map((option) => (
+                  <FormControlLabel
+                    key={option}
+                    control={
+                      <Checkbox
+                        checked={classificationFilter.includes(option)}
+                        onChange={handleWeaponChange}
+                        name={option}
+                      />
+                    }
+                    label={option}
+                  />
+                ))}
+              </Box>
+            </FormControl>
             {classificationOptions.map((option) => (
               <FormControlLabel
                 key={option}
