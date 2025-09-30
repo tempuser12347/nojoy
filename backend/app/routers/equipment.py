@@ -31,16 +31,9 @@ def read_equipments(
             """
             SELECT
                 e.*,
-                json_group_array(
-                    json_object(
-                        'id', s.id,
-                        'name', s.name,
-                        'value', je.value
-                    )
-                ) as skills_json
+                json_group_array(je.value) as skills_json
             FROM equipment e
             LEFT JOIN json_each(e.skills) je ON 1=1
-            LEFT JOIN skill s ON s.id = je.key
             GROUP BY e.id
             """
         )
@@ -106,16 +99,9 @@ def read_equipment(equipment_id: int, db: Session = Depends(get_db)):
             """
             SELECT
                 e.*,
-                json_group_array(
-                    json_object(
-                        'id', s.id,
-                        'name', s.name,
-                        'value', je.value
-                    )
-                ) as skills_json
+                json_group_array(je.value) as skills_json
             FROM equipment e
             LEFT JOIN json_each(e.skills) je ON 1=1
-            LEFT JOIN skill s ON s.id = je.key
             WHERE e.id = :equipment_id
             GROUP BY e.id
             """
