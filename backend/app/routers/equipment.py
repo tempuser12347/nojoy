@@ -77,18 +77,27 @@ GROUP BY e.id;
     # Sorting logic
     if results:
         reverse = sort_order.lower() == "desc"
+    print(f'sort by: {sort_by}, reverse: {reverse}')
+    def sort_key(row):
+        if sort_by == 'skills':
+            # get the max value among skills
+            skills = json.loads(row.skills_json)
+            max_value = 0
+            for skill in skills:
+                if skill['value'] > max_value:
+                    max_value = skill['value']
+            return max_value
 
-        def sort_key(row):
-            value = getattr(row, sort_by, None)
-            if value is None:
-                return (
-                    (0, "")
-                    if isinstance(getattr(results[0], sort_by, None), (int, float))
-                    else ""
-                )
-            return value
+        value = getattr(row, sort_by, None)
+        if value is None:
+            return (
+                (0, "")
+                if isinstance(getattr(results[0], sort_by, None), (int, float))
+                else ""
+            )
+        return value
 
-        results.sort(key=sort_key, reverse=reverse)
+    results.sort(key=sort_key, reverse=reverse)
 
     total = len(results)
     equipments = results[skip : skip + limit]
