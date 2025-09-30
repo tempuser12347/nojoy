@@ -8,31 +8,51 @@ import json
 
 router = APIRouter(prefix="/api/discoveries", tags=["discoveries"])
 
+
 @router.get("/")
 async def get_discoveries(
-    type: str = None,
     search: str = None,
+    category: str = None,
     db: Session = Depends(get_db),
     skip: int = 0,
-    limit: int = 100
+    limit: int = 100,
 ):
-    query = db.query(models.Discovery)
-    if type:
-        query = query.filter(models.Discovery.type == type)
+
+    results = db.execute(
+        text(
+            """
+    select id, name, category, difficulty, discovery_method from discovery
+"""
+        )
+    ).fetchall()
     if search:
-        query = query.filter(models.Discovery.name.ilike(f"%{search}%"))
-    
-    total = query.count()
-    items = query.offset(skip).limit(limit).all()
-    
-    return {"items": items, "total": total}
+        results = [row for row in results if search.lower() in row.name.lower()]
+
+    if category:
+        results = [row for row in results if category.lower() == row.category.lower()]
+
+    total = len(results)
+    items = results[skip : skip + limit]
+
+    # convert to dict
+    fetch_field_list = ["id", "name", "category", "difficulty", "discovery_method"]
+
+    item_dict_list = []
+    for item in items:
+        item_dict = {}
+        for field in fetch_field_list:
+            item_dict[field] = getattr(item, field, None)
+        item_dict_list.append(item_dict)
+
+    return {"items": item_dict_list, "total": total}
 
 
 @router.get("/{discovery_id}")
 async def get_discovery(discovery_id: int, db: Session = Depends(get_db)):
-    print(f'discovery_id: {discovery_id}')
+    print(f"discovery_id: {discovery_id}")
     result = db.execute(
-        text("""
+        text(
+            """
 SELECT
     d.*,
     json_group_array(
@@ -49,17 +69,19 @@ LEFT JOIN allData ad
 WHERE d.id = :discovery_id
 GROUP BY d.id;
 
-"""), {"discovery_id": discovery_id}).fetchone()
-    
+"""
+        ),
+        {"discovery_id": discovery_id},
+    ).fetchone()
 
     # print(result)
 
     # discovery = db.query(models.Discovery).filter(models.Discovery.id == discovery_id).first()
     if not result:
         raise HTTPException(status_code=404, detail="Discovery not found")
-    
+
     # convert to dict
-    '''
+    """
     CREATE TABLE discovery (
     id INT AUTO_INCREMENT PRIMARY KEY,
     `type` VARCHAR(255),
@@ -81,16 +103,38 @@ GROUP BY d.id;
     `time_period` VARCHAR(255),
     `weather` VARCHAR(255),
     `coordinates` VARCHAR(255)
-    '''
-    fetch_field_list = ['id', 'type', 'name', 'additional_name', 'name_key', 'description', 'category', 'difficulty', 'card_points', 'discovery_experience', 'card_acquisition_experience', 'report_reputation', 'discovery_method', 'discovery_rank', 'additional_description', 'era', 'time_period', 'weather', 'coordinates']
+    """
+    fetch_field_list = [
+        "id",
+        "type",
+        "name",
+        "additional_name",
+        "name_key",
+        "description",
+        "category",
+        "difficulty",
+        "card_points",
+        "discovery_experience",
+        "card_acquisition_experience",
+        "report_reputation",
+        "discovery_method",
+        "discovery_rank",
+        "additional_description",
+        "era",
+        "time_period",
+        "weather",
+        "coordinates",
+    ]
 
     ret = {}
     for field in fetch_field_list:
         ret[field] = getattr(result, field, None)
 
-    ret['discovery_location'] = json.loads(result.discovery_location_resolved) if result.discovery_location_resolved else None
+    ret["discovery_location"] = (
+        json.loads(result.discovery_location_resolved)
+        if result.discovery_location_resolved
+        else None
+    )
     print(ret)
 
-    return ret  
-    
-
+    return ret
