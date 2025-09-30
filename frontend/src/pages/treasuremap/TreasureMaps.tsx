@@ -1,51 +1,66 @@
-import { useEffect, useState } from 'react';
-import { Box, Typography, TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import DataTable from '../../components/DataTable';
-import api from '../../api';
+import React, { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+} from "@mui/material";
+import DataTable from "../../components/DataTable";
+import api from "../../api";
 
-interface TreasureMap {
-  id: number;
-  name: string;
-  category: string;
-  required_skill: string;
-  academic_field: string;
-  library: string,
-  destination: string,
-  discovery: string
-}
-
-export default function TreasureMaps() {
-  const [treasureMaps, setTreasureMaps] = useState<TreasureMap[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [search, setSearch] = useState('');
+const TreasureMaps: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  // State initialization from URL search params
+  const page = parseInt(searchParams.get("page") || "0", 10);
+  const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
+  const name_search = searchParams.get("name_search") || "";
+  const sort_by = searchParams.get("sort_by") || "id";
+  const sort_order =
+    (searchParams.get("sort_order") as "asc" | "desc") || "desc";
+
+  // Component state for inputs
+  const [searchInput, setSearchInput] = React.useState(name_search);
+
+  // Sync local state with URL search params on mount/change
   useEffect(() => {
-    const fetchTreasureMaps = async () => {
-      setLoading(true);
-      try {
-        const response = await api.get('/api/treasuremaps', {
-          params: {
-            search,
-            skip: page * rowsPerPage,
-            limit: rowsPerPage,
-          },
-        });
-        setTreasureMaps(response.data);
-      } catch (err) {
-        setError('Failed to load treasure maps');
-        console.error('Error fetching treasure maps:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    setSearchInput(name_search);
+  }, [name_search]);
 
-    fetchTreasureMaps();
-  }, [search, page, rowsPerPage]);
+  // Helper to update search params
+  const updateSearchParams = (newParams: Record<string, any>) => {
+    const currentParams = new URLSearchParams(searchParams);
+    Object.entries(newParams).forEach(([key, value]) => {
+      value ? currentParams.set(key, value) : currentParams.delete(key);
+    });
+    setSearchParams(currentParams);
+  };
+
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      "treasuremaps",
+      page,
+      rowsPerPage,
+      name_search,
+      sort_by,
+      sort_order,
+    ],
+    queryFn: async () => {
+      const response = await api.get("/api/treasuremaps", {
+        params: {
+          name_search,
+          sort_by,
+          sort_order,
+          skip: page * rowsPerPage,
+          limit: rowsPerPage,
+        },
+      });
+      return response.data; // Expecting { items: [], total: 0 }
+    },
+  });
 
   const columns = [
     { id: 'name', label: '이름' },
@@ -56,45 +71,80 @@ export default function TreasureMaps() {
     { id: 'destination', label: '목적지' },
   ];
 
-  if (error) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Typography color="error">{error}</Typography>
-      </Box>
-    );
-  }
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchInput(event.target.value);
+  };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
-    setPage(0);
+  const handleSearch = () => {
+    const newParams: Record<string, any> = {
+      name_search: searchInput,
+      page: 0,
+    };
+    updateSearchParams(newParams);
+  };
+
+  const resetFilters = () => {
+    setSearchInput("");
+    setSearchParams({ rowsPerPage: searchParams.get("rowsPerPage") || "10" });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    updateSearchParams({ page: newPage });
+  };
+
+  const handleRowsPerPageChange = (newRowsPerPage: number) => {
+    updateSearchParams({ rowsPerPage: newRowsPerPage, page: 0 });
+  };
+
+  const handleSortChange = (columnId: string) => {
+    const isAsc = sort_by === columnId && sort_order === "asc";
+    updateSearchParams({
+      sort_by: columnId,
+      sort_order: isAsc ? "desc" : "asc",
+      page: 0,
+    });
   };
 
   return (
-    <Box sx={{ p: 3, height: 'calc(100vh - 100px)' }}>
-      <Typography variant="h4" gutterBottom>보물 지도</Typography>
-      <Box sx={{ mb: 2 }}>
+    <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
+      <Typography variant="h4" gutterBottom>
+        보물 지도
+      </Typography>
+      <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
         <TextField
-          label="이름 검색"
+          label="지도 이름 검색"
           variant="outlined"
-          value={search}
-          onChange={handleSearchChange}
+          value={searchInput}
+          onChange={handleSearchInputChange}
           sx={{ minWidth: 200 }}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
+        <Button variant="contained" onClick={handleSearch}>
+          검색
+        </Button>
+        <Button variant="outlined" onClick={resetFilters}>
+          초기화
+        </Button>
       </Box>
+
       <DataTable
         columns={columns}
-        data={treasureMaps}
-        loading={loading}
-        onRowClick={(row) => navigate(`/보물지도/${row.id}`)}
+        data={data?.items || []}
+        loading={isLoading}
+        total={data?.total || 0}
         page={page}
         rowsPerPage={rowsPerPage}
-        total={treasureMaps.length} // Note: This might need adjustment for server-side pagination total count
-        onPageChange={setPage}
-        onRowsPerPageChange={(newRowsPerPage) => {
-          setPage(0);
-          setRowsPerPage(newRowsPerPage);
-        }}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        sortColumn={sort_by}
+        sortDirection={sort_order}
+        onSortChange={handleSortChange}
+        onRowClick={(row) => navigate(`/보물지도/${row.id}`)}
       />
     </Box>
   );
-}
+};
+
+export default TreasureMaps;
