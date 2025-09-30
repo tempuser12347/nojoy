@@ -86,6 +86,8 @@ def read_equipments(
             if field not in ["skills_json"]
         }
         ret["skills"] = json.loads(equipment.skills_json) if equipment.skills_json else []
+        ret['use_effect'] = json.loads(equipment.use_effect) if equipment.use_effect else None
+        ret['equipped_effect'] = json.loads(equipment.equipped_effect) if equipment.equipped_effect else None
         ret_list.append(ret)
 
     return {"items": ret_list, "total": total}
