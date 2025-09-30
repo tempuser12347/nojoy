@@ -86,9 +86,9 @@ export default function EquipmentDetail() {
             <DetailItem label="내구도" value={equipment.durability} />
             <DetailItem label="변장도" value={equipment.disguise} />
             <DetailItem label="필요명성" value={equipment.attire} />
-            <DetailItem label="사용효과" value={JSON.stringify(equipment.use_effect)} />
-            <DetailItem label="장착효과" value={JSON.stringify(equipment.equipped_effect)} />
-            <DetailItem label="요구사항" value={JSON.stringify(equipment.requirements)} />
+            <DetailItem label="사용효과" value={equipment.use_effect?.name || '-'} />
+            <DetailItem label="장착효과" value={equipment.equipped_effect?.name || '-'} />
+            <DetailItem label="요구사항" value={equipment.requirements} />
             <DetailItem label="스킬" value={renderObjectsToChips(equipment.skills, navigate)} />
           </Box>
         </CardContent>
