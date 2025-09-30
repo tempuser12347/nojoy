@@ -31,6 +31,8 @@ const Discoveries: React.FC = () => {
   const rowsPerPage = parseInt(searchParams.get('rowsPerPage') || '10', 10);
   const category = searchParams.get('category') || '';
   const search = searchParams.get('search') || '';
+  const sort_by = searchParams.get('sort_by') || 'name';
+  const sort_order = (searchParams.get('sort_order') as 'asc' | 'desc') || 'asc';
 
   const [categoryInput, setCategoryInput] = React.useState(category);
   const [searchInput, setSearchInput] = React.useState(search);
@@ -53,7 +55,7 @@ const Discoveries: React.FC = () => {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ['discoveries', page, rowsPerPage, category, search],
+    queryKey: ['discoveries', page, rowsPerPage, category, search, sort_by, sort_order],
     queryFn: async () => {
       const response = await api.get('/api/discoveries', {
         params: {
@@ -61,6 +63,8 @@ const Discoveries: React.FC = () => {
           search,
           skip: page * rowsPerPage,
           limit: rowsPerPage,
+          sort_by,
+          sort_order,
         },
       });
       return response.data;
@@ -95,6 +99,15 @@ const Discoveries: React.FC = () => {
 
   const handleRowsPerPageChange = (newRowsPerPage: number) => {
     updateSearchParams({ rowsPerPage: newRowsPerPage, page: 0 });
+  };
+
+  const handleSortChange = (columnId: string) => {
+    const isAsc = sort_by === columnId && sort_order === 'asc';
+    updateSearchParams({
+      sort_by: columnId,
+      sort_order: isAsc ? 'desc' : 'asc',
+      page: 0,
+    });
   };
 
   return (
@@ -151,6 +164,9 @@ const Discoveries: React.FC = () => {
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
+        sortColumn={sort_by}
+        sortDirection={sort_order}
+        onSortChange={handleSortChange}
         onRowClick={(row) => navigate(`/발견물/${row.id}`)}
       />
     </Box>

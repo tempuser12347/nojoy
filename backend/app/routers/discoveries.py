@@ -16,6 +16,8 @@ async def get_discoveries(
     db: Session = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
+    sort_by: str = "name",
+    sort_order: str = "asc",
 ):
 
     results = db.execute(
@@ -30,6 +32,28 @@ async def get_discoveries(
 
     if category:
         results = [row for row in results if category.lower() == row.category.lower()]
+
+    # Sorting logic
+    if results:
+        # Determine if the sort order is descending
+        reverse = sort_order.lower() == "desc"
+
+        # Define a sorting key function
+        def sort_key(row):
+            # Get the value of the sort_by attribute from the row
+            value = getattr(row, sort_by, None)
+            # Handle None values to prevent errors during sorting
+            if value is None:
+                # Treat None as a very small number for numeric types or an empty string for others
+                # This ensures they are sorted at the beginning (for asc) or end (for desc)
+                return (
+                    (0, "")
+                    if isinstance(getattr(results[0], sort_by, None), (int, float))
+                    else ""
+                )
+            return value
+
+        results.sort(key=sort_key, reverse=reverse)
 
     total = len(results)
     items = results[skip : skip + limit]
