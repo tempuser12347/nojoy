@@ -74,7 +74,9 @@ const Equipments: React.FC = () => {
   useEffect(() => {
     setSearchInput(name_search);
     setClassificationFilter(classification);
-    setSkillsSearch(sampleSkills.filter((s) => skills_search_ids.includes(s.id)));
+    setSkillsSearch(
+      sampleSkills.filter((s) => skills_search_ids.includes(s.id))
+    );
   }, [name_search, searchParams]);
 
   // Helper to update search params
@@ -129,10 +131,7 @@ const Equipments: React.FC = () => {
       id: "use_effect",
       label: "사용효과",
       format: (value: { [key: string]: any } | null) => {
-        if (!value) return "";
-        return Object.entries(value)
-          .map(([key, value]) => `${key} ${value}`)
-          .join(", ");
+        return value?.name;
       },
     },
     {
