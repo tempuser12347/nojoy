@@ -1299,3 +1299,69 @@ export const EQUIPMENT_SKILL_OPTION_ARRAY = [
     name: "화약학",
   },
 ];
+
+export const TREASUREMAP_CATEGORY_ARRAY = [
+  {
+    id: 1,
+    name: "발견물 지도",
+  },
+  {
+    id: 2,
+    name: "침몰선 지도",
+  },
+];
+
+export const ACADEMIC_FIELD_ARRAY = [
+  {
+    id: 1,
+    name: "고고학",
+  },
+  {
+    id: 2,
+    name: "종교학",
+  },
+  {
+    id: 3,
+    name: "미술",
+  },
+  {
+    id: 4,
+    name: "지리학",
+  },
+  {
+    id: 5,
+    name: "생물학",
+  },
+  {
+    id: 6,
+    name: "보물 감정",
+  },
+];
+
+export const LIBRARY_ARRAY = [
+  {
+    id: 1,
+    name: "리스본",
+  },
+  {
+    id: 2,
+    name: "세비야",
+  },
+  {
+    id: 3,
+    name: "런던",
+  },
+  {
+    id: 4,
+    name: "암스테르담",
+  },
+  {
+    id: 5,
+    name: "베네치아",
+  },
+  {
+    id: 6,
+    name: "마르세이유",
+  },
+];
+
