@@ -1301,14 +1301,11 @@ export const EQUIPMENT_SKILL_OPTION_ARRAY = [
 ];
 
 export const TREASUREMAP_CATEGORY_ARRAY = [
-  {
-    id: 1,
-    name: "발견물 지도",
-  },
-  {
-    id: 2,
-    name: "침몰선 지도",
-  },
+ '서고',
+'육지 재조사',
+'NPC',
+'퀘스트',
+'이벤트'
 ];
 
 export const ACADEMIC_FIELD_ARRAY = [

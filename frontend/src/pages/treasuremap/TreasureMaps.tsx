@@ -32,12 +32,7 @@ interface Library {
   name: string;
 }
 
-const sampleCategories: Category[] = TREASUREMAP_CATEGORY_ARRAY.map(
-  (category) => ({
-    id: category.id,
-    name: category.name,
-  })
-);
+const sampleCategories: string[] = TREASUREMAP_CATEGORY_ARRAY;
 
 const sampleAcademicFields: AcademicField[] = ACADEMIC_FIELD_ARRAY.map(
   (field) => ({
@@ -72,8 +67,8 @@ const TreasureMaps: React.FC = () => {
 
   // Component state for inputs
   const [searchInput, setSearchInput] = React.useState(name_search);
-  const [categorySearch, setCategorySearch] = React.useState<Category | null>(
-    sampleCategories.find((c) => c.name === category_search) || null
+  const [categorySearch, setCategorySearch] = React.useState<string | null>(
+    sampleCategories.find((c) => c === category_search) || null
   );
   const [academicFieldSearch, setAcademicFieldSearch] =
     React.useState<AcademicField | null>(
@@ -90,7 +85,7 @@ const TreasureMaps: React.FC = () => {
   useEffect(() => {
     setSearchInput(name_search);
     setCategorySearch(
-      sampleCategories.find((c) => c.name === category_search) || null
+      sampleCategories.find((c) => c === category_search) || null
     );
     setAcademicFieldSearch(
       sampleAcademicFields.find((af) => af.name === academic_field_search) ||
@@ -171,7 +166,7 @@ const TreasureMaps: React.FC = () => {
   const handleSearch = () => {
     const newParams: Record<string, any> = {
       name_search: searchInput,
-      category_search: categorySearch?.name || "",
+      category_search: categorySearch || "",
       academic_field_search: academicFieldSearch?.name || "",
       library_search: librarySearch.map((l) => l.name).join(","),
       destination_search: destinationInput,
@@ -206,7 +201,7 @@ const TreasureMaps: React.FC = () => {
     });
   };
 
-  const handleCategoryChange = (_: any, newValue: Category | null) => {
+  const handleCategoryChange = (_: any, newValue: string | null) => {
     setCategorySearch(newValue);
   };
 
@@ -244,7 +239,7 @@ const TreasureMaps: React.FC = () => {
         <Autocomplete
           id="category-filter"
           options={sampleCategories}
-          getOptionLabel={(option) => option.name}
+          // getOptionLabel={(option) => option.name}
           value={categorySearch}
           onChange={handleCategoryChange}
           renderInput={(params) => (
