@@ -12,9 +12,9 @@ interface TreasureMap {
   academic_field: string;
   library: string,
   destination: {id:number, name: string}|null,
-  discovery: string,
+  discovery: {id:number, name: string}|null,
   city_conditions: string,
-  preceding: string,
+  preceding: {id:number, name: string}[]|null,
   reward_dukat: string,
   reward_item: string,
   strategy: string,
@@ -83,15 +83,15 @@ export default function TreasureMapDetail() {
       <Typography variant="h4" gutterBottom>{treasureMap.name}</Typography>
       <Card>
         <CardContent>
-          <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' } }}>
+          <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr'} }}>
             <DetailItem label="분류" value={treasureMap.category} />
             <DetailItem label="필요 스킬" value={treasureMap.required_skill} />
             <DetailItem label="학문" value={treasureMap.academic_field} />
             <DetailItem label="서고" value={treasureMap.library} />
             <DetailItem label="목적지" value={treasureMap.destination?.name} />
-            <DetailItem label="발견물" value={treasureMap.discovery} />
+            <DetailItem label="발견물" value={treasureMap.discovery?.name} />
             <DetailItem label="도시 조건" value={treasureMap.city_conditions} />
-            <DetailItem label="선행" value={treasureMap.preceding} />
+            <DetailItem label="선행" value={treasureMap.preceding?.map(x=>x.name).join(',')} />
             <DetailItem label="보상 (두캇)" value={treasureMap.reward_dukat} />
             <DetailItem label="보상 (아이템)" value={treasureMap.reward_item} />
             <Box sx={{ gridColumn: '1 / -1' }}>

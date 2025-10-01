@@ -91,14 +91,50 @@ def read_treasuremap(treasuremap_id: int, db: Session = Depends(get_db)):
     result = db.execute(text("""
 SELECT
     t.*,
+    -- destination as JSON
     json_object(
-        'id', a.id,
-        'name', a.name
-    ) AS destination_resolved
+        'id', adest.id,
+        'name', adest.name
+    ) AS destination_resolved,
+
+    -- discovery as JSON
+    json_object(
+        'id', adisc.id,
+        'name', adisc.name
+    ) AS discovery_resolved,
+
+    -- preceding as JSON array
+    COALESCE(
+        json_group_array(
+            json_object(
+                'id', apre.id,
+                'name', apre.name
+            )
+        ),
+        '[]'
+    ) AS preceding_resolved
+
 FROM treasuremap t
-LEFT JOIN allData a
-    ON CAST(t.destination AS INT) = a.id
-WHERE t.id = :treasuremap_id;
+
+-- join for destination
+LEFT JOIN allData adest
+    ON CAST(t.destination AS INT) = adest.id
+
+-- join for discovery
+LEFT JOIN allData adisc
+    ON CAST(t.discovery AS INT) = adisc.id
+
+-- expand preceding JSON array, then join
+LEFT JOIN json_each(t.preceding) je
+    ON 1=1
+LEFT JOIN allData apre
+    ON apre.id = CAST(je.value AS INT)
+
+WHERE t.id = :treasuremap_id
+
+-- important: group by t.id so json_group_array works
+GROUP BY t.id;
+
 
 
 """), {"treasuremap_id": treasuremap_id}).fetchone()
@@ -128,4 +164,7 @@ WHERE t.id = :treasuremap_id;
 
     ret = {field: getattr(result, field, None) for field in return_fields}
     ret['destination'] = json.loads(result.destination_resolved) if result.destination_resolved else None
+
+    ret['preceding'] = json.loads(result.preceding_resolved) if result.preceding_resolved else None
+    ret['discovery'] = json.loads(result.discovery_resolved) if result.discovery_resolved else None
     return ret
