@@ -354,5 +354,7 @@ WHERE l.id = :quest_id;
                     out2.append({"id": b, "name": fetched.name})
             out.append(out2)
         ret['preceding_discovery_quest'] = out
+    else:
+        ret['preceding_discovery_quest'] = None
                 
     return ret
