@@ -86,13 +86,28 @@ LEFT JOIN allData a
 
 @router.get("/{treasuremap_id}", response_model=dict)
 def read_treasuremap(treasuremap_id: int, db: Session = Depends(get_db)):
-    treasure_map = (
-        db.query(models.TreasureMap)
-        .filter(models.TreasureMap.id == treasuremap_id)
-        .first()
-    )
-    if treasure_map is None:
+
+
+    result = db.execute(text("""
+SELECT
+    t.*,
+    json_object(
+        'id', a.id,
+        'name', a.name
+    ) AS destination_resolved
+FROM treasuremap t
+LEFT JOIN allData a
+    ON CAST(t.destination AS INT) = a.id
+WHERE t.id = :treasuremap_id;
+
+
+"""), {"treasuremap_id": treasuremap_id}).fetchone()
+    
+    if not result:
         raise HTTPException(status_code=404, detail="TreasureMap not found")
+
+
+
 
     return_fields = [
         "id",
@@ -111,5 +126,6 @@ def read_treasuremap(treasuremap_id: int, db: Session = Depends(get_db)):
         "strategy",
     ]
 
-    ret = {field: getattr(treasure_map, field, None) for field in return_fields}
+    ret = {field: getattr(result, field, None) for field in return_fields}
+    ret['destination'] = json.loads(result.destination_resolved) if result.destination_resolved else None
     return ret

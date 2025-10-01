@@ -11,7 +11,7 @@ interface TreasureMap {
   category: string;
   academic_field: string;
   library: string,
-  destination: string,
+  destination: {id:number, name: string}|null,
   discovery: string,
   city_conditions: string,
   preceding: string,
@@ -88,7 +88,7 @@ export default function TreasureMapDetail() {
             <DetailItem label="필요 스킬" value={treasureMap.required_skill} />
             <DetailItem label="학문" value={treasureMap.academic_field} />
             <DetailItem label="서고" value={treasureMap.library} />
-            <DetailItem label="목적지" value={treasureMap.destination} />
+            <DetailItem label="목적지" value={treasureMap.destination?.name} />
             <DetailItem label="발견물" value={treasureMap.discovery} />
             <DetailItem label="도시 조건" value={treasureMap.city_conditions} />
             <DetailItem label="선행" value={treasureMap.preceding} />
