@@ -1,11 +1,12 @@
 from typing import List, Dict, Any
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import asc, desc
+from sqlalchemy import asc, desc, text
 from .. import models
 from ..database import get_db
 
 router = APIRouter(prefix="/api/treasuremaps", tags=["treasuremaps"])
+
 
 @router.get("/", response_model=Dict[str, Any])
 def read_treasuremaps(
@@ -14,28 +15,50 @@ def read_treasuremaps(
     name_search: str = Query(None, description="Search term for treasure map name"),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
-    query = db.query(models.TreasureMap)
-    
+    results = db.execute(text("""select * from treasuremap""")).fetchall()
+
     if name_search:
-        query = query.filter(models.TreasureMap.name.ilike(f"%{name_search}%"))
-    
-    total = query.count()
+        results = [row for row in results if name_search.lower() in row.name.lower()]
 
-    if hasattr(models.TreasureMap, sort_by):
-        if sort_order.lower() == "asc":
-            query = query.order_by(asc(sort_by))
-        else:
-            query = query.order_by(desc(sort_by))
+    total = len(results)
 
-    treasure_maps = query.offset(skip).limit(limit).all()
-    
+    # do sorting
+    if results:
+        # Determine if the sort order is descending
+        reverse = sort_order.lower() == "desc"
+
+        # Define a sorting key function
+        def sort_key(row):
+            # Get the value of the sort_by attribute from the row
+            value = getattr(row, sort_by, None)
+            # Handle None values to prevent errors during sorting
+            if value is None:
+                return 0
+            else:
+                return value
+
+        results.sort(key=sort_key, reverse=reverse)
+
+    # do skip and limit
+    treasure_maps = results[skip : skip + limit]
+
     return_fields = [
-        'id', 'name', 'description','category', 'required_skill',
-        'academic_field', 'library', 'destination', 'discovery',
-        'city_conditions', 'preceding', 'reward_dukat', 'reward_item',
-        'strategy'
+        "id",
+        "name",
+        "description",
+        "category",
+        "required_skill",
+        "academic_field",
+        "library",
+        "destination",
+        "discovery",
+        "city_conditions",
+        "preceding",
+        "reward_dukat",
+        "reward_item",
+        "strategy",
     ]
 
     ret_list = []
@@ -45,18 +68,33 @@ def read_treasuremaps(
 
     return {"items": ret_list, "total": total}
 
+
 @router.get("/{treasuremap_id}", response_model=dict)
 def read_treasuremap(treasuremap_id: int, db: Session = Depends(get_db)):
-    treasure_map = db.query(models.TreasureMap).filter(models.TreasureMap.id == treasuremap_id).first()
+    treasure_map = (
+        db.query(models.TreasureMap)
+        .filter(models.TreasureMap.id == treasuremap_id)
+        .first()
+    )
     if treasure_map is None:
         raise HTTPException(status_code=404, detail="TreasureMap not found")
-    
+
     return_fields = [
-        'id', 'name', 'description', 'category', 'required_skill',
-        'academic_field', 'library', 'destination', 'discovery',
-        'city_conditions', 'preceding', 'reward_dukat', 'reward_item',
-        'strategy'
+        "id",
+        "name",
+        "description",
+        "category",
+        "required_skill",
+        "academic_field",
+        "library",
+        "destination",
+        "discovery",
+        "city_conditions",
+        "preceding",
+        "reward_dukat",
+        "reward_item",
+        "strategy",
     ]
-    
+
     ret = {field: getattr(treasure_map, field, None) for field in return_fields}
     return ret
