@@ -144,7 +144,7 @@ const Jobs: React.FC = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 2 }}>
+    <Box sx={{ width: "100%", p: 3}}>
       <Typography variant="h4" gutterBottom>
         직업
       </Typography>
