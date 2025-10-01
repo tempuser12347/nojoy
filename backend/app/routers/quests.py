@@ -341,4 +341,18 @@ WHERE l.id = :quest_id;
     ret['discovery'] = json.loads(result.discovery_json) if result.discovery_json else None
     ret['previous_continuous_quest'] = json.loads(result.previous_continuous_quest_json) if result.previous_continuous_quest_json else None
 
+    # handle preceding_discovery_quest. fetch data
+    if ret['preceding_discovery_quest']:
+        d = json.loads(ret['preceding_discovery_quest'])
+        # d is a list of list. the final element is int which is id. need to fetch name from 'allData' table. in the end recreate list of list but with element of {id, name} dict
+        out =[]
+        for a in d:
+            out2 = []
+            for b in a:
+                fetched = db.execute(text("SELECT name FROM allData WHERE id = :id"), {"id": b}).fetchone()
+                if fetched:
+                    out2.append({"id": b, "name": fetched.name})
+            out.append(out2)
+        ret['preceding_discovery_quest'] = out
+                
     return ret
