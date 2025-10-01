@@ -6,6 +6,9 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Stack,
+  Chip,
+  Divider,
 } from "@mui/material";
 import api from "../../api";
 import {
@@ -63,16 +66,20 @@ const renderPrecedingDiscoveryQuest = (
 ) => {
   if (data == null) return null;
   return (
-    <div style={{ display: "flex", flexDirection: "column", borderStyle: "solid", borderColor: "black" }}>
+    <Card>
       {data.map((x, i) => (
-        <div key={i} style={{ display: "flex", flexDirection: "row", padding: '5px' }}>
-          <span>-</span>
-          {x.map((y, j) => (
-            <div style={{backgroundColor: 'yellow'}} key={j}>{y.name}</div>
-          ))}
-        </div>
+        <>
+        <Box key={i} sx={{ p: 1 }}>
+          <Stack direction="row" spacing={1}>
+            {x.map((y, j) => (
+              <Chip key={j} label={y.name} />
+            ))}
+          </Stack>
+        </Box>
+        {i < data.length - 1 && <Divider />}
+        </>
       ))}
-    </div>
+    </Card>
   );
 };
 
