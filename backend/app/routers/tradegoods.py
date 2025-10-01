@@ -2,21 +2,9 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from sqlalchemy import text, asc, desc
+from sqlalchemy import text
 from ..database import get_db
 import json
-
-
-# class Tradegood(BaseModel):
-#     id: int
-#     name: str
-#     description: Optional[str] = None
-#     culture: Optional[str] = None
-#     category: Optional[str] = None
-#     classification: Optional[str] = None
-
-#     class Config:
-#         from_attributes = True
 
 
 class TradegoodResponse(BaseModel):
@@ -70,7 +58,10 @@ def read_tradegoods(
 
     # Sorting logic
     if sort_by:
-        results.sort(key=lambda x: getattr(x, sort_by) or "", reverse=(sort_order.lower() == "desc"))
+        results.sort(
+            key=lambda x: getattr(x, sort_by) or "",
+            reverse=(sort_order.lower() == "desc"),
+        )
 
     total = len(results)
     paginated_results = results[skip : skip + limit]
