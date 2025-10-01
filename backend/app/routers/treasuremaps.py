@@ -14,11 +14,21 @@ def read_treasuremaps(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit the number of records returned"),
     name_search: str = Query(None, description="Search term for treasure map name"),
+    category_search: str = Query(
+        None, description="Search term for treasure map category"
+    ),
+    academic_field_search: str = Query(
+        None, description="Search term for academic field"
+    ),
+    library_search: str = Query(None, description="Search term for library"),
+    destination_search: str = Query(None, description="Search term for destination"),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
 ):
-    results = db.execute(text("""
+    results = db.execute(
+        text(
+            """
 SELECT
     t.*,
     json_object(
@@ -29,10 +39,47 @@ FROM treasuremap t
 LEFT JOIN allData a
     ON CAST(t.destination AS INT) = a.id;
 
-""")).fetchall()
+"""
+        )
+    ).fetchall()
 
     if name_search:
         results = [row for row in results if name_search.lower() in row.name.lower()]
+    if category_search:
+        print(f"category_search: {category_search}")
+        results = [
+            row for row in results if category_search.lower() == row.category.lower()
+        ]
+    if academic_field_search:
+        print(f"academic_field_search: {academic_field_search}")
+        results = [
+            row
+            for row in results
+            if academic_field_search.lower() == row.academic_field.lower()
+        ]
+    if library_search:
+        print(f"library_search: {library_search}")
+        # split library search by comma
+        library_terms = [term.strip().lower() for term in library_search.split(",")]
+        # if each row library contains at least one of the library terms, then it is okay. the row library is also a comma seperated string to split it before matching
+        results = [
+            row
+            for row in results
+            if any(
+                term in map(lambda x: x.strip(), (row.library or "").split(","))
+                for term in library_terms
+            )
+        ]
+
+    if destination_search:
+        print(f"destination_search: {destination_search}")
+        filtered = []
+        for row in results:
+            if row.destination_resolved:
+                dest = json.loads(row.destination_resolved)
+                if destination_search.lower() in dest["name"].lower():
+                    filtered.append(row)
+        results = filtered
 
     total = len(results)
 
@@ -55,7 +102,7 @@ LEFT JOIN allData a
 
     # do skip and limit
     treasure_maps = results[skip : skip + limit]
-    print(treasure_maps)
+    # print(treasure_maps)
 
     return_fields = [
         "id",
@@ -76,10 +123,12 @@ LEFT JOIN allData a
     ret_list = []
     for treasure_map in treasure_maps:
         ret = {field: getattr(treasure_map, field, None) for field in return_fields}
-        ret['destination'] = json.loads(treasure_map.destination_resolved) if treasure_map.destination_resolved else None
+        ret["destination"] = (
+            json.loads(treasure_map.destination_resolved)
+            if treasure_map.destination_resolved
+            else None
+        )
         ret_list.append(ret)
-
-    
 
     return {"items": ret_list, "total": total}
 
@@ -87,8 +136,9 @@ LEFT JOIN allData a
 @router.get("/{treasuremap_id}", response_model=dict)
 def read_treasuremap(treasuremap_id: int, db: Session = Depends(get_db)):
 
-
-    result = db.execute(text("""
+    result = db.execute(
+        text(
+            """
 SELECT
     t.*,
     -- destination as JSON
@@ -137,13 +187,13 @@ GROUP BY t.id;
 
 
 
-"""), {"treasuremap_id": treasuremap_id}).fetchone()
-    
+"""
+        ),
+        {"treasuremap_id": treasuremap_id},
+    ).fetchone()
+
     if not result:
         raise HTTPException(status_code=404, detail="TreasureMap not found")
-
-
-
 
     return_fields = [
         "id",
@@ -163,8 +213,14 @@ GROUP BY t.id;
     ]
 
     ret = {field: getattr(result, field, None) for field in return_fields}
-    ret['destination'] = json.loads(result.destination_resolved) if result.destination_resolved else None
+    ret["destination"] = (
+        json.loads(result.destination_resolved) if result.destination_resolved else None
+    )
 
-    ret['preceding'] = json.loads(result.preceding_resolved) if result.preceding_resolved else None
-    ret['discovery'] = json.loads(result.discovery_resolved) if result.discovery_resolved else None
+    ret["preceding"] = (
+        json.loads(result.preceding_resolved) if result.preceding_resolved else None
+    )
+    ret["discovery"] = (
+        json.loads(result.discovery_resolved) if result.discovery_resolved else None
+    )
     return ret

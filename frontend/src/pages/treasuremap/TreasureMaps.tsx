@@ -34,12 +34,7 @@ interface Library {
 
 const sampleCategories: string[] = TREASUREMAP_CATEGORY_ARRAY;
 
-const sampleAcademicFields: AcademicField[] = ACADEMIC_FIELD_ARRAY.map(
-  (field) => ({
-    id: field.id,
-    name: field.name,
-  })
-);
+const sampleAcademicFields: string[] = ACADEMIC_FIELD_ARRAY;
 
 const sampleLibraries: Library[] = LIBRARY_ARRAY.map((library) => ({
   id: library.id,
@@ -71,8 +66,8 @@ const TreasureMaps: React.FC = () => {
     sampleCategories.find((c) => c === category_search) || null
   );
   const [academicFieldSearch, setAcademicFieldSearch] =
-    React.useState<AcademicField | null>(
-      sampleAcademicFields.find((af) => af.name === academic_field_search) ||
+    React.useState<string | null>(
+      sampleAcademicFields.find((af) => af === academic_field_search) ||
         null
     );
   const [librarySearch, setLibrarySearch] = React.useState<Library[]>(
@@ -88,7 +83,7 @@ const TreasureMaps: React.FC = () => {
       sampleCategories.find((c) => c === category_search) || null
     );
     setAcademicFieldSearch(
-      sampleAcademicFields.find((af) => af.name === academic_field_search) ||
+      sampleAcademicFields.find((af) => af === academic_field_search) ||
         null
     );
     setLibrarySearch(
@@ -167,7 +162,7 @@ const TreasureMaps: React.FC = () => {
     const newParams: Record<string, any> = {
       name_search: searchInput,
       category_search: categorySearch || "",
-      academic_field_search: academicFieldSearch?.name || "",
+      academic_field_search: academicFieldSearch || "",
       library_search: librarySearch.map((l) => l.name).join(","),
       destination_search: destinationInput,
       page: 0,
@@ -207,7 +202,7 @@ const TreasureMaps: React.FC = () => {
 
   const handleAcademicFieldChange = (
     _: any,
-    newValue: AcademicField | null
+    newValue: string | null
   ) => {
     setAcademicFieldSearch(newValue);
   };
@@ -254,7 +249,7 @@ const TreasureMaps: React.FC = () => {
         <Autocomplete
           id="academic-field-filter"
           options={sampleAcademicFields}
-          getOptionLabel={(option) => option.name}
+          // getOptionLabel={(option) => option.name}
           value={academicFieldSearch}
           onChange={handleAcademicFieldChange}
           renderInput={(params) => (

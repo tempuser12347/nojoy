@@ -1309,30 +1309,14 @@ export const TREASUREMAP_CATEGORY_ARRAY = [
 ];
 
 export const ACADEMIC_FIELD_ARRAY = [
-  {
-    id: 1,
-    name: "고고학",
-  },
-  {
-    id: 2,
-    name: "종교학",
-  },
-  {
-    id: 3,
-    name: "미술",
-  },
-  {
-    id: 4,
-    name: "지리학",
-  },
-  {
-    id: 5,
-    name: "생물학",
-  },
-  {
-    id: 6,
-    name: "보물 감정",
-  },
+
+  '생물학',
+'고고학',
+'보물감정',
+'종교학',
+'미술',
+'지리학',
+'천문학'
 ];
 
 export const LIBRARY_ARRAY = [
