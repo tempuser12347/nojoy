@@ -6,30 +6,38 @@ from sqlalchemy import text, asc, desc
 from ..database import get_db
 import json
 
-class Tradegood(BaseModel):
-    id: int
-    name: str
-    description: Optional[str] = None
-    culture: Optional[str] = None
-    category: Optional[str] = None
-    classification: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+# class Tradegood(BaseModel):
+#     id: int
+#     name: str
+#     description: Optional[str] = None
+#     culture: Optional[str] = None
+#     category: Optional[str] = None
+#     classification: Optional[str] = None
+
+#     class Config:
+#         from_attributes = True
+
 
 class TradegoodResponse(BaseModel):
-    items: List[Tradegood]
+    items: List[dict]
     total: int
 
+
 router = APIRouter(prefix="/api/tradegoods", tags=["tradegoods"])
+
 
 @router.get("/", response_model=TradegoodResponse)
 def read_tradegoods(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit the number of records returned"),
     name_search: Optional[str] = Query(None, description="Search term for name"),
-    category_search: Optional[str] = Query(None, description="Search term for category"),
-    classification_search: Optional[str] = Query(None, description="Search term for classification"),
+    category_search: Optional[str] = Query(
+        None, description="Search term for category"
+    ),
+    classification_search: Optional[str] = Query(
+        None, description="Search term for classification"
+    ),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("asc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
@@ -38,23 +46,30 @@ def read_tradegoods(
     Retrieve a list of tradegoods with optional pagination, searching, and sorting.
     """
     query = "SELECT * FROM tradegoods"
-    
+
     # Initial fetch to get all data
     results = db.execute(text(query)).fetchall()
 
     # Filtering logic
     if name_search:
         results = [row for row in results if name_search.lower() in row.name.lower()]
-    
+
     if category_search:
-        results = [row for row in results if category_search.lower() in (row.category or "").lower()]
+        results = [
+            row
+            for row in results
+            if category_search.lower() in (row.category or "").lower()
+        ]
 
     if classification_search:
-        results = [row for row in results if classification_search.lower() in (row.classification or "").lower()]
+        results = [
+            row
+            for row in results
+            if classification_search.lower() in (row.classification or "").lower()
+        ]
 
     # Sorting logic
-    if sort_by in [c.name for c in text(query).columns]:
-        order_func = desc if sort_order.lower() == "desc" else asc
+    if sort_by:
         results.sort(key=lambda x: getattr(x, sort_by) or "", reverse=(sort_order.lower() == "desc"))
 
     total = len(results)
@@ -64,18 +79,18 @@ def read_tradegoods(
     items = []
     for row in paginated_results:
         item_dict = dict(row._mapping)
-        if item_dict.get('culture'):
+        if item_dict.get("culture"):
             try:
-                item_dict['culture'] = json.loads(item_dict['culture'])
+                item_dict["culture"] = json.loads(item_dict["culture"])
             except (json.JSONDecodeError, TypeError):
                 # If it's not valid JSON, keep the original string
                 pass
-        items.append(Tradegood(**item_dict))
+        items.append(item_dict)
 
     return {"items": items, "total": total}
 
 
-@router.get("/{tradegood_id}", response_model=Tradegood)
+@router.get("/{tradegood_id}", response_model=dict)
 def read_tradegood(tradegood_id: int, db: Session = Depends(get_db)):
     """
     Retrieve a single tradegood by its ID.
@@ -87,10 +102,10 @@ def read_tradegood(tradegood_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Tradegood not found")
 
     item_dict = dict(result._mapping)
-    if item_dict.get('culture'):
+    if item_dict.get("culture"):
         try:
-            item_dict['culture'] = json.loads(item_dict['culture'])
+            item_dict["culture"] = json.loads(item_dict["culture"])
         except (json.JSONDecodeError, TypeError):
             pass
-            
-    return Tradegood(**item_dict)
+
+    return item_dict

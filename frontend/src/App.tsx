@@ -24,6 +24,8 @@ import Jobs from './pages/job/Jobs';
 import JobDetail from './pages/job/JobDetail';
 import Equipments from './pages/equipment/Equipments';
 import EquipmentDetail from './pages/equipment/EquipmentDetail';
+import Tradegoods from './pages/tradegood/Tradegoods';
+import TradegoodDetail from './pages/tradegood/TradegoodDetail';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -57,6 +59,8 @@ function App() {
               <Route path="/직업/:id" element={<JobDetail />} />
               <Route path="/장비품" element={<Equipments />} />
               <Route path="/장비품/:id" element={<EquipmentDetail />} />
+              <Route path="/교역품" element={<Tradegoods />} />
+              <Route path="/교역품/:id" element={<TradegoodDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
