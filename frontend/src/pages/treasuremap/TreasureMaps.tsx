@@ -17,21 +17,6 @@ import {
   TREASUREMAP_LIBRARY_ARRAY,
 } from "../../constants/listvalues";
 
-interface Category {
-  id: number;
-  name: string;
-}
-
-interface AcademicField {
-  id: number;
-  name: string;
-}
-
-interface Library {
-  id: number;
-  name: string;
-}
-
 const sampleCategories: string[] = TREASUREMAP_CATEGORY_ARRAY;
 
 const sampleAcademicFields: string[] = TREASUREMAP_ACADEMIC_FIELD_ARRAY;
@@ -47,8 +32,7 @@ const TreasureMaps: React.FC = () => {
   const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
   const name_search = searchParams.get("name_search") || "";
   const category_search = searchParams.get("category_search") || "";
-  const academic_field_search =
-    searchParams.get("academic_field_search") || "";
+  const academic_field_search = searchParams.get("academic_field_search") || "";
   const library_search_names = (searchParams.get("library_search") || "")
     .split(",")
     .filter(Boolean);
@@ -62,11 +46,9 @@ const TreasureMaps: React.FC = () => {
   const [categorySearch, setCategorySearch] = React.useState<string | null>(
     sampleCategories.find((c) => c === category_search) || null
   );
-  const [academicFieldSearch, setAcademicFieldSearch] =
-    React.useState<string | null>(
-      sampleAcademicFields.find((af) => af === academic_field_search) ||
-        null
-    );
+  const [academicFieldSearch, setAcademicFieldSearch] = React.useState<
+    string | null
+  >(sampleAcademicFields.find((af) => af === academic_field_search) || null);
   const [librarySearch, setLibrarySearch] = React.useState<string[]>(
     sampleLibraries.filter((l) => library_search_names.includes(l))
   );
@@ -80,8 +62,7 @@ const TreasureMaps: React.FC = () => {
       sampleCategories.find((c) => c === category_search) || null
     );
     setAcademicFieldSearch(
-      sampleAcademicFields.find((af) => af === academic_field_search) ||
-        null
+      sampleAcademicFields.find((af) => af === academic_field_search) || null
     );
     setLibrarySearch(
       sampleLibraries.filter((l) => library_search_names.includes(l))
@@ -197,10 +178,7 @@ const TreasureMaps: React.FC = () => {
     setCategorySearch(newValue);
   };
 
-  const handleAcademicFieldChange = (
-    _: any,
-    newValue: string | null
-  ) => {
+  const handleAcademicFieldChange = (_: any, newValue: string | null) => {
     setAcademicFieldSearch(newValue);
   };
 
