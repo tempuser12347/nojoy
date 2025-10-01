@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import asc, desc, text
 from .. import models
 from ..database import get_db
+import json
 
 router = APIRouter(prefix="/api/treasuremaps", tags=["treasuremaps"])
 
@@ -17,7 +18,18 @@ def read_treasuremaps(
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
 ):
-    results = db.execute(text("""select * from treasuremap""")).fetchall()
+    results = db.execute(text("""
+SELECT
+    t.*,
+    json_object(
+        'id', a.id,
+        'name', a.name
+    ) AS destination_resolved
+FROM treasuremap t
+LEFT JOIN allData a
+    ON CAST(t.destination AS INT) = a.id;
+
+""")).fetchall()
 
     if name_search:
         results = [row for row in results if name_search.lower() in row.name.lower()]
@@ -43,6 +55,7 @@ def read_treasuremaps(
 
     # do skip and limit
     treasure_maps = results[skip : skip + limit]
+    print(treasure_maps)
 
     return_fields = [
         "id",
@@ -52,7 +65,6 @@ def read_treasuremaps(
         "required_skill",
         "academic_field",
         "library",
-        "destination",
         "discovery",
         "city_conditions",
         "preceding",
@@ -64,7 +76,10 @@ def read_treasuremaps(
     ret_list = []
     for treasure_map in treasure_maps:
         ret = {field: getattr(treasure_map, field, None) for field in return_fields}
+        ret['destination'] = json.loads(treasure_map.destination_resolved) if treasure_map.destination_resolved else None
         ret_list.append(ret)
+
+    
 
     return {"items": ret_list, "total": total}
 

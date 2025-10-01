@@ -68,7 +68,7 @@ const TreasureMaps: React.FC = () => {
     { id: 'required_skill', label: '필요스킬' },
     { id: 'academic_field', label: '학문' },
     { id: 'library', label: '서고' },
-    { id: 'destination', label: '목적지' },
+    { id: 'destination', label: '목적지', format: (value: {id: number, name: string}|null) => (value ? value.name : null)},
   ];
 
   const handleSearchInputChange = (
