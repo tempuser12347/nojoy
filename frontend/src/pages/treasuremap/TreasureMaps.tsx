@@ -13,8 +13,8 @@ import DataTable from "../../components/DataTable";
 import api from "../../api";
 import {
   TREASUREMAP_CATEGORY_ARRAY,
-  ACADEMIC_FIELD_ARRAY,
-  LIBRARY_ARRAY,
+  TREASUREMAP_ACADEMIC_FIELD_ARRAY,
+  TREASUREMAP_LIBRARY_ARRAY,
 } from "../../constants/listvalues";
 
 interface Category {
@@ -34,12 +34,9 @@ interface Library {
 
 const sampleCategories: string[] = TREASUREMAP_CATEGORY_ARRAY;
 
-const sampleAcademicFields: string[] = ACADEMIC_FIELD_ARRAY;
+const sampleAcademicFields: string[] = TREASUREMAP_ACADEMIC_FIELD_ARRAY;
 
-const sampleLibraries: Library[] = LIBRARY_ARRAY.map((library) => ({
-  id: library.id,
-  name: library.name,
-}));
+const sampleLibraries: string[] = TREASUREMAP_LIBRARY_ARRAY;
 
 const TreasureMaps: React.FC = () => {
   const navigate = useNavigate();
@@ -70,8 +67,8 @@ const TreasureMaps: React.FC = () => {
       sampleAcademicFields.find((af) => af === academic_field_search) ||
         null
     );
-  const [librarySearch, setLibrarySearch] = React.useState<Library[]>(
-    sampleLibraries.filter((l) => library_search_names.includes(l.name))
+  const [librarySearch, setLibrarySearch] = React.useState<string[]>(
+    sampleLibraries.filter((l) => library_search_names.includes(l))
   );
   const [destinationInput, setDestinationInput] =
     React.useState(destination_search);
@@ -87,7 +84,7 @@ const TreasureMaps: React.FC = () => {
         null
     );
     setLibrarySearch(
-      sampleLibraries.filter((l) => library_search_names.includes(l.name))
+      sampleLibraries.filter((l) => library_search_names.includes(l))
     );
     setDestinationInput(destination_search);
   }, [
@@ -163,7 +160,7 @@ const TreasureMaps: React.FC = () => {
       name_search: searchInput,
       category_search: categorySearch || "",
       academic_field_search: academicFieldSearch || "",
-      library_search: librarySearch.map((l) => l.name).join(","),
+      library_search: librarySearch.join(","),
       destination_search: destinationInput,
       page: 0,
     };
@@ -207,7 +204,7 @@ const TreasureMaps: React.FC = () => {
     setAcademicFieldSearch(newValue);
   };
 
-  const handleLibraryChange = (_: any, newValue: Library[]) => {
+  const handleLibraryChange = (_: any, newValue: string[]) => {
     setLibrarySearch(newValue);
   };
 
@@ -265,7 +262,7 @@ const TreasureMaps: React.FC = () => {
           multiple
           id="library-filter"
           options={sampleLibraries}
-          getOptionLabel={(option) => option.name}
+          // getOptionLabel={(option) => option.name}
           value={librarySearch}
           onChange={handleLibraryChange}
           renderInput={(params) => (
@@ -280,7 +277,7 @@ const TreasureMaps: React.FC = () => {
             value.map((option, index) => (
               <Chip
                 variant="outlined"
-                label={option.name}
+                label={option}
                 {...getTagProps({ index })}
               />
             ))

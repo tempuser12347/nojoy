@@ -1301,48 +1301,50 @@ export const EQUIPMENT_SKILL_OPTION_ARRAY = [
 ];
 
 export const TREASUREMAP_CATEGORY_ARRAY = [
- '서고',
-'육지 재조사',
-'NPC',
-'퀘스트',
-'이벤트'
+  "서고",
+  "육지 재조사",
+  "NPC",
+  "퀘스트",
+  "이벤트",
 ];
 
-export const ACADEMIC_FIELD_ARRAY = [
-
-  '생물학',
-'고고학',
-'보물감정',
-'종교학',
-'미술',
-'지리학',
-'천문학'
+export const TREASUREMAP_ACADEMIC_FIELD_ARRAY = [
+  "생물학",
+  "고고학",
+  "보물감정",
+  "종교학",
+  "미술",
+  "지리학",
+  "천문학",
 ];
 
-export const LIBRARY_ARRAY = [
-  {
-    id: 1,
-    name: "리스본",
-  },
-  {
-    id: 2,
-    name: "세비야",
-  },
-  {
-    id: 3,
-    name: "런던",
-  },
-  {
-    id: 4,
-    name: "암스테르담",
-  },
-  {
-    id: 5,
-    name: "베네치아",
-  },
-  {
-    id: 6,
-    name: "마르세이유",
-  },
+export const TREASUREMAP_LIBRARY_ARRAY = [
+  "그랜드케이맨",
+  "나폴리",
+  "런던",
+  "리마",
+  "리스본",
+  "마르세이유",
+  "베네치아",
+  "사카이",
+  "상트 페테르부르크",
+  "샌프란시스코",
+  "세비야",
+  "아테네",
+  "안평",
+  "알렉산드리아",
+  "암보이나",
+  "암스테르담",
+  "윌렘스타트",
+  "이스탄불",
+  "제노바",
+  "카라카스",
+  "카옌",
+  "캘리컷",
+  "테르나테",
+  "튀니스",
+  "트루히요",
+  "페르남부쿠",
+  "한양",
+  "항주",
 ];
-
