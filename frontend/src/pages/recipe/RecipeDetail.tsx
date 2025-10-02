@@ -71,7 +71,7 @@ export default function RecipeDetail() {
       <Typography variant="h4" gutterBottom>{recipe.name}</Typography>
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' } }}>
+          <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' , md: '1fr 1fr 1fr', lg: '1fr 1fr 1fr 1fr'} }}>
             <Box>
               <Typography variant="subtitle1" color="text.secondary">필요 스킬</Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>{renderObjectsToChips(recipe.required_Skill, navigate)}</Box>

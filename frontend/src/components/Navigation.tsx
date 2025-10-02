@@ -97,7 +97,8 @@ const availableSections = [
   "교역품",
   "추천장",
   "소비품",
-  "레시피책"
+  "레시피책",
+  "레시피"
 ];
 
 const Navigation: React.FC = () => {
