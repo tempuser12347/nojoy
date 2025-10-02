@@ -14,9 +14,9 @@ dho joy 에 올라간 정보를 오프라인으로 서버를 직접 띄워서 �
 
 :warning: python 설치 부분은 매우 대충 넘어감
 
-윈도우11 환경
+윈도우11 환경 가정
 
-### python 설치
+### 1. python 설치
 
 https://www.python.org/downloads/windows/ 에서 윈도우 설치 파일 받아서 설치
 
@@ -25,7 +25,7 @@ https://www.python.org/downloads/windows/ 에서 윈도우 설치 파일 받아�
 꼭 스샷 처럼 3.13.7 일 필요 없습니다. 링크 들어가셨을 때 보이는 최신 버전의 windows installer 다운받아서 설치하시면 됩니다.
 
 
-#### (선택) 파이썬 설치 후 실행 되는지 확인
+#### 1.1 (선택) 파이썬 설치 후 실행 되는지 확인
 
 윈도우 powershell을 열어서 python을 입력해서 실행해봅니다
 아래와 같이 보인다면 python 이 설치가 되고 powershell/cmd 에서 실행이 가능하다는 것입니다.
@@ -33,7 +33,7 @@ https://www.python.org/downloads/windows/ 에서 윈도우 설치 파일 받아�
 ![](docs/powershellpython.png)
 
 
-### 코드 다운로드
+### 2. 코드 다운로드
 
 git clone 혹은 zip 파일 다운로드.
 
@@ -46,7 +46,7 @@ OR
 zip download url: https://github.com/tempuser12347/nojoy/archive/refs/heads/main.zip
 여기에서 zip 파일 다운로드 후 압축을 해제합니다
 
-### `win_run_server.bat` 파일 실행
+### 3. `win_run_server.bat` 파일 실행
 
 압축해제된 폴더에서 `win_run_server.bat` 파일을 실행합니다.
 python이 설치가 되었다면 이 스크립트로 필요한 파이썬 패키지를 설치하고 nojoy 서버를 실행하는 작업을 합니다.
