@@ -73,6 +73,13 @@ FROM recipe;
                     break
         results = filtered
 
+    
+    # Sorting
+    reverse = sort_order.lower() == "desc"
+    if sort_by:
+        print(f'sort_by: {sort_by}, sort_order: {sort_order}')
+        results.sort(key=lambda r: getattr(r, sort_by) or "", reverse=reverse)
+
     total = len(results)
     items = results[skip : skip + limit]
 
@@ -112,11 +119,16 @@ FROM recipe;
 
         ret = {field: getattr(recipe, field) for field in return_fields}
         for field in json_parsing_fields:
-            ret[field] = (
-                json.loads(getattr(recipe, field))
-                if getattr(recipe, field, None)
-                else None
-            )
+            try:
+                ret[field] = (
+                    json.loads(getattr(recipe, field))
+                    if getattr(recipe, field, None)
+                    else None
+                )
+            except json.decoder.JSONDecodeError as e:
+                print(f'failed to parse {field}, value: {getattr(recipe, field)}') 
+                raise e
+                
 
         ret_list.append(ret)
 
