@@ -48,7 +48,9 @@ const Recipebooks: React.FC = () => {
   // Sync with params
   useEffect(() => {
     setSearchInput(name_search);
-    setSkillsSearch(skillOptions.filter((s) => skills_search_ids.includes(s.id)));
+    setSkillsSearch(
+      skillOptions.filter((s) => skills_search_ids.includes(s.id))
+    );
   }, [name_search, searchParams]);
 
   // Helper to update params
@@ -94,10 +96,9 @@ const Recipebooks: React.FC = () => {
   const columns = [
     { id: "name", label: "이름", minWidth: 150 },
     { id: "additionalname", label: "추가 이름", minWidth: 120 },
-    { id: "description", label: "설명", minWidth: 200 },
+    { id: "skill", label: "스킬", minWidth: 100 },
     { id: "productionNPC", label: "생산 NPC", minWidth: 120 },
     { id: "era", label: "시대", minWidth: 100 },
-    { id: "skill", label: "스킬", minWidth: 100 },
   ];
 
   // --- Handlers ---
@@ -166,7 +167,12 @@ const Recipebooks: React.FC = () => {
           value={skillsSearch}
           onChange={handleSkillsChange}
           renderInput={(params) => (
-            <TextField {...params} variant="outlined" label="스킬" sx={{ minWidth: 200 }} />
+            <TextField
+              {...params}
+              variant="outlined"
+              label="스킬"
+              sx={{ minWidth: 200 }}
+            />
           )}
           renderTags={(value, getTagProps) =>
             value.map((option, index) => (
@@ -178,15 +184,14 @@ const Recipebooks: React.FC = () => {
             ))
           }
         />
-      </Box>
-
-      <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
-        <Button variant="contained" onClick={handleSearch}>
-          검색
-        </Button>
-        <Button variant="outlined" onClick={resetFilters}>
-          초기화
-        </Button>
+        <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+          <Button variant="contained" onClick={handleSearch}>
+            검색
+          </Button>
+          <Button variant="outlined" onClick={resetFilters}>
+            초기화
+          </Button>
+        </Box>
       </Box>
 
       <DataTable
