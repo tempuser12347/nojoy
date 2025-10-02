@@ -20,6 +20,18 @@ dho joy 에 올라간 정보를 오프라인으로 서버를 직접 띄워서 �
 
 https://www.python.org/downloads/windows/ 에서 윈도우 설치 파일 받아서 설치
 
+![](docs/pythonsite.png)
+
+꼭 스샷 처럼 3.13.7 일 필요 없습니다. 링크 들어가셨을 때 보이는 최신 버전의 windows installer 다운받아서 설치하시면 됩니다.
+
+
+#### (선택) 파이썬 설치 후 실행 되는지 확인
+
+윈도우 powershell을 열어서 python을 입력해서 실행해봅니다
+아래와 같이 보인다면 python 이 설치가 되고 powershell/cmd 에서 실행이 가능하다는 것입니다.
+
+![](docs/powershellpython.png)
+
 
 ### 코드 다운로드
 
@@ -54,4 +66,8 @@ python이 설치가 되었다면 이 스크립트로 필요한 파이썬 패키�
 
 가져온 db에서 한글 column 을 영어로 바꾸는 작업, 추가 table 대충이라도 생성하는 등의 수정을 가했습니다.
 
+이후에 dhodb.com 을 크롤링하여 데이터를 지속적으로 추가하고 있습니다. dhodb.com 크롤링 중에도 특정 페이지는 로그인에 막혀서 제대로 수집을 못하는 경우들이 발생하여 dhodb.com 데이터 100%를 가져왔다고 하기는 어렵습니다. 그래도 한 80-90% 정도는 가져오고 있는 것 같습니다.
+
 db 파일은 `dhoDatabase.sqlite3` 파일입니다.
+
+
