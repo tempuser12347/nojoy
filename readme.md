@@ -44,6 +44,7 @@ git clone https://github.com/tempuser12347/nojoy
 OR
 
 zip download url: https://github.com/tempuser12347/nojoy/archive/refs/heads/main.zip
+
 여기에서 zip 파일 다운로드 후 압축을 해제합니다
 
 ### 3. `win_run_server.bat` 파일 실행
@@ -56,7 +57,7 @@ python이 설치가 되었다면 이 스크립트로 필요한 파이썬 패키�
 
 기본적으로 8000번 포트에 실행됩니다.
 
-브라우저를 켜고 `http://localhost:8000` 으로 가면 사용 가능합니다.
+브라우저를 켜고 [`http://localhost:8000`](http://localhost:8000) 으로 가면 사용 가능합니다.
 
 ----
 
