@@ -186,7 +186,7 @@ const Tradegoods: React.FC = () => {
               />
               <Grid container>
                 {category.classifications.map((classification) => (
-                  <Grid item key={classification}>
+                  <Grid key={classification}>
                     <FormControlLabel
                       control={
                         <Checkbox
