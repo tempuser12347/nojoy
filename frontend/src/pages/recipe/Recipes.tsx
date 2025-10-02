@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Box,
   Typography,
@@ -8,7 +9,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
 import { renderObjectsToChips } from "../../common/render";
@@ -27,46 +28,53 @@ interface Recipe {
 
 const SKILL_FILTERS = ["주조", "공예", "보관", "조리", "연금술", "언어학", "봉제"];
 
-export default function Recipes() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // pagination
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
-
-  // search + filters
-  const [searchInput, setSearchInput] = useState("");
-  const [skillFilters, setSkillFilters] = useState<string[]>([]);
-  const [appliedSearch, setAppliedSearch] = useState("");
-  const [appliedSkills, setAppliedSkills] = useState<string[]>([]);
-
+const Recipes: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  // read params
+  const page = parseInt(searchParams.get("page") || "0", 10);
+  const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "25", 10);
+  const name_search = searchParams.get("name_search") || "";
+  const skills_search = (searchParams.get("skills_search") || "")
+    .split(",")
+    .filter(Boolean);
+
+  // local UI state
+  const [searchInput, setSearchInput] = useState(name_search);
+  const [skillFilters, setSkillFilters] = useState<string[]>(skills_search);
+
+  // sync when params change
   useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get("/api/recipes", {
-          params: {
-            search: appliedSearch,
-            required_skills: appliedSkills.join(","), // backend should handle comma-separated
-            skip: page * rowsPerPage,
-            limit: rowsPerPage,
-          },
-        });
-        setRecipes(response.data.items || response.data); // adjust depending on API response
-      } catch (err) {
-        setError("Failed to load recipes");
-        console.error("Error fetching recipes:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    setSearchInput(name_search);
+    setSkillFilters(skills_search);
+  }, [name_search, skills_search.join(",")]);
 
-    fetchRecipes();
-  }, [appliedSearch, appliedSkills, page, rowsPerPage]);
+  const updateSearchParams = (newParams: Record<string, any>) => {
+    const current = new URLSearchParams(searchParams);
+    Object.entries(newParams).forEach(([key, value]) => {
+      value && value !== ""
+        ? current.set(key, value)
+        : current.delete(key);
+    });
+    setSearchParams(current);
+  };
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["recipes", page, rowsPerPage, name_search, skills_search],
+    queryFn: async () => {
+      const response = await api.get("/api/recipes", {
+        params: {
+          search: name_search,
+          required_skills: skills_search.join(","),
+          skip: page * rowsPerPage,
+          limit: rowsPerPage,
+        },
+      });
+      console.log(response.data)
+      return response.data; // Expect { items: [], total: 0 }
+    },
+  });
 
   const columns = [
     { id: "name", label: "이름" },
@@ -88,6 +96,7 @@ export default function Recipes() {
     { id: "Investment_cost", label: "투자비용" },
   ];
 
+  // handlers
   const handleSkillChange = (skill: string) => {
     setSkillFilters((prev) =>
       prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
@@ -95,17 +104,25 @@ export default function Recipes() {
   };
 
   const handleSearch = () => {
-    setAppliedSearch(searchInput);
-    setAppliedSkills(skillFilters);
-    setPage(0);
+    updateSearchParams({
+      name_search: searchInput,
+      skills_search: skillFilters.join(","),
+      page: 0,
+    });
   };
 
   const resetFilters = () => {
     setSearchInput("");
     setSkillFilters([]);
-    setAppliedSearch("");
-    setAppliedSkills([]);
-    setPage(0);
+    setSearchParams({ rowsPerPage: rowsPerPage.toString() });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    updateSearchParams({ page: newPage });
+  };
+
+  const handleRowsPerPageChange = (newRowsPerPage: number) => {
+    updateSearchParams({ rowsPerPage: newRowsPerPage, page: 0 });
   };
 
   return (
@@ -153,24 +170,19 @@ export default function Recipes() {
       </Box>
 
       {/* Data Table */}
-      {error ? (
-        <Typography color="error">{error}</Typography>
-      ) : (
-        <DataTable
-          columns={columns}
-          data={recipes}
-          loading={loading}
-          onRowClick={(row) => navigate(`/레시피/${row.id}`)}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          total={recipes.length} // if API returns {items,total} use response.data.total instead
-          onPageChange={setPage}
-          onRowsPerPageChange={(newRowsPerPage) => {
-            setPage(0);
-            setRowsPerPage(newRowsPerPage);
-          }}
-        />
-      )}
+      <DataTable
+        columns={columns}
+        data={data?.items || []}
+        loading={isLoading}
+        onRowClick={(row) => navigate(`/레시피/${row.id}`)}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        total={data?.total || 0}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+      />
     </Box>
   );
-}
+};
+
+export default Recipes;
