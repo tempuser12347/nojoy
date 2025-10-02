@@ -24,6 +24,7 @@ interface Recipe {
   era: string;
   central_city: string;
   Investment_cost: number;
+  success: {id:number, name: string}[] | null
 }
 
 const SKILL_FILTERS = ["주조", "공예", "보관", "조리", "연금술", "언어학", "봉제"];
@@ -90,10 +91,7 @@ const Recipes: React.FC = () => {
       format: (value: Recipe["ingredients"]) =>
         renderObjectsToChips(value, navigate),
     },
-    { id: "sophia", label: "소피아" },
-    { id: "era", label: "시대" },
-    { id: "central_city", label: "중앙도시" },
-    { id: "Investment_cost", label: "투자비용" },
+    {id: "success", label: "성공", format: (value: Recipe["success"]) => renderObjectsToChips(value, navigate)}
   ];
 
   // handlers

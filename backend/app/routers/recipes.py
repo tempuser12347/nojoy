@@ -21,7 +21,32 @@ def read_recipes(
 ):
     # query = db.query(models.Recipe)
 
-    results = db.execute(text("select * from recipe")).fetchall()
+    results = db.execute(text(''' 
+SELECT
+    id,
+    name,
+    description,
+    recipe_book_id,
+    required_Skill,
+    ingredients,
+    sophia,
+    era,
+    home_production,
+    development,
+    Investment_cost,
+    central_city,
+    Industrial_revolution,
+    own_Industrial_city,
+    title,
+    consumption_contribution,
+    other,
+    -- replace "ref" with "id" in the JSON string
+    REPLACE(success, '"ref"', '"id"') AS success,
+    greatsuccess,
+    failure
+FROM recipe;
+
+''')).fetchall()
 
     if search:
         results = [row for row in results if search.lower() in (row.name or "").lower()]
