@@ -50,11 +50,21 @@ def read_tradegoods(
         ]
 
     if classification_search:
-        results = [
-            row
-            for row in results
-            if classification_search.lower() in (row.classification or "").lower()
-        ]
+        term_list = classification_search.split(",")
+        print(term_list)
+        filtered = []
+        for row in results:
+            if row.classification and row.classification in term_list:
+                filtered.append(row)
+
+        results = filtered
+
+
+        # results = [
+        #     row
+        #     for row in results
+        #     if classification_search.lower() in (row.classification or "").lower()
+        # ]
 
     # Sorting logic
     if sort_by:
