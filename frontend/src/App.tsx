@@ -29,6 +29,7 @@ import TradegoodDetail from './pages/tradegood/TradegoodDetail';
 import Certificates from './pages/certificate/Certificates';
 import CertificateDetail from './pages/certificate/CertificateDetail';
 import Recipebooks from './pages/recipebook/RecipeBooks';
+import RecipebookDetail from './pages/recipebook/RecipeBookDetail';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -67,6 +68,7 @@ function App() {
               <Route path="/추천장" element={<Certificates />} />
               <Route path="/추천장/:id" element={<CertificateDetail />} />
               <Route path="/레시피책" element={<Recipebooks />} />
+              <Route path="/레시피책/:id" element={<RecipebookDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

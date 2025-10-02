@@ -97,8 +97,8 @@ def read_recipebook(recipebook_id: int, db: Session = Depends(get_db)):
 
     ret = {}
     for field in fetch_field_list:
-        ret[field] = result.get(field)
+        ret[field] = getattr(result, field, None)
 
-    ret["skill"] = result.get("sveries")
+    ret["skill"] = result.sveries
 
     return ret
