@@ -51,7 +51,7 @@ def read_consumables(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit number of records returned"),
     name_search: Optional[str] = Query(None, description="Search by name"),
-    category_search: Optional[str] = Query(None, description="Search by category"),
+    category: Optional[str] = Query(None, description="Search by category"),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("asc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
@@ -64,16 +64,16 @@ def read_consumables(
             row for row in results if name_search.lower() in (row.name or "").lower()
         ]
 
-    if category_search:
+    if category:
+        term_list = category.split(',')
         results = [
             row
             for row in results
-            if category_search.lower() in (row.category or "").lower()
+            if row.category in term_list
         ]
 
     # do sorting
     if results:
-        print(f'sort_order: {sort_order}, sort_by: {sort_by}')
         reverse = sort_order.lower() == "desc"
         def sort_key(row):
             value = getattr(row, sort_by, None)
@@ -96,10 +96,8 @@ def read_consumables(
             "description": c.description,
             "category": c.category,
             "usage_effect": handle_usage_effect(c.usage_Effect),
-            # Parse JSON fields if not empty
             "features": c.features if c.features else None,
             "item": normalize_items(c.Item),
-            # "duplicate": json.loads(c.Duplicate) if c.Duplicate else [],
         }
         ret_list.append(ret)
 
@@ -124,6 +122,5 @@ def read_consumable(consumable_id: int, db: Session = Depends(get_db)):
         "category": row.category,
         "usage_effect": handle_usage_effect(row.usage_Effect),
         "features": row.features if row.features else None,
-        "item": normalize_items(row.Item),
-        "duplicate": json.loads(row.Duplicate) if row.Duplicate else [],
+        "item": normalize_items(row.Item)
     }

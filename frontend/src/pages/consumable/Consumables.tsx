@@ -38,7 +38,7 @@ export default function Consumables() {
   // URL param → state
   const page = parseInt(searchParams.get("page") || "0", 10);
   const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "25", 10);
-  const search = searchParams.get("search") || "";
+  const name_search = searchParams.get("name_search") || "";
   const category_filter = (searchParams.get("category") || "")
     .split(",")
     .filter(Boolean);
@@ -47,15 +47,15 @@ export default function Consumables() {
     (searchParams.get("sort_order") as "asc" | "desc") || "asc";
 
   // Local state for UI inputs (not immediately triggering API)
-  const [searchInput, setSearchInput] = useState(search);
+  const [searchInput, setSearchInput] = useState(name_search);
   const [selectedCategories, setSelectedCategories] =
     useState<string[]>(category_filter);
 
   // Keep local inputs in sync with URL params when they change
   useEffect(() => {
-    setSearchInput(search);
+    setSearchInput(name_search);
     setSelectedCategories(category_filter);
-  }, [search, category_filter.join(",")]);
+  }, [name_search, category_filter.join(",")]);
 
   // Update URL params (→ triggers query)
   const updateSearchParams = (newParams: Record<string, any>) => {
@@ -71,7 +71,7 @@ export default function Consumables() {
       "consumables",
       page,
       rowsPerPage,
-      search,
+      name_search,
       category_filter,
       sort_by,
       sort_order,
@@ -79,7 +79,7 @@ export default function Consumables() {
     queryFn: async () => {
       const response = await api.get("/api/consumables", {
         params: {
-          search,
+          name_search,
           category: category_filter.join(","),
           skip: page * rowsPerPage,
           limit: rowsPerPage,
@@ -110,7 +110,7 @@ export default function Consumables() {
 
   const handleSearch = () => {
     updateSearchParams({
-      search: searchInput,
+      name_search: searchInput,
       category: selectedCategories.join(","),
       page: 0,
     });
