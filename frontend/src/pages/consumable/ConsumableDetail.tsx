@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Box, Typography, Card, CardContent } from '@mui/material';
-import api from '../../api';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Box, Typography, Card, CardContent } from "@mui/material";
+import { renderObjectsToChips } from "../../common/render";
+import api from "../../api";
 
 interface Consumable {
   id: number;
@@ -10,9 +11,9 @@ interface Consumable {
   description: string;
   category: string;
   type: string;
-  usage_Effect: any;
+  usage_Effect: { id: number; name: string };
   features: string;
-  Item: string;
+  item: { id: number; name: string; value?: number }[] | null;
   Duplicate: string;
 }
 
@@ -25,10 +26,11 @@ export default function ConsumableDetail() {
     const fetchConsumable = async () => {
       try {
         const response = await api.get(`/api/consumables/${id}`);
+        console.log(response.data);
         setConsumable(response.data);
       } catch (err) {
-        setError('Failed to load consumable details');
-        console.error('Error fetching consumable:', err);
+        setError("Failed to load consumable details");
+        console.error("Error fetching consumable:", err);
       }
     };
 
@@ -55,46 +57,79 @@ export default function ConsumableDetail() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>{consumable.name}</Typography>
+      <Typography variant="h4" gutterBottom>
+        {consumable.name}
+      </Typography>
       {consumable.additional_Name && (
-        <Typography variant="h6" color="text.secondary" gutterBottom>{consumable.additional_Name}</Typography>
+        <Typography variant="h6" color="text.secondary" gutterBottom>
+          {consumable.additional_Name}
+        </Typography>
       )}
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' } }}>
+          <Box
+            sx={{
+              display: "grid",
+              gap: 2,
+              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+            }}
+          >
             <Box>
-              <Typography variant="subtitle1" color="text.secondary">카테고리</Typography>
+              <Typography variant="subtitle1" color="text.secondary">
+                카테고리
+              </Typography>
               <Typography variant="body1">{consumable.category}</Typography>
             </Box>
             <Box>
-              <Typography variant="subtitle1" color="text.secondary">타입</Typography>
+              <Typography variant="subtitle1" color="text.secondary">
+                타입
+              </Typography>
               <Typography variant="body1">{consumable.type}</Typography>
             </Box>
-            <Box sx={{ gridColumn: { xs: '1', sm: '1 / -1' } }}>
-              <Typography variant="subtitle1" color="text.secondary">설명</Typography>
+            <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
+              <Typography variant="subtitle1" color="text.secondary">
+                설명
+              </Typography>
               <Typography variant="body1">{consumable.description}</Typography>
             </Box>
-            <Box sx={{ gridColumn: { xs: '1', sm: '1 / -1' } }}>
-              <Typography variant="subtitle1" color="text.secondary">특징</Typography>
+            <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
+              <Typography variant="subtitle1" color="text.secondary">
+                특징
+              </Typography>
               <Typography variant="body1">{consumable.features}</Typography>
             </Box>
             {consumable.usage_Effect && (
-              <Box sx={{ gridColumn: { xs: '1', sm: '1 / -1' } }}>
-                <Typography variant="subtitle1" color="text.secondary">사용효과</Typography>
-                <Typography component="pre" sx={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', bgcolor: 'grey.100', p: 1, borderRadius: 1 }}>
-                  {typeof consumable.usage_Effect === 'object'
+              <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
+                <Typography variant="subtitle1" color="text.secondary">
+                  사용효과
+                </Typography>
+                <Typography
+                  component="pre"
+                  sx={{
+                    whiteSpace: "pre-wrap",
+                    fontFamily: "monospace",
+                    bgcolor: "grey.100",
+                    p: 1,
+                    borderRadius: 1,
+                  }}
+                >
+                  {typeof consumable.usage_Effect === "object"
                     ? JSON.stringify(consumable.usage_Effect, null, 2)
                     : consumable.usage_Effect}
                 </Typography>
               </Box>
             )}
             <Box>
-              <Typography variant="subtitle1" color="text.secondary">아이템</Typography>
-              <Typography variant="body1">{consumable.Item || '-'}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">중복</Typography>
-              <Typography variant="body1">{consumable.Duplicate || '-'}</Typography>
+              <Typography variant="subtitle1" color="text.secondary">
+                아이템
+              </Typography>
+              <Typography variant="body1">
+                {renderObjectsToChips(
+                  consumable.item,
+                  null,
+                  (value) => "x" + value
+                )}
+              </Typography>
             </Box>
           </Box>
         </CardContent>

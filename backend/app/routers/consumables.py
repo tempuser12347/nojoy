@@ -65,23 +65,24 @@ def read_consumables(
         ]
 
     if category:
-        term_list = category.split(',')
-        results = [
-            row
-            for row in results
-            if row.category in term_list
-        ]
+        term_list = category.split(",")
+        results = [row for row in results if row.category in term_list]
 
     # do sorting
     if results:
         reverse = sort_order.lower() == "desc"
+
         def sort_key(row):
             value = getattr(row, sort_by, None)
             if value is None:
-                return (0, "") if isinstance(getattr(results[0], sort_by, None), (int, float)) else ""
+                return (
+                    (0, "")
+                    if isinstance(getattr(results[0], sort_by, None), (int, float))
+                    else ""
+                )
             return value
-        results.sort(key=sort_key, reverse=reverse)
 
+        results.sort(key=sort_key, reverse=reverse)
 
     total = len(results)
     consumables = results[skip : skip + limit]
@@ -113,7 +114,7 @@ def read_consumable(consumable_id: int, db: Session = Depends(get_db)):
     if not row:
         raise HTTPException(status_code=404, detail="Consumable not found")
 
-    return {
+    ret = {
         "id": row.id,
         "type": row.type,
         "name": row.name,
@@ -122,5 +123,17 @@ def read_consumable(consumable_id: int, db: Session = Depends(get_db)):
         "category": row.category,
         "usage_effect": handle_usage_effect(row.usage_Effect),
         "features": row.features if row.features else None,
-        "item": normalize_items(row.Item)
+        "item": normalize_items(row.Item),
     }
+
+    # get names of item
+    if ret["item"]:
+        for item in ret["item"]:
+            itemid = item["id"]
+            name = db.execute(
+                text("SELECT name FROM allData WHERE id = :id"), {"id": itemid}
+            ).fetchone()
+            if name:
+                item["name"] = name.name
+
+    return ret

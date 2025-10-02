@@ -15,7 +15,7 @@ export function renderObjectsToChips(
         link?: string;
       }[]
     | null,
-  navigate?: NavigateFunction,
+  navigate?: NavigateFunction | null,
   value_render_fn?: (value: number | null) => string
 ) {
   if (!data) return null;
