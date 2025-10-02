@@ -156,22 +156,6 @@ const Tradegoods: React.FC = () => {
       <Typography variant="h4" gutterBottom>
         교역품
       </Typography>
-      <Box sx={{ display: "flex", gap: 1, mb: 2, alignItems: "center" }}>
-        <TextField
-          label="이름 검색"
-          variant="outlined"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          sx={{ minWidth: 200 }}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-        />
-        <Button variant="contained" onClick={handleSearch}>
-          검색
-        </Button>
-        <Button variant="outlined" onClick={resetFilters}>
-          초기화
-        </Button>
-      </Box>
       <Box sx={{ mb: 2, p: 2, border: "1px solid grey", borderRadius: 1 }}>
         {categories.map((category) => {
           const categoryClassifications = category.classifications;
@@ -225,6 +209,22 @@ const Tradegoods: React.FC = () => {
             </FormGroup>
           );
         })}
+      </Box>
+      <Box sx={{ display: "flex", gap: 1, mb: 2, alignItems: "center" }}>
+        <TextField
+          label="이름 검색"
+          variant="outlined"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          sx={{ minWidth: 200 }}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+        />
+        <Button variant="contained" onClick={handleSearch}>
+          검색
+        </Button>
+        <Button variant="outlined" onClick={resetFilters}>
+          초기화
+        </Button>
       </Box>
 
       <DataTable
