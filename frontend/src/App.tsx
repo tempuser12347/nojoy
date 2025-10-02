@@ -27,7 +27,7 @@ import EquipmentDetail from './pages/equipment/EquipmentDetail';
 import Tradegoods from './pages/tradegood/Tradegoods';
 import TradegoodDetail from './pages/tradegood/TradegoodDetail';
 import Certificates from './pages/certificate/Certificates';
-import CertificateDetail from './pages/certificate/Certificates';
+import CertificateDetail from './pages/certificate/CertificateDetail';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
