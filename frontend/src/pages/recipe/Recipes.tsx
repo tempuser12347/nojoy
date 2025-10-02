@@ -24,7 +24,7 @@ interface Recipe {
   era: string;
   central_city: string;
   Investment_cost: number;
-  success: {id:number, name: string}[] | null
+  success: { id: number; name: string }[] | null;
 }
 
 const SKILL_FILTERS = ["주조", "공예", "보관", "조리", "연금술", "언어학", "봉제"];
@@ -40,6 +40,10 @@ const Recipes: React.FC = () => {
   const skills_search = (searchParams.get("skills_search") || "")
     .split(",")
     .filter(Boolean);
+
+  const sort_by = searchParams.get("sort_by") || "id";
+  const sort_order =
+    (searchParams.get("sort_order") as "asc" | "desc") || "asc";
 
   // local UI state
   const [searchInput, setSearchInput] = useState(name_search);
@@ -62,17 +66,19 @@ const Recipes: React.FC = () => {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ["recipes", page, rowsPerPage, name_search, skills_search],
+    queryKey: ["recipes", page, rowsPerPage, name_search, skills_search, sort_by, sort_order],
     queryFn: async () => {
       const response = await api.get("/api/recipes", {
         params: {
           search: name_search,
           required_skills: skills_search.join(","),
+          sort_by,
+          sort_order,
           skip: page * rowsPerPage,
           limit: rowsPerPage,
         },
       });
-      console.log(response.data)
+      console.log(response.data);
       return response.data; // Expect { items: [], total: 0 }
     },
   });
@@ -91,7 +97,12 @@ const Recipes: React.FC = () => {
       format: (value: Recipe["ingredients"]) =>
         renderObjectsToChips(value, navigate),
     },
-    {id: "success", label: "성공", format: (value: Recipe["success"]) => renderObjectsToChips(value, navigate)}
+    {
+      id: "success",
+      label: "성공",
+      format: (value: Recipe["success"]) =>
+        renderObjectsToChips(value, navigate),
+    },
   ];
 
   // handlers
@@ -121,6 +132,15 @@ const Recipes: React.FC = () => {
 
   const handleRowsPerPageChange = (newRowsPerPage: number) => {
     updateSearchParams({ rowsPerPage: newRowsPerPage, page: 0 });
+  };
+
+  const handleSortChange = (columnId: string) => {
+    const isAsc = sort_by === columnId && sort_order === "asc";
+    updateSearchParams({
+      sort_by: columnId,
+      sort_order: isAsc ? "desc" : "asc",
+      page: 0,
+    });
   };
 
   return (
@@ -178,6 +198,9 @@ const Recipes: React.FC = () => {
         total={data?.total || 0}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
+        sortColumn={sort_by}
+        sortDirection={sort_order}
+        onSortChange={handleSortChange}
       />
     </Box>
   );
