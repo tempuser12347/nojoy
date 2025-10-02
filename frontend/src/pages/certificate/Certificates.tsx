@@ -6,6 +6,9 @@ import {
   TextField,
   Typography,
   Button,
+  Select,
+  MenuItem,
+  type SelectChangeEvent,
 } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
@@ -20,11 +23,14 @@ const Certificates: React.FC = () => {
   const name_search = searchParams.get("name_search") || "";
   const classification_search = searchParams.get("classification_search") || "";
   const sort_by = searchParams.get("sort_by") || "id";
-  const sort_order = (searchParams.get("sort_order") as "asc" | "desc") || "desc";
+  const sort_order =
+    (searchParams.get("sort_order") as "asc" | "desc") || "desc";
 
   // Component state for inputs
   const [searchInput, setSearchInput] = useState(name_search);
-  const [classificationInput, setClassificationInput] = useState(classification_search);
+  const [classificationInput, setClassificationInput] = useState(
+    classification_search
+  );
 
   // Sync local state with URL search params on mount/change
   useEffect(() => {
@@ -63,7 +69,8 @@ const Certificates: React.FC = () => {
         limit: rowsPerPage,
       };
       if (name_search) params.name_search = name_search;
-      if (classification_search) params.classification_search = classification_search;
+      if (classification_search)
+        params.classification_search = classification_search;
 
       const response = await api.get("/api/certificates", { params });
       return response.data; // Expecting { items: [], total: 0 }
@@ -77,18 +84,23 @@ const Certificates: React.FC = () => {
       id: "description",
       label: "설명",
       format: (value: string) => (
-        <Typography variant="body2" sx={{ maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>
+        <Typography
+          variant="body2"
+          sx={{ maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}
+        >
           {value || ""}
         </Typography>
       ),
     },
   ];
 
-  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setSearchInput(event.target.value);
   };
 
-  const handleClassificationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleClassificationChange = (event: SelectChangeEvent<string>) => {
     setClassificationInput(event.target.value);
   };
 
@@ -104,7 +116,7 @@ const Certificates: React.FC = () => {
   const resetFilters = () => {
     setSearchInput("");
     setClassificationInput("");
-    setSearchParams({ });
+    setSearchParams({});
   };
 
   const handlePageChange = (newPage: number) => {
@@ -138,14 +150,20 @@ const Certificates: React.FC = () => {
           sx={{ minWidth: 200 }}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
-        <TextField
-          label="분류 검색"
-          variant="outlined"
+
+        <Select
           value={classificationInput}
           onChange={handleClassificationChange}
+          displayEmpty
           sx={{ minWidth: 200 }}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-        />
+        >
+          <MenuItem value="">
+            <em>전체</em>
+          </MenuItem>
+          <MenuItem value="모험">모험</MenuItem>
+          <MenuItem value="전투">전투</MenuItem>
+          <MenuItem value="교역">교역</MenuItem>
+        </Select>
         <Button variant="contained" onClick={handleSearch}>
           검색
         </Button>
