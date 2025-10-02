@@ -20,9 +20,6 @@ def read_tradegoods(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit the number of records returned"),
     name_search: Optional[str] = Query(None, description="Search term for name"),
-    category_search: Optional[str] = Query(
-        None, description="Search term for category"
-    ),
     classification_search: Optional[str] = Query(
         None, description="Search term for classification"
     ),
@@ -42,13 +39,6 @@ def read_tradegoods(
     if name_search:
         results = [row for row in results if name_search.lower() in row.name.lower()]
 
-    if category_search:
-        results = [
-            row
-            for row in results
-            if category_search.lower() in (row.category or "").lower()
-        ]
-
     if classification_search:
         term_list = classification_search.split(",")
         print(term_list)
@@ -58,13 +48,6 @@ def read_tradegoods(
                 filtered.append(row)
 
         results = filtered
-
-
-        # results = [
-        #     row
-        #     for row in results
-        #     if classification_search.lower() in (row.classification or "").lower()
-        # ]
 
     # Sorting logic
     if sort_by:
