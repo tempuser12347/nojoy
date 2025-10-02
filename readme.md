@@ -2,6 +2,11 @@
 
 dho joy 에 올라간 정보를 오프라인으로 서버를 직접 띄워서 사용하는 프로그램
 
+**스크린샷**
+
+![](docs/스크린샷%202025-10-02%20오전%209.44.04.png)
+![](docs/스크린샷%202025-10-02%20오전%209.44.17.png)
+
 > [!CAUTION]
 > dho joy 의 모든 데이터를 수집하지 못하여 모든 정보를 검색할 수는 없습니다. 현재 퀘스트,발견물,도시,침몰선,보물지도,선박 탭만 구현이 되어 있습니다. 이마저도 아직 joy 처럼 다른 테이블에 있는 데이터를 다 긁어와서 추가정보를 종합하여 보여주는 방식은 아닙니다. 초기베타버전이라고 생각해주세요
 
@@ -27,27 +32,21 @@ git clone https://github.com/tempuser12347/nojoy
 OR
 
 zip download url: https://github.com/tempuser12347/nojoy/archive/refs/heads/main.zip
+여기에서 zip 파일 다운로드 후 압축을 해제합니다
 
+### `win_run_server.bat` 파일 실행
 
-### python 필수 패키지 설치
+압축해제된 폴더에서 `win_run_server.bat` 파일을 실행합니다.
+python이 설치가 되었다면 이 스크립트로 필요한 파이썬 패키지를 설치하고 nojoy 서버를 실행하는 작업을 합니다.
 
-powershell 열어서 작업
+![](docs/win1.png)
+![](docs/win2.png)
 
-```
-cd backend
-pip install -r requirements.txt
-```
+기본적으로 8000번 포트에 실행됩니다.
 
+브라우저를 켜고 `http://localhost:8000` 으로 가면 사용 가능합니다.
 
-### 서버 실행
-
-```
-cd backend
-python run.py
-```
-
-`http://localhost:8000` 으로 가면 서버 웹페이지 접근 가능
-
+----
 
 ## 데이터베이스
 
