@@ -104,7 +104,7 @@ const Certificates: React.FC = () => {
   const resetFilters = () => {
     setSearchInput("");
     setClassificationInput("");
-    updateSearchParams({ page: 0 });
+    setSearchParams({ });
   };
 
   const handlePageChange = (newPage: number) => {
