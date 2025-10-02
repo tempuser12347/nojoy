@@ -52,6 +52,8 @@ def read_consumables(
     limit: int = Query(10, description="Limit number of records returned"),
     name_search: Optional[str] = Query(None, description="Search by name"),
     category_search: Optional[str] = Query(None, description="Search by category"),
+    sort_by: str = Query("id", description="Column to sort by"),
+    sort_order: str = Query("asc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
 ):
     results = db.execute(text("SELECT * FROM consumable")).fetchall()
@@ -69,6 +71,18 @@ def read_consumables(
             if category_search.lower() in (row.category or "").lower()
         ]
 
+    # do sorting
+    if results:
+        print(f'sort_order: {sort_order}, sort_by: {sort_by}')
+        reverse = sort_order.lower() == "desc"
+        def sort_key(row):
+            value = getattr(row, sort_by, None)
+            if value is None:
+                return (0, "") if isinstance(getattr(results[0], sort_by, None), (int, float)) else ""
+            return value
+        results.sort(key=sort_key, reverse=reverse)
+
+
     total = len(results)
     consumables = results[skip : skip + limit]
 
@@ -83,7 +97,7 @@ def read_consumables(
             "category": c.category,
             "usage_effect": handle_usage_effect(c.usage_Effect),
             # Parse JSON fields if not empty
-            "features": json.loads(c.features) if c.features else [],
+            "features": c.features if c.features else None,
             "item": normalize_items(c.Item),
             # "duplicate": json.loads(c.Duplicate) if c.Duplicate else [],
         }
@@ -109,7 +123,7 @@ def read_consumable(consumable_id: int, db: Session = Depends(get_db)):
         "description": row.description,
         "category": row.category,
         "usage_effect": handle_usage_effect(row.usage_Effect),
-        "features": json.loads(row.features) if row.features else [],
+        "features": row.features if row.features else None,
         "item": normalize_items(row.Item),
         "duplicate": json.loads(row.Duplicate) if row.Duplicate else [],
     }

@@ -48,9 +48,8 @@ export default function Consumables() {
 
   // Local state for UI inputs (not immediately triggering API)
   const [searchInput, setSearchInput] = useState(search);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    category_filter
-  );
+  const [selectedCategories, setSelectedCategories] =
+    useState<string[]>(category_filter);
 
   // Keep local inputs in sync with URL params when they change
   useEffect(() => {
@@ -99,7 +98,6 @@ export default function Consumables() {
     {
       id: "features",
       label: "특징",
-      format: (value: string[]) => value?.join(", ") || "",
     },
   ];
 
