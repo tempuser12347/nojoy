@@ -94,7 +94,8 @@ const availableSections = [
   "선박",
   "직업",
   "도시",
-  "교역품"
+  "교역품",
+  "추천장"
 ];
 
 const Navigation: React.FC = () => {

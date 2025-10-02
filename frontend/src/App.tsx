@@ -26,6 +26,8 @@ import Equipments from './pages/equipment/Equipments';
 import EquipmentDetail from './pages/equipment/EquipmentDetail';
 import Tradegoods from './pages/tradegood/Tradegoods';
 import TradegoodDetail from './pages/tradegood/TradegoodDetail';
+import Certificates from './pages/certificate/Certificates';
+import CertificateDetail from './pages/certificate/Certificates';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -61,6 +63,8 @@ function App() {
               <Route path="/장비품/:id" element={<EquipmentDetail />} />
               <Route path="/교역품" element={<Tradegoods />} />
               <Route path="/교역품/:id" element={<TradegoodDetail />} />
+              <Route path="/추천장" element={<Certificates />} />
+              <Route path="/추천장/:id" element={<CertificateDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
