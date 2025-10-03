@@ -182,6 +182,10 @@ LEFT JOIN allData ad2
 
 @router.get("/{quest_id}", response_model=dict)
 def read_quest(quest_id: int, db: Session = Depends(get_db)):
+    return read_quest_core(quest_id, db)
+
+
+def read_quest_core(quest_id: int, db: Session = Depends(get_db)):
 
     result = db.execute(
         text(

@@ -135,6 +135,10 @@ LEFT JOIN allData a
 
 @router.get("/{treasuremap_id}", response_model=dict)
 def read_treasuremap(treasuremap_id: int, db: Session = Depends(get_db)):
+    return read_treasuremap_core(treasuremap_id, db)
+
+
+def read_treasuremap_core(treasuremap_id: int, db: Session = Depends(get_db)):
 
     result = db.execute(
         text(

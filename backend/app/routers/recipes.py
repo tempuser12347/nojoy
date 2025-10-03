@@ -21,7 +21,9 @@ def read_recipes(
 ):
     # query = db.query(models.Recipe)
 
-    results = db.execute(text(''' 
+    results = db.execute(
+        text(
+            """ 
 SELECT
     id,
     name,
@@ -46,7 +48,9 @@ SELECT
     failure
 FROM recipe;
 
-''')).fetchall()
+"""
+        )
+    ).fetchall()
 
     if search:
         results = [row for row in results if search.lower() in (row.name or "").lower()]
@@ -57,7 +61,7 @@ FROM recipe;
         filtered = []
         for row in results:
             a = row.required_Skill
-            
+
             if not a:
                 continue
             if a is None:
@@ -65,19 +69,18 @@ FROM recipe;
             try:
                 a = json.loads(a)
             except Exception as e:
-               raise e
-                
+                raise e
+
             for b in a:
                 if b.get("name", None) in term_list:
                     filtered.append(row)
                     break
         results = filtered
 
-    
     # Sorting
     reverse = sort_order.lower() == "desc"
     if sort_by:
-        print(f'sort_by: {sort_by}, sort_order: {sort_order}')
+        print(f"sort_by: {sort_by}, sort_order: {sort_order}")
         results.sort(key=lambda r: getattr(r, sort_by) or "", reverse=reverse)
 
     total = len(results)
@@ -126,9 +129,8 @@ FROM recipe;
                     else None
                 )
             except json.decoder.JSONDecodeError as e:
-                print(f'failed to parse {field}, value: {getattr(recipe, field)}') 
+                print(f"failed to parse {field}, value: {getattr(recipe, field)}")
                 raise e
-                
 
         ret_list.append(ret)
 
@@ -137,6 +139,10 @@ FROM recipe;
 
 @router.get("/{recipe_id}", response_model=dict)
 def read_recipe(recipe_id: int, db: Session = Depends(get_db)):
+    return read_recipe_core(recipe_id, db)
+
+
+def read_recipe_core(recipe_id: int, db: Session = Depends(get_db)):
     recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id).first()
     if recipe is None:
         raise HTTPException(status_code=404, detail="Recipe not found")

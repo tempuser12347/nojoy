@@ -76,6 +76,10 @@ def read_tradegoods(
 
 @router.get("/{tradegood_id}", response_model=dict)
 def read_tradegood(tradegood_id: int, db: Session = Depends(get_db)):
+    return read_tradegood_core(tradegood_id, db)
+
+
+def read_tradegood_core(tradegood_id: int, db: Session = Depends(get_db)):
     """
     Retrieve a single tradegood by its ID.
     """

@@ -107,6 +107,10 @@ def read_consumables(
 
 @router.get("/{consumable_id}", response_model=dict)
 def read_consumable(consumable_id: int, db: Session = Depends(get_db)):
+    return read_consumable_core(consumable_id, db)
+
+
+def read_consumable_core(consumable_id: int, db: Session = Depends(get_db)):
     row = db.execute(
         text("SELECT * FROM consumable WHERE id = :id"), {"id": consumable_id}
     ).fetchone()

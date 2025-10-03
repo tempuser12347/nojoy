@@ -80,6 +80,10 @@ def read_recipebooks(
 # -------------------------------
 @router.get("/{recipebook_id}", response_model=dict)
 def read_recipebook(recipebook_id: int, db: Session = Depends(get_db)):
+    return read_recipebook_core(recipebook_id, db)
+
+
+def read_recipebook_core(recipebook_id: int, db: Session = Depends(get_db)):
     query = "SELECT * FROM recipebook WHERE id = :id"
     result = db.execute(text(query), {"id": recipebook_id}).fetchone()
 

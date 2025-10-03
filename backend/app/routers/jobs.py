@@ -25,12 +25,15 @@ def read_jobs(
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     name_search: str = Query(None, description="Search term"),
     category_search: str = Query(None, description="Category search term"),
-    preferred_skill_search: str = Query(None, description="Preferred skill search term"),
+    preferred_skill_search: str = Query(
+        None, description="Preferred skill search term"
+    ),
     db: Session = Depends(get_db),
 ):
-    
 
-    result = db.execute(text("""
+    result = db.execute(
+        text(
+            """
 SELECT
     j.id,
     j.name,
@@ -65,18 +68,27 @@ SELECT
 
 FROM job j
 LEFT JOIN allData ad ON ad.id = j.reference_letter
-                             """)).fetchall()
-    
+                             """
+        )
+    ).fetchall()
 
     # do filtering
     if name_search:
-        result = [job for job in result if job.name and name_search.lower() in job.name.lower()]
+        result = [
+            job
+            for job in result
+            if job.name and name_search.lower() in job.name.lower()
+        ]
     if category_search:
-        result = [job for job in result if job.category and category_search.lower() in job.category.lower()]
+        result = [
+            job
+            for job in result
+            if job.category and category_search.lower() in job.category.lower()
+        ]
     if preferred_skill_search:
         # split by comma and strip whitespace
-        search_terms = [int(term.strip()) for term in preferred_skill_search.split(',')]
-        print('search_terms:', search_terms)
+        search_terms = [int(term.strip()) for term in preferred_skill_search.split(",")]
+        print("search_terms:", search_terms)
 
         # filter jobs where its preferred_skills contains all of search terms
         def job_matches(job):
@@ -84,15 +96,15 @@ LEFT JOIN allData ad ON ad.id = j.reference_letter
                 return False
             try:
                 skills = json.loads(job.preferred_skills)
-                print('skills:', skills)
+                print("skills:", skills)
             except json.JSONDecodeError:
                 return False
             for t in search_terms:
                 # check if t is in row skill's id
                 t_found = False
                 for skill in skills:
-                    if skill.get('id') == t:
-                        t_found = True  
+                    if skill.get("id") == t:
+                        t_found = True
                         break
                 if not t_found:
                     return False
@@ -100,23 +112,46 @@ LEFT JOIN allData ad ON ad.id = j.reference_letter
 
         result = [job for job in result if job_matches(job)]
 
-
-
     # Sorting logic
     reverse = sort_order.lower() == "desc"
-    if sort_by in ['name', 'category']:
-        result.sort(key=lambda x: (getattr(x, sort_by, None) is not None, getattr(x, sort_by, '').lower()), reverse=reverse)
-    elif sort_by in ['cost']:
-        result.sort(key=lambda x: (getattr(x, sort_by, None) is not None, getattr(x, sort_by, float('-inf'))), reverse=reverse)
+    if sort_by in ["name", "category"]:
+        result.sort(
+            key=lambda x: (
+                getattr(x, sort_by, None) is not None,
+                getattr(x, sort_by, "").lower(),
+            ),
+            reverse=reverse,
+        )
+    elif sort_by in ["cost"]:
+        result.sort(
+            key=lambda x: (
+                getattr(x, sort_by, None) is not None,
+                getattr(x, sort_by, float("-inf")),
+            ),
+            reverse=reverse,
+        )
     else:
-        result.sort(key=lambda x: (getattr(x, sort_by, None) is not None, getattr(x, sort_by, float('-inf'))), reverse=reverse)
+        result.sort(
+            key=lambda x: (
+                getattr(x, sort_by, None) is not None,
+                getattr(x, sort_by, float("-inf")),
+            ),
+            reverse=reverse,
+        )
 
     # result is a list
     total = len(result)
-    jobs = result[skip: skip + limit]
+    jobs = result[skip : skip + limit]
 
     # fields to extract
-    target_field_list = ['id','name', 'cost', 'category', ('preferred_skills', json.loads), ('reference_letter', json.loads)]
+    target_field_list = [
+        "id",
+        "name",
+        "cost",
+        "category",
+        ("preferred_skills", json.loads),
+        ("reference_letter", json.loads),
+    ]
 
     # convert each job to dict with only target fields
     ret = []
@@ -145,7 +180,14 @@ LEFT JOIN allData ad ON ad.id = j.reference_letter
 @router.get("/{job_id}", response_model=dict)
 def read_job(job_id: int, db: Session = Depends(get_db)):
 
-    results = db.execute(text("""
+    return read_job_core(job_id, db)
+
+
+def read_job_core(job_id: int, db: Session = Depends(get_db)):
+
+    results = db.execute(
+        text(
+            """
 SELECT
     j.id,
     j.name,
@@ -182,7 +224,10 @@ FROM job j
 LEFT JOIN allData ad ON ad.id = j.reference_letter
 WHERE j.id = :job_id
 
-                              """), {"job_id": job_id}).fetchone()
+                              """
+        ),
+        {"job_id": job_id},
+    ).fetchone()
 
     if not results:
         raise HTTPException(status_code=404, detail="Job not found")
@@ -196,15 +241,11 @@ WHERE j.id = :job_id
         "cost": results.cost,
         "requirements": json.loads(results.requirements),
         "preferred_skills": json.loads(results.preferred_skills),
-        "reference_letter": json.loads(results.reference_letter_json) if results.reference_letter_json else None
+        "reference_letter": (
+            json.loads(results.reference_letter_json)
+            if results.reference_letter_json
+            else None
+        ),
     }
 
     return job
-
-
-
-
-    # job = db.query(models.Job).filter(models.Job.id == job_id).first()
-    # if job is None:
-    #     raise HTTPException(status_code=404, detail="Job not found")
-    # return job

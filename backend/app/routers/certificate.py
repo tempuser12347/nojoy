@@ -19,7 +19,9 @@ def read_certificates(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit the number of records returned"),
     name_search: str = Query(None, description="Search term for name"),
-    classification_search: str = Query(None, description="Search term for classification"),
+    classification_search: str = Query(
+        None, description="Search term for classification"
+    ),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
@@ -27,10 +29,16 @@ def read_certificates(
     results = db.execute(text("SELECT * FROM certificate")).fetchall()
 
     if name_search:
-        results = [row for row in results if name_search.lower() in (row.name or "").lower()]
+        results = [
+            row for row in results if name_search.lower() in (row.name or "").lower()
+        ]
 
     if classification_search:
-        results = [row for row in results if classification_search.lower() in (row.classification or "").lower()]
+        results = [
+            row
+            for row in results
+            if classification_search.lower() in (row.classification or "").lower()
+        ]
 
     # Sorting logic
     if results:
@@ -39,7 +47,11 @@ def read_certificates(
         def sort_key(row):
             value = getattr(row, sort_by, None)
             if value is None:
-                return 0 if isinstance(getattr(results[0], sort_by, None), (int, float)) else ""
+                return (
+                    0
+                    if isinstance(getattr(results[0], sort_by, None), (int, float))
+                    else ""
+                )
             return value
 
         results.sort(key=sort_key, reverse=reverse)
@@ -62,6 +74,10 @@ def read_certificates(
 
 @router.get("/{cert_id}", response_model=dict)
 def read_certificate(cert_id: int, db: Session = Depends(get_db)):
+    return read_certificate_core(cert_id, db)
+
+
+def read_certificate_core(cert_id: int, db: Session = Depends(get_db)):
     result = db.execute(
         text("SELECT * FROM certificate WHERE id = :cert_id"),
         {"cert_id": cert_id},
