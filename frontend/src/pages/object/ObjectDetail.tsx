@@ -27,10 +27,10 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   job: JobDetail,
   quest: QuestDetail,
   recipe: RecipeDetail,
-  recipeBook: RecipeBookDetail,
+  recipebook: RecipeBookDetail,
   ship: ShipDetail,
   shipwreck: ShipwreckDetail,
-  tradeGoods: TradegoodDetail,
+  tradegoods: TradegoodDetail,
   treasuremap: TreasureMapDetail,
   skill: SkillDetail,
 };

@@ -86,11 +86,11 @@ title
 detail_data_fetch_function_dict = {
     "equipment": read_equipment_core,
     "discovery": get_discovery_core,
-    'tradeGoods': read_tradegood_core,
+    'tradegoods': read_tradegood_core,
     'consumable': read_consumable_core,
     'shipwreck': read_shipwreck_core,
     'job': read_job_core,
-    'recipeBook': read_recipebook_core,
+    'recipebook': read_recipebook_core,
     'recipe': read_recipe_core,
     'city': read_city_core,
     'ship': read_ship_core,
