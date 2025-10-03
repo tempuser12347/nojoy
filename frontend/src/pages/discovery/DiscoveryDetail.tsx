@@ -4,8 +4,9 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Chip,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../api";
 
@@ -50,33 +51,44 @@ const DetailItem = ({
     </Box>
   ) : null;
 
-
-const generateDiscoveryLocationPrefixString = (method: string, era: string|null, time_period: string|null) =>{
-  if(method){
-    method = '[' + method + ']'
+const generateDiscoveryLocationPrefixString = (
+  method: string,
+  era: string | null,
+  time_period: string | null
+) => {
+  if (method) {
+    method = "[" + method + "]";
   }
-  let obj_arr = [method, era, time_period]
+  let obj_arr = [method, era, time_period];
   // filterout null or empty string or undefined vlaues
-  return obj_arr.filter(x=>x!=null).filter(x=>x!="").filter(x=>x!=undefined).join(' ')
-}
+  return obj_arr
+    .filter((x) => x != null)
+    .filter((x) => x != "")
+    .filter((x) => x != undefined)
+    .join(" ");
+};
 
-const generateDiscoveryLocationSuffixString = (additional_description: string|null, discovery_rank: string|null) =>{
-  let outstr = '' 
-  if(additional_description){
-    outstr = ' ' + additional_description
+const generateDiscoveryLocationSuffixString = (
+  additional_description: string | null,
+  discovery_rank: string | null
+) => {
+  let outstr = "";
+  if (additional_description) {
+    outstr = " " + additional_description;
   }
-  if(discovery_rank){
-    outstr += ' (' + discovery_rank + ')'
-  
+  if (discovery_rank) {
+    outstr += " (" + discovery_rank + ")";
   }
-  return outstr
-}
+  return outstr;
+};
 
 export default function DiscoveryDetail({ data }: { data?: Discovery }) {
   const { id } = useParams();
   const [discovery, setDiscovery] = useState<Discovery | null>(data || null);
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDiscovery = async () => {
@@ -161,12 +173,26 @@ export default function DiscoveryDetail({ data }: { data?: Discovery }) {
               <DetailItem
                 label="발견방법"
                 value={
-                  generateDiscoveryLocationPrefixString(discovery.discovery_method, discovery.era, discovery.time_period) +
-                  " " +
-                  discovery.discovery_location?.map((a) => a.name).join(",") + 
-                  generateDiscoveryLocationSuffixString(discovery.additional_description, discovery.discovery_rank)
-                ||
-                  "-"
+                  <>
+                    {generateDiscoveryLocationPrefixString(
+                      discovery.discovery_method,
+                      discovery.era,
+                      discovery.time_period
+                    )}{" "}
+                    {discovery.discovery_location?.map((a, idx) => (
+                      <Chip
+                        key={a.id}
+                        label={a.name}
+                        clickable
+                        onClick={() => navigate(`/obj/${a.id}`)}
+                        sx={{ mr: 1 }}
+                      />
+                    ))}
+                    {generateDiscoveryLocationSuffixString(
+                      discovery.additional_description,
+                      discovery.discovery_rank
+                    ) || null}
+                  </>
                 }
               />
             </Box>
