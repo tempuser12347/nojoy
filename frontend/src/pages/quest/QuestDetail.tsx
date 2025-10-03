@@ -62,7 +62,8 @@ interface Quest {
 }
 
 const renderPrecedingDiscoveryQuest = (
-  data: { id: number; name: string }[][] | null
+  data: { id: number; name: string }[][] | null,
+  navigate: any 
 ) => {
   if (data == null) return null;
   return (
@@ -72,7 +73,7 @@ const renderPrecedingDiscoveryQuest = (
         <Box key={i} sx={{ p: 1 }}>
           <Stack direction="row" spacing={1}>
             {x.map((y, j) => (
-              <Chip key={j} label={y.name} />
+              <Chip key={j} label={y.name} clickable onClick={() => navigate(`/obj/${y.id}`)}/>
             ))}
           </Stack>
         </Box>
@@ -82,6 +83,7 @@ const renderPrecedingDiscoveryQuest = (
     </Card>
   );
 };
+
 
 const DetailItem = ({
   label,
@@ -189,7 +191,8 @@ export default function QuestDetail({ data }: { data?: Quest }) {
               <DetailItem
                 label="선행 발견 퀘스트"
                 value={renderPrecedingDiscoveryQuest(
-                  quest.preceding_discovery_quest
+                  quest.preceding_discovery_quest,
+                  navigate
                 )}
               />
             </Box>
@@ -203,7 +206,7 @@ export default function QuestDetail({ data }: { data?: Quest }) {
             />
             <DetailItem
               label="이전 연속 퀘스트"
-              value={renderLink(quest.previous_continuous_quest?.name)}
+              value={renderLink(quest.previous_continuous_quest?.name, '/obj/' + quest.previous_continuous_quest?.id)}
             />
             <DetailItem label="에피소드" value={quest.episode} />
             <DetailItem

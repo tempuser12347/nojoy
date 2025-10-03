@@ -21,7 +21,7 @@ export function renderObjectsToChips(
   if (!data) return null;
 
   return data.map((item, index) => {
-    const hasLink = item.link && navigate;
+    const hasLink = item.id && navigate;
 
     const label =
       item.value === null || item.value === undefined
@@ -37,7 +37,7 @@ export function renderObjectsToChips(
         key={index}
         label={label}
         sx={{ margin: 0.5, cursor: hasLink ? "pointer" : "default" }}
-        onClick={hasLink ? () => navigate(item.link!) : undefined}
+        onClick={hasLink ? () => navigate('/obj/' + item.id) : undefined}
         clickable={!!hasLink}
       />
     );
