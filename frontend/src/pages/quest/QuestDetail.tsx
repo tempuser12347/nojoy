@@ -15,6 +15,7 @@ import {
   renderObjectsToChips,
   renderItemsWithAmount,
   renderLink,
+  renderObjectChip,
 } from "../../common/render";
 
 interface Quest {
@@ -63,27 +64,31 @@ interface Quest {
 
 const renderPrecedingDiscoveryQuest = (
   data: { id: number; name: string }[][] | null,
-  navigate: any 
+  navigate: any
 ) => {
   if (data == null) return null;
   return (
     <Card>
       {data.map((x, i) => (
         <>
-        <Box key={i} sx={{ p: 1 }}>
-          <Stack direction="row" spacing={1}>
-            {x.map((y, j) => (
-              <Chip key={j} label={y.name} clickable onClick={() => navigate(`/obj/${y.id}`)}/>
-            ))}
-          </Stack>
-        </Box>
-        {i < data.length - 1 && <Divider />}
+          <Box key={i} sx={{ p: 1 }}>
+            <Stack direction="row" spacing={1}>
+              {x.map((y, j) => (
+                <Chip
+                  key={j}
+                  label={y.name}
+                  clickable
+                  onClick={() => navigate(`/obj/${y.id}`)}
+                />
+              ))}
+            </Stack>
+          </Box>
+          {i < data.length - 1 && <Divider />}
         </>
       ))}
     </Card>
   );
 };
-
 
 const DetailItem = ({
   label,
@@ -180,7 +185,14 @@ export default function QuestDetail({ data }: { data?: Quest }) {
             <DetailItem label="난이도" value={quest.difficulty} />
             <DetailItem label="시대" value={quest.era} />
             <DetailItem label="의뢰장소" value={quest.location} />
-            <DetailItem label="목적지" value={quest.destination?.name} />
+            <DetailItem
+              label="목적지"
+              value={
+                quest.destination
+                  ? renderObjectChip(quest.destination, navigate)
+                  : null
+              }
+            />
             <DetailItem label="시리즈" value={quest.series} />
             <DetailItem label="마감일" value={quest.deadline} />
             <DetailItem
@@ -206,7 +218,10 @@ export default function QuestDetail({ data }: { data?: Quest }) {
             />
             <DetailItem
               label="이전 연속 퀘스트"
-              value={renderLink(quest.previous_continuous_quest?.name, '/obj/' + quest.previous_continuous_quest?.id)}
+              value={renderLink(
+                quest.previous_continuous_quest?.name,
+                "/obj/" + quest.previous_continuous_quest?.id
+              )}
             />
             <DetailItem label="에피소드" value={quest.episode} />
             <DetailItem

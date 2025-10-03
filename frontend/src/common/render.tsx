@@ -37,7 +37,7 @@ export function renderObjectsToChips(
         key={index}
         label={label}
         sx={{ margin: 0.5, cursor: hasLink ? "pointer" : "default" }}
-        onClick={hasLink ? () => navigate('/obj/' + item.id) : undefined}
+        onClick={hasLink ? () => navigate("/obj/" + item.id) : undefined}
         clickable={!!hasLink}
       />
     );
@@ -58,7 +58,7 @@ export function renderItemsWithAmount(
           <Chip
             label={item.name}
             sx={{ margin: 0.5, cursor: "pointer" }}
-            onClick={() => navigate!('/obj/' + item.id)}
+            onClick={() => navigate!("/obj/" + item.id)}
             clickable
           />
         ) : (
@@ -97,11 +97,21 @@ export function renderLink(
   if (!text) return null;
 
   return (
-    <span
-      className="highlight-link"
-      onClick={() => navigate?.(url ?? "")}
-    >
+    <span className="highlight-link" onClick={() => navigate?.(url ?? "")}>
       {text}
     </span>
+  );
+}
+
+export function renderObjectChip(
+  data: { id: number; name: string },
+  navigate?: NavigateFunction
+) {
+  return (
+    <Chip
+      clickable
+      label={data.name}
+      onClick={() => navigate!("/obj/" + data.id)}
+    />
   );
 }
