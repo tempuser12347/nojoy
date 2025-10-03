@@ -345,7 +345,7 @@ const Equipments: React.FC = () => {
         sortColumn={sort_by}
         sortDirection={sort_order}
         onSortChange={handleSortChange}
-        onRowClick={(row) => navigate(`/장비품/${row.id}`)}
+        onRowClick={(row) => navigate(`/obj/${row.id}`)}
       />
     </Box>
   );
