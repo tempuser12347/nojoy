@@ -239,7 +239,7 @@ const Tradegoods: React.FC = () => {
         sortColumn={sort_by}
         sortDirection={sort_order}
         onSortChange={handleSortChange}
-        onRowClick={(row) => navigate(`/교역품/${row.id}`)}
+        onRowClick={(row) => navigate(`/obj/${row.id}`)}
       />
     </Box>
   );

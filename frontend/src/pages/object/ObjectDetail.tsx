@@ -30,8 +30,8 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   recipebook: RecipeBookDetail,
   ship: ShipDetail,
   shipwreck: ShipwreckDetail,
-  tradegood: TradegoodDetail,
-  treasuremap: TreasureMapDetail,
+  tradeGoods: TradegoodDetail,
+  treasureMap: TreasureMapDetail,
 };
 
 export default function ObjectDetail() {

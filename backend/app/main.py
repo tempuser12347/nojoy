@@ -2,7 +2,22 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from app.routers import discoveries, items, ships, technics, npcs, quests, cities, recipes, shipwrecks, treasuremaps, consumables, jobs, equipment, tradegoods, certificate, recipebook, objects
+from app.routers import (
+    discoveries,
+    ships,
+    quests,
+    cities,
+    recipes,
+    shipwrecks,
+    treasuremaps,
+    consumables,
+    jobs,
+    equipment,
+    tradegoods,
+    certificate,
+    recipebook,
+    objects,
+)
 import os
 
 app = FastAPI(title="DHO Database API")
@@ -19,10 +34,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(discoveries.router)
-app.include_router(items.router)
 app.include_router(ships.router)
-app.include_router(technics.router)
-app.include_router(npcs.router)
 app.include_router(quests.router)
 app.include_router(cities.router)
 app.include_router(recipes.router)
@@ -38,9 +50,11 @@ app.include_router(objects.router)
 
 
 dist_dir = "dist"
-app.mount("/assets", StaticFiles(directory=os.path.join(dist_dir, "assets")), name="assets")
+app.mount(
+    "/assets", StaticFiles(directory=os.path.join(dist_dir, "assets")), name="assets"
+)
+
 
 @app.get("/")
 async def spa_handler():
     return FileResponse(os.path.join(dist_dir, "index.html"))
-

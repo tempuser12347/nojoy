@@ -289,7 +289,7 @@ const TreasureMaps: React.FC = () => {
         sortColumn={sort_by}
         sortDirection={sort_order}
         onSortChange={handleSortChange}
-        onRowClick={(row) => navigate(`/보물지도/${row.id}`)}
+        onRowClick={(row) => navigate(`/obj/${row.id}`)}
       />
     </Box>
   );
