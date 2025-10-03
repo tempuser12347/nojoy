@@ -197,7 +197,11 @@ export default function QuestDetail({ data }: { data?: Quest }) {
             <DetailItem label="마감일" value={quest.deadline} />
             <DetailItem
               label="발견물"
-              value={renderLink(quest.discovery?.name)}
+              value={
+                quest.discovery
+                  ? renderObjectChip(quest.discovery, navigate)
+                  : null
+              }
             />
             <Box sx={{ gridColumn: "1 / -1" }}>
               <DetailItem
@@ -218,10 +222,11 @@ export default function QuestDetail({ data }: { data?: Quest }) {
             />
             <DetailItem
               label="이전 연속 퀘스트"
-              value={renderLink(
-                quest.previous_continuous_quest?.name,
-                "/obj/" + quest.previous_continuous_quest?.id
-              )}
+              value={
+                quest.previous_continuous_quest
+                  ? renderObjectChip(quest.previous_continuous_quest, navigate)
+                  : null
+              }
             />
             <DetailItem label="에피소드" value={quest.episode} />
             <DetailItem
