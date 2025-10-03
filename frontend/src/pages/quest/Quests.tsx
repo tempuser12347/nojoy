@@ -144,6 +144,12 @@ const Quests: React.FC = () => {
       label: "필요스킬",
       format: (value: Skill[]) => renderObjectsToChips(value, navigate),
     },
+    {
+      id: "discovery",
+      label: "발견물",
+      format: (value: { id: number; name: string } | null) =>
+        value ? <Chip key={value?.id} label={value?.name || ""} /> : null,
+    },
   ];
 
   const handleSearchInputChange = (

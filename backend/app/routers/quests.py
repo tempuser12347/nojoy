@@ -59,14 +59,23 @@ SELECT
         ELSE json_object(
             'id', ad.id,
             'name', ad.name
-            -- ,'category', ad.category  -- add if needed
         )
-    END AS destination_json
+    END AS destination_json,
+    CASE 
+        WHEN ad2.id IS NULL OR ad2.id = '' THEN NULL
+        ELSE json_object(
+            'id', ad2.id,
+            'name', ad2.name
+        )
+    END AS discovery_json
 FROM quest l
 LEFT JOIN skill_arr r
     ON l.id = r.quest_id
 LEFT JOIN allData ad
-    ON CAST(l.destination AS INTEGER) = ad.id;
+    ON CAST(l.destination AS INTEGER) = ad.id
+LEFT JOIN allData ad2
+    ON CAST(l.discovery AS INTEGER) = ad2.id;
+
 
                       """
         )
@@ -143,7 +152,6 @@ LEFT JOIN allData ad
         "location",
         "destination",
         "skills",
-        "discovery",
         "preceding_discovery_quest",
         "grouped_skills",
     ]
@@ -163,7 +171,10 @@ LEFT JOIN allData ad
         ret["destination"] = (
             json.loads(quest.destination_json) if quest.destination_json else None
         )
-        del ret["grouped_skills"]
+        ret["discovery"] = (
+            json.loads(quest.discovery_json) if quest.discovery_json else None
+        )
+        # del ret["grouped_skills"]
         ret_list.append(ret)
 
     return {"items": ret_list, "total": total}
@@ -338,23 +349,31 @@ WHERE l.id = :quest_id;
         if result.grouped_required_items
         else []
     )
-    ret['discovery'] = json.loads(result.discovery_json) if result.discovery_json else None
-    ret['previous_continuous_quest'] = json.loads(result.previous_continuous_quest_json) if result.previous_continuous_quest_json else None
+    ret["discovery"] = (
+        json.loads(result.discovery_json) if result.discovery_json else None
+    )
+    ret["previous_continuous_quest"] = (
+        json.loads(result.previous_continuous_quest_json)
+        if result.previous_continuous_quest_json
+        else None
+    )
 
     # handle preceding_discovery_quest. fetch data
-    if ret['preceding_discovery_quest']:
-        d = json.loads(ret['preceding_discovery_quest'])
+    if ret["preceding_discovery_quest"]:
+        d = json.loads(ret["preceding_discovery_quest"])
         # d is a list of list. the final element is int which is id. need to fetch name from 'allData' table. in the end recreate list of list but with element of {id, name} dict
-        out =[]
+        out = []
         for a in d:
             out2 = []
             for b in a:
-                fetched = db.execute(text("SELECT name FROM allData WHERE id = :id"), {"id": b}).fetchone()
+                fetched = db.execute(
+                    text("SELECT name FROM allData WHERE id = :id"), {"id": b}
+                ).fetchone()
                 if fetched:
                     out2.append({"id": b, "name": fetched.name})
             out.append(out2)
-        ret['preceding_discovery_quest'] = out
+        ret["preceding_discovery_quest"] = out
     else:
-        ret['preceding_discovery_quest'] = None
-                
+        ret["preceding_discovery_quest"] = None
+
     return ret
