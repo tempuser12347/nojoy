@@ -101,10 +101,10 @@ const DetailItem = ({
     </Box>
   ) : null;
 
-export default function QuestDetail() {
+export default function QuestDetail({ data }: { data?: Quest }) {
   const { id } = useParams<{ id: string }>();
-  const [quest, setQuest] = useState<Quest | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [quest, setQuest] = useState<Quest | null>(data || null);
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -122,10 +122,10 @@ export default function QuestDetail() {
       }
     };
 
-    if (id) {
+    if (!data && id) {
       fetchQuest();
     }
-  }, [id]);
+  }, [id, data]);
 
   if (loading) {
     return (

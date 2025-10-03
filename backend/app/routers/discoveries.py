@@ -73,6 +73,10 @@ async def get_discoveries(
 
 @router.get("/{discovery_id}")
 async def get_discovery(discovery_id: int, db: Session = Depends(get_db)):
+    return get_discovery_core(discovery_id, db)
+
+
+def get_discovery_core(discovery_id: int, db: Session = Depends(get_db)):
     print(f"discovery_id: {discovery_id}")
     result = db.execute(
         text(

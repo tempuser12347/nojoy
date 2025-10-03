@@ -37,10 +37,10 @@ const DetailItem = ({
     </Box>
   ) : null;
 
-export default function RecipebookDetail() {
+export default function RecipebookDetail({ data }: { data?: Recipebook }) {
   const { id } = useParams<{ id: string }>();
-  const [recipebook, setRecipebook] = useState<Recipebook | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [recipebook, setRecipebook] = useState<Recipebook | null>(data || null);
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -58,10 +58,10 @@ export default function RecipebookDetail() {
       }
     };
 
-    if (id) {
+    if (!data && id) {
       fetchRecipebook();
     }
-  }, [id]);
+  }, [id, data]);
 
   if (loading) {
     return (

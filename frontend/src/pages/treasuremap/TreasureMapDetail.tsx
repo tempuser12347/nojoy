@@ -29,10 +29,10 @@ const DetailItem = ({ label, value }: { label: string; value: React.ReactNode })
   ) : null
 );
 
-export default function TreasureMapDetail() {
+export default function TreasureMapDetail({ data }: { data?: TreasureMap }) {
   const { id } = useParams<{ id: string }>();
-  const [treasureMap, setTreasureMap] = useState<TreasureMap | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [treasureMap, setTreasureMap] = useState<TreasureMap | null>(data || null);
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -51,8 +51,10 @@ export default function TreasureMapDetail() {
       }
     };
 
-    fetchTreasureMap();
-  }, [id]);
+    if (!data && id) {
+      fetchTreasureMap();
+    }
+  }, [id, data]);
 
   if (loading) {
     return (

@@ -56,8 +56,7 @@ GROUP BY e.id;
             results = [
                 row
                 for row in results
-                if row.classification != None
-                and row.classification in classifications
+                if row.classification != None and row.classification in classifications
             ]
 
     if skills_search:
@@ -73,19 +72,19 @@ GROUP BY e.id;
             )
         ]
 
-
     # Sorting logic
     if results:
         reverse = sort_order.lower() == "desc"
-    print(f'sort by: {sort_by}, reverse: {reverse}')
+    print(f"sort by: {sort_by}, reverse: {reverse}")
+
     def sort_key(row):
-        if sort_by == 'skills':
+        if sort_by == "skills":
             # get the max value among skills
             skills = json.loads(row.skills_json)
             max_value = 0
             for skill in skills:
-                if skill['value'] > max_value:
-                    max_value = skill['value']
+                if skill["value"] > max_value:
+                    max_value = skill["value"]
             return max_value
 
         value = getattr(row, sort_by, None)
@@ -141,6 +140,10 @@ GROUP BY e.id;
 
 @router.get("/{equipment_id}", response_model=dict)
 def read_equipment(equipment_id: int, db: Session = Depends(get_db)):
+    return read_equipment_core(equipment_id, db)
+
+
+def read_equipment_core(equipment_id: int, db: Session = Depends(get_db)):
 
     result = db.execute(
         text(
@@ -182,11 +185,11 @@ def read_equipment(equipment_id: int, db: Session = Depends(get_db)):
         if field != "skills_json"
     }
     ret["skills"] = json.loads(result.skills_json) if result.skills_json else []
-    ret["use_effect"] = (
-        json.loads(result.use_effect) if result.use_effect else None
-    )
+    ret["use_effect"] = json.loads(result.use_effect) if result.use_effect else None
     ret["equipped_effect"] = (
         json.loads(result.equipped_effect) if result.equipped_effect else None
     )
-    ret['requirements']= json.loads(result.requirements) if result.requirements else None
+    ret["requirements"] = (
+        json.loads(result.requirements) if result.requirements else None
+    )
     return ret

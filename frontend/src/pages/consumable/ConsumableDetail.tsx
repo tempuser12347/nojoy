@@ -17,10 +17,11 @@ interface Consumable {
   Duplicate: string;
 }
 
-export default function ConsumableDetail() {
+export default function ConsumableDetail({ data }: { data?: Consumable }) {
   const { id } = useParams<{ id: string }>();
-  const [consumable, setConsumable] = useState<Consumable | null>(null);
+  const [consumable, setConsumable] = useState<Consumable | null>(data || null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(!data);
 
   useEffect(() => {
     const fetchConsumable = async () => {
@@ -31,23 +32,17 @@ export default function ConsumableDetail() {
       } catch (err) {
         setError("Failed to load consumable details");
         console.error("Error fetching consumable:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (id) {
+    if (!data && id) {
       fetchConsumable();
     }
-  }, [id]);
+  }, [id, data]);
 
-  if (error) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Typography color="error">{error}</Typography>
-      </Box>
-    );
-  }
-
-  if (!consumable) {
+  if (loading) {
     return (
       <Box sx={{ p: 3 }}>
         <Typography>Loading...</Typography>

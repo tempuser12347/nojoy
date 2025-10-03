@@ -42,10 +42,10 @@ const RequirementsTable = ({ requirements }: { requirements: any }) => {
   );
 };
 
-export default function JobDetail() {
+export default function JobDetail({ data }: { data?: Job }) {
   const { id } = useParams<{ id: string }>();
-  const [job, setJob] = useState<Job | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<Job | null>(data || null);
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -62,10 +62,10 @@ export default function JobDetail() {
       }
     };
 
-    if (id) {
+    if (!data && id) {
       fetchJob();
     }
-  }, [id]);
+  }, [id, data]);
 
   if (loading) {
     return (

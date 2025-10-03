@@ -33,10 +33,10 @@ const DetailItem = ({
   </Box>
 );
 
-export default function CertificateDetail() {
+export default function CertificateDetail({ data }: { data?: Certificate }) {
   const { id } = useParams<{ id: string }>();
-  const [certificate, setCertificate] = useState<Certificate | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [certificate, setCertificate] = useState<Certificate | null>(data || null);
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -53,10 +53,10 @@ export default function CertificateDetail() {
       }
     };
 
-    if (id) {
+    if (!data && id) {
       fetchCertificate();
     }
-  }, [id]);
+  }, [id, data]);
 
   if (loading) {
     return (

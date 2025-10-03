@@ -72,10 +72,10 @@ const generateDiscoveryLocationSuffixString = (additional_description: string|nu
   return outstr
 }
 
-export default function DiscoveryDetail() {
+export default function DiscoveryDetail({ data }: { data?: Discovery }) {
   const { id } = useParams();
-  const [discovery, setDiscovery] = useState<Discovery | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [discovery, setDiscovery] = useState<Discovery | null>(data || null);
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -95,8 +95,10 @@ export default function DiscoveryDetail() {
       }
     };
 
-    fetchDiscovery();
-  }, [id]);
+    if (!data && id) {
+      fetchDiscovery();
+    }
+  }, [id, data]);
 
   if (loading) {
     return (

@@ -27,10 +27,11 @@ interface City {
   fishing: string;
 }
 
-export default function CityDetail() {
+export default function CityDetail({ data }: { data?: City }) {
   const { id } = useParams<{ id: string }>();
-  const [city, setCity] = useState<City | null>(null);
+  const [city, setCity] = useState<City | null>(data || null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(!data);
 
   useEffect(() => {
     const fetchCity = async () => {
@@ -40,29 +41,24 @@ export default function CityDetail() {
       } catch (err) {
         setError('Failed to load city details');
         console.error('Error fetching city:', err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (id) {
+    if (!data && id) {
       fetchCity();
     }
-  }, [id]);
+  }, [id, data]);
 
-  if (error) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Typography color="error">{error}</Typography>
-      </Box>
-    );
-  }
-
-  if (!city) {
+  if (loading) {
     return (
       <Box sx={{ p: 3 }}>
         <Typography>Loading...</Typography>
       </Box>
     );
   }
+
 
   return (
     <Box sx={{ p: 3 }}>

@@ -27,10 +27,11 @@ interface Recipe {
   failure: Array<{ ref: string; name: string; value: number }>;
 }
 
-export default function RecipeDetail() {
+export default function RecipeDetail({ data }: { data?: Recipe }) {
   const { id } = useParams<{ id: string }>();
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [recipe, setRecipe] = useState<Recipe | null>(data || null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(!data);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,13 +43,15 @@ export default function RecipeDetail() {
       } catch (err) {
         setError("Failed to load recipe details");
         console.error("Error fetching recipe:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (id) {
+    if (!data && id) {
       fetchRecipe();
     }
-  }, [id]);
+  }, [id, data]);
 
   if (error) {
     return (

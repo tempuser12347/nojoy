@@ -59,10 +59,10 @@ const DetailItem = ({ label, value }: { label: string; value: any }) => (
   </Box>
 );
 
-export default function ShipDetail() {
+export default function ShipDetail({ data }: { data?: Ship }) {
   const { id } = useParams<{ id: string }>();
-  const [ship, setShip] = useState<Ship | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [ship, setShip] = useState<Ship | null>(data || null);
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -80,8 +80,10 @@ export default function ShipDetail() {
       }
     };
 
-    fetchShip();
-  }, [id]);
+    if (!data && id) {
+      fetchShip();
+    }
+  }, [id, data]);
 
   if (loading) {
     return <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}><CircularProgress /></Box>;

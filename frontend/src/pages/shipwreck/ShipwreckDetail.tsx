@@ -28,10 +28,11 @@ interface Shipwreck {
   ship_decoration: string;
 }
 
-export default function ShipwreckDetail() {
+export default function ShipwreckDetail({ data }: { data?: Shipwreck }) {
   const { id } = useParams<{ id: string }>();
-  const [shipwreck, setShipwreck] = useState<Shipwreck | null>(null);
+  const [shipwreck, setShipwreck] = useState<Shipwreck | null>(data || null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(!data);
 
   useEffect(() => {
     const fetchShipwreck = async () => {
@@ -42,13 +43,15 @@ export default function ShipwreckDetail() {
       } catch (err) {
         setError('Failed to load shipwreck details');
         console.error('Error fetching shipwreck:', err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (id) {
+    if (!data && id) {
       fetchShipwreck();
     }
-  }, [id]);
+  }, [id, data]);
 
   if (error) {
     return (

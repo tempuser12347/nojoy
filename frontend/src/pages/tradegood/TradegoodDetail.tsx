@@ -36,10 +36,10 @@ const DetailItem = ({
     </Box>
   ) : null;
 
-export default function TradegoodDetail() {
+export default function TradegoodDetail({ data }: { data?: Tradegood }) {
   const { id } = useParams<{ id: string }>();
-  const [tradegood, setTradegood] = useState<Tradegood | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [tradegood, setTradegood] = useState<Tradegood | null>(data || null);
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -55,10 +55,10 @@ export default function TradegoodDetail() {
       }
     };
 
-    if (id) {
+    if (!data && id) {
       fetchTradegood();
     }
-  }, [id]);
+  }, [id, data]);
 
   if (loading) {
     return (

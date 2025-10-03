@@ -48,30 +48,32 @@ const DetailItem = ({
     </Box>
   ) : null;
 
-export default function EquipmentDetail() {
+export default function EquipmentDetail({ data }: { data?: Equipment }) {
   const { id } = useParams<{ id: string }>();
-  const [equipment, setEquipment] = useState<Equipment | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [equipment, setEquipment] = useState<Equipment | null>(data || null);
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEquipment = async () => {
-      try {
-        const response = await api.get(`/api/equipment/${id}`);
-        setEquipment(response.data);
-      } catch (err) {
-        setError("Failed to load equipment details");
-        console.error("Error fetching equipment:", err);
-      } finally {
-        setLoading(false);
+      if (id) {
+        try {
+          const response = await api.get(`/api/equipment/${id}`);
+          setEquipment(response.data);
+        } catch (err) {
+          setError("Failed to load equipment details");
+          console.error("Error fetching equipment:", err);
+        } finally {
+          setLoading(false);
+        }
       }
     };
 
-    if (id) {
+    if (!data && id) {
       fetchEquipment();
     }
-  }, [id]);
+  }, [id, data]);
 
   if (loading) {
     return (
