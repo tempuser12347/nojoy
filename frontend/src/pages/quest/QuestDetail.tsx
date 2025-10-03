@@ -214,7 +214,7 @@ export default function QuestDetail({ data }: { data?: Quest }) {
             />
             <DetailItem
               label="필요 아이템"
-              value={renderItemsWithAmount(quest.required_items)}
+              value={renderItemsWithAmount(quest.required_items, navigate)}
             />
             <DetailItem
               label="이전 연속 퀘스트"
