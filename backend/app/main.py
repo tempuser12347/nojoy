@@ -17,6 +17,7 @@ from app.routers import (
     certificate,
     recipebook,
     objects,
+    skill,
 )
 import os
 
@@ -47,6 +48,7 @@ app.include_router(tradegoods.router)
 app.include_router(certificate.router)
 app.include_router(recipebook.router)
 app.include_router(objects.router)
+app.include_router(skill.router)
 
 
 dist_dir = "dist"

@@ -98,7 +98,8 @@ const availableSections = [
   "추천장",
   "소비품",
   "레시피책",
-  "레시피"
+  "레시피",
+  "스킬"
 ];
 
 const Navigation: React.FC = () => {
@@ -138,7 +139,11 @@ const Navigation: React.FC = () => {
 
   const handleSubsectionClick = (subsection: string) => {
     handleCloseMenu();
-    navigate(`/${subsection}`);
+    if (subsection === "스킬") {
+      navigate(`/skills`);
+    } else {
+      navigate(`/${subsection}`);
+    }
   };
 
   React.useEffect(() => {
