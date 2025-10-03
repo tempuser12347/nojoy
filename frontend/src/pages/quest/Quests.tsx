@@ -129,6 +129,7 @@ const Quests: React.FC = () => {
 
   const columns = [
     { id: "name", label: "이름" },
+    { id: "series", label: "종류" },
     { id: "difficulty", label: "난이도" },
     { id: "location", label: "의뢰장소" },
     {

@@ -136,8 +136,8 @@ LEFT JOIN allData ad
 
     return_fields = [
         "id",
-        "type",
         "name",
+        "series",
         "description",
         "difficulty",
         "location",
