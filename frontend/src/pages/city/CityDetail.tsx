@@ -27,10 +27,9 @@ interface City {
   fishing: string;
 }
 
-export default function CityDetail({ data }: { data?: City }) {
+export default function CityDetail({ data }: { data: City }) {
   const { id } = useParams<{ id: string }>();
-  const [city, setCity] = useState<City | null>(data || null);
-  const [error, setError] = useState<string | null>(null);
+  const [city, setCity] = useState<City >(data);
   const [loading, setLoading] = useState(!data);
 
   useEffect(() => {
@@ -39,8 +38,6 @@ export default function CityDetail({ data }: { data?: City }) {
         const response = await api.get(`/api/cities/${id}`);
         setCity(response.data);
       } catch (err) {
-        setError('Failed to load city details');
-        console.error('Error fetching city:', err);
       } finally {
         setLoading(false);
       }

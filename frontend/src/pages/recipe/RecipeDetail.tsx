@@ -31,7 +31,6 @@ export default function RecipeDetail({ data }: { data?: Recipe }) {
   const { id } = useParams<{ id: string }>();
   const [recipe, setRecipe] = useState<Recipe | null>(data || null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(!data);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,9 +42,7 @@ export default function RecipeDetail({ data }: { data?: Recipe }) {
       } catch (err) {
         setError("Failed to load recipe details");
         console.error("Error fetching recipe:", err);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     if (!data && id) {

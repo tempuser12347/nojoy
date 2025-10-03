@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -38,7 +38,7 @@ export default function CertificateDetail({ data }: { data?: Certificate }) {
   const [certificate, setCertificate] = useState<Certificate | null>(data || null);
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+//   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCertificate = async () => {

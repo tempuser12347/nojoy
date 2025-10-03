@@ -16,4 +16,7 @@ export default defineConfig({
       "/api": "http://localhost:8000",
     },
   },
+  esbuild: {
+    drop: ["console", "debugger"]
+  }
 });

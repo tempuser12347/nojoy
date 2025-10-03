@@ -17,10 +17,9 @@ interface Consumable {
   Duplicate: string;
 }
 
-export default function ConsumableDetail({ data }: { data?: Consumable }) {
+export default function ConsumableDetail({ data }: { data: Consumable }) {
   const { id } = useParams<{ id: string }>();
-  const [consumable, setConsumable] = useState<Consumable | null>(data || null);
-  const [error, setError] = useState<string | null>(null);
+  const [consumable, setConsumable] = useState<Consumable>(data);
   const [loading, setLoading] = useState(!data);
 
   useEffect(() => {
@@ -30,8 +29,6 @@ export default function ConsumableDetail({ data }: { data?: Consumable }) {
         console.log(response.data);
         setConsumable(response.data);
       } catch (err) {
-        setError("Failed to load consumable details");
-        console.error("Error fetching consumable:", err);
       } finally {
         setLoading(false);
       }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -42,7 +42,7 @@ export default function RecipebookDetail({ data }: { data?: Recipebook }) {
   const [recipebook, setRecipebook] = useState<Recipebook | null>(data || null);
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+//   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecipebook = async () => {
