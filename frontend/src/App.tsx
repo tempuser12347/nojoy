@@ -20,7 +20,6 @@ import Recipebooks from './pages/recipebook/RecipeBooks';
 import NotFound from './pages/NotFound';
 import ObjectDetail from './pages/object/ObjectDetail';
 import Skills from './pages/skill/Skills';
-import SkillDetail from './pages/skill/SkillDetail';
 
 const queryClient = new QueryClient();
 

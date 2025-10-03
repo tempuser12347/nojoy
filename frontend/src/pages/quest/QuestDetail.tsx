@@ -14,7 +14,6 @@ import api from "../../api";
 import {
   renderObjectsToChips,
   renderItemsWithAmount,
-  renderLink,
   renderObjectChip,
 } from "../../common/render";
 

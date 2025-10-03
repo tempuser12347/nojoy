@@ -181,7 +181,7 @@ export default function DiscoveryDetail({ data }: { data?: Discovery }) {
                     )}{" "}
                     {discovery.discovery_location?.map((a, idx) => (
                       <Chip
-                        key={a.id}
+                        key={idx}
                         label={a.name}
                         clickable
                         onClick={() => navigate(`/obj/${a.id}`)}
