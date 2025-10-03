@@ -206,7 +206,7 @@ const Recipebooks: React.FC = () => {
         sortColumn={sort_by}
         sortDirection={sort_order}
         onSortChange={handleSortChange}
-        onRowClick={(row) => navigate(`/레시피책/${row.id}`)}
+        onRowClick={(row) => navigate(`/obj/${row.id}`)}
       />
     </Box>
   );

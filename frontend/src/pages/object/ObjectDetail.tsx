@@ -27,11 +27,11 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   job: JobDetail,
   quest: QuestDetail,
   recipe: RecipeDetail,
-  recipebook: RecipeBookDetail,
+  recipeBook: RecipeBookDetail,
   ship: ShipDetail,
   shipwreck: ShipwreckDetail,
   tradeGoods: TradegoodDetail,
-  treasureMap: TreasureMapDetail,
+  treasuremap: TreasureMapDetail,
 };
 
 export default function ObjectDetail() {

@@ -206,7 +206,7 @@ const Recipes: React.FC = () => {
         columns={columns}
         data={data?.items || []}
         loading={isLoading}
-        onRowClick={(row) => navigate(`/레시피/${row.id}`)}
+        onRowClick={(row) => navigate(`/obj/${row.id}`)}
         page={page}
         rowsPerPage={rowsPerPage}
         total={data?.total || 0}

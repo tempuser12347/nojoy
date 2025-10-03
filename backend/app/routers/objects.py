@@ -89,7 +89,7 @@ detail_data_fetch_function_dict = {
     'consumable': read_consumable_core,
     'shipwreck': read_shipwreck_core,
     'job': read_job_core,
-    'recipebook': read_recipebook_core,
+    'recipeBook': read_recipebook_core,
     'recipe': read_recipe_core,
     'city': read_city_core,
     'ship': read_ship_core,

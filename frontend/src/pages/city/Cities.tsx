@@ -64,7 +64,7 @@ const Cities: React.FC = () => {
         rowsPerPage={rowsPerPage}
         onPageChange={setPage}
         onRowsPerPageChange={setRowsPerPage}
-        onRowClick={(row) => navigate(`/도시/${row.id}`)}
+        onRowClick={(row) => navigate(`/api/${row.id}`)}
       />
     </Box>
   );
