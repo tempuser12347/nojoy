@@ -42,7 +42,7 @@ export default function RecipeDetail({ data }: { data?: Recipe }) {
       } catch (err) {
         setError("Failed to load recipe details");
         console.error("Error fetching recipe:", err);
-      } 
+      }
     };
 
     if (!data && id) {
@@ -90,7 +90,12 @@ export default function RecipeDetail({ data }: { data?: Recipe }) {
                 필요 스킬
               </Typography>
               <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-                {renderObjectsToChips(recipe.required_Skill, navigate)}
+                {renderObjectsToChips(
+                  recipe.required_Skill.map((x) => {
+                    return { ...x, id: parseInt(x.ref) };
+                  }),
+                  navigate
+                )}
               </Box>
             </Box>
             <Box>
@@ -111,7 +116,9 @@ export default function RecipeDetail({ data }: { data?: Recipe }) {
               </Typography>
               <Typography variant="body1">
                 {renderObjectsToChips(
-                  recipe.ingredients,
+                  recipe.ingredients.map((x) => {
+                    return { ...x, id: parseInt(x.ref) };
+                  }),
                   navigate,
                   (value) => "x " + value
                 )}
@@ -189,7 +196,9 @@ export default function RecipeDetail({ data }: { data?: Recipe }) {
               </Typography>
               <Typography variant="body1">
                 {renderObjectsToChips(
-                  recipe.success,
+                  recipe.success?.map((x) => {
+                    return { ...x, id: parseInt(x.ref) };
+                  }),
                   navigate,
                   (value) => "x " + value
                 )}
@@ -201,7 +210,9 @@ export default function RecipeDetail({ data }: { data?: Recipe }) {
               </Typography>
               <Typography variant="body1">
                 {renderObjectsToChips(
-                  recipe.greatsuccess,
+                  recipe.greatsuccess?.map((x) => {
+                    return { ...x, id: parseInt(x.ref) };
+                  }),
                   navigate,
                   (value) => "x " + value
                 )}
@@ -213,7 +224,9 @@ export default function RecipeDetail({ data }: { data?: Recipe }) {
               </Typography>
               <Typography variant="body1">
                 {renderObjectsToChips(
-                  recipe.failure,
+                  recipe.failure?.map((x) => {
+                    return { ...x, id: parseInt(x.ref) };
+                  }),
                   navigate,
                   (value) => "x " + value
                 )}
