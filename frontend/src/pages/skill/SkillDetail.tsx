@@ -92,8 +92,7 @@ export default function SkillDetail() {
               gridTemplateColumns: "1fr",
             }}
           >
-            <DetailItem label="ID" value={skill.id} />
-            <DetailItem label="Name" value={skill.name} />
+            <DetailItem label="이름" value={skill.name} />
           </Box>
         </CardContent>
       </Card>

@@ -15,6 +15,7 @@ from .cities import read_city_core
 from .ships import read_ship_core
 from .quests import read_quest_core
 from .consumables import read_consumable_core
+from .skill import read_skill_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -96,6 +97,7 @@ detail_data_fetch_function_dict = {
     'quest': read_quest_core,
     'certificate': read_certificate_core,
     'treasuremap': read_treasuremap_core,
+    'skill': read_skill_core,
 }
 
 

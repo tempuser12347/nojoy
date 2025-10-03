@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from sqlalchemy import text
@@ -32,7 +32,7 @@ def read_skills(
     db: Session = Depends(get_db),
 ):
     query = "SELECT id, name FROM skill"
-    
+
     where_clauses = []
     params = {}
 
@@ -64,10 +64,21 @@ def read_skills(
 
 @router.get("/{skill_id}", response_model=Skill)
 def read_skill(skill_id: int, db: Session = Depends(get_db)):
+    return read_skill_core(skill_id, db)
+
+
+def read_skill_core(skill_id: int, db: Session = Depends(get_db)):
     result = db.execute(
         text("SELECT id, name FROM skill WHERE id = :skill_id"),
         {"skill_id": skill_id},
     ).fetchone()
     if not result:
         raise HTTPException(status_code=404, detail="Skill not found")
+    
+    # convert to dict
+    result = {
+        "id": result.id,
+        "name": result.name,
+    }
+
     return result

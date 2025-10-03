@@ -17,6 +17,7 @@ import ShipDetail from '../ship/ShipDetail';
 import ShipwreckDetail from '../shipwreck/ShipwreckDetail';
 import TradegoodDetail from '../tradegood/TradegoodDetail';
 import TreasureMapDetail from '../treasuremap/TreasureMapDetail';
+import SkillDetail from '../skill/SkillDetail';
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -32,6 +33,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   shipwreck: ShipwreckDetail,
   tradeGoods: TradegoodDetail,
   treasuremap: TreasureMapDetail,
+  skill: SkillDetail
 };
 
 export default function ObjectDetail() {
@@ -91,7 +93,7 @@ export default function ObjectDetail() {
   if (!DetailComponent) {
     return (
       <Box sx={{ p: 3 }}>
-        <Typography>Unknown object type: {type}</Typography>
+        <Typography>no detail page found for type: {type}</Typography>
       </Box>
     );
   }

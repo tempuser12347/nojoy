@@ -5,10 +5,6 @@ import { Box, TextField, Typography, Button } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
 
-interface Skill {
-  id: number;
-  name: string;
-}
 
 const Skills: React.FC = () => {
   const navigate = useNavigate();
@@ -59,8 +55,7 @@ const Skills: React.FC = () => {
   });
 
   const columns = [
-    { id: "id", label: "ID" },
-    { id: "name", label: "Name" },
+    { id: "name", label: "이름" },
   ];
 
   const handleSearchInputChange = (
@@ -98,11 +93,11 @@ const Skills: React.FC = () => {
   return (
     <Box sx={{ width: "100%", p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Skills
+        스킬
       </Typography>
       <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
         <TextField
-          label="Search by name"
+          label="스킬 이름"
           variant="outlined"
           value={searchInput}
           onChange={handleSearchInputChange}
@@ -128,7 +123,7 @@ const Skills: React.FC = () => {
         sortColumn={sort_by}
         sortDirection={sort_order}
         onSortChange={handleSortChange}
-        onRowClick={(row) => navigate(`/skills/${row.id}`)}
+        onRowClick={(row) => navigate(`/obj/${row.id}`)}
       />
     </Box>
   );
