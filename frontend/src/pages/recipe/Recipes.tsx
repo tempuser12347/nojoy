@@ -27,7 +27,15 @@ interface Recipe {
   success: { id: number; name: string }[] | null;
 }
 
-const SKILL_FILTERS = ["주조", "공예", "보관", "조리", "연금술", "언어학", "봉제"];
+const SKILL_FILTERS = [
+  "주조",
+  "공예",
+  "보관",
+  "조리",
+  "연금술",
+  "언어학",
+  "봉제",
+];
 
 const Recipes: React.FC = () => {
   const navigate = useNavigate();
@@ -58,15 +66,21 @@ const Recipes: React.FC = () => {
   const updateSearchParams = (newParams: Record<string, any>) => {
     const current = new URLSearchParams(searchParams);
     Object.entries(newParams).forEach(([key, value]) => {
-      value && value !== ""
-        ? current.set(key, value)
-        : current.delete(key);
+      value && value !== "" ? current.set(key, value) : current.delete(key);
     });
     setSearchParams(current);
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ["recipes", page, rowsPerPage, name_search, skills_search, sort_by, sort_order],
+    queryKey: [
+      "recipes",
+      page,
+      rowsPerPage,
+      name_search,
+      skills_search,
+      sort_by,
+      sort_order,
+    ],
     queryFn: async () => {
       const response = await api.get("/api/recipes", {
         params: {
@@ -95,13 +109,13 @@ const Recipes: React.FC = () => {
       id: "ingredients",
       label: "재료",
       format: (value: Recipe["ingredients"]) =>
-        renderObjectsToChips(value, navigate),
+        renderObjectsToChips(value, navigate, (value) => "x " + value),
     },
     {
       id: "success",
       label: "성공",
       format: (value: Recipe["success"]) =>
-        renderObjectsToChips(value, navigate),
+        renderObjectsToChips(value, navigate, (value) => "x " + value),
     },
   ];
 
