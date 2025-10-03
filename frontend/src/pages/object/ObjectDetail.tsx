@@ -1,23 +1,22 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Box, Typography, CircularProgress } from "@mui/material";
+import api from "../../api";
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Box, Typography, CircularProgress } from '@mui/material';
-import api from '../../api';
-
-import CertificateDetail from '../certificate/CertificateDetail';
-import CityDetail from '../city/CityDetail';
-import ConsumableDetail from '../consumable/ConsumableDetail';
-import DiscoveryDetail from '../discovery/DiscoveryDetail';
-import EquipmentDetail from '../equipment/EquipmentDetail';
-import JobDetail from '../job/JobDetail';
-import QuestDetail from '../quest/QuestDetail';
-import RecipeDetail from '../recipe/RecipeDetail';
-import RecipeBookDetail from '../recipebook/RecipeBookDetail';
-import ShipDetail from '../ship/ShipDetail';
-import ShipwreckDetail from '../shipwreck/ShipwreckDetail';
-import TradegoodDetail from '../tradegood/TradegoodDetail';
-import TreasureMapDetail from '../treasuremap/TreasureMapDetail';
-import SkillDetail from '../skill/SkillDetail';
+import CertificateDetail from "../certificate/CertificateDetail";
+import CityDetail from "../city/CityDetail";
+import ConsumableDetail from "../consumable/ConsumableDetail";
+import DiscoveryDetail from "../discovery/DiscoveryDetail";
+import EquipmentDetail from "../equipment/EquipmentDetail";
+import JobDetail from "../job/JobDetail";
+import QuestDetail from "../quest/QuestDetail";
+import RecipeDetail from "../recipe/RecipeDetail";
+import RecipeBookDetail from "../recipebook/RecipeBookDetail";
+import ShipDetail from "../ship/ShipDetail";
+import ShipwreckDetail from "../shipwreck/ShipwreckDetail";
+import TradegoodDetail from "../tradegood/TradegoodDetail";
+import TreasureMapDetail from "../treasuremap/TreasureMapDetail";
+import SkillDetail from "../skill/SkillDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -33,7 +32,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   shipwreck: ShipwreckDetail,
   tradeGoods: TradegoodDetail,
   treasuremap: TreasureMapDetail,
-  skill: SkillDetail
+  skill: SkillDetail,
 };
 
 export default function ObjectDetail() {
@@ -45,15 +44,17 @@ export default function ObjectDetail() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      setData(null);
+
       try {
         const response = await api.get(`/api/obj/${id}`);
-        console.log(response.data)
         setData(response.data.data);
         setType(response.data.type);
-
       } catch (err) {
-        setError('Failed to load object details');
-        console.error('Error fetching object:', err);
+        setError("Failed to load object details");
+        console.error("Error fetching object:", err);
       } finally {
         setLoading(false);
       }
@@ -66,7 +67,7 @@ export default function ObjectDetail() {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", p: 3 }}>
         <CircularProgress />
       </Box>
     );
