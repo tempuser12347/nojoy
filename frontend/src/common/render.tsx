@@ -37,7 +37,7 @@ export function renderObjectsToChips(
         key={index}
         label={label}
         sx={{ margin: 0.5, cursor: hasLink ? "pointer" : "default" }}
-        onClick={hasLink ? () => navigate("/obj/" + item.id) : undefined}
+        onClick={hasLink ? (e) => { e.stopPropagation(); navigate("/obj/" + item.id); } : undefined}
         clickable={!!hasLink}
       />
     );
