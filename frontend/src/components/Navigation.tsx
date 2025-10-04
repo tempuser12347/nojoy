@@ -99,7 +99,8 @@ const availableSections = [
   "소비품",
   "레시피책",
   "레시피",
-  "스킬"
+  "스킬",
+  "판매 npc"
 ];
 
 const Navigation: React.FC = () => {
@@ -141,6 +142,9 @@ const Navigation: React.FC = () => {
     handleCloseMenu();
     if (subsection === "스킬") {
       navigate(`/skills`);
+    }
+    else if(subsection=='판매 npc'){
+      navigate(`/npcsales`)
     } else {
       navigate(`/${subsection}`);
     }

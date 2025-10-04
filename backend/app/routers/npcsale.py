@@ -28,7 +28,7 @@ def read_npcsale(
     db: Session = Depends(get_db),
 ):
 
-    query = ''' 
+    query = """ 
 SELECT
     n.id,
     n.npc,
@@ -47,29 +47,30 @@ LEFT JOIN allData AS ad_loc ON ad_loc.id = n.location_id
 LEFT JOIN allData AS ad_item ON ad_item.id = n.item_id
 GROUP BY n.id, n.npc, n.location_id, ad_loc.name;
 
-'''
-    
+"""
+
     results = db.execute(text(query)).fetchall()
 
     if npc_search:
         results = [row for row in results if npc_search.lower() in row.npc.lower()]
-    
+
     if location_search:
-        results = [row for row in results if location_search == (json.loads(row.city)['id'] if row.city else None)]
+        results = [
+            row
+            for row in results
+            if location_search == (json.loads(row.city)["id"] if row.city else None)
+        ]
 
     if item_search:
-        filtered =[]
+        filtered = []
 
         for row in results:
             items = json.loads(row.items)
             for item in items:
-                if item_search.lower() in item['name'].lower():
+                if item_search.lower() in item["name"].lower():
                     filtered.append(row)
                     break
         results = filtered
-
-
-
 
     # Sorting logic
     if results:
@@ -96,4 +97,15 @@ GROUP BY n.id, n.npc, n.location_id, ad_loc.name;
     total = len(results)
     items = results[skip : skip + limit]
 
-    return {"items": items, "total": total}
+    # convert items to dict list
+    target_field_list = ["id", "npc"]
+    item_list = []
+    for item in items:
+        item_dict = {}
+        for field in target_field_list:
+            item_dict[field] = getattr(item, field, None)
+        item_dict["location"] = json.loads(item.location)
+        item_dict["items"] = json.loads(item.items)
+        item_list.append(item_dict)
+
+    return {"items": item_list, "total": total}

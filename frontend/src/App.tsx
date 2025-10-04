@@ -20,6 +20,7 @@ import Recipebooks from './pages/recipebook/RecipeBooks';
 import NotFound from './pages/NotFound';
 import ObjectDetail from './pages/object/ObjectDetail';
 import Skills from './pages/skill/Skills';
+import NpcSales from './pages/npcsale/NpcSales';
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ function App() {
               <Route path="/추천장" element={<Certificates />} />
               <Route path="/레시피책" element={<Recipebooks />} />
               <Route path="/skills" element={<Skills />} />
+              <Route path="/npcsales" element={<NpcSales />} />
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
