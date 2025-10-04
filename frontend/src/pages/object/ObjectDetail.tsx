@@ -17,6 +17,7 @@ import ShipwreckDetail from "../shipwreck/ShipwreckDetail";
 import TradegoodDetail from "../tradegood/TradegoodDetail";
 import TreasureMapDetail from "../treasuremap/TreasureMapDetail";
 import SkillDetail from "../skill/SkillDetail";
+import NpcSaleDetail from "../npcsale/NpcSaleDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -33,6 +34,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   tradegoods: TradegoodDetail,
   treasuremap: TreasureMapDetail,
   skill: SkillDetail,
+  sellernpc: NpcSaleDetail,
 };
 
 export default function ObjectDetail() {
