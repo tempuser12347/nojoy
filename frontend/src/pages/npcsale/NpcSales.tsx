@@ -99,9 +99,14 @@ const NpcSales: React.FC = () => {
       id: "items",
       label: "판매 아이템",
       format: (value: any[]) =>
-        value.length > 3
-          ? renderObjectsToChips(value.slice(0, 3), navigate)
-          : renderObjectsToChips(value, navigate),
+        value.length > 3 ? (
+          <>
+            {renderObjectsToChips(value.slice(0, 3), navigate)}
+            <span>...</span>
+          </>
+        ) : (
+          renderObjectsToChips(value, navigate)
+        ),
     },
   ];
 
