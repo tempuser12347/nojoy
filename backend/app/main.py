@@ -18,6 +18,7 @@ from app.routers import (
     recipebook,
     objects,
     skill,
+    npcsale,
 )
 import os
 
@@ -49,6 +50,7 @@ app.include_router(certificate.router)
 app.include_router(recipebook.router)
 app.include_router(objects.router)
 app.include_router(skill.router)
+app.include_router(npcsale.router)
 
 
 dist_dir = "dist"
