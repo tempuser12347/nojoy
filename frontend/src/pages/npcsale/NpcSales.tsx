@@ -6,7 +6,6 @@ import {
   TextField,
   Typography,
   Button,
-  Chip,
   Autocomplete,
 } from "@mui/material";
 import DataTable from "../../components/DataTable";
@@ -34,7 +33,10 @@ const NpcSales: React.FC = () => {
     (searchParams.get("sort_order") as "asc" | "desc") || "desc";
 
   const [npcSearchInput, setNpcSearchInput] = React.useState(npc_search);
-  const [locationSearch, setLocationSearch] = React.useState<City | null>(
+  const [locationSearch, setLocationSearch] = React.useState<{
+    id: number;
+    name: string;
+  } | null>(
     sampleCities.find((c) => c.id === Number(location_search_id)) || null
   );
   const [itemSearchInput, setItemSearchInput] = React.useState(item_search);
