@@ -11,13 +11,14 @@ import {
 } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
-import { renderObjectsToChips } from "../../common/render";
+import { renderObjectsToChips, renderObjectChip } from "../../common/render";
 import { QUEST_FILTER_LOCATION_ARRAY } from "../../constants/listvalues";
 
-const sampleCities: City[] = QUEST_FILTER_LOCATION_ARRAY.map((city) => ({
-  id: city.id,
-  name: city.name,
-}));
+const sampleCities: { id: number; name: string }[] =
+  QUEST_FILTER_LOCATION_ARRAY.map((city) => ({
+    id: city.id,
+    name: city.name,
+  }));
 
 const NpcSales: React.FC = () => {
   const navigate = useNavigate();
@@ -87,13 +88,8 @@ const NpcSales: React.FC = () => {
     {
       id: "location",
       label: "판매장소",
-      format: (value: { id: number; name: string }) => (
-        <Chip
-          key={value?.id}
-          label={value?.name || ""}
-          onClick={() => navigate(`/obj/${value.id}`)}
-        />
-      ),
+      format: (value: { id: number; name: string }) =>
+        renderObjectChip(value, navigate),
     },
     {
       id: "items",
