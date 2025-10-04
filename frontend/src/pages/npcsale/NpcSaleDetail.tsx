@@ -1,20 +1,39 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  type NavigateFunction,
+} from "react-router-dom";
 import {
   Box,
   Typography,
   Card,
   CardContent,
   CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
 } from "@mui/material";
 import api from "../../api";
-import { renderObjectsToChips, renderObjectChip } from "../../common/render";
+import { renderObjectChip } from "../../common/render";
 
 interface NpcSale {
   id: number;
   npc: string;
   location: { id: number; name: string };
-  items: { id: number; name: string }[];
+  items: {
+    id: number;
+    name: string;
+    price: string | null;
+    count: number | null;
+    progress: string | null;
+    invest: string | null;
+    contribution: string | null;
+    centralcity: string | null;
+    era: string | null;
+  }[];
 }
 
 const DetailItem = ({
@@ -35,7 +54,58 @@ const DetailItem = ({
     </Box>
   ) : null;
 
+const renderTableForItems = (
+  items: {
+    id: number;
+    name: string;
+    price: string | null;
+    count: number | null;
+    progress: string | null;
+    invest: string | null;
+    contribution: string | null;
+    centralcity: string | null;
+    era: string | null;
+  }[],
+  navigate: NavigateFunction | null
+) => {
+  return (
+    <Table sx={{ border: "1px solid black" }}>
+      <TableHead>
+        <TableRow>
+          <TableCell>아이템</TableCell>
+          <TableCell>수량</TableCell>
+          <TableCell>가격</TableCell>
+          <TableCell>진척도</TableCell>
+          <TableCell>투자</TableCell>
+          <TableCell>공헌도</TableCell>
+          <TableCell>중심도시</TableCell>
+          <TableCell>시대</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {items.map((item) => (
+          <TableRow key={item.id}>
+            <TableCell>
+              {navigate
+                ? renderObjectChip({ id: item.id, name: item.name }, navigate)
+                : item.name}
+            </TableCell>
+            <TableCell>{item.count}</TableCell>
+            <TableCell>{item.price}</TableCell>
+            <TableCell>{item.progress}</TableCell>
+            <TableCell>{item.invest}</TableCell>
+            <TableCell>{item.contribution}</TableCell>
+            <TableCell>{item.centralcity}</TableCell>
+            <TableCell>{item.era}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
+
 export default function NpcSaleDetail({ data }: { data?: NpcSale }) {
+  console.log(data);
   const { id } = useParams<{ id: string }>();
   const [npcSale, setNpcSale] = useState<NpcSale | null>(data || null);
   const [loading, setLoading] = useState(!data);
@@ -46,6 +116,7 @@ export default function NpcSaleDetail({ data }: { data?: NpcSale }) {
     const fetchNpcSale = async () => {
       try {
         const response = await api.get(`/api/npcsale/${id}`);
+        console.log(response.data);
         setNpcSale(response.data);
       } catch (err) {
         setError("Failed to load npc sale details");
@@ -102,13 +173,17 @@ export default function NpcSaleDetail({ data }: { data?: NpcSale }) {
             }}
           >
             <DetailItem
-              label="Location"
+              label="위치"
               value={renderObjectChip(npcSale.location, navigate)}
             />
-            <DetailItem
-              label="Items"
-              value={renderObjectsToChips(npcSale.items, navigate)}
-            />
+            <Box sx={{ gridColumn: "1 / -1" }}>
+              <Typography variant="h6" color="text.secondary">
+                판매 아이템
+              </Typography>
+              {npcSale.items
+                ? renderTableForItems(npcSale.items, navigate)
+                : null}
+            </Box>
           </Box>
         </CardContent>
       </Card>

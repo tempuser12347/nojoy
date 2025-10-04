@@ -129,7 +129,14 @@ SELECT
     json_group_array(
         json_object(
             'id', n.item_id,
-            'name', ad_item.name
+            'name', ad_item.name,
+            'price', n.price,
+            'count', n.count,
+            'progress', n.progress,
+            'invest', n.invest,
+            'contribution', n.contribution,
+            'centralcity', n.centralcity,
+            'era', n.era
         )
     ) AS items
 FROM npcsale AS n
