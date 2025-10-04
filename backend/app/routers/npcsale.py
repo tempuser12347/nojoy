@@ -109,3 +109,47 @@ GROUP BY n.id, n.npc, n.location_id, ad_loc.name;
         item_list.append(item_dict)
 
     return {"items": item_list, "total": total}
+
+
+@router.get("/{npc_id}", response_model=dict)
+def read_npcsale_detail(npc_id: int, db: Session = Depends(get_db)):
+    return read_npcsale_core(npc_id, db)
+
+
+def read_npcsale_core(npc_id: int, db: Session = Depends(get_db)):
+
+    query = """ 
+SELECT
+    n.id,
+    n.npc,
+    json_object(
+        'id', n.location_id,
+        'name', ad_loc.name
+    ) AS location,
+    json_group_array(
+        json_object(
+            'id', n.item_id,
+            'name', ad_item.name
+        )
+    ) AS items
+FROM npcsale AS n
+LEFT JOIN allData AS ad_loc ON ad_loc.id = n.location_id
+LEFT JOIN allData AS ad_item ON ad_item.id = n.item_id
+WHERE n.id = :npc_id
+GROUP BY n.id, n.npc, n.location_id, ad_loc.name;
+
+"""
+
+    results = db.execute(text(query), {"npc_id": npc_id}).fetchone()
+
+    if not results:
+        raise HTTPException(status_code=404, detail="Npc not found")
+
+    # convert to dict
+    ret = {}
+    ret["id"] = results.id
+    ret["npc"] = results.npc
+    ret["location"] = json.loads(results.location)
+    ret["items"] = json.loads(results.items)
+
+    return ret
