@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -14,11 +13,6 @@ import DataTable from "../../components/DataTable";
 import api from "../../api";
 import { renderObjectsToChips } from "../../common/render";
 import { QUEST_FILTER_LOCATION_ARRAY } from "../../constants/listvalues";
-
-interface City {
-  id: number;
-  name: string;
-}
 
 const sampleCities: City[] = QUEST_FILTER_LOCATION_ARRAY.map((city) => ({
   id: city.id,
@@ -55,9 +49,7 @@ const NpcSales: React.FC = () => {
   const updateSearchParams = (newParams: Record<string, any>) => {
     const currentParams = new URLSearchParams(searchParams);
     Object.entries(newParams).forEach(([key, value]) => {
-      value
-        ? currentParams.set(key, String(value))
-        : currentParams.delete(key);
+      value ? currentParams.set(key, String(value)) : currentParams.delete(key);
     });
     setSearchParams(currentParams);
   };
@@ -85,7 +77,7 @@ const NpcSales: React.FC = () => {
           limit: rowsPerPage,
         },
       });
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     },
   });
@@ -95,18 +87,21 @@ const NpcSales: React.FC = () => {
     {
       id: "location",
       label: "판매장소",
-      format: (value: City) => (
+      format: (value: { id: number; name: string }) => (
         <Chip
           key={value?.id}
           label={value?.name || ""}
-          onClick={() => navigate(`/city/${value.id}`)}
+          onClick={() => navigate(`/obj/${value.id}`)}
         />
       ),
     },
     {
       id: "items",
       label: "판매 아이템",
-      format: (value: any[]) => renderObjectsToChips(value, navigate),
+      format: (value: any[]) =>
+        value.length > 3
+          ? renderObjectsToChips(value.slice(0, 3), navigate)
+          : renderObjectsToChips(value, navigate),
     },
   ];
 
