@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import api from "../../api";
 import { renderObjectChip } from "../../common/render";
+import "../../common/innertable.css";
 
 interface NpcSale {
   id: number;
@@ -69,39 +70,34 @@ const renderTableForItems = (
   navigate: NavigateFunction | null
 ) => {
   return (
-    <Table
-      sx={{
-        borderCollapse: "collapse",
-        width: "100%",
-      }}
-    >
+    <Table className="inner-table">
       <TableHead>
-        <TableRow sx={{ backgroundColor: "grey.200" }}>
-          <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>아이템</TableCell>
-          <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>수량</TableCell>
-          <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>가격</TableCell>
-          <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>진척도</TableCell>
-          <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>투자</TableCell>
-          <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>공헌도</TableCell>
-          <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>중심도시</TableCell>
-          <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>시대</TableCell>
+        <TableRow>
+          <TableCell>아이템</TableCell>
+          <TableCell>수량</TableCell>
+          <TableCell>가격</TableCell>
+          <TableCell>진척도</TableCell>
+          <TableCell>투자</TableCell>
+          <TableCell>공헌도</TableCell>
+          <TableCell>중심도시</TableCell>
+          <TableCell>시대</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
         {items.map((item) => (
           <TableRow key={item.id}>
-            <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>
+            <TableCell>
               {navigate
                 ? renderObjectChip({ id: item.id, name: item.name }, navigate)
                 : item.name}
             </TableCell>
-            <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>{item.count}</TableCell>
-            <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>{item.price}</TableCell>
-            <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>{item.progress}</TableCell>
-            <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>{item.invest}</TableCell>
-            <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>{item.contribution}</TableCell>
-            <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>{item.centralcity}</TableCell>
-            <TableCell sx={{ border: "1px solid rgba(224,224,224,1)" }}>{item.era}</TableCell>
+            <TableCell>{item.count}</TableCell>
+            <TableCell>{item.price}</TableCell>
+            <TableCell>{item.progress}</TableCell>
+            <TableCell>{item.invest}</TableCell>
+            <TableCell>{item.contribution}</TableCell>
+            <TableCell>{item.centralcity}</TableCell>
+            <TableCell>{item.era}</TableCell>
           </TableRow>
         ))}
       </TableBody>
