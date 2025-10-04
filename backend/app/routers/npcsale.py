@@ -21,25 +21,54 @@ def read_npcsale(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit the number of records returned"),
     npc_search: str = Query(None, description="Search term for npc"),
-    city_search: str = Query(None, description="Search term for city"),
+    location_search: int = Query(None, description="Search term for city"),
     item_search: str = Query(None, description="Search term for item"),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
 ):
 
-    query = "SELECT * FROM npcsale"
+    query = ''' 
+SELECT
+    n.id,
+    n.npc,
+    json_object(
+        'id', n.location_id,
+        'name', ad_loc.name
+    ) AS location,
+    json_group_array(
+        json_object(
+            'id', n.item_id,
+            'name', ad_item.name
+        )
+    ) AS items
+FROM npcsale AS n
+LEFT JOIN allData AS ad_loc ON ad_loc.id = n.location_id
+LEFT JOIN allData AS ad_item ON ad_item.id = n.item_id
+GROUP BY n.id, n.npc, n.location_id, ad_loc.name;
+
+'''
     
     results = db.execute(text(query)).fetchall()
 
     if npc_search:
         results = [row for row in results if npc_search.lower() in row.npc.lower()]
     
-    if city_search:
-        results = [row for row in results if city_search.lower() in row.city.lower()]
+    if location_search:
+        results = [row for row in results if location_search == (json.loads(row.city)['id'] if row.city else None)]
 
     if item_search:
-        results = [row for row in results if item_search.lower() in row.item.lower()]
+        filtered =[]
+
+        for row in results:
+            items = json.loads(row.items)
+            for item in items:
+                if item_search.lower() in item['name'].lower():
+                    filtered.append(row)
+                    break
+        results = filtered
+
+
 
 
     # Sorting logic
