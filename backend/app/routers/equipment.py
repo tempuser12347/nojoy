@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from sqlalchemy import text
 from .. import models
 from ..database import get_db
+from ..common import fetch_quest_rewarding_id
 import json
 
 
@@ -196,27 +197,14 @@ def read_equipment_core(equipment_id: int, db: Session = Depends(get_db)):
     # fetch obtain methods from other tables
 
     ## check obtainable from quest
-    fetched = db.execute(
-        text(
-            """
-    SELECT id, name
-    FROM quest
-    WHERE json_valid(reward_items) = 1 AND json_extract(reward_items, '$."' || :equipid || '"') IS NOT NULL
-"""
-        ),
-        {"equipid": equipment_id},
-    ).fetchall()
     obtain_method = []
-    if fetched:
-        from_quest_method = {"from": "quest"}
-        obj_list = []
-        for row in fetched:
-            obj = {"id": row.id, "name": row.name}
-            obj_list.append(obj)
-        from_quest_method["quest_list"] = obj_list
-        obtain_method.append(from_quest_method)
 
-    ret["obtain_method"] = obtain_method
+    obt_quest_list = fetch_quest_rewarding_id(equipment_id, db)
+    if obt_quest_list:
+        obtain_method.append({"from": "quest", "quest_list": obt_quest_list})
+
+    if obtain_method:
+        ret["obtain_method"] = obtain_method
 
     ## check obtainable from treasuremap
     return ret

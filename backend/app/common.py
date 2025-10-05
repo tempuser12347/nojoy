@@ -1,0 +1,101 @@
+from sqlalchemy.orm.session import Session
+from sqlalchemy import text
+
+
+def fetch_quest_rewarding_id(item_id: int, db: Session):
+    fetched = db.execute(
+        text(
+            """
+        SELECT id, name
+        FROM quest
+        WHERE json_valid(reward_items) = 1 AND json_extract(reward_items, '$."' || :itemid || '"') IS NOT NULL
+    """
+        ),
+        {"itemid": item_id},
+    ).fetchall()
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {"id": row.id, "name": row.name}
+            obj_list.append(obj)
+        return obj_list
+    return None
+
+
+def fetch_recipe_producing_id(item_id: int, db: Session):
+
+    fetched = db.execute(
+        text(
+            """
+SELECT id, name
+FROM recipe
+WHERE
+json_valid(greatsuccess) = 1 AND
+    json_type(greatsuccess, '$') = 'array'
+    AND EXISTS (
+        SELECT 1
+        FROM json_each(greatsuccess)
+        WHERE json_extract(value, '$.ref') = :itemid
+    )
+UNION
+SELECT id, name
+FROM recipe
+WHERE
+json_valid(success) = 1 AND
+    json_type(success, '$') = 'array'
+    AND EXISTS (
+        SELECT 1
+        FROM json_each(success)
+        WHERE json_extract(value, '$.ref') = :itemid
+    )
+UNION
+SELECT id, name
+FROM recipe
+WHERE
+json_valid(failure) = 1 AND
+    json_type(failure, '$') = 'array'
+    AND EXISTS (
+        SELECT 1
+        FROM json_each(failure)
+        WHERE json_extract(value, '$.ref') = :itemid
+    )
+
+"""
+        ),
+        {"itemid": item_id},
+    ).fetchall()
+
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {"id": row.id, "name": row.name}
+            obj_list.append(obj)
+        return obj_list
+    return None
+
+
+def fetch_sellernpc_selling_id(item_id: int, db: Session):
+
+    fetched = db.execute(
+        text(
+            """
+select npcsale.id, npcsale.npc, allData.name as location_name, location_id
+from npcsale left join allData on allData.id = npcsale.location_id
+    where item_id = :itemid
+                              """
+        ),
+        {"itemid": item_id},
+    )
+
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {
+                "id": row.id,
+                "npc": row.npc,
+                "location_name": row.location_name,
+                "location_id": row.location_id,
+            }
+            obj_list.append(obj)
+        return obj_list
+    return None

@@ -4,6 +4,11 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from pydantic import BaseModel
 from ..database import get_db
+from ..common import (
+    fetch_quest_rewarding_id,
+    fetch_recipe_producing_id,
+    fetch_sellernpc_selling_id,
+)
 import json
 
 
@@ -139,5 +144,28 @@ def read_consumable_core(consumable_id: int, db: Session = Depends(get_db)):
             ).fetchone()
             if name:
                 item["name"] = name.name
+
+    # fetch obtain from quest
+    obtain_method_list = []
+    obtainable_quest_list = fetch_quest_rewarding_id(consumable_id, db)
+    if obtainable_quest_list:
+        obtain_method_list.append(
+            {"from": "quest", "quest_list": obtainable_quest_list}
+        )
+
+    obtainable_recipe_list = fetch_recipe_producing_id(consumable_id, db)
+    if obtainable_recipe_list:
+        obtain_method_list.append(
+            {"from": "recipe", "recipe_list": obtainable_recipe_list}
+        )
+
+    obtainable_npcsale_list = fetch_sellernpc_selling_id(consumable_id, db)
+    if obtainable_npcsale_list:
+        obtain_method_list.append(
+            {"from": "npcsale", "npcsale_list": obtainable_npcsale_list}
+        )
+
+    if obtain_method_list:
+        ret["obtain_method"] = obtain_method_list
 
     return ret
