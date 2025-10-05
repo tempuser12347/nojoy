@@ -19,6 +19,7 @@ from app.routers import (
     objects,
     skill,
     npcsale,
+    treasurebox
 )
 import os
 
@@ -51,6 +52,7 @@ app.include_router(recipebook.router)
 app.include_router(objects.router)
 app.include_router(skill.router)
 app.include_router(npcsale.router)
+app.include_router(treasurebox.router)
 
 
 dist_dir = "dist"
