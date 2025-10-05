@@ -39,7 +39,7 @@ const renderTabContent = (method: any) => {
         <ul>
           {method.quest_list.map((item: any) => (
             <li key={item.id}>
-              <Link to={`/quest/${item.id}`}>{item.name}</Link>
+              <Link to={`/obj/${item.id}`}>{item.name}</Link>
             </li>
           ))}
         </ul>
@@ -49,7 +49,7 @@ const renderTabContent = (method: any) => {
         <ul>
           {method.recipe_list.map((item: any) => (
             <li key={item.id}>
-              <Link to={`/recipe/${item.id}`}>{item.name}</Link>
+              <Link to={`/obj/${item.id}`}>{item.name}</Link>
             </li>
           ))}
         </ul>
@@ -68,7 +68,7 @@ const renderTabContent = (method: any) => {
               <tr key={item.id}>
                 <td>{item.npc}</td>
                 <td>
-                  <Link to={`/city/${item.location_id}`}>{item.location_name}</Link>
+                  <Link to={`/obj/${item.location_id}`}>{item.location_name}</Link>
                 </td>
               </tr>
             ))}
@@ -80,7 +80,7 @@ const renderTabContent = (method: any) => {
         <ul>
           {method.shipwreck_list.map((item: any) => (
             <li key={item.id}>
-              <Link to={`/shipwreck/${item.id}`}>{item.name}</Link>
+              <Link to={`/obj/${item.id}`}>{item.name}</Link>
             </li>
           ))}
         </ul>
@@ -101,6 +101,7 @@ interface Consumable {
   features: string;
   item: { id: number; name: string; value?: number }[] | null;
   Duplicate: string;
+  obtain_method: any[]
 }
 
 export default function ConsumableDetail({ data }: { data: Consumable }) {
@@ -187,20 +188,38 @@ export default function ConsumableDetail({ data }: { data: Consumable }) {
                 )}
               </Typography>
             </Box>
-          </Box>
-        </CardContent>
-      </Card>
+            
       {consumable.obtain_method && consumable.obtain_method.length > 0 && (
-        <Box sx={{ width: "100%", mt: 4 }}>
+        // <Box sx={{ width: "100%", mt: 4 }}>
+        <Box sx={{ gridColumn: "1 / -1"}}>
+          <Typography variant="subtitle1" color="text.secondary">
+            획득방법
+          </Typography>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
               value={tabValue}
               onChange={handleTabChange}
               aria-label="obtain methods"
             >
-              {consumable.obtain_method.map((method, index) => (
-                <Tab label={method.from.toUpperCase()} key={index} />
-              ))}
+              {consumable.obtain_method.map((method, index) => {
+
+                let label = method.from.toUpperCase();
+                if(method.from == "quest"){
+                  label = '퀘스트'
+                }
+                else if(method.from == "recipe"){
+                  label = '생산'
+                }
+                else if(method.from == "npcsale"){
+                  label = '구입'
+                }
+                else if(method.from == "shipwreck"){
+                  label = '침몰선'
+                }
+
+                return <Tab label={label} key={index} />
+              }
+              )}
             </Tabs>
           </Box>
           {consumable.obtain_method.map((method, index) => (
@@ -210,6 +229,9 @@ export default function ConsumableDetail({ data }: { data: Consumable }) {
           ))}
         </Box>
       )}
+          </Box>
+        </CardContent>
+      </Card>
     </Box>
   );
 }
