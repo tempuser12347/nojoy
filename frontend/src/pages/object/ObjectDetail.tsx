@@ -52,6 +52,7 @@ export default function ObjectDetail() {
 
       try {
         const response = await api.get(`/api/obj/${id}`);
+        console.log(response.data)
         setData(response.data.data);
         setType(response.data.type);
       } catch (err) {
