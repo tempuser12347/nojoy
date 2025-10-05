@@ -186,6 +186,7 @@ def read_equipment_core(equipment_id: int, db: Session = Depends(get_db)):
         if field != "skills_json"
     }
     ret["skills"] = json.loads(result.skills_json) if result.skills_json else []
+    ret["skills"] = [a for a in ret["skills"] if a is not None]
     ret["use_effect"] = json.loads(result.use_effect) if result.use_effect else None
     ret["equipped_effect"] = (
         json.loads(result.equipped_effect) if result.equipped_effect else None
