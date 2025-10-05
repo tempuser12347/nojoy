@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Box, Typography, Card, CardContent } from "@mui/material";
 import { renderObjectsToChips } from "../../common/render";
-import api from "../../api";
 
 interface Consumable {
   id: number;
@@ -18,35 +17,8 @@ interface Consumable {
 }
 
 export default function ConsumableDetail({ data }: { data: Consumable }) {
-  const { id } = useParams<{ id: string }>();
-  const [consumable, setConsumable] = useState<Consumable>(data);
-  const [loading, setLoading] = useState(!data);
-
-  useEffect(() => {
-    const fetchConsumable = async () => {
-      try {
-        const response = await api.get(`/api/consumables/${id}`);
-        console.log(response.data);
-        setConsumable(response.data);
-      } catch (err) {
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (!data && id) {
-      fetchConsumable();
-    }
-  }, [id, data]);
-
-  if (loading) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Typography>Loading...</Typography>
-      </Box>
-    );
-  }
-
+  // const [consumable, setConsumable] = useState<Consumable>(data);
+  const consumable = data;
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
