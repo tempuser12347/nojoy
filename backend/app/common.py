@@ -99,3 +99,25 @@ from npcsale left join allData on allData.id = npcsale.location_id
             obj_list.append(obj)
         return obj_list
     return None
+
+
+def fetch_shipwreck_producing_id(item_id: int, db: Session):
+
+    fetched = db.execute(text('''
+SELECT id, name
+FROM shipwreck
+WHERE EXISTS (
+  SELECT 1
+  FROM json_each(shipwreck.item_id)
+  WHERE value = :itemid
+);
+
+                              '''), {"itemid": item_id}).fetchall()
+    
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {"id": row.id, "name": row.name}
+            obj_list.append(obj)
+        return obj_list
+    return None

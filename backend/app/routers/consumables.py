@@ -8,6 +8,7 @@ from ..common import (
     fetch_quest_rewarding_id,
     fetch_recipe_producing_id,
     fetch_sellernpc_selling_id,
+    fetch_shipwreck_producing_id
 )
 import json
 
@@ -164,6 +165,13 @@ def read_consumable_core(consumable_id: int, db: Session = Depends(get_db)):
         obtain_method_list.append(
             {"from": "npcsale", "npcsale_list": obtainable_npcsale_list}
         )
+
+    obt_shipwreck_list = fetch_shipwreck_producing_id(consumable_id, db)
+    if obt_shipwreck_list:
+        obtain_method_list.append(
+            {"from": "shipwreck", "shipwreck_list": obt_shipwreck_list}
+        )
+
 
     if obtain_method_list:
         ret["obtain_method"] = obtain_method_list
