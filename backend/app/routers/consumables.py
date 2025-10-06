@@ -5,10 +5,7 @@ from sqlalchemy import text
 from pydantic import BaseModel
 from ..database import get_db
 from ..common import (
-    fetch_quest_rewarding_id,
-    fetch_recipe_producing_id,
-    fetch_sellernpc_selling_id,
-    fetch_shipwreck_producing_id
+    fetch_all_obtain_methods,
 )
 import json
 
@@ -146,33 +143,7 @@ def read_consumable_core(consumable_id: int, db: Session = Depends(get_db)):
             if name:
                 item["name"] = name.name
 
-    # fetch obtain from quest
-    obtain_method_list = []
-    obtainable_quest_list = fetch_quest_rewarding_id(consumable_id, db)
-    if obtainable_quest_list:
-        obtain_method_list.append(
-            {"from": "quest", "quest_list": obtainable_quest_list}
-        )
-
-    obtainable_recipe_list = fetch_recipe_producing_id(consumable_id, db)
-    if obtainable_recipe_list:
-        obtain_method_list.append(
-            {"from": "recipe", "recipe_list": obtainable_recipe_list}
-        )
-
-    obtainable_npcsale_list = fetch_sellernpc_selling_id(consumable_id, db)
-    if obtainable_npcsale_list:
-        obtain_method_list.append(
-            {"from": "npcsale", "npcsale_list": obtainable_npcsale_list}
-        )
-
-    obt_shipwreck_list = fetch_shipwreck_producing_id(consumable_id, db)
-    if obt_shipwreck_list:
-        obtain_method_list.append(
-            {"from": "shipwreck", "shipwreck_list": obt_shipwreck_list}
-        )
-
-
+    obtain_method_list = fetch_all_obtain_methods(consumable_id, db)
     if obtain_method_list:
         ret["obtain_method"] = obtain_method_list
 

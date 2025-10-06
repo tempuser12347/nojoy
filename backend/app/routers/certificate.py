@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from sqlalchemy import text
 from ..database import get_db
+from ..common import fetch_all_obtain_methods
 
 
 class CertificateResponse(BaseModel):
@@ -85,6 +86,9 @@ def read_certificate_core(cert_id: int, db: Session = Depends(get_db)):
 
     if not result:
         raise HTTPException(status_code=404, detail="Certificate not found")
+
+    obtm_list = fetch_all_obtain_methods(cert_id, db)
+    result["obtain_method"] = obtm_list
 
     return {
         "id": result.id,

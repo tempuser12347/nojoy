@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from pydantic import BaseModel
 from ..database import get_db
+from ..common import fetch_all_obtain_methods
 
 router = APIRouter(prefix="/api/recipebooks", tags=["recipebooks"])
 
@@ -104,5 +105,8 @@ def read_recipebook_core(recipebook_id: int, db: Session = Depends(get_db)):
         ret[field] = getattr(result, field, None)
 
     ret["skill"] = result.sveries
+
+    obtm_list = fetch_all_obtain_methods(recipebook_id, db)
+    ret["obtain_method"] = obtm_list
 
     return ret

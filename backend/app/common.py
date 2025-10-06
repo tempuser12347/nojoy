@@ -103,7 +103,9 @@ from npcsale left join allData on allData.id = npcsale.location_id
 
 def fetch_shipwreck_producing_id(item_id: int, db: Session):
 
-    fetched = db.execute(text('''
+    fetched = db.execute(
+        text(
+            """
 SELECT id, name
 FROM shipwreck
 WHERE EXISTS (
@@ -112,8 +114,11 @@ WHERE EXISTS (
   WHERE value = :itemid
 );
 
-                              '''), {"itemid": item_id}).fetchall()
-    
+                              """
+        ),
+        {"itemid": item_id},
+    ).fetchall()
+
     if fetched:
         obj_list = []
         for row in fetched:
@@ -121,3 +126,38 @@ WHERE EXISTS (
             obj_list.append(obj)
         return obj_list
     return None
+
+
+def fetch_all_obtain_methods(itemid: int, db: Session):
+
+    # fetch obtain from quest
+    obtain_method_list = []
+    obtainable_quest_list = fetch_quest_rewarding_id(itemid, db)
+    if obtainable_quest_list:
+        obtain_method_list.append(
+            {"from": "quest", "quest_list": obtainable_quest_list}
+        )
+
+    obtainable_recipe_list = fetch_recipe_producing_id(itemid, db)
+    if obtainable_recipe_list:
+        obtain_method_list.append(
+            {"from": "recipe", "recipe_list": obtainable_recipe_list}
+        )
+
+    obtainable_npcsale_list = fetch_sellernpc_selling_id(itemid, db)
+    if obtainable_npcsale_list:
+        obtain_method_list.append(
+            {"from": "npcsale", "npcsale_list": obtainable_npcsale_list}
+        )
+
+    obt_shipwreck_list = fetch_shipwreck_producing_id(itemid, db)
+    if obt_shipwreck_list:
+        obtain_method_list.append(
+            {"from": "shipwreck", "shipwreck_list": obt_shipwreck_list}
+        )
+
+    # if empty return None
+    if not obtain_method_list:
+        return None
+
+    return obtain_method_list

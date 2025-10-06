@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from sqlalchemy import text
 from ..database import get_db
 import json
+from ..common import fetch_all_obtain_methods
 
 
 class TradegoodResponse(BaseModel):
@@ -95,5 +96,8 @@ def read_tradegood_core(tradegood_id: int, db: Session = Depends(get_db)):
             item_dict["culture"] = json.loads(item_dict["culture"])
         except (json.JSONDecodeError, TypeError):
             pass
+
+    obtm_list = fetch_all_obtain_methods(tradegood_id, db)
+    item_dict["obtain_method"] = obtm_list
 
     return item_dict
