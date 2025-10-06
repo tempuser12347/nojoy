@@ -12,6 +12,7 @@ import {
   renderObjectsToChips,
   renderRequirementsTable,
 } from "../../common/render";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface Equipment {
   id: number;
@@ -28,6 +29,7 @@ interface Equipment {
   equipped_effect: any;
   requirements: { type: string; content: any }[] | null;
   skills: Array<{ id: number; name: string; value: number }>;
+  obtain_method: any[] | null;
 }
 
 const DetailItem = ({
@@ -146,6 +148,14 @@ export default function EquipmentDetail({ data }: { data?: Equipment }) {
                 value={renderRequirementsTable(equipment.requirements)}
               />
             </Box>
+            {equipment.obtain_method ? (
+              <Box sx={{ gridColumn: "1 / -1" }}>
+                <DetailItem
+                  label="획득방법"
+                  value={<ObtainMethodTabs data={equipment.obtain_method} />}
+                />
+              </Box>
+            ) : null}
           </Box>
         </CardContent>
       </Card>

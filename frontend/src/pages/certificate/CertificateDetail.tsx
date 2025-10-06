@@ -8,12 +8,14 @@ import {
   CircularProgress,
 } from "@mui/material";
 import api from "../../api";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface Certificate {
   id: number;
   name: string;
   description: string;
   classification: string;
+  obtain_method: any[] | null;
 }
 
 const DetailItem = ({
@@ -35,10 +37,12 @@ const DetailItem = ({
 
 export default function CertificateDetail({ data }: { data?: Certificate }) {
   const { id } = useParams<{ id: string }>();
-  const [certificate, setCertificate] = useState<Certificate | null>(data || null);
+  const [certificate, setCertificate] = useState<Certificate | null>(
+    data || null
+  );
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
-//   const navigate = useNavigate();
+  //   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCertificate = async () => {
@@ -91,6 +95,15 @@ export default function CertificateDetail({ data }: { data?: Certificate }) {
         <CardContent>
           <DetailItem label="분류" value={certificate.classification} />
           <DetailItem label="설명" value={certificate.description} />
+
+          {certificate.obtain_method ? (
+            <Box sx={{ gridColumn: "1 / -1" }}>
+              <DetailItem
+                label="획득방법"
+                value={<ObtainMethodTabs data={certificate.obtain_method} />}
+              />
+            </Box>
+          ) : null}
         </CardContent>
       </Card>
     </Box>

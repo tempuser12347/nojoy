@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { Box, Typography, Card, CardContent } from "@mui/material";
 import { renderObjectsToChips } from "../../common/render";
 import ObtainMethodTabs from "../../components/ObtainMethodTabs";
+import DetailItem from "../../components/DetailItem";
 
 interface Consumable {
   id: number;
@@ -97,16 +97,14 @@ export default function ConsumableDetail({ data }: { data: Consumable }) {
               </Typography>
             </Box>
 
-            {consumable.obtain_method &&
-              consumable.obtain_method.length > 0 && (
-                // <Box sx={{ width: "100%", mt: 4 }}>
-                <Box sx={{ gridColumn: "1 / -1" }}>
-                  <Typography variant="subtitle1" color="text.secondary">
-                    획득방법
-                  </Typography>
-                  <ObtainMethodTabs data={consumable.obtain_method} />
-                </Box>
-              )}
+            {consumable.obtain_method ? (
+              <Box sx={{ gridColumn: "1 / -1" }}>
+                <DetailItem
+                  label="획득방법"
+                  value={<ObtainMethodTabs data={consumable.obtain_method} />}
+                />
+              </Box>
+            ) : null}
           </Box>
         </CardContent>
       </Card>

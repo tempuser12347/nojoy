@@ -8,6 +8,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import api from "../../api";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface Recipebook {
   id: number;
@@ -17,6 +18,7 @@ interface Recipebook {
   productionNPC: string | null;
   era: string | null;
   skill: string | null; // or object if needed
+  obtain_method: any[] | null;
 }
 
 const DetailItem = ({
@@ -42,7 +44,7 @@ export default function RecipebookDetail({ data }: { data?: Recipebook }) {
   const [recipebook, setRecipebook] = useState<Recipebook | null>(data || null);
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
-//   const navigate = useNavigate();
+  //   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecipebook = async () => {
@@ -114,6 +116,15 @@ export default function RecipebookDetail({ data }: { data?: Recipebook }) {
             <DetailItem label="제작 NPC" value={recipebook.productionNPC} />
             <DetailItem label="시대" value={recipebook.era} />
             <DetailItem label="스킬" value={recipebook.skill} />
+
+            {recipebook.obtain_method ? (
+              <Box sx={{ gridColumn: "1 / -1" }}>
+                <DetailItem
+                  label="획득방법"
+                  value={<ObtainMethodTabs data={recipebook.obtain_method} />}
+                />
+              </Box>
+            ) : null}
           </Box>
         </CardContent>
       </Card>

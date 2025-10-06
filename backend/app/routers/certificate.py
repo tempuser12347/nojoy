@@ -87,12 +87,13 @@ def read_certificate_core(cert_id: int, db: Session = Depends(get_db)):
     if not result:
         raise HTTPException(status_code=404, detail="Certificate not found")
 
-    obtm_list = fetch_all_obtain_methods(cert_id, db)
-    result["obtain_method"] = obtm_list
-
-    return {
+    ret = {
         "id": result.id,
         "name": result.name,
         "description": result.description,
         "classification": result.classification,
     }
+
+    obtm_list = fetch_all_obtain_methods(cert_id, db)
+    ret["obtain_method"] = obtm_list
+    return ret

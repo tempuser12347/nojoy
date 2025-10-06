@@ -8,6 +8,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import api from "../../api";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface Tradegood {
   id: number;
@@ -16,6 +17,7 @@ interface Tradegood {
   culture: { id: number; name: string } | null;
   category: string;
   classification: string;
+  obtain_method: any[] | null;
 }
 
 const DetailItem = ({
@@ -108,6 +110,15 @@ export default function TradegoodDetail({ data }: { data?: Tradegood }) {
             <DetailItem label="분류" value={tradegood.classification} />
             <DetailItem label="문화권" value={tradegood.culture?.name} />
           </Box>
+
+          {tradegood.obtain_method ? (
+            <Box sx={{ gridColumn: "1 / -1" }}>
+              <DetailItem
+                label="획득방법"
+                value={<ObtainMethodTabs data={tradegood.obtain_method} />}
+              />
+            </Box>
+          ) : null}
         </CardContent>
       </Card>
     </Box>
