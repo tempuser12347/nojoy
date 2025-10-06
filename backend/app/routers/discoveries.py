@@ -77,7 +77,6 @@ async def get_discovery(discovery_id: int, db: Session = Depends(get_db)):
 
 
 def get_discovery_core(discovery_id: int, db: Session = Depends(get_db)):
-    print(f"discovery_id: {discovery_id}")
     result = db.execute(
         text(
             """
@@ -102,9 +101,6 @@ GROUP BY d.id;
         {"discovery_id": discovery_id},
     ).fetchone()
 
-    # print(result)
-
-    # discovery = db.query(models.Discovery).filter(models.Discovery.id == discovery_id).first()
     if not result:
         raise HTTPException(status_code=404, detail="Discovery not found")
 
@@ -163,6 +159,5 @@ GROUP BY d.id;
         if result.discovery_location_resolved
         else None
     )
-    print(ret)
 
     return ret
