@@ -1,94 +1,7 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Tabs,
-  Tab,
-} from "@mui/material";
+import { Box, Typography, Card, CardContent } from "@mui/material";
 import { renderObjectsToChips } from "../../common/render";
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-
-const renderTabContent = (method: any) => {
-  switch (method.from) {
-    case "quest":
-      return (
-        <ul>
-          {method.quest_list.map((item: any) => (
-            <li key={item.id}>
-              <Link to={`/obj/${item.id}`}>{item.name}</Link>
-            </li>
-          ))}
-        </ul>
-      );
-    case "recipe":
-      return (
-        <ul>
-          {method.recipe_list.map((item: any) => (
-            <li key={item.id}>
-              <Link to={`/obj/${item.id}`}>{item.name}</Link>
-            </li>
-          ))}
-        </ul>
-      );
-    case "npcsale":
-      return (
-        <table className="inner-table">
-          <thead>
-            <tr>
-              <th>NPC</th>
-              <th>Location</th>
-            </tr>
-          </thead>
-          <tbody>
-            {method.npcsale_list.map((item: any) => (
-              <tr key={item.id}>
-                <td>{item.npc}</td>
-                <td>
-                  <Link to={`/obj/${item.location_id}`}>{item.location_name}</Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      );
-    case "shipwreck":
-      return (
-        <ul>
-          {method.shipwreck_list.map((item: any) => (
-            <li key={item.id}>
-              <Link to={`/obj/${item.id}`}>{item.name}</Link>
-            </li>
-          ))}
-        </ul>
-      );
-    default:
-      return null;
-  }
-};
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface Consumable {
   id: number;
@@ -101,15 +14,10 @@ interface Consumable {
   features: string;
   item: { id: number; name: string; value?: number }[] | null;
   Duplicate: string;
-  obtain_method: any[]
+  obtain_method: any[];
 }
 
 export default function ConsumableDetail({ data }: { data: Consumable }) {
-  const [tabValue, setTabValue] = useState(0);
-
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue);
-  };
   // const [consumable, setConsumable] = useState<Consumable>(data);
   const consumable = data;
   return (
@@ -188,47 +96,17 @@ export default function ConsumableDetail({ data }: { data: Consumable }) {
                 )}
               </Typography>
             </Box>
-            
-      {consumable.obtain_method && consumable.obtain_method.length > 0 && (
-        // <Box sx={{ width: "100%", mt: 4 }}>
-        <Box sx={{ gridColumn: "1 / -1"}}>
-          <Typography variant="subtitle1" color="text.secondary">
-            획득방법
-          </Typography>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs
-              value={tabValue}
-              onChange={handleTabChange}
-              aria-label="obtain methods"
-            >
-              {consumable.obtain_method.map((method, index) => {
 
-                let label = method.from.toUpperCase();
-                if(method.from == "quest"){
-                  label = '퀘스트'
-                }
-                else if(method.from == "recipe"){
-                  label = '생산'
-                }
-                else if(method.from == "npcsale"){
-                  label = '구입'
-                }
-                else if(method.from == "shipwreck"){
-                  label = '침몰선'
-                }
-
-                return <Tab label={label} key={index} />
-              }
+            {consumable.obtain_method &&
+              consumable.obtain_method.length > 0 && (
+                // <Box sx={{ width: "100%", mt: 4 }}>
+                <Box sx={{ gridColumn: "1 / -1" }}>
+                  <Typography variant="subtitle1" color="text.secondary">
+                    획득방법
+                  </Typography>
+                  <ObtainMethodTabs data={consumable.obtain_method} />
+                </Box>
               )}
-            </Tabs>
-          </Box>
-          {consumable.obtain_method.map((method, index) => (
-            <TabPanel value={tabValue} index={index} key={index}>
-              {renderTabContent(method)}
-            </TabPanel>
-          ))}
-        </Box>
-      )}
           </Box>
         </CardContent>
       </Card>
