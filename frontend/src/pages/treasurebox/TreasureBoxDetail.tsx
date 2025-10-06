@@ -18,11 +18,17 @@ interface TreasureBox {
   description: string;
   sell_period: string;
   price: number;
-  items: Record<string, { items: { id: number; name: string }[]; count: number }[]>;
+  items: Record<
+    string,
+    { items: { id: number; name: string }[]; count: number }[]
+  >;
 }
 
 const renderItems = (
-  items: Record<string, { items: { id: number; name: string }[]; count: number }[]>,
+  items: Record<
+    string,
+    { items: { id: number; name: string }[]; count: number }[]
+  >,
   navigate: any
 ) => {
   const tableRows: React.ReactNode[] = [];
@@ -32,17 +38,17 @@ const renderItems = (
         <tr key={`${setname}-${index}`}>
           {index === 0 && (
             <td rowSpan={itemGroup.length} style={{ verticalAlign: "top" }}>
-              {setname}
+              {setname.startsWith("세트") ? "세트" : null}
             </td>
           )}
           <td>
             {item.items.map((subItem, subIdx) => (
               <div key={subIdx}>
                 <a
-                  href={`/object/${subItem.id}`}
+                  href={`/obj/${subItem.id}`}
                   onClick={(e) => {
                     e.preventDefault();
-                    navigate(`/object/${subItem.id}`);
+                    navigate(`/obj/${subItem.id}`);
                   }}
                 >
                   {subItem.name}
@@ -60,7 +66,7 @@ const renderItems = (
     <table className="inner-table">
       <thead>
         <tr>
-          <th>세트 이름</th>
+          <th>세트</th>
           <th>아이템</th>
           <th>개수</th>
         </tr>
@@ -160,7 +166,10 @@ export default function TreasureBoxDetail() {
             <DetailItem label="판매 기간" value={treasureBox.sell_period} />
             <DetailItem label="가격" value={treasureBox.price} />
             <Box sx={{ gridColumn: "1 / -1" }}>
-              <DetailItem label="아이템" value={renderItems(treasureBox.items, navigate)} />
+              <DetailItem
+                label="아이템"
+                value={renderItems(treasureBox.items, navigate)}
+              />
             </Box>
           </Box>
         </CardContent>
