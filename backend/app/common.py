@@ -128,6 +128,33 @@ WHERE EXISTS (
     return None
 
 
+def fetch_treasurebox_producing_id(item_id: int, db: Session):
+
+    fetched = db.execute(
+        text(
+            """ 
+SELECT
+    distinct
+  t.id,
+  t.name
+FROM treasurebox AS t,
+     json_each(t.item_ids)
+WHERE json_each.value = :itemid;
+
+"""
+        ),
+        {"itemid": item_id},
+    ).fetchall()
+
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {"id": row.id, "name": row.name}
+            obj_list.append(obj)
+        return obj_list
+    return None
+
+
 def fetch_all_obtain_methods(itemid: int, db: Session):
 
     # fetch obtain from quest
@@ -154,6 +181,12 @@ def fetch_all_obtain_methods(itemid: int, db: Session):
     if obt_shipwreck_list:
         obtain_method_list.append(
             {"from": "shipwreck", "shipwreck_list": obt_shipwreck_list}
+        )
+
+    obt_treasurebox_list = fetch_treasurebox_producing_id(itemid, db)
+    if obt_treasurebox_list:
+        obtain_method_list.append(
+            {"from": "treasurebox", "treasurebox_list": obt_treasurebox_list}
         )
 
     # if empty return None

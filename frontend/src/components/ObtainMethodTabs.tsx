@@ -65,6 +65,16 @@ const renderTabContent = (method: any) => {
           ))}
         </ul>
       );
+    case "treasurebox":
+      return (
+        <ul>
+          {method.treasurebox_list.map((item: any) => (
+            <li key={item.id}>
+              <Link to={`/obj/${item.id}`}>{item.name}</Link>
+            </li>
+          ))}
+        </ul>
+      );
     default:
       return null;
   }
@@ -109,6 +119,8 @@ const ObtainMethodTabs: React.FC<{ data: { from: string }[] }> = ({ data }) => {
               label = "구입";
             } else if (method.from == "shipwreck") {
               label = "침몰선";
+            } else if (method.from == "treasurebox") {
+              label = "트레져박스";
             }
 
             return <Tab label={label} key={index} />;
