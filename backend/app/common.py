@@ -155,6 +155,32 @@ WHERE json_each.value = :itemid;
     return None
 
 
+def fetch_treasuremp_producing_id(item_id: int, db: Session):
+    fetched = db.execute(
+        text(
+            """
+SELECT
+    t.id,
+    t.name
+FROM treasuremap AS t,
+     json_each(t.reward_item)
+WHERE json_each.key = :id
+AND json_valid(t.reward_item);
+
+                              """
+        ),
+        {"id": item_id},
+    ).fetchall()
+
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {"id": row.id, "name": row.name}
+            obj_list.append(obj)
+        return obj_list
+    return None
+
+
 def fetch_all_obtain_methods(itemid: int, db: Session):
 
     # fetch obtain from quest
@@ -187,6 +213,11 @@ def fetch_all_obtain_methods(itemid: int, db: Session):
     if obt_treasurebox_list:
         obtain_method_list.append(
             {"from": "treasurebox", "treasurebox_list": obt_treasurebox_list}
+        )
+    obt_treasuremap_list = fetch_treasuremp_producing_id(itemid, db)
+    if obt_treasuremap_list:
+        obtain_method_list.append(
+            {"from": "treasuremap", "treasuremap_list": obt_treasuremap_list}
         )
 
     # if empty return None
