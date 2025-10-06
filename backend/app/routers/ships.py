@@ -4,6 +4,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import asc, desc
 from app.database import get_db
 from app import models
+from ..common import fetch_all_obtain_methods
+
+
 
 router = APIRouter(prefix="/api/ships", tags=["ships"])
 
@@ -122,4 +125,8 @@ def read_ship_core(ship_id: int, db: Session = Depends(get_db)):
     ]
 
     ret = {field: getattr(ship, field) for field in return_fields}
+
+    obtm_list = fetch_all_obtain_methods(ship_id, db)
+    ret["obtain_method"] = obtm_list
+
     return ret

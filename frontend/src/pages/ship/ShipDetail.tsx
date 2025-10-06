@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Typography, Card, CardContent, CircularProgress } from '@mui/material';
 import api from '../../api';
+import ObtainMethodTabs from '../../components/ObtainMethodTabs';
 
 interface Ship {
   id: number;
@@ -50,6 +51,7 @@ interface Ship {
   broadside_ports: number;
   bow_ports: number;
   stern_ports: number;
+  obtain_method: any[] | null;
 }
 
 const DetailItem = ({ label, value }: { label: string; value: any }) => (
@@ -135,6 +137,14 @@ export default function ShipDetail({ data }: { data?: Ship }) {
             <DetailItem label="선측포" value={ship.broadside_ports} />
             <DetailItem label="선수포" value={ship.bow_ports} />
             <DetailItem label="선미포" value={ship.stern_ports} />
+            {ship.obtain_method ? (
+              <Box sx={{ gridColumn: "1 / -1" }}>
+                <DetailItem
+                  label="획득방법"
+                  value={<ObtainMethodTabs data={ship.obtain_method} />}
+                />
+              </Box>
+            ) : null}
           </Box>
         </CardContent>
       </Card>
