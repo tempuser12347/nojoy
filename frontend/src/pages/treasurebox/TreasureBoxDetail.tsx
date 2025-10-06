@@ -11,6 +11,7 @@ import {
   Divider,
 } from "@mui/material";
 import api from "../../api";
+import "../../common/innertable.css";
 
 interface TreasureBox {
   name: string;
@@ -24,34 +25,48 @@ const renderItems = (
   items: Record<string, { items: { id: number; name: string }[]; count: number }[]>,
   navigate: any
 ) => {
+  const tableRows: React.ReactNode[] = [];
+  Object.entries(items).forEach(([setname, itemGroup]) => {
+    itemGroup.forEach((item, index) => {
+      tableRows.push(
+        <tr key={`${setname}-${index}`}>
+          {index === 0 && (
+            <td rowSpan={itemGroup.length} style={{ verticalAlign: "top" }}>
+              {setname}
+            </td>
+          )}
+          <td>
+            {item.items.map((subItem, subIdx) => (
+              <div key={subIdx}>
+                <a
+                  href={`/object/${subItem.id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(`/object/${subItem.id}`);
+                  }}
+                >
+                  {subItem.name}
+                </a>
+              </div>
+            ))}
+          </td>
+          <td>{item.count}</td>
+        </tr>
+      );
+    });
+  });
+
   return (
-    <Stack spacing={2}>
-      {Object.entries(items).map(([setname, itemGroup], index) => (
-        <Card key={index}>
-          <CardContent>
-            <Typography variant="h6">{setname}</Typography>
-            <Divider sx={{ my: 1 }} />
-            <Stack spacing={1}>
-              {itemGroup.map((item, idx) => (
-                <Box key={idx}>
-                  <Typography variant="body2">Count: {item.count}</Typography>
-                  <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
-                    {item.items.map((subItem, subIdx) => (
-                      <Chip
-                        key={subIdx}
-                        label={subItem.name}
-                        clickable
-                        onClick={() => navigate(`/object/${subItem.id}`)}
-                      />
-                    ))}
-                  </Stack>
-                </Box>
-              ))}
-            </Stack>
-          </CardContent>
-        </Card>
-      ))}
-    </Stack>
+    <table className="inner-table">
+      <thead>
+        <tr>
+          <th>세트 이름</th>
+          <th>아이템</th>
+          <th>개수</th>
+        </tr>
+      </thead>
+      <tbody>{tableRows}</tbody>
+    </table>
   );
 };
 
