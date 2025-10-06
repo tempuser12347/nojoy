@@ -11,10 +11,10 @@ import {
 import DataTable from "../../components/DataTable";
 import api from "../../api";
 import { renderObjectsToChips, renderObjectChip } from "../../common/render";
-import { QUEST_FILTER_LOCATION_ARRAY } from "../../constants/listvalues";
+import { NPCSALE_LOCATION_ARRAY } from "../../constants/listvalues";
 
 const sampleCities: { id: number; name: string }[] =
-  QUEST_FILTER_LOCATION_ARRAY.map((city) => ({
+  NPCSALE_LOCATION_ARRAY.map((city) => ({
     id: city.id,
     name: city.name,
   }));
