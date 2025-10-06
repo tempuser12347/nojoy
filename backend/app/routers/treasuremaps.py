@@ -178,8 +178,13 @@ LEFT JOIN allData adest
 LEFT JOIN allData adisc
     ON CAST(t.discovery AS INT) = adisc.id
 
--- expand preceding JSON array, then join
-LEFT JOIN json_each(t.preceding) je
+-- expand preceding JSON array safely, then join
+LEFT JOIN json_each(
+    CASE
+        WHEN json_valid(t.preceding) THEN t.preceding
+        ELSE '[]'
+    END
+) je
     ON 1=1
 LEFT JOIN allData apre
     ON apre.id = CAST(je.value AS INT)
