@@ -45,6 +45,7 @@ export default function ObjectDetail() {
   const { id } = useParams<{ id: string }>();
   const [data, setData] = useState<any>(null);
   const [type, setType] = useState<string | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -56,9 +57,10 @@ export default function ObjectDetail() {
 
       try {
         const response = await api.get(`/api/obj/${id}`);
-        console.log(response.data)
+        console.log(response.data);
         setData(response.data.data);
         setType(response.data.type);
+        response.data.msg ? setMsg(response.data.msg) : setMsg(null);
       } catch (err) {
         setError("Failed to load object details");
         console.error("Error fetching object:", err);
@@ -87,11 +89,28 @@ export default function ObjectDetail() {
       </Box>
     );
   }
+  if (data == null && type == null && msg == "not in allData") {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography color="error">object id not exist in allData</Typography>
+      </Box>
+    );
+  }
+
+  if (data == null && type == null && msg == "no detail found") {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography color="error">
+          object id exist but no detail found
+        </Typography>
+      </Box>
+    );
+  }
 
   if (!data || !type) {
     return (
       <Box sx={{ p: 3 }}>
-        <Typography>Object not found.</Typography>
+        <Typography>object not found</Typography>
       </Box>
     );
   }

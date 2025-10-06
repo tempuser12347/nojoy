@@ -116,12 +116,12 @@ def read_object(obj_id: int, db: Session = Depends(get_db)):
     ).fetchone()
     if not result:
         print(f"no query result")
-        return {"type": None, "data": None}
+        return {"type": None, "data": None, "msg": 'not in allData'}
     print(f"category: {result.category}")
     fetch_fn = detail_data_fetch_function_dict.get(result.category, None)
     if not fetch_fn:
         print(f"no matching fetch fn")
-        return {"type": None, "data": None}
+        return {"type": None, "data": None, "msg": "no detail found"}
     else:
         deatil_data = fetch_fn(obj_id, db)
         print(f"deatil_data: {deatil_data}")

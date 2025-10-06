@@ -68,7 +68,7 @@ def read_treasurebox_core(treasurebox_id: int, db: Session = Depends(get_db)):
     query = text("SELECT * FROM treasurebox WHERE id = :id")
     result = db.execute(query, {"id": treasurebox_id}).fetchall()
 
-    if result is None:
+    if result is None or len(result) == 0:
         raise HTTPException(status_code=404, detail="Tradegood not found")
 
     # get name, description, sell_period, price
