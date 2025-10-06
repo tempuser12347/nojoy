@@ -98,7 +98,7 @@ function TabPanel(props: TabPanelProps) {
 const ObtainMethodTabs: React.FC<{ data: { from: string }[] }> = ({ data }) => {
   const [tabValue, setTabValue] = useState(0);
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
   return (

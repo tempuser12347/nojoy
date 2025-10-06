@@ -157,15 +157,6 @@ const Navigation: React.FC = () => {
         break;
     }
 
-    //
-    // if (subsection === "스킬") {
-    //   navigate(`/skills`);
-    // }
-    // else if(subsection=='판매 npc'){
-    //   navigate(`/npcsales`)
-    // } else {
-    //   navigate(`/${subsection}`);
-    // }
     navigate(`/${subsection}`);
   };
 
