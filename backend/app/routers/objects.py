@@ -17,6 +17,7 @@ from .quests import read_quest_core
 from .consumables import read_consumable_core
 from .skill import read_skill_core
 from .npcsale import read_npcsale_core
+from .region import get_region_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -100,6 +101,7 @@ detail_data_fetch_function_dict = {
     'treasuremap': read_treasuremap_core,
     'skill': read_skill_core,
     'sellernpc': read_npcsale_core,
+    'region': get_region_core,
 }
 
 

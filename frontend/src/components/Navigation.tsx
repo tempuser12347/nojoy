@@ -100,7 +100,8 @@ const availableSections = [
   "레시피책",
   "레시피",
   "스킬",
-  "판매 npc"
+  "판매 npc",
+  "지역",
 ];
 
 const Navigation: React.FC = () => {
@@ -140,14 +141,32 @@ const Navigation: React.FC = () => {
 
   const handleSubsectionClick = (subsection: string) => {
     handleCloseMenu();
-    if (subsection === "스킬") {
-      navigate(`/skills`);
+
+    // case with subsection to switch values to korean
+    switch (subsection) {
+      case "스킬":
+        subsection = "skills";
+        break;
+      case "판매 npc":
+        subsection = "npcsales";
+        break;
+      case "지역":
+        subsection = "region";
+        break;
+      default:
+        break;
     }
-    else if(subsection=='판매 npc'){
-      navigate(`/npcsales`)
-    } else {
-      navigate(`/${subsection}`);
-    }
+
+    //
+    // if (subsection === "스킬") {
+    //   navigate(`/skills`);
+    // }
+    // else if(subsection=='판매 npc'){
+    //   navigate(`/npcsales`)
+    // } else {
+    //   navigate(`/${subsection}`);
+    // }
+    navigate(`/${subsection}`);
   };
 
   React.useEffect(() => {
