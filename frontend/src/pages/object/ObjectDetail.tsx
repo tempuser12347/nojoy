@@ -19,6 +19,7 @@ import TreasureMapDetail from "../treasuremap/TreasureMapDetail";
 import SkillDetail from "../skill/SkillDetail";
 import NpcSaleDetail from "../npcsale/NpcSaleDetail";
 import RegionDetail from "../region/RegionDetail";
+import TreasureBoxDetail from "../treasurebox/TreasureBoxDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -36,7 +37,8 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   treasuremap: TreasureMapDetail,
   skill: SkillDetail,
   sellernpc: NpcSaleDetail,
-  region: RegionDetail
+  region: RegionDetail,
+  treasurebox: TreasureBoxDetail,
 };
 
 export default function ObjectDetail() {

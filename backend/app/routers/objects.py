@@ -18,11 +18,12 @@ from .consumables import read_consumable_core
 from .skill import read_skill_core
 from .npcsale import read_npcsale_core
 from .region import get_region_core
+from .treasurebox import read_treasurebox_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
 
-''' unique category values in allData table
+""" unique category values in allData table
 discovery
 quest
 treasuremap
@@ -84,24 +85,25 @@ marineNpc
 sea
 title
 
-'''
+"""
 detail_data_fetch_function_dict = {
     "equipment": read_equipment_core,
     "discovery": get_discovery_core,
-    'tradegoods': read_tradegood_core,
-    'consumable': read_consumable_core,
-    'shipwreck': read_shipwreck_core,
-    'job': read_job_core,
-    'recipebook': read_recipebook_core,
-    'recipe': read_recipe_core,
-    'city': read_city_core,
-    'ship': read_ship_core,
-    'quest': read_quest_core,
-    'certificate': read_certificate_core,
-    'treasuremap': read_treasuremap_core,
-    'skill': read_skill_core,
-    'sellernpc': read_npcsale_core,
-    'region': get_region_core,
+    "tradegoods": read_tradegood_core,
+    "consumable": read_consumable_core,
+    "shipwreck": read_shipwreck_core,
+    "job": read_job_core,
+    "recipebook": read_recipebook_core,
+    "recipe": read_recipe_core,
+    "city": read_city_core,
+    "ship": read_ship_core,
+    "quest": read_quest_core,
+    "certificate": read_certificate_core,
+    "treasuremap": read_treasuremap_core,
+    "skill": read_skill_core,
+    "sellernpc": read_npcsale_core,
+    "region": get_region_core,
+    "treasurebox": read_treasurebox_core,
 }
 
 
