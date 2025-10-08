@@ -19,6 +19,7 @@ from .skill import read_skill_core
 from .npcsale import read_npcsale_core
 from .region import get_region_core
 from .treasurebox import read_treasurebox_core
+from .field import read_field_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -104,6 +105,7 @@ detail_data_fetch_function_dict = {
     "sellernpc": read_npcsale_core,
     "region": get_region_core,
     "treasurebox": read_treasurebox_core,
+    'field': read_field_core
 }
 
 

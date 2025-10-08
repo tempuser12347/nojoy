@@ -23,6 +23,7 @@ import Skills from './pages/skill/Skills';
 import NpcSales from './pages/npcsale/NpcSales';
 import Regions from './pages/region/Regions';
 import TreasureBoxes from './pages/treasurebox/TreasureBoxes';
+import Fields from './pages/field/Fields';
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,8 @@ function App() {
               <Route path="/npcsales" element={<NpcSales />} />
               <Route path="/region" element={<Regions />} />
               <Route path="/treasurebox" element={<TreasureBoxes />} />
+              <Route path="/field" element={<Fields />} />
+              <Route path="/field/:id" element={<ObjectDetail />} />
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
