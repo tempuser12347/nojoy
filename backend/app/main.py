@@ -20,7 +20,8 @@ from app.routers import (
     skill,
     npcsale,
     treasurebox,
-    region
+    region,
+    field,
 )
 import os
 
@@ -55,6 +56,7 @@ app.include_router(skill.router)
 app.include_router(npcsale.router)
 app.include_router(treasurebox.router)
 app.include_router(region.router)
+app.include_router(field.router)
 
 
 dist_dir = "dist"
