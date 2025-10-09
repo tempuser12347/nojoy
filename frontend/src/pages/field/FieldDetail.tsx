@@ -225,7 +225,7 @@ export default function FieldDetail({ data }: { data?: Field }) {
       </TableContainer>
 
       <Typography variant="h5" gutterBottom>
-        채집물
+        수집아이템
       </Typography>
       <TableContainer component={Paper}>
         <Table size="small">
