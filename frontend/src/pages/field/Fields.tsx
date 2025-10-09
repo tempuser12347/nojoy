@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Box,
   TextField,
   Typography,
+  Button,
 } from '@mui/material';
 import DataTable from '../../components/DataTable';
 import api from '../../api';
@@ -15,16 +16,32 @@ const columns = [
 
 const Fields: React.FC = () => {
   const navigate = useNavigate();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [search, setSearch] = React.useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const page = parseInt(searchParams.get('page') || '0', 10);
+  const rowsPerPage = parseInt(searchParams.get('rowsPerPage') || '10', 10);
+  const name_search = searchParams.get('name_search') || '';
+
+  const [searchInput, setSearchInput] = React.useState(name_search);
+
+  useEffect(() => {
+    setSearchInput(name_search);
+  }, [name_search]);
+
+  const updateSearchParams = (newParams: Record<string, any>) => {
+    const currentParams = new URLSearchParams(searchParams);
+    Object.entries(newParams).forEach(([key, value]) => {
+      value ? currentParams.set(key, value) : currentParams.delete(key);
+    });
+    setSearchParams(currentParams);
+  };
 
   const { data, isLoading } = useQuery({
-    queryKey: ['fields', page, rowsPerPage, search],
+    queryKey: ['fields', page, rowsPerPage, name_search],
     queryFn: async () => {
       const response = await api.get('/api/field', {
         params: {
-          search,
+          name_search,
           skip: page * rowsPerPage,
           limit: rowsPerPage,
         },
@@ -34,9 +51,25 @@ const Fields: React.FC = () => {
     },
   });
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
-    setPage(0);
+  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(event.target.value);
+  };
+
+  const handleSearch = () => {
+    updateSearchParams({ name_search: searchInput, page: 0 });
+  };
+
+  const resetFilters = () => {
+    setSearchInput('');
+    setSearchParams({ rowsPerPage: searchParams.get('rowsPerPage') || '10' });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    updateSearchParams({ page: newPage });
+  };
+
+  const handleRowsPerPageChange = (newRowsPerPage: number) => {
+    updateSearchParams({ rowsPerPage: newRowsPerPage, page: 0 });
   };
 
   return (
@@ -46,10 +79,17 @@ const Fields: React.FC = () => {
         <TextField
           label="이름검색"
           variant="outlined"
-          value={search}
-          onChange={handleSearchChange}
+          value={searchInput}
+          onChange={handleSearchInputChange}
           sx={{ minWidth: 200 }}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
         />
+        <Button variant="contained" onClick={handleSearch}>
+          검색
+        </Button>
+        <Button variant="outlined" onClick={resetFilters}>
+          초기화
+        </Button>
       </Box>
 
       <DataTable
@@ -59,8 +99,8 @@ const Fields: React.FC = () => {
         total={data?.total || 0}
         page={page}
         rowsPerPage={rowsPerPage}
-        onPageChange={setPage}
-        onRowsPerPageChange={setRowsPerPage}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
         onRowClick={(row) => navigate(`/obj/${row.id}`)}
       />
     </Box>
