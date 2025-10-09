@@ -13,7 +13,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Chip,
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
@@ -94,6 +93,26 @@ export default function FieldDetail({ data }: { data?: Field }) {
     );
   }
 
+  const surveyRows = field.survey.reduce((acc, item) => {
+    const existing = acc.find((i) => i.단계 === item.단계);
+    if (existing) {
+      existing.rows.push(item);
+    } else {
+      acc.push({ 단계: item.단계, rows: [item] });
+    }
+    return acc;
+  }, [] as { 단계: number; rows: typeof field.survey }[]);
+
+  const gatherableRows = field.gatherable.reduce((acc, item) => {
+    const existing = acc.find((i) => i.method === item.method);
+    if (existing) {
+      existing.rows.push(item);
+    } else {
+      acc.push({ method: item.method, rows: [item] });
+    }
+    return acc;
+  }, [] as { method: string; rows: typeof field.gatherable }[]);
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -160,17 +179,23 @@ export default function FieldDetail({ data }: { data?: Field }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {field.survey.map((s, i) => (
-              <TableRow key={i}>
-                <TableCell>{s["단계"]}</TableCell>
-                <TableCell>{s["필수"]}</TableCell>
-                <TableCell>{s["종류"]}</TableCell>
-                <TableCell>{s["조사 항목"]}</TableCell>
-                <TableCell>{s["횟수"]}</TableCell>
-                <TableCell>{s["획득 완성도"]}</TableCell>
-                <TableCell>{s["완성도 제한"]}</TableCell>
-              </TableRow>
-            ))}
+            {surveyRows.map((group, groupIndex) =>
+              group.rows.map((row, rowIndex) => (
+                <TableRow key={`${groupIndex}-${rowIndex}`}>
+                  {rowIndex === 0 && (
+                    <TableCell rowSpan={group.rows.length}>
+                      {group.단계}
+                    </TableCell>
+                  )}
+                  <TableCell>{row["필수"]}</TableCell>
+                  <TableCell>{row["종류"]}</TableCell>
+                  <TableCell>{row["조사 항목"]}</TableCell>
+                  <TableCell>{row["횟수"]}</TableCell>
+                  <TableCell>{row["획득 완성도"]}</TableCell>
+                  <TableCell>{row["완성도 제한"]}</TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -213,18 +238,24 @@ export default function FieldDetail({ data }: { data?: Field }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {field.gatherable.map((g, i) => (
-              <TableRow key={i}>
-                <TableCell>{g.method}</TableCell>
-                <TableCell>{g.type}</TableCell>
-                <TableCell>{g.rank}</TableCell>
-                <TableCell>
-                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                    {g.item.map((item) => renderObjectChip(item, navigate))}
-                  </Box>
-                </TableCell>
-              </TableRow>
-            ))}
+            {gatherableRows.map((group, groupIndex) =>
+              group.rows.map((row, rowIndex) => (
+                <TableRow key={`${groupIndex}-${rowIndex}`}>
+                  {rowIndex === 0 && (
+                    <TableCell rowSpan={group.rows.length}>
+                      {group.method}
+                    </TableCell>
+                  )}
+                  <TableCell>{row.type}</TableCell>
+                  <TableCell>{row.rank}</TableCell>
+                  <TableCell>
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                      {row.item.map((item) => renderObjectChip(item, navigate))}
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
