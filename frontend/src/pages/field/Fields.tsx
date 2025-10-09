@@ -44,7 +44,7 @@ const Fields: React.FC = () => {
       <Typography variant="h4" gutterBottom>필드</Typography>
       <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
         <TextField
-          label="검색"
+          label="이름검색"
           variant="outlined"
           value={search}
           onChange={handleSearchChange}
@@ -54,11 +54,11 @@ const Fields: React.FC = () => {
 
       <DataTable
         columns={columns}
-        data={data.items || []}
+        data={data?.items || []}
         loading={isLoading}
-        total={data.total || 0}
+        total={data?.total || 0}
         page={page}
-        rowsPerPage={setRowsPerPage}
+        rowsPerPage={rowsPerPage}
         onPageChange={setPage}
         onRowsPerPageChange={setRowsPerPage}
         onRowClick={(row) => navigate(`/obj/${row.id}`)}
