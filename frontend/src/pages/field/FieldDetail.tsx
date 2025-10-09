@@ -104,14 +104,21 @@ export default function FieldDetail({ data }: { data?: Field }) {
   }, [] as { 단계: number; rows: typeof field.survey }[]);
 
   const gatherableRows = field.gatherable.reduce((acc, item) => {
-    const existing = acc.find((i) => i.method === item.method);
-    if (existing) {
-      existing.rows.push(item);
-    } else {
-      acc.push({ method: item.method, rows: [item] });
+    let methodGroup = acc.find((g) => g.method === item.method);
+    if (!methodGroup) {
+      methodGroup = { method: item.method, ranks: [] };
+      acc.push(methodGroup);
     }
+
+    let rankGroup = methodGroup.ranks.find((r) => r.rank === (item.rank ?? 0));
+    if (!rankGroup) {
+      rankGroup = { rank: item.rank ?? 0, rows: [] };
+      methodGroup.ranks.push(rankGroup);
+    }
+
+    rankGroup.rows.push(item);
     return acc;
-  }, [] as { method: string; rows: typeof field.gatherable }[]);
+  }, [] as { method: string; ranks: { rank: number; rows: typeof field.gatherable }[] }[]);
 
   return (
     <Box sx={{ p: 3 }}>
@@ -225,37 +232,45 @@ export default function FieldDetail({ data }: { data?: Field }) {
       </TableContainer>
 
       <Typography variant="h5" gutterBottom>
-        수집아이템
+        채집물
       </Typography>
       <TableContainer component={Paper}>
         <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell>방법</TableCell>
-              <TableCell>종류</TableCell>
               <TableCell>랭크</TableCell>
+              <TableCell>종류</TableCell>
               <TableCell>아이템</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {gatherableRows.map((group, groupIndex) =>
-              group.rows.map((row, rowIndex) => (
-                <TableRow key={`${groupIndex}-${rowIndex}`}>
-                  {rowIndex === 0 && (
-                    <TableCell rowSpan={group.rows.length}>
-                      {group.method}
+            {gatherableRows.map((methodGroup, methodIndex) => {
+              let methodRowSpan = methodGroup.ranks.reduce((acc, rankGroup) => acc + rankGroup.rows.length, 0);
+              return methodGroup.ranks.map((rankGroup, rankIndex) => {
+                let rankRowSpan = rankGroup.rows.length;
+                return rankGroup.rows.map((row, rowIndex) => (
+                  <TableRow key={`${methodIndex}-${rankIndex}-${rowIndex}`}>
+                    {rankIndex === 0 && rowIndex === 0 && (
+                      <TableCell rowSpan={methodRowSpan}>
+                        {methodGroup.method}
+                      </TableCell>
+                    )}
+                    {rowIndex === 0 && (
+                      <TableCell rowSpan={rankRowSpan}>
+                        {rankGroup.rank === 0 ? '' : rankGroup.rank}
+                      </TableCell>
+                    )}
+                    <TableCell>{row.type}</TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                        {row.item.map((item) => renderObjectChip(item, navigate))}
+                      </Box>
                     </TableCell>
-                  )}
-                  <TableCell>{row.type}</TableCell>
-                  <TableCell>{row.rank}</TableCell>
-                  <TableCell>
-                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                      {row.item.map((item) => renderObjectChip(item, navigate))}
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
+                  </TableRow>
+                ));
+              });
+            })}
           </TableBody>
         </Table>
       </TableContainer>
