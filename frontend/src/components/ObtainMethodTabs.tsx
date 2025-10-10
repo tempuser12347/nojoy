@@ -2,7 +2,17 @@ import React from "react";
 import { useState } from "react";
 
 import { Link } from "react-router-dom";
-import { Box, Tabs, Tab } from "@mui/material";
+import {
+  Box,
+  Tabs,
+  Tab,
+  TableCell,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+} from "@mui/material";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -85,6 +95,29 @@ const renderTabContent = (method: any) => {
           ))}
         </ul>
       );
+    case "field_gatherable":
+      return (
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>방법</TableCell>
+                <TableCell>필드</TableCell>
+                <TableCell>랭크</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {method.field_list.map((item: any) => (
+                <TableRow>
+                  <TableCell>{item.method}</TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.rank}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      );
     default:
       return null;
   }
@@ -133,6 +166,8 @@ const ObtainMethodTabs: React.FC<{ data: { from: string }[] }> = ({ data }) => {
               label = "트레져박스";
             } else if (method.from == "treasuremap") {
               label = "보물지도";
+            } else if (method.from == "field_gatherable") {
+              label = "필드수집";
             }
 
             return <Tab label={label} key={index} />;
