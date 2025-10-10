@@ -244,6 +244,40 @@ WHERE json_extract(r.value, '$.id') = :itemid;
     return None
 
 
+def fetch_consumable_producing_id(item_id: int, db: Session):
+
+    fetched = db.execute(
+        text(
+            """
+SELECT
+    c.id AS consumable_id,
+    c.name AS consumable_name,
+    json_extract(i.value, '$."' || :target_id || '"') AS value
+FROM consumable AS c
+JOIN json_each(c.Item) AS i
+WHERE json_valid(c.Item)
+  AND json_type(c.Item) = 'array'
+  AND json_type(i.value, '$."' || :target_id || '"') IS NOT NULL;
+
+
+                              """
+        ),
+        {"target_id": str(item_id)},
+    ).fetchall()
+
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {
+                "id": row.consumable_id,
+                "name": row.consumable_name,
+                "amount": row.value,
+            }
+            obj_list.append(obj)
+        return obj_list
+    return None
+
+
 def fetch_all_obtain_methods(itemid: int, db: Session):
 
     # fetch obtain from quest
@@ -289,7 +323,9 @@ def fetch_all_obtain_methods(itemid: int, db: Session):
             {"from": "field_gatherable", "field_list": obt_field_gatherable_list}
         )
 
-    obt_field_resurvey_reward_list = fetch_field_resurvey_reward_producing_id(itemid, db)
+    obt_field_resurvey_reward_list = fetch_field_resurvey_reward_producing_id(
+        itemid, db
+    )
     if obt_field_resurvey_reward_list:
         obtain_method_list.append(
             {
@@ -298,6 +334,11 @@ def fetch_all_obtain_methods(itemid: int, db: Session):
             }
         )
 
+    obt_consumable_list = fetch_consumable_producing_id(itemid, db)
+    if obt_consumable_list:
+        obtain_method_list.append(
+            {"from": "consumable", "consumable_list": obt_consumable_list}
+        )
 
     # if empty return None
     if not obtain_method_list:

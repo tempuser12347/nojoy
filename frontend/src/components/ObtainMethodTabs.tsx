@@ -143,6 +143,29 @@ const renderTabContent = (method: any) => {
           </Table>
         </TableContainer>
       );
+    case "consumable":
+      return (
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>아이템</TableCell>
+                <TableCell>획득수량</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {method.consumable_list.map((item: any) => (
+                <TableRow>
+                  <TableCell>
+                    <Link to={`/obj/${item.id}`}>{item.name}</Link>
+                  </TableCell>
+                  <TableCell>{item.amount}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      );
     default:
       return null;
   }
@@ -195,6 +218,8 @@ const ObtainMethodTabs: React.FC<{ data: { from: string }[] }> = ({ data }) => {
               label = "필드수집";
             } else if (method.from == "field_resurvey_reward") {
               label = "육지재조사보상";
+            } else if (method.from == "consumable") {
+              label = "아이템 사용";
             }
 
             return <Tab label={label} key={index} />;
