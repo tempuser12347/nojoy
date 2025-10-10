@@ -28,11 +28,11 @@ interface Field {
   entrance: { id: number; name: string } | null;
   flag_quest: { id: number; name: string } | null;
   survey: {
-    "단계": number;
-    "필수": string | null;
-    "종류": string;
+    단계: number;
+    필수: string | null;
+    종류: string;
     "조사 항목": string | null;
-    "횟수": number;
+    횟수: number;
     "획득 완성도": string;
     "완성도 제한": string;
   }[];
@@ -93,7 +93,7 @@ export default function FieldDetail({ data }: { data?: Field }) {
     );
   }
 
-  const surveyRows = field.survey.reduce((acc, item) => {
+  const surveyRows = field.survey?.reduce((acc, item) => {
     const existing = acc.find((i) => i.단계 === item.단계);
     if (existing) {
       existing.rows.push(item);
@@ -103,7 +103,7 @@ export default function FieldDetail({ data }: { data?: Field }) {
     return acc;
   }, [] as { 단계: number; rows: typeof field.survey }[]);
 
-  const gatherableRows = field.gatherable.reduce((acc, item) => {
+  const gatherableRows = field.gatherable?.reduce((acc, item) => {
     let methodGroup = acc.find((g) => g.method === item.method);
     if (!methodGroup) {
       methodGroup = { method: item.method, ranks: [] };
@@ -149,12 +149,16 @@ export default function FieldDetail({ data }: { data?: Field }) {
             />
             <DetailItem
               label="지역"
-              value={field.region ? renderObjectChip(field.region, navigate) : null}
+              value={
+                field.region ? renderObjectChip(field.region, navigate) : null
+              }
             />
             <DetailItem
               label="입구"
               value={
-                field.entrance ? renderObjectChip(field.entrance, navigate) : null
+                field.entrance
+                  ? renderObjectChip(field.entrance, navigate)
+                  : null
               }
             />
             <DetailItem
@@ -169,111 +173,128 @@ export default function FieldDetail({ data }: { data?: Field }) {
         </CardContent>
       </Card>
 
-      <Typography variant="h5" gutterBottom>
-        필드 조사
-      </Typography>
-      <TableContainer component={Paper} sx={{ mb: 3 }}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>단계</TableCell>
-              <TableCell>필수</TableCell>
-              <TableCell>종류</TableCell>
-              <TableCell>조사 항목</TableCell>
-              <TableCell>횟수</TableCell>
-              <TableCell>획득 완성도</TableCell>
-              <TableCell>완성도 제한</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {surveyRows.map((group, groupIndex) =>
-              group.rows.map((row, rowIndex) => (
-                <TableRow key={`${groupIndex}-${rowIndex}`}>
-                  {rowIndex === 0 && (
-                    <TableCell rowSpan={group.rows.length}>
-                      {group.단계}
-                    </TableCell>
-                  )}
-                  <TableCell>{row["필수"]}</TableCell>
-                  <TableCell>{row["종류"]}</TableCell>
-                  <TableCell>{row["조사 항목"]}</TableCell>
-                  <TableCell>{row["횟수"]}</TableCell>
-                  <TableCell>{row["획득 완성도"]}</TableCell>
-                  <TableCell>{row["완성도 제한"]}</TableCell>
+      {data?.survey ? (
+        <>
+          <Typography variant="h5" gutterBottom>
+            필드 조사
+          </Typography>
+          <TableContainer component={Paper} sx={{ mb: 3 }}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>단계</TableCell>
+                  <TableCell>필수</TableCell>
+                  <TableCell>종류</TableCell>
+                  <TableCell>조사 항목</TableCell>
+                  <TableCell>횟수</TableCell>
+                  <TableCell>획득 완성도</TableCell>
+                  <TableCell>완성도 제한</TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              </TableHead>
+              <TableBody>
+                {surveyRows?.map((group, groupIndex) =>
+                  group.rows.map((row, rowIndex) => (
+                    <TableRow key={`${groupIndex}-${rowIndex}`}>
+                      {rowIndex === 0 && (
+                        <TableCell rowSpan={group.rows.length}>
+                          {group.단계}
+                        </TableCell>
+                      )}
+                      <TableCell>{row["필수"]}</TableCell>
+                      <TableCell>{row["종류"]}</TableCell>
+                      <TableCell>{row["조사 항목"]}</TableCell>
+                      <TableCell>{row["횟수"]}</TableCell>
+                      <TableCell>{row["획득 완성도"]}</TableCell>
+                      <TableCell>{row["완성도 제한"]}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
+      ) : null}
 
-      <Typography variant="h5" gutterBottom>
-        재조사 보상
-      </Typography>
-      <TableContainer component={Paper} sx={{ mb: 3 }}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>아이템</TableCell>
-              <TableCell>수량</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {field.resurvey_reward.map((r) => (
-              <TableRow key={r.id}>
-                <TableCell>
-                  {renderObjectChip(r, navigate)}
-                </TableCell>
-                <TableCell>{r.value}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <Typography variant="h5" gutterBottom>
-        채집물
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>방법</TableCell>
-              <TableCell>랭크</TableCell>
-              <TableCell>종류</TableCell>
-              <TableCell>아이템</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {gatherableRows.map((methodGroup, methodIndex) => {
-              let methodRowSpan = methodGroup.ranks.reduce((acc, rankGroup) => acc + rankGroup.rows.length, 0);
-              return methodGroup.ranks.map((rankGroup, rankIndex) => {
-                let rankRowSpan = rankGroup.rows.length;
-                return rankGroup.rows.map((row, rowIndex) => (
-                  <TableRow key={`${methodIndex}-${rankIndex}-${rowIndex}`}>
-                    {rankIndex === 0 && rowIndex === 0 && (
-                      <TableCell rowSpan={methodRowSpan}>
-                        {methodGroup.method}
-                      </TableCell>
-                    )}
-                    {rowIndex === 0 && (
-                      <TableCell rowSpan={rankRowSpan}>
-                        {rankGroup.rank === 0 ? '' : rankGroup.rank}
-                      </TableCell>
-                    )}
-                    <TableCell>{row.type}</TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                        {row.item.map((item) => renderObjectChip(item, navigate))}
-                      </Box>
-                    </TableCell>
+      {data?.resurvey_reward ? (
+        <>
+          <Typography variant="h5" gutterBottom>
+            재조사 보상
+          </Typography>
+          <TableContainer component={Paper} sx={{ mb: 3 }}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>아이템</TableCell>
+                  <TableCell>수량</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {field.resurvey_reward?.map((r) => (
+                  <TableRow key={r.id}>
+                    <TableCell>{renderObjectChip(r, navigate)}</TableCell>
+                    <TableCell>{r.value}</TableCell>
                   </TableRow>
-                ));
-              });
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
+      ) : null}
+
+      {data?.gatherable ? (
+        <>
+          <Typography variant="h5" gutterBottom>
+            채집물
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>방법</TableCell>
+                  <TableCell>랭크</TableCell>
+                  <TableCell>종류</TableCell>
+                  <TableCell>아이템</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {gatherableRows?.map((methodGroup, methodIndex) => {
+                  let methodRowSpan = methodGroup.ranks.reduce(
+                    (acc, rankGroup) => acc + rankGroup.rows.length,
+                    0
+                  );
+                  return methodGroup.ranks.map((rankGroup, rankIndex) => {
+                    let rankRowSpan = rankGroup.rows.length;
+                    return rankGroup.rows.map((row, rowIndex) => (
+                      <TableRow key={`${methodIndex}-${rankIndex}-${rowIndex}`}>
+                        {rankIndex === 0 && rowIndex === 0 && (
+                          <TableCell rowSpan={methodRowSpan}>
+                            {methodGroup.method}
+                          </TableCell>
+                        )}
+                        {rowIndex === 0 && (
+                          <TableCell rowSpan={rankRowSpan}>
+                            {rankGroup.rank === 0 ? "" : rankGroup.rank}
+                          </TableCell>
+                        )}
+                        <TableCell>{row.type}</TableCell>
+                        <TableCell>
+                          <Box
+                            sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}
+                          >
+                            {row.item.map((item) =>
+                              renderObjectChip(item, navigate)
+                            )}
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                    ));
+                  });
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
+      ) : null}
     </Box>
   );
 }
