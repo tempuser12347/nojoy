@@ -187,7 +187,8 @@ def fetch_gathering_producing_id(item_id: int, db: Session):
     """
 
     fetched = db.execute(
-        text("""
+        text(
+            """
 SELECT
     f.id AS field_id,
              f.name as field_name,
@@ -198,14 +199,46 @@ JOIN json_each(f.gatherable) AS g
 JOIN json_each(g.value, '$.item') AS i
 WHERE i.value ->> '$.id' = :itemid;
 
- """),
+ """
+        ),
         {"itemid": item_id},
     ).fetchall()
 
     if fetched:
         obj_list = []
         for row in fetched:
-            obj = {"id": row.field_id,'name': row.field_name, "method": row.method, "rank": row.rank}
+            obj = {
+                "id": row.field_id,
+                "name": row.field_name,
+                "method": row.method,
+                "rank": row.rank,
+            }
+            obj_list.append(obj)
+        return obj_list
+    return None
+
+
+def fetch_field_resurvey_reward_producing_id(item_id: int, db: Session):
+
+    fetched = db.execute(
+        text(
+            """
+             SELECT
+    f.id AS field_id,
+    f.name AS field_name,
+    json_extract(r.value, '$.value') AS value
+FROM field AS f
+JOIN json_each(f.resurvey_reward) AS r
+WHERE json_extract(r.value, '$.id') = :itemid;
+"""
+        ),
+        {"itemid": item_id},
+    ).fetchall()
+
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {"id": row.field_id, "name": row.field_name, "amount": row.value}
             obj_list.append(obj)
         return obj_list
     return None
@@ -254,6 +287,15 @@ def fetch_all_obtain_methods(itemid: int, db: Session):
     if obt_field_gatherable_list:
         obtain_method_list.append(
             {"from": "field_gatherable", "field_list": obt_field_gatherable_list}
+        )
+
+    obt_field_resurvey_reward_list = fetch_field_resurvey_reward_producing_id(itemid, db)
+    if obt_field_resurvey_reward_list:
+        obtain_method_list.append(
+            {
+                "from": "field_resurvey_reward",
+                "field_list": obt_field_resurvey_reward_list,
+            }
         )
 
 

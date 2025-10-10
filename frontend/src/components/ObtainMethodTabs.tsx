@@ -110,8 +110,33 @@ const renderTabContent = (method: any) => {
               {method.field_list.map((item: any) => (
                 <TableRow>
                   <TableCell>{item.method}</TableCell>
-                  <TableCell>{item.name}</TableCell>
+                  <TableCell>
+                    <Link to={`/obj/${item.id}`}>{item.name}</Link>
+                  </TableCell>
                   <TableCell>{item.rank}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      );
+    case "field_resurvey_reward":
+      return (
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>필드</TableCell>
+                <TableCell>수량</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {method.field_list.map((item: any) => (
+                <TableRow>
+                  <TableCell>
+                    <Link to={`/obj/${item.id}`}>{item.name}</Link>
+                  </TableCell>
+                  <TableCell>{item.amount}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -168,6 +193,8 @@ const ObtainMethodTabs: React.FC<{ data: { from: string }[] }> = ({ data }) => {
               label = "보물지도";
             } else if (method.from == "field_gatherable") {
               label = "필드수집";
+            } else if (method.from == "field_resurvey_reward") {
+              label = "육지재조사보상";
             }
 
             return <Tab label={label} key={index} />;
