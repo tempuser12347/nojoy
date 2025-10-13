@@ -62,6 +62,8 @@ export default function NationDetail({ data }: { data?: Nation }) {
             <Grid item xs={12}>
                 <DetailItem label="설명" value={nation.description} />
             </Grid>
+          </Grid>
+          <Grid container spacing={2}> 
             <Grid item xs={12} sm={6}>
               <DetailItem label="NPC 국가" value={renderBooleanEmoji(nation.npc_nation)} />
             </Grid>
