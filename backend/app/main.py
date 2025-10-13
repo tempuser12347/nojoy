@@ -25,6 +25,7 @@ from app.routers import (
     sea,
     culture,
     privatefarm,
+    nation,
 )
 import os
 
@@ -63,6 +64,7 @@ app.include_router(field.router)
 app.include_router(sea.router)
 app.include_router(culture.router)
 app.include_router(privatefarm.router)
+app.include_router(nation.router)
 
 
 dist_dir = "dist"
