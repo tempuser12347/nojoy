@@ -103,6 +103,7 @@ const availableSections = [
   "판매 npc",
   "지역",
   "필드",
+  "해역",
   "트레져박스",
 ];
 
@@ -157,6 +158,9 @@ const Navigation: React.FC = () => {
         break;
       case "필드":
         subsection = "field";
+        break;
+      case "해역":
+        subsection = "sea";
         break;
       case "트레져박스":
         subsection = "treasurebox";

@@ -24,6 +24,8 @@ import NpcSales from './pages/npcsale/NpcSales';
 import Regions from './pages/region/Regions';
 import TreasureBoxes from './pages/treasurebox/TreasureBoxes';
 import Fields from './pages/field/Fields';
+import Seas from './pages/sea/Seas';
+import SeaDetail from './pages/sea/SeaDetail';
 
 const queryClient = new QueryClient();
 
@@ -55,6 +57,8 @@ function App() {
               <Route path="/treasurebox" element={<TreasureBoxes />} />
               <Route path="/field" element={<Fields />} />
               <Route path="/field/:id" element={<ObjectDetail />} />
+              <Route path="/sea" element={<Seas />} />
+              <Route path="/sea/:id" element={<SeaDetail />} />
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

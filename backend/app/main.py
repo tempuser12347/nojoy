@@ -22,6 +22,7 @@ from app.routers import (
     treasurebox,
     region,
     field,
+    sea,
 )
 import os
 
@@ -57,6 +58,7 @@ app.include_router(npcsale.router)
 app.include_router(treasurebox.router)
 app.include_router(region.router)
 app.include_router(field.router)
+app.include_router(sea.router)
 
 
 dist_dir = "dist"
