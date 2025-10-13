@@ -63,35 +63,45 @@ const ProductsTable: React.FC<{ data: any }> = ({ data }) => {
         {Object.entries(data).map(([category, facilities]: [string, any]) => (
             <Box key={category} mb={3}>
             <Typography variant="h6">{category}</Typography>
-            {facilities.map((facility: any) => (
-                <Box key={facility.facility} mb={2}>
-                <Typography variant="subtitle1">{facility.facility}</Typography>
-                <TableContainer component={Paper}>
-                    <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                        <TableCell>아이템</TableCell>
+            <TableContainer component={Paper}>
+                <Table size="small">
+                <TableHead>
+                    <TableRow>
+                    <TableCell>시설</TableCell>
+                    <TableCell>아이템</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {facilities.map((facility: any) => {
+                    const facilityRowSpan = facility.items.length;
+                    return facility.items.map((itemGroup: any[], index: number) => (
+                        <TableRow key={index}>
+                        {index === 0 && (
+                            <TableCell rowSpan={facilityRowSpan}>
+                            {facility.facility}
+                            </TableCell>
+                        )}
+                        <TableCell>
+                            <Box
+                            sx={{
+                                display: "flex",
+                                gap: 1,
+                                flexWrap: "wrap",
+                            }}
+                            >
+                            {itemGroup.map((item) => (
+                                <span key={item.id}>
+                                {renderObjectChip(item, navigate)} x {item.amount}
+                                </span>
+                            ))}
+                            </Box>
+                        </TableCell>
                         </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {facility.items.map((itemGroup: any[], index: number) => (
-                            <TableRow key={index}>
-                                <TableCell>
-                                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                                        {itemGroup.map(item => (
-                                            <span key={item.id}>
-                                                {renderObjectChip(item, navigate)} ({item.amount})
-                                            </span>
-                                        ))}
-                                    </Box>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                    </Table>
-                </TableContainer>
-                </Box>
-            ))}
+                    ));
+                    })}
+                </TableBody>
+                </Table>
+            </TableContainer>
             </Box>
         ))}
         </Box>
