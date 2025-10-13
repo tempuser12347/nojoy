@@ -69,7 +69,7 @@ const Seas: React.FC = () => {
     { id: 'region', label: '해역', format: (value: any) => value && value.map((r: any) => r.name).join(', ') },
     { id: 'wave', label: '파도' },
     { id: 'seacurrent', label: '해류' },
-    { id: 'max_speed_incrase', label: '최대 속도 증가' },
+    { id: 'max_speed_increase', label: '최대 속도 증가' },
   ];
 
   const handleSearchInputChange = (

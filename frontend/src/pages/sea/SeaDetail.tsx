@@ -28,7 +28,7 @@ interface Sea {
   boundary: { [key: string]: number };
   wave: number;
   seacurrent: number;
-  max_speed_incrase: string;
+  max_speed_increase: string;
   gatherable: any; // This will be a JSON object
 }
 
@@ -162,7 +162,7 @@ export default function SeaDetail() {
               <DetailItem label="해류" value={sea.seacurrent} />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <DetailItem label="최대 속도 증가" value={sea.max_speed_incrase} />
+              <DetailItem label="최대 속도 증가" value={sea.max_speed_increase} />
             </Grid>
             {sea.boundary && (
               <Grid item xs={12}>
