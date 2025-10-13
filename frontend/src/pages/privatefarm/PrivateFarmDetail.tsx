@@ -71,15 +71,21 @@ const ProductsTable: React.FC<{ data: any }> = ({ data }) => {
                     <TableHead>
                         <TableRow>
                         <TableCell>아이템</TableCell>
-                        <TableCell>수량</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {facility.items.map((item: any) => (
-                        <TableRow key={item.id}>
-                            <TableCell>{renderObjectChip(item, navigate)}</TableCell>
-                            <TableCell>{item.amount}</TableCell>
-                        </TableRow>
+                        {facility.items.map((itemGroup: any[], index: number) => (
+                            <TableRow key={index}>
+                                <TableCell>
+                                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                                        {itemGroup.map(item => (
+                                            <span key={item.id}>
+                                                {renderObjectChip(item, navigate)} ({item.amount})
+                                            </span>
+                                        ))}
+                                    </Box>
+                                </TableCell>
+                            </TableRow>
                         ))}
                     </TableBody>
                     </Table>
