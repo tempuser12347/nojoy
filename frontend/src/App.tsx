@@ -26,6 +26,8 @@ import TreasureBoxes from './pages/treasurebox/TreasureBoxes';
 import Fields from './pages/field/Fields';
 import Seas from './pages/sea/Seas';
 import SeaDetail from './pages/sea/SeaDetail';
+import Cultures from './pages/culture/Cultures';
+import CultureDetail from './pages/culture/CultureDetail';
 
 const queryClient = new QueryClient();
 
@@ -59,6 +61,8 @@ function App() {
               <Route path="/field/:id" element={<ObjectDetail />} />
               <Route path="/sea" element={<Seas />} />
               <Route path="/sea/:id" element={<SeaDetail />} />
+              <Route path="/culture" element={<Cultures />} />
+              <Route path="/culture/:id" element={<CultureDetail />} />
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

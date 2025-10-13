@@ -23,6 +23,7 @@ from app.routers import (
     region,
     field,
     sea,
+    culture,
 )
 import os
 
@@ -59,6 +60,7 @@ app.include_router(treasurebox.router)
 app.include_router(region.router)
 app.include_router(field.router)
 app.include_router(sea.router)
+app.include_router(culture.router)
 
 
 dist_dir = "dist"
