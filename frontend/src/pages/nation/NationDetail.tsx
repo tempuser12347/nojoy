@@ -4,6 +4,10 @@ import { Box, Typography, Card, CardContent, CircularProgress, Grid } from '@mui
 import api from '../../api';
 import DetailItem from '../../components/DetailItem';
 
+const renderBooleanEmoji = (value: number) => {
+  return value === 1 ? '✅' : '❌';
+};
+
 interface Nation {
   id: number;
   name: string;
@@ -59,10 +63,10 @@ export default function NationDetail({ data }: { data?: Nation }) {
                 <DetailItem label="설명" value={nation.description} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <DetailItem label="NPC 국가" value={nation.npc_nation} />
+              <DetailItem label="NPC 국가" value={renderBooleanEmoji(nation.npc_nation)} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <DetailItem label="기본 국가" value={nation.is_basic} />
+              <DetailItem label="기본 국가" value={renderBooleanEmoji(nation.is_basic)} />
             </Grid>
           </Grid>
         </CardContent>

@@ -10,11 +10,15 @@ import {
 import DataTable from '../../components/DataTable';
 import api from '../../api';
 
+const renderBooleanEmoji = (value: number) => {
+  return value === 1 ? '✅' : '❌';
+};
+
 const columns = [
   { id: 'name', label: '국가명', minWidth: 170 },
   { id: 'description', label: '설명', minWidth: 170 },
-  { id: 'npc_nation', label: 'NPC 국가', minWidth: 100 },
-  { id: 'is_basic', label: '기본 국가', minWidth: 100 },
+  { id: 'npc_nation', label: 'NPC 국가', minWidth: 100, format: (value: number) => renderBooleanEmoji(value) },
+  { id: 'is_basic', label: '기본 국가', minWidth: 100, format: (value: number) => renderBooleanEmoji(value) },
 ];
 
 const Nations: React.FC = () => {
