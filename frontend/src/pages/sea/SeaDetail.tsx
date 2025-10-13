@@ -1,8 +1,23 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Box, Typography, Card, CardContent, CircularProgress, Grid } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from '@mui/material';
 import api from '../../api';
 import DetailItem from '../../components/DetailItem';
+import { renderObjectChip } from '../../common/render';
 
 interface Sea {
   id: number;
@@ -17,31 +32,76 @@ interface Sea {
   gatherable: any; // This will be a JSON object
 }
 
-const GatherableItem: React.FC<{ data: any }> = ({ data }) => {
+const GatherableTable: React.FC<{ data: any }> = ({ data }) => {
+  const navigate = useNavigate();
   if (!data) return null;
 
+  const allMethods = Object.entries(data).map(([method, items]) => {
+    const ranks = (items as any[]).reduce((acc, item) => {
+        const rank = item['랭크'];
+        let rankGroup = acc.find(r => r.rank === rank);
+        if (!rankGroup) {
+            rankGroup = { rank: rank, rows: [] };
+            acc.push(rankGroup);
+        }
+        rankGroup.rows.push(item);
+        return acc;
+    }, [] as { rank: number, rows: any[] }[]);
+
+    // Sort ranks
+    ranks.sort((a, b) => a.rank - b.rank);
+
+    return { method, ranks };
+  });
+
   return (
-    <Box>
-      {Object.entries(data).map(([key, value]: [string, any]) => (
-        <Box key={key} mb={2}>
-          <Typography variant="h6">{key}</Typography>
-          {value.map((item: any, index: number) => (
-            <Card key={index} sx={{ mb: 1 }}>
-              <CardContent>
-                <Typography>랭크: {item['랭크']}</Typography>
-                <Typography>종류: {item['종류']}</Typography>
-                <Box>
-                  <Typography>아이템:</Typography>
-                  {item['아이템'].map((i: any) => (
-                    <Typography key={i.id}>- {i.name}</Typography>
-                  ))}
-                </Box>
-              </CardContent>
-            </Card>
-          ))}
-        </Box>
-      ))}
-    </Box>
+    <TableContainer component={Paper}>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>방법</TableCell>
+            <TableCell>랭크</TableCell>
+            <TableCell>종류</TableCell>
+            <TableCell>아이템</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {allMethods.map((methodGroup, methodIndex) => {
+            const methodRowSpan = methodGroup.ranks.reduce(
+              (acc, rankGroup) => acc + rankGroup.rows.length,
+              0
+            );
+            return methodGroup.ranks.map((rankGroup, rankIndex) => {
+              const rankRowSpan = rankGroup.rows.length;
+              return rankGroup.rows.map((row, rowIndex) => (
+                <TableRow key={`${methodIndex}-${rankIndex}-${rowIndex}`}>
+                  {rankIndex === 0 && rowIndex === 0 && (
+                    <TableCell rowSpan={methodRowSpan}>
+                      {methodGroup.method}
+                    </TableCell>
+                  )}
+                  {rowIndex === 0 && (
+                    <TableCell rowSpan={rankRowSpan}>
+                      {rankGroup.rank === 0 ? "" : rankGroup.rank}
+                    </TableCell>
+                  )}
+                  <TableCell>{row['종류']}</TableCell>
+                  <TableCell>
+                    <Box
+                      sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}
+                    >
+                      {row['아이템'].map((item: any) =>
+                        renderObjectChip(item, navigate)
+                      )}
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ));
+            });
+          })}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
@@ -115,7 +175,7 @@ export default function SeaDetail() {
       {sea.gatherable && (
         <Box mt={3}>
           <Typography variant="h5" gutterBottom>채집 정보</Typography>
-          <GatherableItem data={sea.gatherable} />
+          <GatherableTable data={sea.gatherable} />
         </Box>
       )}
     </Box>
