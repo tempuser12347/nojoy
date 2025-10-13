@@ -53,6 +53,9 @@ def read_cultures(
 
 @router.get("/{culture_id}", response_model=dict)
 def read_culture(culture_id: int, db: Session = Depends(get_db)):
+    return read_culture_core(culture_id, db)
+
+def read_culture_core(culture_id: int, db: Session = Depends(get_db)):
     result = db.execute(text("SELECT * FROM culture WHERE id = :id"), {"id": culture_id}).fetchone()
 
     if not result:

@@ -20,6 +20,8 @@ from .npcsale import read_npcsale_core
 from .region import get_region_core
 from .treasurebox import read_treasurebox_core
 from .field import read_field_core
+from .sea import read_sea_core
+from .culture import read_culture_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -105,7 +107,9 @@ detail_data_fetch_function_dict = {
     "sellernpc": read_npcsale_core,
     "region": get_region_core,
     "treasurebox": read_treasurebox_core,
-    'field': read_field_core
+    'field': read_field_core,
+    "sea": read_sea_core,
+    "culture": read_culture_core,
 }
 
 

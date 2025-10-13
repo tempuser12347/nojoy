@@ -21,6 +21,8 @@ import NpcSaleDetail from "../npcsale/NpcSaleDetail";
 import RegionDetail from "../region/RegionDetail";
 import TreasureBoxDetail from "../treasurebox/TreasureBoxDetail";
 import FieldDetail from "../field/FieldDetail";
+import SeaDetail from "../sea/SeaDetail";
+import CultureDetail from "../culture/CultureDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -40,7 +42,9 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   sellernpc: NpcSaleDetail,
   region: RegionDetail,
   treasurebox: TreasureBoxDetail,
-  field: FieldDetail 
+  field: FieldDetail,
+  sea: SeaDetail,
+  culture: CultureDetail,
 };
 
 export default function ObjectDetail() {

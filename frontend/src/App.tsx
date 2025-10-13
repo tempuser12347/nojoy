@@ -60,9 +60,7 @@ function App() {
               <Route path="/field" element={<Fields />} />
               <Route path="/field/:id" element={<ObjectDetail />} />
               <Route path="/sea" element={<Seas />} />
-              <Route path="/sea/:id" element={<SeaDetail />} />
               <Route path="/culture" element={<Cultures />} />
-              <Route path="/culture/:id" element={<CultureDetail />} />
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

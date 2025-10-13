@@ -69,6 +69,9 @@ def read_seas(
 
 @router.get("/{sea_id}", response_model=dict)
 def read_sea(sea_id: int, db: Session = Depends(get_db)):
+    return read_sea_core(sea_id, db)
+
+def read_sea_core(sea_id: int, db: Session = Depends(get_db)):
     result = db.execute(text("SELECT * FROM sea WHERE id = :id"), {"id": sea_id}).fetchone()
 
     if not result:
