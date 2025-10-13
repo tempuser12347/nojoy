@@ -22,6 +22,7 @@ from .treasurebox import read_treasurebox_core
 from .field import read_field_core
 from .sea import read_sea_core
 from .culture import read_culture_core
+from .privatefarm import read_privatefarm_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -110,6 +111,7 @@ detail_data_fetch_function_dict = {
     'field': read_field_core,
     "sea": read_sea_core,
     "culture": read_culture_core,
+    "privatefarm": read_privatefarm_core,
 }
 
 
