@@ -54,7 +54,7 @@ def read_portpermit_core(portpermit_id: int, db: Session):
     ret = dict(result._mapping)
 
     # Parse JSON fields
-    for field in ['quests_select_one', 'required', 'fame_per_nation']:
+    for field in ['quests_select_one', 'fame_per_nation']:
         if ret.get(field) and isinstance(ret[field], str):
             try:
                 ret[field] = json.loads(ret[field])
