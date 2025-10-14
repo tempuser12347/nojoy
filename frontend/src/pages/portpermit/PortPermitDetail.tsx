@@ -51,22 +51,37 @@ const QuestsTable: React.FC<{ data: { id: number; name: string }[] }> = ({ data 
     );
 };
 
-const FameTable: React.FC<{ data: { [key: string]: number } }> = ({ data }) => {
+const FameTable: React.FC<{ data: { [category: string]: { [nation: string]: number } } }> = ({ data }) => {
     if (!data) return null;
+
+    // Extract all unique nation names for column headers
+    const nationNames = Array.from(new Set(
+        Object.values(data).flatMap(nationFames => Object.keys(nationFames))
+    ));
+
+    // Sort nation names alphabetically for consistent display
+    nationNames.sort();
+
     return (
         <TableContainer component={Paper}>
             <Table size="small">
                 <TableHead>
                     <TableRow>
-                        <TableCell>국가 ID</TableCell>
-                        <TableCell>명성</TableCell>
+                        <TableCell></TableCell> {/* Empty cell for the category column */}
+                        {nationNames.map(nation => (
+                            <TableCell key={nation}>{nation}</TableCell>
+                        ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {Object.entries(data).map(([nationId, fame]) => (
-                        <TableRow key={nationId}>
-                            <TableCell>{nationId}</TableCell>
-                            <TableCell>{fame}</TableCell>
+                    {Object.entries(data).map(([category, nationFames]) => (
+                        <TableRow key={category}>
+                            <TableCell>{category}</TableCell>
+                            {nationNames.map(nation => (
+                                <TableCell key={nation}>
+                                    {nationFames[nation] !== undefined ? nationFames[nation] : '-'}
+                                </TableCell>
+                            ))}
                         </TableRow>
                     ))}
                 </TableBody>
