@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -25,6 +25,7 @@ interface RecipeItem {
 }
 
 interface Recipe {
+  id: number;
   name: string;
   ingredients: string | RecipeItem[];
   output: string | RecipeItem[];
@@ -173,7 +174,9 @@ export default function RecipebookDetail({ data }: { data?: Recipebook }) {
 
                     return (
                       <TableRow key={index}>
-                        <TableCell>{recipe.name}</TableCell>
+                        <TableCell>
+                        <Link to={`/obj/${recipe.id}`}>{recipe.name}</Link>
+                      </TableCell>
                         <TableCell>
                           {renderObjectsToChips(
                             parsedIngredients.map((x: RecipeItem) => ({ ...x, id: parseInt(x.ref) })),

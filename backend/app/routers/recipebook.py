@@ -110,12 +110,13 @@ def read_recipebook_core(recipebook_id: int, db: Session = Depends(get_db)):
     ret["obtain_method"] = obtm_list
 
     # Fetch associated recipes
-    recipes_query = "SELECT name, ingredients, success FROM recipe WHERE recipe_book_id = :recipebook_id"
+    recipes_query = "SELECT id, name, ingredients, success FROM recipe WHERE recipe_book_id = :recipebook_id"
     recipes_results = db.execute(text(recipes_query), {"recipebook_id": recipebook_id}).fetchall()
     
     recipes_list = []
     for recipe_row in recipes_results:
         recipes_list.append({
+            "id": recipe_row.id,
             "name": recipe_row.name,
             "ingredients": recipe_row.ingredients,
             "output": recipe_row.success
