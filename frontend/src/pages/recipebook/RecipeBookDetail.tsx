@@ -1,14 +1,34 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
   Card,
   CardContent,
   CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import api from "../../api";
 import ObtainMethodTabs from "../../components/ObtainMethodTabs";
+import { renderObjectsToChips } from "../../common/render";
+
+interface RecipeItem {
+  ref: string;
+  name: string;
+  value: number;
+}
+
+interface Recipe {
+  name: string;
+  ingredients: string | RecipeItem[];
+  output: string | RecipeItem[];
+}
 
 interface Recipebook {
   id: number;
@@ -19,6 +39,7 @@ interface Recipebook {
   era: string | null;
   skill: string | null; // or object if needed
   obtain_method: any[] | null;
+  recipes: Recipe[] | null;
 }
 
 const DetailItem = ({
@@ -44,6 +65,7 @@ export default function RecipebookDetail({ data }: { data?: Recipebook }) {
   const [recipebook, setRecipebook] = useState<Recipebook | null>(data || null);
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
   //   const navigate = useNavigate();
 
   useEffect(() => {
@@ -128,6 +150,53 @@ export default function RecipebookDetail({ data }: { data?: Recipebook }) {
           </Box>
         </CardContent>
       </Card>
+
+      {recipebook.recipes && recipebook.recipes.length > 0 && (
+        <Card>
+          <CardContent>
+            <Typography variant="h5" gutterBottom>
+              레시피 목록
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>이름</TableCell>
+                    <TableCell>재료</TableCell>
+                    <TableCell>결과물</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {recipebook.recipes.map((recipe, index) => {
+                    const parsedIngredients = recipe.ingredients ? JSON.parse(recipe.ingredients as unknown as string) : [];
+                    const parsedOutput = recipe.output ? JSON.parse(recipe.output as unknown as string) : [];
+
+                    return (
+                      <TableRow key={index}>
+                        <TableCell>{recipe.name}</TableCell>
+                        <TableCell>
+                          {renderObjectsToChips(
+                            parsedIngredients.map((x: RecipeItem) => ({ ...x, id: parseInt(x.ref) })),
+                            navigate,
+                            (value) => " x " + value
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {renderObjectsToChips(
+                            parsedOutput.map((x: RecipeItem) => ({ ...x, id: parseInt(x.ref) })),
+                            navigate,
+                            (value) => " x " + value
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </CardContent>
+        </Card>
+      )}
     </Box>
   );
 }
