@@ -27,6 +27,7 @@ interface RecipeItem {
 interface Recipe {
   id: number;
   name: string;
+  required_Skill: string | RecipeItem[];
   ingredients: string | RecipeItem[];
   output: string | RecipeItem[];
 }
@@ -163,6 +164,7 @@ export default function RecipebookDetail({ data }: { data?: Recipebook }) {
                 <TableHead>
                   <TableRow>
                     <TableCell>이름</TableCell>
+                    <TableCell>스킬</TableCell>
                     <TableCell>재료</TableCell>
                     <TableCell>결과물</TableCell>
                   </TableRow>
@@ -171,12 +173,19 @@ export default function RecipebookDetail({ data }: { data?: Recipebook }) {
                   {recipebook.recipes.map((recipe, index) => {
                     const parsedIngredients = recipe.ingredients ? JSON.parse(recipe.ingredients as unknown as string) : [];
                     const parsedOutput = recipe.output ? JSON.parse(recipe.output as unknown as string) : [];
+                    const parsedRequiredSkill = recipe.required_Skill ? JSON.parse(recipe.required_Skill as unknown as string) : [];
 
                     return (
                       <TableRow key={index}>
                         <TableCell>
                         <Link to={`/obj/${recipe.id}`}>{recipe.name}</Link>
                       </TableCell>
+                        <TableCell>
+                          {renderObjectsToChips(
+                            parsedRequiredSkill.map((x: RecipeItem) => ({ ...x, id: parseInt(x.ref) })),
+                            navigate
+                          )}
+                        </TableCell>
                         <TableCell>
                           {renderObjectsToChips(
                             parsedIngredients.map((x: RecipeItem) => ({ ...x, id: parseInt(x.ref) })),
