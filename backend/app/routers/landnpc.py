@@ -21,7 +21,7 @@ def read_landnpcs(
     sort_order: str = Query("asc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
 ):
-    query = "SELECT id, name, description, level, feature FROM landnpc"
+    query = "SELECT id, name, description, level, fields, feature FROM landnpc"
     results = db.execute(text(query)).fetchall()
 
     if name_search:
@@ -36,7 +36,15 @@ def read_landnpcs(
     total = len(results)
     paginated_results = results[skip : skip + limit]
 
-    items = [dict(row._mapping) for row in paginated_results]
+    items = []
+    for row in paginated_results:
+        item_dict = dict(row._mapping)
+        if item_dict.get('fields') and isinstance(item_dict['fields'], str):
+            try:
+                item_dict['fields'] = json.loads(item_dict['fields'])
+            except json.JSONDecodeError:
+                item_dict['fields'] = None
+        items.append(item_dict)
 
     return {"items": items, "total": total}
 
