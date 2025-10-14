@@ -66,14 +66,14 @@ const AcquiredItemsTable: React.FC<{ data: MarineNpc['acquired_items'] }> = ({ d
     if (!data || data.length === 0) return null;
 
     // Group by "획득 방법"
-    const groupedItems = data.reduce((acc, item) => {
-        const key = item['획득 방법'];
-        if (!acc[key]) {
-            acc[key] = [];
+    const groupedByMethod = data.reduce((acc, item) => {
+        const methodKey = item['획득 방법'];
+        if (!acc[methodKey]) {
+            acc[methodKey] = [];
         }
-        acc[key].push(item);
+        acc[methodKey].push(item);
         return acc;
-    }, {} as { [key: string]: MarineNpc['acquired_items'] });
+    }, {} as { [method: string]: MarineNpc['acquired_items'] });
 
     return (
         <TableContainer component={Paper}>
@@ -87,19 +87,57 @@ const AcquiredItemsTable: React.FC<{ data: MarineNpc['acquired_items'] }> = ({ d
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {Object.entries(groupedItems).map(([method, items]) => {
-                        const rowSpan = items.length;
-                        return items.map((item, index) => (
-                            <TableRow key={`${method}-${index}`}>
-                                {index === 0 && (
-                                    <TableCell rowSpan={rowSpan}>{method}</TableCell>
-                                )}
-                                <TableCell>{item['유형']}</TableCell>
-                                <TableCell>{item['종류']}</TableCell>
-                                <TableCell>{renderObjectChip(item, navigate)}</TableCell>
-                            </TableRow>
-                        ));
-                    })}
+                    {Object.entries(groupedByMethod).map(([method, itemsByMethod]) => {
+                        // Group by "유형" within each method
+                        const groupedByType = itemsByMethod.reduce((acc, item) => {
+                            const typeKey = item['유형'];
+                            if (!acc[typeKey]) {
+                                acc[typeKey] = [];
+                            }
+                            acc[typeKey].push(item);
+                            return acc;
+                        }, {} as { [type: string]: MarineNpc['acquired_items'] });
+
+                        const methodRowSpan = itemsByMethod.length; // Total items for this method
+
+                        return Object.entries(groupedByType).map(([type, itemsByType]) => {
+                            // Group by "종류" within each type
+                            const groupedByCategory = itemsByType.reduce((acc, item) => {
+                                const categoryKey = item['종류'];
+                                if (!acc[categoryKey]) {
+                                    acc[categoryKey] = [];
+                                }
+                                acc[categoryKey].push(item);
+                                return acc;
+                            }, {} as { [category: string]: MarineNpc['acquired_items'] });
+
+                            const typeRowSpan = itemsByType.length; // Total items for this type
+
+                            return Object.entries(groupedByCategory).map(([category, itemsByCategory]) => {
+                                const categoryRowSpan = itemsByCategory.length; // Total items for this category
+
+                                return itemsByCategory.map((item, index) => (
+                                    <TableRow key={`${method}-${type}-${category}-${item.id}`}>
+                                        {/* Acquisition Method Cell */}
+                                        {itemsByMethod.indexOf(item) === 0 && (
+                                            <TableCell rowSpan={methodRowSpan}>{method}</TableCell>
+                                        )}
+                                        {/* Type Cell */}
+                                        {itemsByType.indexOf(item) === 0 && (
+                                            <TableCell rowSpan={typeRowSpan}>{type}</TableCell>
+                                        )}
+                                        {/* Category Cell */}
+                                        {itemsByCategory.indexOf(item) === 0 && (
+                                            <TableCell rowSpan={categoryRowSpan}>{category}</TableCell>
+                                        )}
+                                        {/* Item Cell */}
+                                        <TableCell>{renderObjectChip(item, navigate)}</TableCell>
+                                    </TableRow>
+                                ));
+                            }).flat(); // Flatten the nested arrays of TableRows
+                        }).flat(); // Flatten the nested arrays of TableRows
+                    }).flat() // Flatten the nested arrays of TableRows
+                    }
                 </TableBody>
             </Table>
         </TableContainer>
