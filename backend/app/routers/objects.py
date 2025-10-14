@@ -24,6 +24,7 @@ from .sea import read_sea_core
 from .culture import read_culture_core
 from .privatefarm import read_privatefarm_core
 from .nation import read_nation_core
+from .portpermit import read_portpermit_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -114,6 +115,7 @@ detail_data_fetch_function_dict = {
     "culture": read_culture_core,
     "privatefarm": read_privatefarm_core,
     "nation": read_nation_core,
+    "portpermit": read_portpermit_core,
 }
 
 

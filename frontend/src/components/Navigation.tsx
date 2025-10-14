@@ -107,6 +107,7 @@ const availableSections = [
   "문화",
   "개인 농장",
   "국가",
+  "입항허가",
   "트레져박스",
 ];
 
@@ -173,6 +174,9 @@ const Navigation: React.FC = () => {
         break;
       case "국가":
         subsection = "nation";
+        break;
+      case "입항허가":
+        subsection = "portpermit";
         break;
       case "트레져박스":
         subsection = "treasurebox";

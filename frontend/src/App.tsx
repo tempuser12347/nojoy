@@ -28,6 +28,7 @@ import Seas from './pages/sea/Seas';
 import Cultures from './pages/culture/Cultures';
 import PrivateFarms from './pages/privatefarm/PrivateFarms';
 import Nations from './pages/nation/Nations';
+import PortPermits from './pages/portpermit/PortPermits';
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ function App() {
               <Route path="/culture" element={<Cultures />} />
               <Route path="/privatefarm" element={<PrivateFarms />} />
               <Route path="/nation" element={<Nations />} />
+              <Route path="/portpermit" element={<PortPermits />} />
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

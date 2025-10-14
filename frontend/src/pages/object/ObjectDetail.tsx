@@ -25,6 +25,7 @@ import SeaDetail from "../sea/SeaDetail";
 import CultureDetail from "../culture/CultureDetail";
 import PrivateFarmDetail from "../privatefarm/PrivateFarmDetail";
 import NationDetail from "../nation/NationDetail";
+import PortPermitDetail from "../portpermit/PortPermitDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -49,6 +50,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   culture: CultureDetail,
   privatefarm: PrivateFarmDetail,
   nation: NationDetail,
+  portpermit: PortPermitDetail,
 };
 
 export default function ObjectDetail() {
