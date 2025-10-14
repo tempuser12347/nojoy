@@ -102,6 +102,32 @@ const AcquiredItemsTable: React.FC<{ data: Ganador['acquired_items'] }> = ({ dat
 };
 
 
+const StatsTable: React.FC<{ ganador: Ganador }> = ({ ganador }) => {
+    return (
+        <TableContainer component={Paper}>
+            <Table size="small">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>내구력</TableCell>
+                        <TableCell>선원</TableCell>
+                        <TableCell>공격력</TableCell>
+                        <TableCell>방어력</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    <TableRow>
+                        <TableCell>{ganador.durability}</TableCell>
+                        <TableCell>{ganador.crew}</TableCell>
+                        <TableCell>{ganador.attack_power}</TableCell>
+                        <TableCell>{ganador.defense_power}</TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </TableContainer>
+    );
+};
+
+
 export default function GanadorDetail({ data }: { data?: Ganador }) {
   const { id } = useParams<{ id: string }>();
   const [ganador, setGanador] = useState<Ganador | null>(data || null);
@@ -149,6 +175,16 @@ export default function GanadorDetail({ data }: { data?: Ganador }) {
             <Grid item xs={12}>
                 <DetailItem label="설명" value={ganador.description} />
             </Grid>
+          </Grid>
+          {/* New Grid container for StatsTable */}
+          <Grid container spacing={2} sx={{ mt: 2 }}>
+            <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom>능력치</Typography>
+                <StatsTable ganador={ganador} />
+            </Grid>
+          </Grid>
+          {/* Original Grid container for other DetailItems */}
+          <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid item xs={12} sm={6}>
               <DetailItem label="카테고리" value={ganador.category} />
             </Grid>
@@ -157,18 +193,6 @@ export default function GanadorDetail({ data }: { data?: Ganador }) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <DetailItem label="난이도" value={ganador.difficulty} />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <DetailItem label="내구력" value={ganador.durability} />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <DetailItem label="선원" value={ganador.crew} />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <DetailItem label="공격력" value={ganador.attack_power} />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <DetailItem label="방어력" value={ganador.defense_power} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <DetailItem label="준비물" value={ganador.preparation_item ? `${ganador.preparation_item.name} x ${ganador.preparation_item.quantity}` : '-'} />
