@@ -30,6 +30,7 @@ import PrivateFarms from './pages/privatefarm/PrivateFarms';
 import Nations from './pages/nation/Nations';
 import PortPermits from './pages/portpermit/PortPermits';
 import LandNpcs from './pages/landnpc/LandNpcs';
+import MarineNpcs from './pages/marinenpc/MarineNpcs';
 
 const queryClient = new QueryClient();
 
@@ -67,6 +68,7 @@ function App() {
               <Route path="/nation" element={<Nations />} />
               <Route path="/portpermit" element={<PortPermits />} />
               <Route path="/landnpc" element={<LandNpcs />} />
+              <Route path="/marinenpc" element={<MarineNpcs />} />
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

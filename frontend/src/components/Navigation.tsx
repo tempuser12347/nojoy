@@ -109,6 +109,7 @@ const availableSections = [
   "국가",
   "입항허가",
   "육상 npc",
+  "해상 npc",
   "트레져박스",
 ];
 
@@ -181,6 +182,9 @@ const Navigation: React.FC = () => {
         break;
       case "육상 npc":
         subsection = "landnpc";
+        break;
+      case "해상 npc":
+        subsection = "marinenpc";
         break;
       case "트레져박스":
         subsection = "treasurebox";
