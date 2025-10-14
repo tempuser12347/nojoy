@@ -12,10 +12,6 @@ import api from '../../api';
 
 const columns = [
   { id: 'name', label: '이름', minWidth: 170 },
-  { id: 'description', label: '설명', minWidth: 170 },
-  { id: 'quests_select_one', label: '퀘스트 (선택 1)', minWidth: 200, format: (value: any) => value && value.map((q: any) => q.name).join(', ') },
-  { id: 'required', label: '필요 조건', minWidth: 200 },
-  { id: 'fame_per_nation', label: '국가별 명성', minWidth: 200 },
 ];
 
 const PortPermits: React.FC = () => {
