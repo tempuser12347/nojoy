@@ -192,6 +192,8 @@ export default function MarineNpcDetail({ data }: { data?: MarineNpc }) {
             <Grid item xs={12}>
                 <DetailItem label="설명" value={npc.description} />
             </Grid>
+          </Grid>
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <DetailItem label="함대 수" value={npc.fleet_count} />
             </Grid>
