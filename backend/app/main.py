@@ -29,6 +29,7 @@ from app.routers import (
     portpermit,
     landnpc,
     marinenpc,
+    ganador,
 )
 import os
 
@@ -71,6 +72,7 @@ app.include_router(nation.router)
 app.include_router(portpermit.router)
 app.include_router(landnpc.router)
 app.include_router(marinenpc.router)
+app.include_router(ganador.router)
 
 
 dist_dir = "dist"

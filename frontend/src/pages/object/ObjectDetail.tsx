@@ -28,6 +28,7 @@ import NationDetail from "../nation/NationDetail";
 import PortPermitDetail from "../portpermit/PortPermitDetail";
 import LandNpcDetail from "../landnpc/LandNpcDetail";
 import MarineNpcDetail from "../marinenpc/MarineNpcDetail";
+import GanadorDetail from "../ganador/GanadorDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -55,7 +56,8 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   portpermit: PortPermitDetail,
   landnpc: LandNpcDetail,
   marinenpc: MarineNpcDetail,
-};;
+  ganador: GanadorDetail,
+};;;
 
 export default function ObjectDetail() {
   const { id } = useParams<{ id: string }>();

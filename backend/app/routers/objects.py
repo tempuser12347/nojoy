@@ -27,6 +27,7 @@ from .nation import read_nation_core
 from .portpermit import read_portpermit_core
 from .landnpc import read_landnpc_core
 from .marinenpc import read_marinenpc_core
+from .ganador import read_ganador_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -120,6 +121,7 @@ detail_data_fetch_function_dict = {
     "portpermit": read_portpermit_core,
     "landnpc": read_landnpc_core,
     "marinenpc": read_marinenpc_core,
+    "ganador": read_ganador_core,
 }
 
 

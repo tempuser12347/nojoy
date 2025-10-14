@@ -31,6 +31,7 @@ import Nations from './pages/nation/Nations';
 import PortPermits from './pages/portpermit/PortPermits';
 import LandNpcs from './pages/landnpc/LandNpcs';
 import MarineNpcs from './pages/marinenpc/MarineNpcs';
+import Ganadors from './pages/ganador/Ganadors';
 
 const queryClient = new QueryClient();
 
@@ -69,6 +70,7 @@ function App() {
               <Route path="/portpermit" element={<PortPermits />} />
               <Route path="/landnpc" element={<LandNpcs />} />
               <Route path="/marinenpc" element={<MarineNpcs />} />
+              <Route path="/ganador" element={<Ganadors />} />
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
