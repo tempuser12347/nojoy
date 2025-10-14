@@ -26,6 +26,7 @@ import CultureDetail from "../culture/CultureDetail";
 import PrivateFarmDetail from "../privatefarm/PrivateFarmDetail";
 import NationDetail from "../nation/NationDetail";
 import PortPermitDetail from "../portpermit/PortPermitDetail";
+import LandNpcDetail from "../landnpc/LandNpcDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -51,6 +52,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   privatefarm: PrivateFarmDetail,
   nation: NationDetail,
   portpermit: PortPermitDetail,
+  landnpc: LandNpcDetail,
 };
 
 export default function ObjectDetail() {
