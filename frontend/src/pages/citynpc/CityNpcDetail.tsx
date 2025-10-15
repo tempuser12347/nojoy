@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -7,6 +7,13 @@ import {
   CardContent,
   CircularProgress,
   Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from '@mui/material';
 import api from '../../api';
 import DetailItem from '../../components/DetailItem';
@@ -93,10 +100,51 @@ export default function CityNpcDetail({ data }: { data?: CityNpc }) {
               />
             </Grid>
             <Grid item xs={12}>
-              <DetailItem
-                label="선물"
-                value={cityNpc.gifts ? renderObjectsToChips(cityNpc.gifts, navigate, (value) => value ? ` x ${value}` : '') : null}
-              />
+              {cityNpc.gifts && cityNpc.gifts.length > 0 && (
+                <Box>
+                  <Typography variant="h6" color="text.secondary">
+                    선물
+                  </Typography>
+                  <TableContainer component={Paper}>
+                    <Table size="small">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>종류</TableCell>
+                          <TableCell>아이템</TableCell>
+                          <TableCell>수량</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                    {Object.entries(cityNpc.gifts.reduce((acc, gift) => {
+                      const type = gift.종류 || '기타';
+                      if (!acc[type]) {
+                        acc[type] = [];
+                      }
+                      acc[type].push(gift);
+                      return acc;
+                    }, {} as Record<string, typeof cityNpc.gifts>)).map(([type, giftsInType]) => (
+                      giftsInType.map((gift, index) => (
+                        <TableRow key={gift.id}>
+                          {index === 0 && (
+                            <TableCell rowSpan={giftsInType.length}>
+                              {type}
+                            </TableCell>
+                          )}
+                          <TableCell>
+                            <Link to={`/obj/${gift.id}`}>
+                              {gift.name}
+                              {gift.extraname && ` ${gift.extraname}`}
+                            </Link>
+                          </TableCell>
+                          <TableCell>{gift.quantity}</TableCell>
+                        </TableRow>
+                      ))
+                    ))}
+                  </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+              )}
             </Grid>
           </Grid>
         </CardContent>
