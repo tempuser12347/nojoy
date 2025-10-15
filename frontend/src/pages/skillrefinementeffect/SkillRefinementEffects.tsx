@@ -11,7 +11,6 @@ import DataTable from '../../components/DataTable';
 import api from '../../api';
 
 const columns = [
-  { id: 'id', label: 'ID', minWidth: 50 },
   { id: 'name', label: '이름', minWidth: 170 },
   { id: 'description', label: '설명', minWidth: 200 },
   { id: 'action_power', label: '행동력', minWidth: 100 },
