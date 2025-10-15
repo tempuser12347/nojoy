@@ -11,7 +11,7 @@ import DataTable from '../../components/DataTable';
 import api from '../../api';
 
 const columns = [
-  { id: 'name', label: '이름', minWidth: 170, format: (value: any, row: any) => (row ? value + (row.extraname ? ` ${row.extraname}` : '') : value) },
+  { id: 'name', label: '이름', minWidth: 170 },
   { id: 'city', label: '도시', minWidth: 100, format: (value: any) => value && value.name },
   { id: 'skills', label: '스킬', minWidth: 200, format: (value: any) => value && value.map((skill: any) => skill.name).join(', ') },
 ];
@@ -48,7 +48,13 @@ const CityNpcs: React.FC = () => {
           limit: rowsPerPage,
         },
       });
-      return response.data;
+      const processedItems = response.data.items.map((item: any) => {
+        if (item.extraname) {
+          return { ...item, name: `${item.name} ${item.extraname}` };
+        }
+        return item;
+      });
+      return { ...response.data, items: processedItems };
     },
   });
 
