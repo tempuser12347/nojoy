@@ -6,6 +6,8 @@ import DataTable from "../../components/DataTable";
 import api from "../../api";
 
 
+import { renderObjectsToChips } from "../../common/render";
+
 const Skills: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -50,12 +52,27 @@ const Skills: React.FC = () => {
           limit: rowsPerPage,
         },
       });
-      return response.data;
+      console.log(response.data)
+      const processedItems = response.data.items.map((item: any) => {
+        if (item.acquire_requirement && typeof item.acquire_requirement === 'string') {
+          try {
+            item.acquire_requirement = JSON.parse(item.acquire_requirement);
+          } catch (e) {
+            console.error("Error parsing acquire_requirement:", e);
+            item.acquire_requirement = [];
+          }
+        }
+        return item;
+      });
+      return { ...response.data, items: processedItems };
     },
   });
 
   const columns = [
     { id: "name", label: "이름" },
+    { id: "type", label: "타입" },
+    { id: "action_point", label: "행동력" },
+    { id: "apply_range", label: "적용 범위" },
   ];
 
   const handleSearchInputChange = (

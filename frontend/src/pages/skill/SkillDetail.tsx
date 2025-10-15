@@ -1,40 +1,38 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
   Card,
   CardContent,
   CircularProgress,
+  Grid,
 } from "@mui/material";
 import api from "../../api";
+import DetailItem from "../../components/DetailItem";
+import { renderObjectsToChips } from "../../common/render";
 
 interface Skill {
   id: number;
   name: string;
+  description: string | null;
+  type: string | null;
+  action_point: string | null;
+  apply_range: string | null;
+  acquire_cost: string | null;
+  equip_cost: string | null;
+  max_rank_adjustment: string | null;
+  adjutant_position: string | null;
+  refinement_effect: { id: number; name: string }[] | null;
+  acquire_requirement: { 종류: string; 내용: string }[] | null;
 }
-
-const DetailItem = ({
-  label,
-  value,
-}: {
-  label: string;
-  value: React.ReactNode;
-}) =>
-  value ? (
-    <Box>
-      <Typography variant="h6" color="text.secondary">
-        {label}
-      </Typography>
-      <Typography variant="body1">{value}</Typography>
-    </Box>
-  ) : null;
 
 export default function SkillDetail() {
   const { id } = useParams<{ id: string }>();
   const [skill, setSkill] = useState<Skill | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSkill = async () => {
@@ -85,15 +83,44 @@ export default function SkillDetail() {
       </Typography>
       <Card>
         <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: "1fr",
-            }}
-          >
-            <DetailItem label="이름" value={skill.name} />
-          </Box>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <DetailItem label="설명" value={skill.description} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DetailItem label="타입" value={skill.type} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DetailItem label="행동력" value={skill.action_point} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DetailItem label="적용 범위" value={skill.apply_range} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DetailItem label="습득 비용" value={skill.acquire_cost} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DetailItem label="장착 비용" value={skill.equip_cost} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DetailItem label="최대 랭크 조정" value={skill.max_rank_adjustment} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DetailItem label="부관 배치" value={skill.adjutant_position} />
+            </Grid>
+            <Grid item xs={12}>
+              <DetailItem
+                label="습득 조건"
+                value={skill.acquire_requirement ? renderObjectsToChips(skill.acquire_requirement, navigate) : null}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <DetailItem
+                label="연성 효과"
+                value={skill.refinement_effect ? renderObjectsToChips(skill.refinement_effect, navigate) : null}
+              />
+            </Grid>
+          </Grid>
         </CardContent>
       </Card>
     </Box>

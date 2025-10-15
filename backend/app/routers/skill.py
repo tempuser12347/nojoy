@@ -1,14 +1,25 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from sqlalchemy import text
 from ..database import get_db
+import json
 
 
 class Skill(BaseModel):
     id: int
     name: str
+    description: Optional[str]
+    type: Optional[str]
+    action_point: Optional[str]
+    apply_range: Optional[str]
+    acquire_cost: Optional[str]
+    equip_cost: Optional[str]
+    max_rank_adjustment: Optional[str]
+    adjutant_position: Optional[str]
+    refinement_effect: Optional[dict]
+    acquire_requirement: Optional[List[dict]]
 
     class Config:
         orm_mode = True
@@ -31,7 +42,7 @@ def read_skills(
     sort_order: str = Query("asc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
 ):
-    query = "SELECT id, name FROM skill"
+    query = "SELECT id, name, description, type, action_point, apply_range, acquire_cost, equip_cost, max_rank_adjustment, adjutant_position, refinement_effect, acquire_requirement FROM skill"
 
     where_clauses = []
     params = {}
@@ -59,7 +70,19 @@ def read_skills(
 
     results = db.execute(text(query), params).fetchall()
 
-    return {"items": results, "total": total}
+    # Convert Row objects to dict for easier filtering and manipulation
+    items = []
+    for row in results:
+        item_dict = dict(row._mapping)
+        for field in ['acquire_requirement', 'refinement_effect']:
+            if item_dict.get(field) and isinstance(item_dict[field], str):
+                try:
+                    item_dict[field] = json.loads(item_dict[field])
+                except json.JSONDecodeError:
+                    item_dict[field] = None
+        items.append(item_dict)
+
+    return {"items": items, "total": total}
 
 
 @router.get("/{skill_id}", response_model=Skill)
@@ -69,16 +92,20 @@ def read_skill(skill_id: int, db: Session = Depends(get_db)):
 
 def read_skill_core(skill_id: int, db: Session = Depends(get_db)):
     result = db.execute(
-        text("SELECT id, name FROM skill WHERE id = :skill_id"),
+        text("SELECT id, name, description, type, action_point, apply_range, acquire_cost, equip_cost, max_rank_adjustment, adjutant_position, refinement_effect, acquire_requirement FROM skill WHERE id = :skill_id"),
         {"skill_id": skill_id},
     ).fetchone()
     if not result:
         raise HTTPException(status_code=404, detail="Skill not found")
     
-    # convert to dict
-    result = {
-        "id": result.id,
-        "name": result.name,
-    }
+    ret = dict(result._mapping)
 
-    return result
+    # Parse JSON fields
+    for field in ['acquire_requirement', 'refinement_effect']:
+        if ret.get(field) and isinstance(ret[field], str):
+            try:
+                ret[field] = json.loads(ret[field])
+            except json.JSONDecodeError:
+                ret[field] = None
+
+    return ret
