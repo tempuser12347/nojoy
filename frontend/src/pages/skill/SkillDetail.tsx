@@ -30,7 +30,10 @@ interface Skill {
   equip_cost: string | null;
   max_rank_adjustment: string | null;
   adjutant_position: string | null;
-  refinement_effect: { id: number; name: string }[] | { id: number; name: string } | null;
+  refinement_effect:
+    | { id: number; name: string }[]
+    | { id: number; name: string }
+    | null;
   acquire_requirement: { 종류: string; 내용: string }[] | null;
 }
 
@@ -40,6 +43,14 @@ export default function SkillDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const renderContentOfRequirement = (req: string | any[] | null) => {
+    if (!req) return null;
+    if (Array.isArray(req)) {
+      return renderObjectsToChips(req, navigate);
+    }
+    return req;
+  };
 
   useEffect(() => {
     const fetchSkill = async () => {
@@ -110,7 +121,10 @@ export default function SkillDetail() {
               <DetailItem label="장착 비용" value={skill.equip_cost} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <DetailItem label="최대 랭크 조정" value={skill.max_rank_adjustment} />
+              <DetailItem
+                label="최대 랭크 조정"
+                value={skill.max_rank_adjustment}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
               <DetailItem label="부관 배치" value={skill.adjutant_position} />
@@ -118,7 +132,16 @@ export default function SkillDetail() {
             <Grid item xs={12}>
               <DetailItem
                 label="연성 효과"
-                value={skill.refinement_effect ? renderObjectsToChips(Array.isArray(skill.refinement_effect) ? skill.refinement_effect : [skill.refinement_effect], navigate) : null}
+                value={
+                  skill.refinement_effect
+                    ? renderObjectsToChips(
+                        Array.isArray(skill.refinement_effect)
+                          ? skill.refinement_effect
+                          : [skill.refinement_effect],
+                        navigate
+                      )
+                    : null
+                }
               />
             </Grid>
           </Grid>
@@ -142,7 +165,9 @@ export default function SkillDetail() {
                 {skill.acquire_requirement.map((req, index) => (
                   <TableRow key={index}>
                     <TableCell>{req.종류}</TableCell>
-                    <TableCell>{req.내용}</TableCell>
+                    <TableCell>
+                      {renderContentOfRequirement(req.내용)}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

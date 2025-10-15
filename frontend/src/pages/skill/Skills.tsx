@@ -5,9 +5,6 @@ import { Box, TextField, Typography, Button } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
 
-
-import { renderObjectsToChips } from "../../common/render";
-
 const Skills: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -34,14 +31,7 @@ const Skills: React.FC = () => {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: [
-      "skills",
-      page,
-      rowsPerPage,
-      name_search,
-      sort_by,
-      sort_order,
-    ],
+    queryKey: ["skills", page, rowsPerPage, name_search, sort_by, sort_order],
     queryFn: async () => {
       const response = await api.get("/api/skills", {
         params: {
@@ -52,9 +42,12 @@ const Skills: React.FC = () => {
           limit: rowsPerPage,
         },
       });
-      console.log(response.data)
+      console.log(response.data);
       const processedItems = response.data.items.map((item: any) => {
-        if (item.acquire_requirement && typeof item.acquire_requirement === 'string') {
+        if (
+          item.acquire_requirement &&
+          typeof item.acquire_requirement === "string"
+        ) {
           try {
             item.acquire_requirement = JSON.parse(item.acquire_requirement);
           } catch (e) {
