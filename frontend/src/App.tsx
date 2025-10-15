@@ -34,6 +34,8 @@ import MarineNpcs from "./pages/marinenpc/MarineNpcs";
 import Ganadors from "./pages/ganador/Ganadors";
 import CityNpcs from "./pages/citynpc/CityNpcs";
 import CityNpcDetail from "./pages/citynpc/CityNpcDetail";
+import SkillRefinementEffects from "./pages/skillrefinementeffect/SkillRefinementEffects";
+import SkillRefinementEffectDetail from "./pages/skillrefinementeffect/SkillRefinementEffectDetail";
 
 const queryClient = new QueryClient();
 
@@ -75,6 +77,8 @@ function App() {
               <Route path="/ganador" element={<Ganadors />} />
               <Route path="/citynpc" element={<CityNpcs />} />
               <Route path="/citynpc/:id" element={<CityNpcDetail />} />
+              <Route path="/skillrefinementeffects" element={<SkillRefinementEffects />} />
+              <Route path="/skillrefinementeffects/:id" element={<SkillRefinementEffectDetail />} />
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

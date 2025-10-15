@@ -31,6 +31,7 @@ from app.routers import (
     marinenpc,
     ganador,
     citynpc,
+    skillrefinementeffect,
 )
 import os
 
@@ -75,6 +76,7 @@ app.include_router(landnpc.router)
 app.include_router(marinenpc.router)
 app.include_router(ganador.router)
 app.include_router(citynpc.router)
+app.include_router(skillrefinementeffect.router)
 
 
 dist_dir = "dist"

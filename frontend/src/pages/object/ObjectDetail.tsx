@@ -30,6 +30,7 @@ import LandNpcDetail from "../landnpc/LandNpcDetail";
 import MarineNpcDetail from "../marinenpc/MarineNpcDetail";
 import GanadorDetail from "../ganador/GanadorDetail";
 import CityNpcDetail from "../citynpc/CityNpcDetail";
+import SkillRefinementEffectDetail from "../skillrefinementeffect/SkillRefinementEffectDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -59,6 +60,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   marinenpc: MarineNpcDetail,
   ganador: GanadorDetail,
   citynpc: CityNpcDetail,
+  skillrefinementeffect: SkillRefinementEffectDetail,
 };
 
 export default function ObjectDetail() {
