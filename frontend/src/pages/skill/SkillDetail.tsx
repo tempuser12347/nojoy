@@ -116,33 +116,6 @@ export default function SkillDetail() {
               <DetailItem label="부관 배치" value={skill.adjutant_position} />
             </Grid>
             <Grid item xs={12}>
-              {skill.acquire_requirement && skill.acquire_requirement.length > 0 && (
-                <Box sx={{ mt: 2 }}>
-                  <Typography variant="h6" color="text.secondary">
-                    습득 조건
-                  </Typography>
-                  <TableContainer component={Paper}>
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>종류</TableCell>
-                          <TableCell>내용</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {skill.acquire_requirement.map((req, index) => (
-                          <TableRow key={index}>
-                            <TableCell>{req.종류}</TableCell>
-                            <TableCell>{req.내용}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Box>
-              )}
-            </Grid>
-            <Grid item xs={12}>
               <DetailItem
                 label="연성 효과"
                 value={skill.refinement_effect ? renderObjectsToChips(Array.isArray(skill.refinement_effect) ? skill.refinement_effect : [skill.refinement_effect], navigate) : null}
@@ -151,6 +124,32 @@ export default function SkillDetail() {
           </Grid>
         </CardContent>
       </Card>
+
+      {skill.acquire_requirement && skill.acquire_requirement.length > 0 && (
+        <Box sx={{ mt: 3 }}>
+          <Typography variant="h5" gutterBottom>
+            습득 조건
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>종류</TableCell>
+                  <TableCell>내용</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {skill.acquire_requirement.map((req, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{req.종류}</TableCell>
+                    <TableCell>{req.내용}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      )}
     </Box>
   );
 }
