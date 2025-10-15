@@ -74,10 +74,10 @@ export default function CityNpcDetail({ data }: { data?: CityNpc }) {
       <Typography variant="h4" gutterBottom>{cityNpc.name}</Typography>
       <Card>
         <CardContent>
+          <Box sx={{ mb: 2 }}>
+            <DetailItem label="설명" value={cityNpc.description} />
+          </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-                <DetailItem label="설명" value={cityNpc.description} />
-            </Grid>
             <Grid item xs={12} sm={6}>
               <DetailItem
                 label="도시"
@@ -99,22 +99,22 @@ export default function CityNpcDetail({ data }: { data?: CityNpc }) {
                 value={cityNpc.tarot_cards ? renderObjectsToChips(cityNpc.tarot_cards, navigate) : null}
               />
             </Grid>
-            <Grid item xs={12}>
-              {cityNpc.gifts && cityNpc.gifts.length > 0 && (
-                <Box>
-                  <Typography variant="h6" color="text.secondary">
-                    선물
-                  </Typography>
-                  <TableContainer component={Paper}>
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>종류</TableCell>
-                          <TableCell>아이템</TableCell>
-                          <TableCell>수량</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
+          </Grid>
+          {cityNpc.gifts && cityNpc.gifts.length > 0 && (
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="h6" color="text.secondary">
+                선물
+              </Typography>
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>종류</TableCell>
+                      <TableCell>아이템</TableCell>
+                      <TableCell>수량</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
                     {Object.entries(cityNpc.gifts.reduce((acc, gift) => {
                       const type = gift.종류 || '기타';
                       if (!acc[type]) {
@@ -141,12 +141,10 @@ export default function CityNpcDetail({ data }: { data?: CityNpc }) {
                       ))
                     ))}
                   </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Box>
-              )}
-            </Grid>
-          </Grid>
+                </Table>
+              </TableContainer>
+            </Box>
+          )}
         </CardContent>
       </Card>
     </Box>
