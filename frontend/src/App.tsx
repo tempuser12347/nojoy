@@ -32,6 +32,8 @@ import PortPermits from './pages/portpermit/PortPermits';
 import LandNpcs from './pages/landnpc/LandNpcs';
 import MarineNpcs from './pages/marinenpc/MarineNpcs';
 import Ganadors from './pages/ganador/Ganadors';
+import CityNpcs from './pages/citynpc/CityNpcs';
+import CityNpcDetail from './pages/citynpc/CityNpcDetail';
 
 const queryClient = new QueryClient();
 
@@ -50,7 +52,7 @@ function App() {
               <Route path="/레시피" element={<Recipes />} />
               <Route path="/침몰선" element={<Shipwrecks />} />
               <Route path="/소비품" element={<Consumables />} />
-              <Route path="/선박" element={<Ships />} />
+              <Route path="/선박" element="<Ships />" />
               <Route path="/보물지도" element={<TreasureMaps />} />
               <Route path="/직업" element={<Jobs />} />
               <Route path="/장비품" element={<Equipments />} />
@@ -71,6 +73,8 @@ function App() {
               <Route path="/landnpc" element={<LandNpcs />} />
               <Route path="/marinenpc" element={<MarineNpcs />} />
               <Route path="/ganador" element={<Ganadors />} />
+              <Route path="/citynpc" element={<CityNpcs />} />
+              <Route path="/citynpc/:id" element={<CityNpcDetail />} />
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

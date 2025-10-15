@@ -30,6 +30,7 @@ from app.routers import (
     landnpc,
     marinenpc,
     ganador,
+    citynpc,
 )
 import os
 
@@ -73,6 +74,7 @@ app.include_router(portpermit.router)
 app.include_router(landnpc.router)
 app.include_router(marinenpc.router)
 app.include_router(ganador.router)
+app.include_router(citynpc.router)
 
 
 dist_dir = "dist"

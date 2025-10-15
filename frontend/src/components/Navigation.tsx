@@ -111,6 +111,7 @@ const availableSections = [
   "육상 npc",
   "해상 npc",
   "가나돌",
+  "도시 인물",
   "트레져박스",
 ];
 
@@ -189,6 +190,9 @@ const Navigation: React.FC = () => {
         break;
       case "가나돌":
         subsection = "ganador";
+        break;
+      case "도시 인물":
+        subsection = "citynpc";
         break;
       case "트레져박스":
         subsection = "treasurebox";
