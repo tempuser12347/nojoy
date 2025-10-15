@@ -64,7 +64,7 @@ export default function SkillRefinementEffectDetail({ data }: { data?: SkillRefi
             <DetailItem label="설명" value={skillRefinementEffect.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs: 12, sm: 6}}>
               <DetailItem label="행동력" value={skillRefinementEffect.action_power} />
             </Grid>
           </Grid>

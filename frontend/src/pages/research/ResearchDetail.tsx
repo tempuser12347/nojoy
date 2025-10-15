@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -14,10 +14,10 @@ import {
   TableHead,
   TableRow,
   Paper,
-} from '@mui/material';
-import api from '../../api';
-import DetailItem from '../../components/DetailItem';
-import { renderObjectChip, renderObjectsToChips } from '../../common/render';
+} from "@mui/material";
+import api from "../../api";
+import DetailItem from "../../components/DetailItem";
+import { renderObjectChip } from "../../common/render";
 
 interface ResearchAction {
   id: number;
@@ -50,7 +50,9 @@ interface Research {
   rewards: Reward[] | null;
 }
 
-const ResearchActionsTable: React.FC<{ data: ResearchAction[] }> = ({ data }) => {
+const ResearchActionsTable: React.FC<{ data: ResearchAction[] }> = ({
+  data,
+}) => {
   if (!data || data.length === 0) return null;
   return (
     <TableContainer component={Paper}>
@@ -118,23 +120,31 @@ export default function ResearchDetail({ data }: { data?: Research }) {
         const response = await api.get(`/api/researches/${id}`);
         setResearch(response.data);
       } catch (err) {
-        setError('Failed to load Research details');
+        setError("Failed to load Research details");
       } finally {
         setLoading(false);
       }
     };
 
     if (!data && id) {
-        fetchResearch();
+      fetchResearch();
     }
   }, [id, data]);
 
   if (loading) {
-    return <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}><CircularProgress /></Box>;
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", p: 3 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
-    return <Typography color="error" sx={{ p: 3 }}>{error}</Typography>;
+    return (
+      <Typography color="error" sx={{ p: 3 }}>
+        {error}
+      </Typography>
+    );
   }
 
   if (!research) {
@@ -143,44 +153,57 @@ export default function ResearchDetail({ data }: { data?: Research }) {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>{research.name}</Typography>
+      <Typography variant="h4" gutterBottom>
+        {research.name}
+      </Typography>
       <Card>
         <CardContent>
           <Box sx={{ mb: 2 }}>
             <DetailItem label="설명" value={research.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="카테고리" value={research.category} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="건물 레벨" value={research.building_level} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 label="전공"
-                value={research.major ? renderObjectChip(research.major, navigate) : null}
+                value={
+                  research.major
+                    ? renderObjectChip(research.major, navigate)
+                    : null
+                }
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 label="직업"
-                value={research.job ? renderObjectChip(research.job, navigate) : null}
+                value={
+                  research.job ? renderObjectChip(research.job, navigate) : null
+                }
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="필요 페이지" value={research.required_pages} />
             </Grid>
           </Grid>
-          {research.research_actions && research.research_actions.length > 0 && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" gutterBottom>연구 행동</Typography>
-              <ResearchActionsTable data={research.research_actions} />
-            </Box>
-          )}
+          {research.research_actions &&
+            research.research_actions.length > 0 && (
+              <Box sx={{ mt: 3 }}>
+                <Typography variant="h6" gutterBottom>
+                  연구 행동
+                </Typography>
+                <ResearchActionsTable data={research.research_actions} />
+              </Box>
+            )}
           {research.rewards && research.rewards.length > 0 && (
             <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" gutterBottom>보상</Typography>
+              <Typography variant="h6" gutterBottom>
+                보상
+              </Typography>
               <RewardsTable data={research.rewards} />
             </Box>
           )}

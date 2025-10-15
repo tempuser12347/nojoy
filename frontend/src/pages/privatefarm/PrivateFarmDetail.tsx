@@ -30,84 +30,86 @@ interface PrivateFarm {
 }
 
 const FacilitiesTable: React.FC<{ data: any }> = ({ data }) => {
-    if (!data) return null;
-    return (
-        <TableContainer component={Paper}>
-        <Table size="small">
-            <TableHead>
-            <TableRow>
-                <TableCell>시설</TableCell>
-                <TableCell>시설수</TableCell>
-                <TableCell>개발도</TableCell>
+  if (!data) return null;
+  return (
+    <TableContainer component={Paper}>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>시설</TableCell>
+            <TableCell>시설수</TableCell>
+            <TableCell>개발도</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {Object.entries(data).map(([key, value]: [string, any]) => (
+            <TableRow key={key}>
+              <TableCell>{key}</TableCell>
+              <TableCell>{value["시설수"]}</TableCell>
+              <TableCell>{value["개발도"]}</TableCell>
             </TableRow>
-            </TableHead>
-            <TableBody>
-            {Object.entries(data).map(([key, value]: [string, any]) => (
-                <TableRow key={key}>
-                <TableCell>{key}</TableCell>
-                <TableCell>{value['시설수']}</TableCell>
-                <TableCell>{value['개발도']}</TableCell>
-                </TableRow>
-            ))}
-            </TableBody>
-        </Table>
-        </TableContainer>
-    );
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 };
 
 const ProductsTable: React.FC<{ data: any }> = ({ data }) => {
-    const navigate = useNavigate();
-    if (!data) return null;
-    return (
-        <Box>
-        {Object.entries(data).map(([category, facilities]: [string, any]) => (
-            <Box key={category} mb={3}>
-            <Typography variant="h6">{category}</Typography>
-            <TableContainer component={Paper}>
-                <Table size="small">
-                <TableHead>
-                    <TableRow>
-                    <TableCell>시설</TableCell>
-                    <TableCell>아이템</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {facilities.map((facility: any) => {
-                    const facilityRowSpan = facility.items.length;
-                    return facility.items.map((itemGroup: any[], index: number) => (
-                        <TableRow key={index}>
+  const navigate = useNavigate();
+  if (!data) return null;
+  return (
+    <Box>
+      {Object.entries(data).map(([category, facilities]: [string, any]) => (
+        <Box key={category} mb={3}>
+          <Typography variant="h6">{category}</Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>시설</TableCell>
+                  <TableCell>아이템</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {facilities.map((facility: any) => {
+                  const facilityRowSpan = facility.items.length;
+                  return facility.items.map(
+                    (itemGroup: any[], index: number) => (
+                      <TableRow key={index}>
                         {index === 0 && (
-                            <TableCell rowSpan={facilityRowSpan}>
+                          <TableCell rowSpan={facilityRowSpan}>
                             {facility.facility}
-                            </TableCell>
+                          </TableCell>
                         )}
                         <TableCell>
-                            <Box
+                          <Box
                             sx={{
-                                display: "flex",
-                                gap: 1,
-                                flexWrap: "wrap",
+                              display: "flex",
+                              gap: 1,
+                              flexWrap: "wrap",
                             }}
-                            >
+                          >
                             {itemGroup.map((item) => (
-                                <span key={item.id}>
-                                {renderObjectChip(item, navigate)} x {item.amount}
-                                </span>
+                              <span key={item.id}>
+                                {renderObjectChip(item, navigate)} x{" "}
+                                {item.amount}
+                              </span>
                             ))}
-                            </Box>
+                          </Box>
                         </TableCell>
-                        </TableRow>
-                    ));
-                    })}
-                </TableBody>
-                </Table>
-            </TableContainer>
-            </Box>
-        ))}
+                      </TableRow>
+                    )
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
-    );
+      ))}
+    </Box>
+  );
 };
-
 
 export default function PrivateFarmDetail({ data }: { data?: PrivateFarm }) {
   const { id } = useParams<{ id: string }>();
@@ -168,21 +170,23 @@ export default function PrivateFarmDetail({ data }: { data?: PrivateFarm }) {
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-                <DetailItem
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
                 label="지역"
                 value={
-                    farm.region ? renderObjectChip(farm.region, navigate) : null
+                  farm.region ? renderObjectChip(farm.region, navigate) : null
                 }
-                />
+              />
             </Grid>
-            <Grid item xs={12} sm={6}>
-                <DetailItem
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
                 label="해역"
                 value={
-                    farm.sea_area ? renderObjectChip(farm.sea_area, navigate) : null
+                  farm.sea_area
+                    ? renderObjectChip(farm.sea_area, navigate)
+                    : null
                 }
-                />
+              />
             </Grid>
           </Grid>
         </CardContent>

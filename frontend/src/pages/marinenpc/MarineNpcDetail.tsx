@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -14,10 +14,10 @@ import {
   TableHead,
   TableRow,
   Paper,
-} from '@mui/material';
-import api from '../../api';
-import DetailItem from '../../components/DetailItem';
-import { renderObjectChip } from '../../common/render';
+} from "@mui/material";
+import api from "../../api";
+import DetailItem from "../../components/DetailItem";
+import { renderObjectChip } from "../../common/render";
 
 interface MarineNpc {
   id: number;
@@ -38,112 +38,135 @@ interface MarineNpc {
   penalty_level: number;
 }
 
-const SeaAreasTable: React.FC<{ data: { id: number; name: string }[] }> = ({ data }) => {
-    const navigate = useNavigate();
-    if (!data || data.length === 0) return null;
-    return (
-        <TableContainer component={Paper}>
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>해역</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data.map((seaArea) => (
-                        <TableRow key={seaArea.id}>
-                            <TableCell>{renderObjectChip(seaArea, navigate)}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    );
+const SeaAreasTable: React.FC<{ data: { id: number; name: string }[] }> = ({
+  data,
+}) => {
+  const navigate = useNavigate();
+  if (!data || data.length === 0) return null;
+  return (
+    <TableContainer component={Paper}>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>해역</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((seaArea) => (
+            <TableRow key={seaArea.id}>
+              <TableCell>{renderObjectChip(seaArea, navigate)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 };
 
-const AcquiredItemsTable: React.FC<{ data: MarineNpc['acquired_items'] }> = ({ data }) => {
-    const navigate = useNavigate();
-    if (!data || data.length === 0) return null;
+const AcquiredItemsTable: React.FC<{ data: MarineNpc["acquired_items"] }> = ({
+  data,
+}) => {
+  const navigate = useNavigate();
+  if (!data || data.length === 0) return null;
 
-    // Group by "획득 방법"
-    const groupedByMethod = data.reduce((acc, item) => {
-        const methodKey = item['획득 방법'];
-        if (!acc[methodKey]) {
-            acc[methodKey] = [];
-        }
-        acc[methodKey].push(item);
-        return acc;
-    }, {} as { [method: string]: MarineNpc['acquired_items'] });
+  // Group by "획득 방법"
+  const groupedByMethod = data.reduce((acc, item) => {
+    const methodKey = item["획득 방법"];
+    if (!acc[methodKey]) {
+      acc[methodKey] = [];
+    }
+    acc[methodKey].push(item);
+    return acc;
+  }, {} as { [method: string]: MarineNpc["acquired_items"] });
 
-    return (
-        <TableContainer component={Paper}>
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>획득 방법</TableCell>
-                        <TableCell>유형</TableCell>
-                        <TableCell>종류</TableCell>
-                        <TableCell>아이템</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {Object.entries(groupedByMethod).map(([method, itemsByMethod]) => {
-                        // Group by "유형" within each method
-                        const groupedByType = itemsByMethod.reduce((acc, item) => {
-                            const typeKey = item['유형'];
-                            if (!acc[typeKey]) {
-                                acc[typeKey] = [];
-                            }
-                            acc[typeKey].push(item);
-                            return acc;
-                        }, {} as { [type: string]: MarineNpc['acquired_items'] });
+  return (
+    <TableContainer component={Paper}>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>획득 방법</TableCell>
+            <TableCell>유형</TableCell>
+            <TableCell>종류</TableCell>
+            <TableCell>아이템</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {
+            Object.entries(groupedByMethod)
+              .map(([method, itemsByMethod]) => {
+                // Group by "유형" within each method
+                const groupedByType = itemsByMethod.reduce((acc, item) => {
+                  const typeKey = item["유형"];
+                  if (!acc[typeKey]) {
+                    acc[typeKey] = [];
+                  }
+                  acc[typeKey].push(item);
+                  return acc;
+                }, {} as { [type: string]: MarineNpc["acquired_items"] });
 
-                        const methodRowSpan = itemsByMethod.length; // Total items for this method
+                const methodRowSpan = itemsByMethod.length; // Total items for this method
 
-                        return Object.entries(groupedByType).map(([type, itemsByType]) => {
-                            // Group by "종류" within each type
-                            const groupedByCategory = itemsByType.reduce((acc, item) => {
-                                const categoryKey = item['종류'];
-                                if (!acc[categoryKey]) {
-                                    acc[categoryKey] = [];
-                                }
-                                acc[categoryKey].push(item);
-                                return acc;
-                            }, {} as { [category: string]: MarineNpc['acquired_items'] });
+                return Object.entries(groupedByType)
+                  .map(([type, itemsByType]) => {
+                    // Group by "종류" within each type
+                    const groupedByCategory = itemsByType.reduce(
+                      (acc, item) => {
+                        const categoryKey = item["종류"];
+                        if (!acc[categoryKey]) {
+                          acc[categoryKey] = [];
+                        }
+                        acc[categoryKey].push(item);
+                        return acc;
+                      },
+                      {} as { [category: string]: MarineNpc["acquired_items"] }
+                    );
 
-                            const typeRowSpan = itemsByType.length; // Total items for this type
+                    const typeRowSpan = itemsByType.length; // Total items for this type
 
-                            return Object.entries(groupedByCategory).map(([category, itemsByCategory]) => {
-                                const categoryRowSpan = itemsByCategory.length; // Total items for this category
+                    return Object.entries(groupedByCategory)
+                      .map(([category, itemsByCategory]) => {
+                        const categoryRowSpan = itemsByCategory.length; // Total items for this category
 
-                                return itemsByCategory.map((item, index) => (
-                                    <TableRow key={`${method}-${type}-${category}-${item.id}`}>
-                                        {/* Acquisition Method Cell */}
-                                        {itemsByMethod.indexOf(item) === 0 && (
-                                            <TableCell rowSpan={methodRowSpan}>{method}</TableCell>
-                                        )}
-                                        {/* Type Cell */}
-                                        {itemsByType.indexOf(item) === 0 && (
-                                            <TableCell rowSpan={typeRowSpan}>{type}</TableCell>
-                                        )}
-                                        {/* Category Cell */}
-                                        {itemsByCategory.indexOf(item) === 0 && (
-                                            <TableCell rowSpan={categoryRowSpan}>{category}</TableCell>
-                                        )}
-                                        {/* Item Cell */}
-                                        <TableCell>{renderObjectChip(item, navigate)}</TableCell>
-                                    </TableRow>
-                                ));
-                            }).flat(); // Flatten the nested arrays of TableRows
-                        }).flat(); // Flatten the nested arrays of TableRows
-                    }).flat() // Flatten the nested arrays of TableRows
-                    }
-                </TableBody>
-            </Table>
-        </TableContainer>
-    );
+                        return itemsByCategory.map((item, index) => (
+                          <TableRow
+                            key={`${method}-${type}-${category}-${item.id}`}
+                          >
+                            {/* Acquisition Method Cell */}
+                            {itemsByMethod.indexOf(item) === 0 && (
+                              <TableCell rowSpan={methodRowSpan}>
+                                {method}
+                              </TableCell>
+                            )}
+                            {/* Type Cell */}
+                            {itemsByType.indexOf(item) === 0 && (
+                              <TableCell rowSpan={typeRowSpan}>
+                                {type}
+                              </TableCell>
+                            )}
+                            {/* Category Cell */}
+                            {itemsByCategory.indexOf(item) === 0 && (
+                              <TableCell rowSpan={categoryRowSpan}>
+                                {category}
+                              </TableCell>
+                            )}
+                            {/* Item Cell */}
+                            <TableCell>
+                              {renderObjectChip(item, navigate)}
+                            </TableCell>
+                          </TableRow>
+                        ));
+                      })
+                      .flat(); // Flatten the nested arrays of TableRows
+                  })
+                  .flat(); // Flatten the nested arrays of TableRows
+              })
+              .flat() // Flatten the nested arrays of TableRows
+          }
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 };
-
 
 export default function MarineNpcDetail({ data }: { data?: MarineNpc }) {
   const { id } = useParams<{ id: string }>();
@@ -160,23 +183,31 @@ export default function MarineNpcDetail({ data }: { data?: MarineNpc }) {
         const response = await api.get(`/api/marinenpcs/${id}`);
         setNpc(response.data);
       } catch (err) {
-        setError('Failed to load Marine NPC details');
+        setError("Failed to load Marine NPC details");
       } finally {
         setLoading(false);
       }
     };
 
     if (!data && id) {
-        fetchNpc();
+      fetchNpc();
     }
   }, [id, data]);
 
   if (loading) {
-    return <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}><CircularProgress /></Box>;
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", p: 3 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
-    return <Typography color="error" sx={{ p: 3 }}>{error}</Typography>;
+    return (
+      <Typography color="error" sx={{ p: 3 }}>
+        {error}
+      </Typography>
+    );
   }
 
   if (!npc) {
@@ -185,28 +216,37 @@ export default function MarineNpcDetail({ data }: { data?: MarineNpc }) {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>{npc.name}</Typography>
+      <Typography variant="h4" gutterBottom>
+        {npc.name}
+      </Typography>
       <Card>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-                <DetailItem label="설명" value={npc.description} />
+            <Grid size={{ xs: 12 }}>
+              <DetailItem label="설명" value={npc.description} />
             </Grid>
           </Grid>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="함대 수" value={npc.fleet_count} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="특징" value={npc.feature} />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <DetailItem label="국적" value={npc.nationality ? renderObjectChip(npc.nationality, navigate) : '-'} />
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                label="국적"
+                value={
+                  npc.nationality
+                    ? renderObjectChip(npc.nationality, navigate)
+                    : "-"
+                }
+              />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="백병전" value={npc.deck_battle} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="패널티 레벨" value={npc.penalty_level} />
             </Grid>
           </Grid>
@@ -215,14 +255,18 @@ export default function MarineNpcDetail({ data }: { data?: MarineNpc }) {
 
       {npc.sea_areas && npc.sea_areas.length > 0 && (
         <Box mt={3}>
-          <Typography variant="h5" gutterBottom>해역</Typography>
+          <Typography variant="h5" gutterBottom>
+            해역
+          </Typography>
           <SeaAreasTable data={npc.sea_areas} />
         </Box>
       )}
 
       {npc.acquired_items && npc.acquired_items.length > 0 && (
         <Box mt={3}>
-          <Typography variant="h5" gutterBottom>획득 아이템</Typography>
+          <Typography variant="h5" gutterBottom>
+            획득 아이템
+          </Typography>
           <AcquiredItemsTable data={npc.acquired_items} />
         </Box>
       )}

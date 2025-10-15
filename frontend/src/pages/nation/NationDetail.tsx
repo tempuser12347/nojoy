@@ -1,11 +1,18 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Box, Typography, Card, CardContent, CircularProgress, Grid } from '@mui/material';
-import api from '../../api';
-import DetailItem from '../../components/DetailItem';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+} from "@mui/material";
+import api from "../../api";
+import DetailItem from "../../components/DetailItem";
 
 const renderBooleanEmoji = (value: number) => {
-  return value === 1 ? '✅' : '❌';
+  return value === 1 ? "✅" : "❌";
 };
 
 interface Nation {
@@ -30,23 +37,31 @@ export default function NationDetail({ data }: { data?: Nation }) {
         const response = await api.get(`/api/nations/${id}`);
         setNation(response.data);
       } catch (err) {
-        setError('Failed to load nation details');
+        setError("Failed to load nation details");
       } finally {
         setLoading(false);
       }
     };
 
     if (!data && id) {
-        fetchNation();
+      fetchNation();
     }
   }, [id, data]);
 
   if (loading) {
-    return <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}><CircularProgress /></Box>;
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", p: 3 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
-    return <Typography color="error" sx={{ p: 3 }}>{error}</Typography>;
+    return (
+      <Typography color="error" sx={{ p: 3 }}>
+        {error}
+      </Typography>
+    );
   }
 
   if (!nation) {
@@ -55,20 +70,28 @@ export default function NationDetail({ data }: { data?: Nation }) {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>{nation.name}</Typography>
+      <Typography variant="h4" gutterBottom>
+        {nation.name}
+      </Typography>
       <Card>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-                <DetailItem label="설명" value={nation.description} />
+            <Grid size={{ xs: 12 }}>
+              <DetailItem label="설명" value={nation.description} />
             </Grid>
           </Grid>
-          <Grid container spacing={2}> 
-            <Grid item xs={12} sm={6}>
-              <DetailItem label="NPC 국가" value={renderBooleanEmoji(nation.npc_nation)} />
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                label="NPC 국가"
+                value={renderBooleanEmoji(nation.npc_nation)}
+              />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <DetailItem label="기본 국가" value={renderBooleanEmoji(nation.is_basic)} />
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                label="기본 국가"
+                value={renderBooleanEmoji(nation.is_basic)}
+              />
             </Grid>
           </Grid>
         </CardContent>
