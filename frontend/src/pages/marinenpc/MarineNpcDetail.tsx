@@ -127,7 +127,7 @@ const AcquiredItemsTable: React.FC<{ data: MarineNpc["acquired_items"] }> = ({
                       .map(([category, itemsByCategory]) => {
                         const categoryRowSpan = itemsByCategory.length; // Total items for this category
 
-                        return itemsByCategory.map((item, index) => (
+                        return itemsByCategory.map((item) => (
                           <TableRow
                             key={`${method}-${type}-${category}-${item.id}`}
                           >
