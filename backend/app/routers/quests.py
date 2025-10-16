@@ -125,17 +125,14 @@ LEFT JOIN allData ad2
 
         # Define a sorting key function
         def sort_key(row):
-            # Get the value of the sort_by attribute from the row
             value = getattr(row, sort_by, None)
             # Handle None values to prevent errors during sorting
             if value is None:
                 # Treat None as a very small number for numeric types or an empty string for others
                 # This ensures they are sorted at the beginning (for asc) or end (for desc)
-                return (
-                    (0, "")
-                    if isinstance(getattr(results[0], sort_by, None), (int, float))
-                    else ""
-                )
+                if sort_by in ["id", "difficulty"]:
+                    return 0
+                return ""
             return value
 
         results.sort(key=sort_key, reverse=reverse)
