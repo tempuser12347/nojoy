@@ -33,7 +33,7 @@ def read_seas(
     # Sorting logic
     if results and hasattr(results[0], sort_by):
         reverse = sort_order.lower() == "desc"
-        
+
         is_numeric = False
         for row in results:
             val = getattr(row, sort_by)
@@ -41,12 +41,23 @@ def read_seas(
                 if isinstance(val, (int, float)):
                     is_numeric = True
                 break
-        
-        if is_numeric:
-            results.sort(key=lambda r: getattr(r, sort_by) if getattr(r, sort_by) is not None else float('-inf'), reverse=reverse)
-        else:
-            results.sort(key=lambda r: str(getattr(r, sort_by)) if getattr(r, sort_by) is not None else '', reverse=reverse)
 
+        if is_numeric:
+            results.sort(
+                key=lambda r: (
+                    getattr(r, sort_by)
+                    if getattr(r, sort_by) is not None
+                    else float("-inf")
+                ),
+                reverse=reverse,
+            )
+        else:
+            results.sort(
+                key=lambda r: (
+                    str(getattr(r, sort_by)) if getattr(r, sort_by) is not None else ""
+                ),
+                reverse=reverse,
+            )
 
     total = len(results)
     paginated_results = results[skip : skip + limit]
@@ -55,13 +66,15 @@ def read_seas(
     for row in paginated_results:
         item = dict(row._mapping)
         try:
-            item['region'] = json.loads(item['region']) if item['region'] else None
+            item["region"] = json.loads(item["region"]) if item["region"] else None
         except (json.JSONDecodeError, TypeError):
-            item['region'] = None
+            item["region"] = None
         try:
-            item['gatherable'] = json.loads(item['gatherable']) if item['gatherable'] else None
+            item["gatherable"] = (
+                json.loads(item["gatherable"]) if item["gatherable"] else None
+            )
         except (json.JSONDecodeError, TypeError):
-            item['gatherable'] = None
+            item["gatherable"] = None
         items.append(item)
 
     return {"items": items, "total": total}
@@ -71,8 +84,11 @@ def read_seas(
 def read_sea(sea_id: int, db: Session = Depends(get_db)):
     return read_sea_core(sea_id, db)
 
+
 def read_sea_core(sea_id: int, db: Session = Depends(get_db)):
-    result = db.execute(text("SELECT * FROM sea WHERE id = :id"), {"id": sea_id}).fetchone()
+    result = db.execute(
+        text("SELECT * FROM sea WHERE id = :id"), {"id": sea_id}
+    ).fetchone()
 
     if not result:
         raise HTTPException(status_code=404, detail="Sea not found")
@@ -80,23 +96,23 @@ def read_sea_core(sea_id: int, db: Session = Depends(get_db)):
     sea = dict(result._mapping)
 
     try:
-        sea['region'] = json.loads(sea['region']) if sea['region'] else None
+        sea["region"] = json.loads(sea["region"]) if sea["region"] else None
     except (json.JSONDecodeError, TypeError):
-        sea['region'] = None
+        sea["region"] = None
     try:
-        sea['gatherable'] = json.loads(sea['gatherable']) if sea['gatherable'] else None
+        sea["gatherable"] = json.loads(sea["gatherable"]) if sea["gatherable"] else None
     except (json.JSONDecodeError, TypeError):
-        sea['gatherable'] = None
+        sea["gatherable"] = None
 
     # Parse boundary
-    if sea['boundary']:
+    if sea["boundary"]:
         try:
             boundary_dict = {}
-            parts = sea['boundary'].split(', ')
+            parts = sea["boundary"].split(", ")
             for part in parts:
-                key, value = part.split(' : ')
+                key, value = part.split(" : ")
                 boundary_dict[key.strip()] = int(value.strip())
-            sea['boundary'] = boundary_dict
+            sea["boundary"] = boundary_dict
         except (ValueError, IndexError):
             # Keep as string if parsing fails
             pass

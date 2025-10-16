@@ -6,11 +6,14 @@ from sqlalchemy import text
 from ..database import get_db
 import json
 
+
 class PrivateFarmResponse(BaseModel):
     items: List[dict]
     total: int
 
+
 router = APIRouter(prefix="/api/privatefarms", tags=["privatefarms"])
+
 
 @router.get("/", response_model=PrivateFarmResponse)
 def read_privatefarms(
@@ -40,9 +43,11 @@ def read_privatefarms(
 
     return {"items": items, "total": total}
 
+
 @router.get("/{privatefarm_id}", response_model=dict)
 def read_privatefarm(privatefarm_id: int, db: Session = Depends(get_db)):
     return read_privatefarm_core(privatefarm_id, db)
+
 
 def read_privatefarm_core(privatefarm_id: int, db: Session):
     query = text("SELECT * FROM privatefarm WHERE id = :id")
@@ -54,11 +59,11 @@ def read_privatefarm_core(privatefarm_id: int, db: Session):
     ret = dict(result._mapping)
 
     # Parse JSON fields
-    for field in ['region', 'sea_area', 'facilities', 'products']:
+    for field in ["region", "sea_area", "facilities", "products"]:
         if ret.get(field) and isinstance(ret[field], str):
             try:
                 ret[field] = json.loads(ret[field])
             except json.JSONDecodeError:
                 ret[field] = None
-    
+
     return ret

@@ -1,9 +1,10 @@
 from sqlalchemy import Column, Integer, String, JSON, ForeignKey
 from app.database import Base
 
+
 class Discovery(Base):
     __tablename__ = "discovery"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     type = Column(String)
     name = Column(String)
@@ -25,9 +26,10 @@ class Discovery(Base):
     weather = Column(String)
     coordinates = Column(String)
 
+
 class Consumable(Base):
     __tablename__ = "consumable"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     type = Column(String)
     name = Column(String)
@@ -39,9 +41,10 @@ class Consumable(Base):
     Item = Column(String)
     Duplicate = Column(String)
 
+
 class Ship(Base):
     __tablename__ = "ship"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     additional_name = Column(String)
@@ -89,9 +92,10 @@ class Ship(Base):
     bow_ports = Column(Integer)
     stern_ports = Column(Integer)
 
+
 class Technic(Base):
     __tablename__ = "technic"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     description = Column(String)
@@ -106,9 +110,10 @@ class Technic(Base):
     technique_rank = Column(String)
     preceding = Column(String)
 
+
 class LandNPC(Base):
     __tablename__ = "landnpc"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     lv = Column(Integer)
@@ -122,9 +127,10 @@ class LandNPC(Base):
     technic_id = Column(JSON)
     비고 = Column(String)
 
+
 class Quest(Base):
     __tablename__ = "quest"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     type = Column(String)
     name = Column(String)
@@ -132,18 +138,20 @@ class Quest(Base):
     description = Column(String)
     series = Column(String)
     difficulty = Column(Integer)
-    era = Column(String) # VARCHAR(255)
+    era = Column(String)  # VARCHAR(255)
     category = Column(String)
     location = Column(String)
     destination = Column(String)
     destination_coordinates = Column(String)
     discovery = Column(String)
     preceding_discovery_quest = Column(String)
-    deadline = Column(String) # DATE in schema, but keeping as String for now to avoid migration issues if data is not clean date format. Can be changed to Date.
+    deadline = Column(
+        String
+    )  # DATE in schema, but keeping as String for now to avoid migration issues if data is not clean date format. Can be changed to Date.
     required_items = Column(String)
-    guide = Column(String) # TEXT
+    guide = Column(String)  # TEXT
     progress = Column(String)
-    previous_continuous_quest_id = Column(String) # TEXT
+    previous_continuous_quest_id = Column(String)  # TEXT
     episode = Column(Integer)
     one_time_only = Column(Integer)
     rare = Column(Integer)
@@ -157,7 +165,7 @@ class Quest(Base):
     occupation = Column(String)
     port_permission = Column(String)
     reputation = Column(String)
-    other = Column(String) # TEXT
+    other = Column(String)  # TEXT
     reward_money = Column(Integer)
     advance_payment = Column(Integer)
     report_experience = Column(String)
@@ -167,9 +175,10 @@ class Quest(Base):
     reward_techniques = Column(String)
     reward_title = Column(String)
 
+
 class City(Base):
     __tablename__ = "city"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     region = Column(String)
@@ -192,9 +201,10 @@ class City(Base):
     transaction_reward = Column(String)
     fishing = Column(String)
 
+
 class Shipwreck(Base):
     __tablename__ = "shipwreck"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     type = Column(String)
     name = Column(String)
@@ -232,9 +242,10 @@ class Shipwreck(Base):
     ship_decoration_code = Column(String)
     item_id = Column(String)
 
+
 class Recipe(Base):
     __tablename__ = "recipe"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     description = Column(String)
@@ -255,7 +266,6 @@ class Recipe(Base):
     success = Column(String)
     greatsuccess = Column(String)
     failure = Column(String)
-
 
 
 class TreasureMap(Base):

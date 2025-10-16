@@ -6,11 +6,14 @@ from sqlalchemy import text
 from ..database import get_db
 import json
 
+
 class LandNpcResponse(BaseModel):
     items: List[dict]
     total: int
 
+
 router = APIRouter(prefix="/api/landnpcs", tags=["landnpcs"])
+
 
 @router.get("/", response_model=LandNpcResponse)
 def read_landnpcs(
@@ -39,18 +42,20 @@ def read_landnpcs(
     items = []
     for row in paginated_results:
         item_dict = dict(row._mapping)
-        if item_dict.get('fields') and isinstance(item_dict['fields'], str):
+        if item_dict.get("fields") and isinstance(item_dict["fields"], str):
             try:
-                item_dict['fields'] = json.loads(item_dict['fields'])
+                item_dict["fields"] = json.loads(item_dict["fields"])
             except json.JSONDecodeError:
-                item_dict['fields'] = None
+                item_dict["fields"] = None
         items.append(item_dict)
 
     return {"items": items, "total": total}
 
+
 @router.get("/{landnpc_id}", response_model=dict)
 def read_landnpc(landnpc_id: int, db: Session = Depends(get_db)):
     return read_landnpc_core(landnpc_id, db)
+
 
 def read_landnpc_core(landnpc_id: int, db: Session):
     query = text("SELECT * FROM landnpc WHERE id = :id")
@@ -62,11 +67,11 @@ def read_landnpc_core(landnpc_id: int, db: Session):
     ret = dict(result._mapping)
 
     # Parse JSON fields
-    for field in ['fields', 'techniques', 'drop_items']:
+    for field in ["fields", "techniques", "drop_items"]:
         if ret.get(field) and isinstance(ret[field], str):
             try:
                 ret[field] = json.loads(ret[field])
             except json.JSONDecodeError:
                 ret[field] = None
-    
+
     return ret

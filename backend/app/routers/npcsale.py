@@ -58,7 +58,8 @@ GROUP BY n.id, n.npc, n.location_id, ad_loc.name;
         results = [
             row
             for row in results
-            if location_search == (json.loads(row.location)["id"] if row.location else None)
+            if location_search
+            == (json.loads(row.location)["id"] if row.location else None)
         ]
 
     if item_search:

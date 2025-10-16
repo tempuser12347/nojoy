@@ -6,11 +6,14 @@ from sqlalchemy import text
 from ..database import get_db
 import json
 
+
 class PortPermitResponse(BaseModel):
     items: List[dict]
     total: int
 
+
 router = APIRouter(prefix="/api/portpermits", tags=["portpermits"])
+
 
 @router.get("/", response_model=PortPermitResponse)
 def read_portpermits(
@@ -40,9 +43,11 @@ def read_portpermits(
 
     return {"items": items, "total": total}
 
+
 @router.get("/{portpermit_id}", response_model=dict)
 def read_portpermit(portpermit_id: int, db: Session = Depends(get_db)):
     return read_portpermit_core(portpermit_id, db)
+
 
 def read_portpermit_core(portpermit_id: int, db: Session):
     query = text("SELECT * FROM portpermit WHERE id = :id")
@@ -54,11 +59,11 @@ def read_portpermit_core(portpermit_id: int, db: Session):
     ret = dict(result._mapping)
 
     # Parse JSON fields
-    for field in ['quests_select_one', 'fame_per_nation']:
+    for field in ["quests_select_one", "fame_per_nation"]:
         if ret.get(field) and isinstance(ret[field], str):
             try:
                 ret[field] = json.loads(ret[field])
             except json.JSONDecodeError:
                 ret[field] = None
-    
+
     return ret

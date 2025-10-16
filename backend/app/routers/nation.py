@@ -6,11 +6,14 @@ from sqlalchemy import text
 from ..database import get_db
 import json
 
+
 class NationResponse(BaseModel):
     items: List[dict]
     total: int
 
+
 router = APIRouter(prefix="/api/nations", tags=["nations"])
+
 
 @router.get("/", response_model=NationResponse)
 def read_nations(
@@ -40,9 +43,11 @@ def read_nations(
 
     return {"items": items, "total": total}
 
+
 @router.get("/{nation_id}", response_model=dict)
 def read_nation(nation_id: int, db: Session = Depends(get_db)):
     return read_nation_core(nation_id, db)
+
 
 def read_nation_core(nation_id: int, db: Session):
     query = text("SELECT * FROM nation WHERE id = :id")

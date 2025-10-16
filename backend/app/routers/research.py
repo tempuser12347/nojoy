@@ -6,6 +6,7 @@ from sqlalchemy import text
 from ..database import get_db
 import json
 
+
 class Research(BaseModel):
     id: int
     name: str
@@ -21,11 +22,14 @@ class Research(BaseModel):
     class Config:
         orm_mode = True
 
+
 class ResearchResponse(BaseModel):
     items: List[Research]
     total: int
 
+
 router = APIRouter(prefix="/api/researches", tags=["researches"])
+
 
 @router.get("/", response_model=ResearchResponse)
 def read_researches(
@@ -51,7 +55,14 @@ def read_researches(
     count_query = f"SELECT COUNT(*) FROM ({query}) as sub"
     total = db.execute(text(count_query), params).scalar()
 
-    if sort_by in ["id", "name", "description", "category", "building_level", "required_pages"]:
+    if sort_by in [
+        "id",
+        "name",
+        "description",
+        "category",
+        "building_level",
+        "required_pages",
+    ]:
         order = "DESC" if sort_order.lower() == "desc" else "ASC"
         query += f" ORDER BY {sort_by} {order}"
 
@@ -63,7 +74,7 @@ def read_researches(
     items = []
     for row in results:
         item_dict = dict(row._mapping)
-        for field in ['major', 'job', 'research_actions', 'rewards']:
+        for field in ["major", "job", "research_actions", "rewards"]:
             if item_dict.get(field) and isinstance(item_dict[field], str):
                 try:
                     item_dict[field] = json.loads(item_dict[field])
@@ -73,12 +84,16 @@ def read_researches(
 
     return {"items": items, "total": total}
 
+
 @router.get("/{research_id}", response_model=Research)
 def read_research(research_id: int, db: Session = Depends(get_db)):
     return read_research_core(research_id, db)
 
+
 def read_research_core(research_id: int, db: Session):
-    query = text("SELECT id, name, description, category, building_level, major, job, required_pages, research_actions, rewards FROM research WHERE id = :id")
+    query = text(
+        "SELECT id, name, description, category, building_level, major, job, required_pages, research_actions, rewards FROM research WHERE id = :id"
+    )
     result = db.execute(query, {"id": research_id}).fetchone()
 
     if result is None:
@@ -86,11 +101,11 @@ def read_research_core(research_id: int, db: Session):
 
     ret = dict(result._mapping)
 
-    for field in ['major', 'job', 'research_actions', 'rewards']:
+    for field in ["major", "job", "research_actions", "rewards"]:
         if ret.get(field) and isinstance(ret[field], str):
             try:
                 ret[field] = json.loads(ret[field])
             except json.JSONDecodeError:
                 ret[field] = None
-    
+
     return ret

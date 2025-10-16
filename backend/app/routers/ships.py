@@ -7,7 +7,6 @@ from app import models
 from ..common import fetch_all_obtain_methods
 
 
-
 router = APIRouter(prefix="/api/ships", tags=["ships"])
 
 

@@ -6,11 +6,14 @@ from sqlalchemy import text
 from ..database import get_db
 import json
 
+
 class CultureResponse(BaseModel):
     items: List[dict]
     total: int
 
+
 router = APIRouter(prefix="/api/cultures", tags=["cultures"])
+
 
 @router.get("/", response_model=CultureResponse)
 def read_cultures(
@@ -30,7 +33,7 @@ def read_cultures(
     # Sorting logic
     if results and hasattr(results[0], sort_by):
         reverse = sort_order.lower() == "desc"
-        
+
         is_numeric = False
         for row in results:
             val = getattr(row, sort_by)
@@ -38,11 +41,23 @@ def read_cultures(
                 if isinstance(val, (int, float)):
                     is_numeric = True
                 break
-        
+
         if is_numeric:
-            results.sort(key=lambda r: getattr(r, sort_by) if getattr(r, sort_by) is not None else float('-inf'), reverse=reverse)
+            results.sort(
+                key=lambda r: (
+                    getattr(r, sort_by)
+                    if getattr(r, sort_by) is not None
+                    else float("-inf")
+                ),
+                reverse=reverse,
+            )
         else:
-            results.sort(key=lambda r: str(getattr(r, sort_by)) if getattr(r, sort_by) is not None else '', reverse=reverse)
+            results.sort(
+                key=lambda r: (
+                    str(getattr(r, sort_by)) if getattr(r, sort_by) is not None else ""
+                ),
+                reverse=reverse,
+            )
 
     total = len(results)
     paginated_results = results[skip : skip + limit]
@@ -51,12 +66,16 @@ def read_cultures(
 
     return {"items": items, "total": total}
 
+
 @router.get("/{culture_id}", response_model=dict)
 def read_culture(culture_id: int, db: Session = Depends(get_db)):
     return read_culture_core(culture_id, db)
 
+
 def read_culture_core(culture_id: int, db: Session = Depends(get_db)):
-    result = db.execute(text("SELECT * FROM culture WHERE id = :id"), {"id": culture_id}).fetchone()
+    result = db.execute(
+        text("SELECT * FROM culture WHERE id = :id"), {"id": culture_id}
+    ).fetchone()
 
     if not result:
         raise HTTPException(status_code=404, detail="Culture not found")

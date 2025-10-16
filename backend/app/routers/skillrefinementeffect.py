@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from sqlalchemy import text
 from ..database import get_db
 
+
 class SkillRefinementEffect(BaseModel):
     id: int
     name: str
@@ -14,11 +15,16 @@ class SkillRefinementEffect(BaseModel):
     class Config:
         orm_mode = True
 
+
 class SkillRefinementEffectResponse(BaseModel):
     items: List[SkillRefinementEffect]
     total: int
 
-router = APIRouter(prefix="/api/skillrefinementeffects", tags=["skillrefinementeffects"])
+
+router = APIRouter(
+    prefix="/api/skillrefinementeffects", tags=["skillrefinementeffects"]
+)
+
 
 @router.get("/", response_model=SkillRefinementEffectResponse)
 def read_skillrefinementeffects(
@@ -57,12 +63,18 @@ def read_skillrefinementeffects(
 
     return {"items": items, "total": total}
 
+
 @router.get("/{skillrefinementeffect_id}", response_model=SkillRefinementEffect)
-def read_skillrefinementeffect(skillrefinementeffect_id: int, db: Session = Depends(get_db)):
+def read_skillrefinementeffect(
+    skillrefinementeffect_id: int, db: Session = Depends(get_db)
+):
     return read_skillrefinementeffect_core(skillrefinementeffect_id, db)
 
+
 def read_skillrefinementeffect_core(skillrefinementeffect_id: int, db: Session):
-    query = text("SELECT id, name, description, action_power FROM skillrefinementeffect WHERE id = :id")
+    query = text(
+        "SELECT id, name, description, action_power FROM skillrefinementeffect WHERE id = :id"
+    )
     result = db.execute(query, {"id": skillrefinementeffect_id}).fetchone()
 
     if result is None:

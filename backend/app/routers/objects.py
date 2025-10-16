@@ -116,7 +116,7 @@ detail_data_fetch_function_dict = {
     "sellernpc": read_npcsale_core,
     "region": get_region_core,
     "treasurebox": read_treasurebox_core,
-    'field': read_field_core,
+    "field": read_field_core,
     "sea": read_sea_core,
     "culture": read_culture_core,
     "privatefarm": read_privatefarm_core,
@@ -140,7 +140,7 @@ def read_object(obj_id: int, db: Session = Depends(get_db)):
     ).fetchone()
     if not result:
         print(f"no query result")
-        return {"type": None, "data": None, "msg": 'not in allData'}
+        return {"type": None, "data": None, "msg": "not in allData"}
     print(f"category: {result.category}")
     fetch_fn = detail_data_fetch_function_dict.get(result.category, None)
     if not fetch_fn:

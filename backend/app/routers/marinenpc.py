@@ -6,11 +6,14 @@ from sqlalchemy import text
 from ..database import get_db
 import json
 
+
 class MarineNpcResponse(BaseModel):
     items: List[dict]
     total: int
 
+
 router = APIRouter(prefix="/api/marinenpcs", tags=["marinenpcs"])
+
 
 @router.get("/", response_model=MarineNpcResponse)
 def read_marinenpcs(
@@ -39,33 +42,37 @@ def read_marinenpcs(
     items = []
     for row in paginated_results:
         item_dict = dict(row._mapping)
-        if item_dict.get('sea_areas') and isinstance(item_dict['sea_areas'], str):
+        if item_dict.get("sea_areas") and isinstance(item_dict["sea_areas"], str):
             try:
-                item_dict['sea_areas'] = json.loads(item_dict['sea_areas'])
+                item_dict["sea_areas"] = json.loads(item_dict["sea_areas"])
             except json.JSONDecodeError:
-                item_dict['sea_areas'] = None
-        if item_dict.get('acquired_items') and isinstance(item_dict['acquired_items'], str):
+                item_dict["sea_areas"] = None
+        if item_dict.get("acquired_items") and isinstance(
+            item_dict["acquired_items"], str
+        ):
             try:
-                item_dict['acquired_items'] = json.loads(item_dict['acquired_items'])
+                item_dict["acquired_items"] = json.loads(item_dict["acquired_items"])
             except json.JSONDecodeError:
-                item_dict['acquired_items'] = None
-        if item_dict.get('nationality') and isinstance(item_dict['nationality'], str):
+                item_dict["acquired_items"] = None
+        if item_dict.get("nationality") and isinstance(item_dict["nationality"], str):
             try:
-                item_dict['nationality'] = json.loads(item_dict['nationality'])
+                item_dict["nationality"] = json.loads(item_dict["nationality"])
             except json.JSONDecodeError:
-                item_dict['nationality'] = None
-        if item_dict.get('deck_battle') and isinstance(item_dict['deck_battle'], str):
+                item_dict["nationality"] = None
+        if item_dict.get("deck_battle") and isinstance(item_dict["deck_battle"], str):
             try:
-                item_dict['deck_battle'] = json.loads(item_dict['deck_battle'])
+                item_dict["deck_battle"] = json.loads(item_dict["deck_battle"])
             except json.JSONDecodeError:
-                item_dict['deck_battle'] = None
+                item_dict["deck_battle"] = None
         items.append(item_dict)
 
     return {"items": items, "total": total}
 
+
 @router.get("/{marinenpc_id}", response_model=dict)
 def read_marinenpc(marinenpc_id: int, db: Session = Depends(get_db)):
     return read_marinenpc_core(marinenpc_id, db)
+
 
 def read_marinenpc_core(marinenpc_id: int, db: Session):
     query = text("SELECT * FROM marinenpc WHERE id = :id")
@@ -77,11 +84,11 @@ def read_marinenpc_core(marinenpc_id: int, db: Session):
     ret = dict(result._mapping)
 
     # Parse JSON fields
-    for field in ['sea_areas', 'acquired_items', 'nationality', 'deck_battle']:
+    for field in ["sea_areas", "acquired_items", "nationality", "deck_battle"]:
         if ret.get(field) and isinstance(ret[field], str):
             try:
                 ret[field] = json.loads(ret[field])
             except json.JSONDecodeError:
                 ret[field] = None
-    
+
     return ret
