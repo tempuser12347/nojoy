@@ -94,8 +94,11 @@ const RewardsTable: React.FC<{ data: Reward[] }> = ({ data }) => {
               <TableCell>{reward.type}</TableCell>
               <TableCell>
                 {reward.content.id && reward.content.name
-                  ? renderObjectChip(reward.content, navigate)
-                  : reward.content}
+                  ? renderObjectChip(
+                      reward.content as { id: number; name: string },
+                      navigate
+                    )
+                  : String(reward.content)}
               </TableCell>
             </TableRow>
           ))}
