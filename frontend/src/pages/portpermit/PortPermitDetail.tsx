@@ -25,7 +25,7 @@ interface PortPermit {
   description: string;
   quests_select_one: { id: number; name: string }[];
   required: string;
-  fame_per_nation: { [key: string]: number };
+  fame_per_nation: { [category: string]: { [nation: string]: number } };
 }
 
 const QuestsTable: React.FC<{ data: { id: number; name: string }[] }> = ({
