@@ -79,22 +79,24 @@ GROUP BY e.id;
     print(f"sort by: {sort_by}, reverse: {reverse}")
 
     def sort_key(row):
-        if sort_by == "skills":
-            # get the max value among skills
-            skills = json.loads(row.skills_json)
-            max_value = 0
-            for skill in skills:
-                if skill["value"] > max_value:
-                    max_value = skill["value"]
-            return max_value
-
         value = getattr(row, sort_by, None)
+
+        if sort_by == "skills":
+            if row.skills_json:
+                skills = json.loads(row.skills_json)
+                max_value = 0
+                for skill in skills:
+                    if skill and skill.get("value", 0) > max_value:
+                        max_value = skill.get("value", 0)
+                return max_value
+            return 0 # Default for no skills
+
         if value is None:
-            return (
-                (0, "")
-                if isinstance(getattr(results[0], sort_by, None), (int, float))
-                else ""
-            )
+            # Provide a default value for None based on expected type
+            # Assuming numeric columns should sort as 0, others as empty string
+            if sort_by in ["id", "attack_power", "defense_power", "durability"]:
+                return 0
+            return ""
         return value
 
     results.sort(key=sort_key, reverse=reverse)
