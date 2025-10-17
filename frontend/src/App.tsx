@@ -46,6 +46,7 @@ import Titles from "./pages/title/Titles";
 import TitleDetail from "./pages/title/TitleDetail";
 import CourtRanks from "./pages/courtrank/CourtRanks";
 import Aides from "./pages/aide/Aides";
+import Pets from "./pages/pet/Pets";
 
 const queryClient = new QueryClient();
 
@@ -96,6 +97,7 @@ function App() {
               <Route path="/titles" element={<Titles />} />
               <Route path="/courtranks" element={<CourtRanks />} />
               <Route path="/aides" element={<Aides />} />
+              <Route path="/pets" element={<Pets />} />
               
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
