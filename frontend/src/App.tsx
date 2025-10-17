@@ -44,6 +44,7 @@ import Techniques from "./pages/technique/Techniques";
 import TechniqueDetail from "./pages/technique/TechniqueDetail";
 import Titles from "./pages/title/Titles";
 import TitleDetail from "./pages/title/TitleDetail";
+import CourtRanks from "./pages/courtrank/CourtRanks";
 
 const queryClient = new QueryClient();
 
@@ -74,7 +75,6 @@ function App() {
               <Route path="/region" element={<Regions />} />
               <Route path="/treasurebox" element={<TreasureBoxes />} />
               <Route path="/field" element={<Fields />} />
-              <Route path="/field/:id" element={<ObjectDetail />} />
               <Route path="/sea" element={<Seas />} />
               <Route path="/culture" element={<Cultures />} />
               <Route path="/privatefarm" element={<PrivateFarms />} />
@@ -84,17 +84,17 @@ function App() {
               <Route path="/marinenpc" element={<MarineNpcs />} />
               <Route path="/ganador" element={<Ganadors />} />
               <Route path="/citynpc" element={<CityNpcs />} />
-              <Route path="/citynpc/:id" element={<CityNpcDetail />} />
               <Route
                 path="/skillrefinementeffects"
                 element={<SkillRefinementEffects />}
               />
               <Route path="/researches" element={<Researches />} />
-              <Route path="/researches/:id" element={<ResearchDetail />} />
               <Route path="/majors" element={<Majors />} />
               <Route path="/researchactions" element={<ResearchActions />} />
               <Route path="/techniques" element={<Techniques />} />
               <Route path="/titles" element={<Titles />} />
+              <Route path="/courtranks" element={<CourtRanks />} />
+              
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
