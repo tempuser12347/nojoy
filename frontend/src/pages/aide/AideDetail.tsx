@@ -133,7 +133,7 @@ export default function AideDetail({ data }: { data?: Aide }) {
             <Grid item xs={12} sm={6} md={4} component="div">
               <DetailItem
                 label="구조 필요"
-                value={aide.rescue_needed === 1 ? "Yes" : "No"}
+                value={aide.rescue_needed === 1 ? "✅" : "❌"}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4} component="div">
@@ -151,46 +151,47 @@ export default function AideDetail({ data }: { data?: Aide }) {
                   <TableHead>
                     <TableRow>
                       <TableCell>카테고리</TableCell>
-                      <TableCell>이름</TableCell>
-                      <TableCell>모험 레벨</TableCell>
-                      <TableCell>교역 레벨</TableCell>
-                      <TableCell>전투 레벨</TableCell>
-                      <TableCell>특성</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {Object.entries(
-                      aide.skills.reduce((acc, skill) => {
-                        const category = skill.category;
-                        if (!acc[category]) {
-                          acc[category] = [];
-                        }
-                        acc[category].push(skill);
-                        return acc;
-                      }, {} as Record<string, typeof aide.skills>)
-                    ).map(([category, skillsInType]) =>
-                      skillsInType.map((skill, index) => (
-                        <TableRow key={skill.id}>
-                          {index === 0 && (
-                            <TableCell rowSpan={skillsInType.length}>
-                              {category}
-                            </TableCell>
-                          )}
-                          <TableCell>{renderObjectChip(skill, navigate)}</TableCell>
-                          <TableCell>{skill.adventure_level}</TableCell>
-                          <TableCell>{skill.trade_level}</TableCell>
-                          <TableCell>{skill.battle_level}</TableCell>
-                          <TableCell>{skill.trait}</TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          )}
-        </CardContent>
-      </Card>
-    </Box>
-  );
-}
+                                            <TableCell>스킬</TableCell>
+                                            <TableCell>모험 레벨</TableCell>
+                                            <TableCell>교역 레벨</TableCell>
+                                            <TableCell>전투 레벨</TableCell>
+                                            <TableCell>특성</TableCell>
+                                          </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                          {Object.entries(
+                                            aide.skills.reduce((acc, skill) => {
+                                              const category = skill.category;
+                                              if (!acc[category]) {
+                                                acc[category] = [];
+                                              }
+                                              acc[category].push(skill);
+                                              return acc;
+                                            }, {} as Record<string, typeof aide.skills>)
+                                          ).map(([category, skillsInType]) =>
+                                            skillsInType.map((skill, index) => (
+                                              <TableRow key={skill.id}>
+                                                {index === 0 && (
+                                                  <TableCell rowSpan={skillsInType.length}>
+                                                    {category}
+                                                  </TableCell>
+                                                )}
+                                                <TableCell>{renderObjectChip(skill, navigate)}</TableCell>
+                                                <TableCell>{skill.adventure_level}</TableCell>
+                                                <TableCell>{skill.trade_level}</TableCell>
+                                                <TableCell>{skill.battle_level}</TableCell>
+                                                <TableCell>{skill.trait}</TableCell>
+                                              </TableRow>
+                                            ))
+                                          )}
+                                        </TableBody>
+                                      </Table>
+                                    </TableContainer>
+                                  </Box>
+                                )}
+                              </CardContent>
+                            </Card>
+                          </Box>
+                        );
+                      }
+                      
