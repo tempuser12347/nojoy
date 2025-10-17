@@ -40,9 +40,7 @@ import Researches from "./pages/research/Researches";
 import ResearchDetail from "./pages/research/ResearchDetail";
 import Majors from "./pages/major/Majors";
 import ResearchActions from "./pages/researchaction/ResearchActions";
-import ResearchActionDetail from "./pages/researchaction/ResearchActionDetail";
 import Techniques from "./pages/technique/Techniques";
-import TechniqueDetail from "./pages/technique/TechniqueDetail";
 
 const queryClient = new QueryClient();
 
@@ -96,9 +94,7 @@ function App() {
               <Route path="/researches/:id" element={<ResearchDetail />} />
               <Route path="/majors" element={<Majors />} />
               <Route path="/researchactions" element={<ResearchActions />} />
-              <Route path="/researchactions/:id" element={<ResearchActionDetail />} />
               <Route path="/techniques" element={<Techniques />} />
-              <Route path="/techniques/:id" element={<TechniqueDetail />} />
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
