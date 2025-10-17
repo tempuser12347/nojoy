@@ -108,7 +108,9 @@ export default function MajorDetail({ data }: { data?: Major }) {
                               renderedValue = value;
                               break;
                             case "skills":
-                              renderedValue = renderObjectsToChips(value, navigate);
+                              renderedValue = renderObjectsToChips(
+                                value.map((skill: any) => ({ ...skill, value: skill.rank }))
+                                , navigate);
                               break;
                             case "job":
                               renderedValue = renderObjectChip(value, navigate);
