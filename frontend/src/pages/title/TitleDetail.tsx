@@ -90,7 +90,7 @@ export default function TitleDetail({ data }: { data?: Title }) {
             />
           </Box>
             <Box sx={{ mt: 2 }}>
-            <DetailItem label="효과" value={title.effect} />
+            <DetailItem label="효과" value={<div dangerouslySetInnerHTML={{ __html: title.effect || '' }} />} />
           </Box>
         </CardContent>
       </Card>
