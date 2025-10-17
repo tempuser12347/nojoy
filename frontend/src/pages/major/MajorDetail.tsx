@@ -109,8 +109,12 @@ export default function MajorDetail({ data }: { data?: Major }) {
                               break;
                             case "skills":
                               renderedValue = renderObjectsToChips(
-                                value.map((skill: any) => ({ ...skill, value: skill.rank }))
-                                , navigate);
+                                value.map((skill: any) => ({
+                                  ...skill,
+                                  value: skill.rank,
+                                })),
+                                navigate
+                              );
                               break;
                             case "job":
                               renderedValue = renderObjectChip(value, navigate);
@@ -119,15 +123,14 @@ export default function MajorDetail({ data }: { data?: Major }) {
                               renderedValue = value;
                               break;
                             default:
-                              renderedValue = typeof value === "object" && value !== null
-                                ? JSON.stringify(value)
-                                : String(value);
+                              renderedValue =
+                                typeof value === "object" && value !== null
+                                  ? JSON.stringify(value)
+                                  : String(value);
                           }
                           return (
                             <TableRow key={key}>
-                              <TableCell
-                                sx={{ fontWeight: "bold", width: "30%" }}
-                              >
+                              <TableCell sx={{ fontWeight: "bold" }}>
                                 {(() => {
                                   switch (key) {
                                     case "building_level":
