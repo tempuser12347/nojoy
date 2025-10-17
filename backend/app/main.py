@@ -35,6 +35,7 @@ from app.routers import (
     research,
     major,
     researchaction,
+    technique,
 )
 import os
 
@@ -83,6 +84,7 @@ app.include_router(skillrefinementeffect.router)
 app.include_router(research.router)
 app.include_router(major.router)
 app.include_router(researchaction.router)
+app.include_router(technique.router)
 
 
 dist_dir = "dist"

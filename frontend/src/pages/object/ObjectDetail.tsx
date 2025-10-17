@@ -34,6 +34,7 @@ import SkillRefinementEffectDetail from "../skillrefinementeffect/SkillRefinemen
 import ResearchDetail from "../research/ResearchDetail";
 import MajorDetail from "../major/MajorDetail";
 import ResearchActionDetail from "../researchaction/ResearchActionDetail";
+import TechniqueDetail from "../technique/TechniqueDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -67,6 +68,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   research: ResearchDetail,
   major: MajorDetail,
   researchaction: ResearchActionDetail,
+  technique: TechniqueDetail,
 };
 
 export default function ObjectDetail() {

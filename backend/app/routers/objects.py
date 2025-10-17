@@ -33,6 +33,7 @@ from .skillrefinementeffect import read_skillrefinementeffect_core
 from .research import read_research_core
 from .major import read_major_core
 from .researchaction import read_researchaction_core
+from .technique import read_technique_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -132,6 +133,7 @@ detail_data_fetch_function_dict = {
     "research": read_research_core,
     "major": read_major_core,
     "researchaction": read_researchaction_core,
+    "technique": read_technique_core,
 }
 
 
