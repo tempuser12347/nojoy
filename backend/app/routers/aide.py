@@ -19,9 +19,7 @@ router = APIRouter(prefix="/api/aides", tags=["aides"])
 def read_aides(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit the number of records returned"),
-    name_search: Optional[str] = Query(
-        None, description="Search term for name"
-    ),
+    name_search: Optional[str] = Query(None, description="Search term for name"),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("asc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
@@ -52,12 +50,23 @@ def read_aides(
     for row in paginated_results:
         item_dict = dict(row)
         # Parse JSON fields for list view if needed
-        for field in ["hiring_city", "max_required_levels", "max_required_traits", "skills"]:
+        for field in [
+            "hiring_city",
+            "skills",
+        ]:
             if item_dict.get(field) and isinstance(item_dict[field], str):
                 try:
                     item_dict[field] = json.loads(item_dict[field])
                 except json.JSONDecodeError:
                     item_dict[field] = None
+
+        # Convert job and nationality to dict for chip rendering
+
+        if item_dict.get("job"):
+            item_dict["job"] = json.loads(item_dict["job"])
+        if item_dict.get("nationality"):
+            item_dict["nationality"] = json.loads(item_dict["nationality"])
+
         items.append(item_dict)
 
     return {"items": items, "total": total}
@@ -78,7 +87,7 @@ def read_aide_core(aide_id: int, db: Session):
     ret = dict(result._mapping)
 
     # Parse JSON fields
-    for field in ["hiring_city", "max_required_levels", "max_required_traits", "skills"]:
+    for field in ["hiring_city", "skills", "job", "nationality"]:
         if ret.get(field) and isinstance(ret[field], str):
             try:
                 ret[field] = json.loads(ret[field])

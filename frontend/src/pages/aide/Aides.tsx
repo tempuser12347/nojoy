@@ -1,34 +1,53 @@
-import React, { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import {
-  Box,
-  TextField,
-  Typography,
-  Button,
-} from '@mui/material';
-import DataTable from '../../components/DataTable';
-import api from '../../api';
-
-const columns = [
-  { id: 'name', label: '이름', minWidth: 170 },
-  { id: 'category', label: '카테고리', minWidth: 100 },
-  { id: 'job', label: '직업', minWidth: 100 },
-  { id: 'nationality', label: '국적', minWidth: 100 },
-  { id: 'gender', label: '성별', minWidth: 80 },
-  { id: 'hiring_city', label: '고용 도시', minWidth: 150, format: (value: any) => value && value.map((city: any) => city.name).join(', ') },
-  { id: 'rescue_needed', label: '구조 필요', minWidth: 100, format: (value: any) => (value === 1 ? 'Yes' : 'No') },
-];
+import React, { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Box, TextField, Typography, Button } from "@mui/material";
+import DataTable from "../../components/DataTable";
+import api from "../../api";
+import { renderObjectChip } from "../../common/render";
 
 const Aides: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const page = parseInt(searchParams.get('page') || '0', 10);
-  const rowsPerPage = parseInt(searchParams.get('rowsPerPage') || '10', 10);
-  const name_search = searchParams.get('name_search') || '';
+  const page = parseInt(searchParams.get("page") || "0", 10);
+  const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
+  const name_search = searchParams.get("name_search") || "";
 
   const [searchInput, setSearchInput] = React.useState(name_search);
+
+  const columns = [
+    { id: "name", label: "이름", minWidth: 170 },
+    { id: "category", label: "카테고리", minWidth: 100 },
+    {
+      id: "job",
+      label: "직업",
+      minWidth: 100,
+      format: (value: any) =>
+        value ? renderObjectChip(value, navigate) : null,
+    },
+    {
+      id: "nationality",
+      label: "국적",
+      minWidth: 100,
+      format: (value: any) =>
+        value ? renderObjectChip(value, navigate) : null,
+    },
+    { id: "gender", label: "성별", minWidth: 80 },
+    {
+      id: "hiring_city",
+      label: "고용 도시",
+      minWidth: 150,
+      format: (value: any) =>
+        value && value.map((city: any) => city.name).join(", "),
+    },
+    {
+      id: "rescue_needed",
+      label: "구조 필요",
+      minWidth: 100,
+      format: (value: any) => (value === 1 ? "Yes" : "No"),
+    },
+  ];
 
   useEffect(() => {
     setSearchInput(name_search);
@@ -43,20 +62,23 @@ const Aides: React.FC = () => {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ['aides', page, rowsPerPage, name_search],
+    queryKey: ["aides", page, rowsPerPage, name_search],
     queryFn: async () => {
-      const response = await api.get('/api/aides', {
+      const response = await api.get("/api/aides", {
         params: {
           name_search,
           skip: page * rowsPerPage,
           limit: rowsPerPage,
         },
       });
+      console.log(response.data);
       return response.data;
     },
   });
 
-  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setSearchInput(event.target.value);
   };
 
@@ -65,8 +87,8 @@ const Aides: React.FC = () => {
   };
 
   const resetFilters = () => {
-    setSearchInput('');
-    setSearchParams({ rowsPerPage: searchParams.get('rowsPerPage') || '10' });
+    setSearchInput("");
+    setSearchParams({ rowsPerPage: searchParams.get("rowsPerPage") || "10" });
   };
 
   const handlePageChange = (newPage: number) => {
@@ -78,16 +100,18 @@ const Aides: React.FC = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', p: 3, height: 'calc(100vh - 100px)' }}>
-      <Typography variant="h4" gutterBottom>부관</Typography>
-      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+    <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
+      <Typography variant="h4" gutterBottom>
+        부관
+      </Typography>
+      <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
         <TextField
           label="이름검색"
           variant="outlined"
           value={searchInput}
           onChange={handleSearchInputChange}
           sx={{ minWidth: 200 }}
-          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
         <Button variant="contained" onClick={handleSearch}>
           검색
