@@ -89,18 +89,13 @@ function App() {
                 path="/skillrefinementeffects"
                 element={<SkillRefinementEffects />}
               />
-              <Route
-                path="/skillrefinementeffects/:id"
-                element={<SkillRefinementEffectDetail />}
-              />
               <Route path="/researches" element={<Researches />} />
               <Route path="/researches/:id" element={<ResearchDetail />} />
               <Route path="/majors" element={<Majors />} />
               <Route path="/researchactions" element={<ResearchActions />} />
               <Route path="/techniques" element={<Techniques />} />
-              <Route path="/techniques/:id" element={<ObjectDetail />} />
               <Route path="/titles" element={<Titles />} />
-              <Route path="/titles/:id" element={<TitleDetail />} />
+              <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
