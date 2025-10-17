@@ -106,132 +106,135 @@ const availableSections = [
   "연구 행동",
   "테크닉",
   "호칭",
-  "작위",
-  "판매 npc",
-  "지역",
-  "필드",
-  "해역",
-  "문화",
-  "개인 농장",
-  "국가",
-  "입항허가",
-  "육상 npc",
-  "해상 npc",
-  "가나돌",
-  "도시 인물",
-  "트레져박스",
-];
-
-const Navigation: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [value, setValue] = React.useState(0);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [openSection, setOpenSection] = React.useState<string | null>(null);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    const section = Object.keys(sections)[newValue];
-
-    // If clicking the same tab when menu is closed, open it
-    if (value === newValue && !anchorEl) {
-      console.log("same tab, open menu");
-      handleOpenMenu(event as React.MouseEvent<HTMLElement>, section);
-    }
-    // If clicking a different tab, or if menu is already open, update everything
-    else {
-      setValue(newValue);
-      handleOpenMenu(event as React.MouseEvent<HTMLElement>, section);
-    }
-  };
-
-  const handleOpenMenu = (
-    event: React.MouseEvent<HTMLElement>,
-    section: string
-  ) => {
-    setAnchorEl(event.currentTarget);
-    setOpenSection(section);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-    setOpenSection(null);
-  };
-
-  const handleSubsectionClick = (subsection: string) => {
-    handleCloseMenu();
-
-    // case with subsection to switch values to korean
-    switch (subsection) {
-      case "스킬":
-        subsection = "skills";
-        break;
-      case "판매 npc":
-        subsection = "npcsales";
-        break;
-      case "지역":
-        subsection = "region";
-        break;
-      case "필드":
-        subsection = "field";
-        break;
-      case "해역":
-        subsection = "sea";
-        break;
-      case "문화":
-        subsection = "culture";
-        break;
-      case "개인 농장":
-        subsection = "privatefarm";
-        break;
-      case "국가":
-        subsection = "nation";
-        break;
-      case "입항허가":
-        subsection = "portpermit";
-        break;
-      case "육상 npc":
-        subsection = "landnpc";
-        break;
-      case "해상 npc":
-        subsection = "marinenpc";
-        break;
-      case "가나돌":
-        subsection = "ganador";
-        break;
-      case "도시 인물":
-        subsection = "citynpc";
-        break;
-      case "스킬 연성 효과":
-        subsection = "skillrefinementeffects";
-        break;
-      case "연구":
-        subsection = "researches";
-        break;
-      case "전공":
-        subsection = "majors";
-        break;
-      case "연구 행동":
-        subsection = "researchactions";
-        break;
-      case "테크닉":
-        subsection = "techniques";
-        break;
-      case "호칭":
-        subsection = "titles";
-        break;
-      case "작위":
-        subsection = "courtranks";
-        break;
-      case "트레져박스":
-        subsection = "treasurebox";
-        break;
-      default:
-        break;
-    }
-
-    navigate(`/${subsection}`);
-  };
-
+      "작위",
+      "부관",
+      "판매 npc",
+      "지역",
+      "필드",
+      "해역",
+      "문화",
+      "개인 농장",
+      "국가",
+      "입항허가",
+      "육상 npc",
+      "해상 npc",
+      "가나돌",
+      "도시 인물",
+      "트레져박스",
+  ];
+  
+  const Navigation: React.FC = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [value, setValue] = React.useState(0);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [openSection, setOpenSection] = React.useState<string | null>(null);
+  
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+      const section = Object.keys(sections)[newValue];
+  
+      // If clicking the same tab when menu is closed, open it
+      if (value === newValue && !anchorEl) {
+        console.log("same tab, open menu");
+        handleOpenMenu(event as React.MouseEvent<HTMLElement>, section);
+      }
+      // If clicking a different tab, or if menu is already open, update everything
+      else {
+        setValue(newValue);
+        handleOpenMenu(event as React.MouseEvent<HTMLElement>, section);
+      }
+    };
+  
+    const handleOpenMenu = (
+      event: React.MouseEvent<HTMLElement>,
+      section: string
+    ) => {
+      setAnchorEl(event.currentTarget);
+      setOpenSection(section);
+    };
+  
+    const handleCloseMenu = () => {
+      setAnchorEl(null);
+      setOpenSection(null);
+    };
+  
+    const handleSubsectionClick = (subsection: string) => {
+      handleCloseMenu();
+  
+      // case with subsection to switch values to korean
+      switch (subsection) {
+        case "스킬":
+          subsection = "skills";
+          break;
+        case "판매 npc":
+          subsection = "npcsales";
+          break;
+        case "지역":
+          subsection = "region";
+          break;
+        case "필드":
+          subsection = "field";
+          break;
+        case "해역":
+          subsection = "sea";
+          break;
+        case "문화":
+          subsection = "culture";
+          break;
+        case "개인 농장":
+          subsection = "privatefarm";
+          break;
+        case "국가":
+          subsection = "nation";
+          break;
+        case "입항허가":
+          subsection = "portpermit";
+          break;
+        case "육상 npc":
+          subsection = "landnpc";
+          break;
+        case "해상 npc":
+          subsection = "marinenpc";
+          break;
+        case "가나돌":
+          subsection = "ganador";
+          break;
+        case "도시 인물":
+          subsection = "citynpc";
+          break;
+        case "스킬 연성 효과":
+          subsection = "skillrefinementeffects";
+          break;
+        case "연구":
+          subsection = "researches";
+          break;
+        case "전공":
+          subsection = "majors";
+          break;
+        case "연구 행동":
+          subsection = "researchactions";
+          break;
+        case "테크닉":
+          subsection = "techniques";
+          break;
+        case "호칭":
+          subsection = "titles";
+          break;
+        case "작위":
+          subsection = "courtranks";
+          break;
+        case "트레져박스":
+          subsection = "treasurebox";
+          break;
+        case "부관":
+          subsection = "aides";
+          break;
+        default:
+          break;
+      }
+  
+      navigate(`/${subsection}`);
+    };
   React.useEffect(() => {
     // Update the tab value based on the current route
     const path = location.pathname.substring(1);

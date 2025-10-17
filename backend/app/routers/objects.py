@@ -36,6 +36,7 @@ from .researchaction import read_researchaction_core
 from .technique import read_technique_core
 from .title import read_title_core
 from .courtrank import read_courtrank_core
+from .aide import read_aide_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -138,6 +139,7 @@ detail_data_fetch_function_dict = {
     "technique": read_technique_core,
     "title": read_title_core,
     "courtrank": read_courtrank_core,
+    "aide": read_aide_core,
 }
 
 

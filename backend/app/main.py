@@ -38,6 +38,7 @@ from app.routers import (
     technique,
     title,
     courtrank,
+    aide,
 )
 import os
 
@@ -89,6 +90,7 @@ app.include_router(researchaction.router)
 app.include_router(technique.router)
 app.include_router(title.router)
 app.include_router(courtrank.router)
+app.include_router(aide.router)
 
 
 dist_dir = "dist"

@@ -45,6 +45,7 @@ import TechniqueDetail from "./pages/technique/TechniqueDetail";
 import Titles from "./pages/title/Titles";
 import TitleDetail from "./pages/title/TitleDetail";
 import CourtRanks from "./pages/courtrank/CourtRanks";
+import Aides from "./pages/aide/Aides";
 
 const queryClient = new QueryClient();
 
@@ -94,6 +95,7 @@ function App() {
               <Route path="/techniques" element={<Techniques />} />
               <Route path="/titles" element={<Titles />} />
               <Route path="/courtranks" element={<CourtRanks />} />
+              <Route path="/aides" element={<Aides />} />
               
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
