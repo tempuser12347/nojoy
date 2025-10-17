@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
-import { renderObjectsToChips } from "../../common/render";
+import { renderObjectsToChips, renderObjectChip } from "../../common/render";
 
 interface Aide {
   id: number;
@@ -159,16 +159,31 @@ export default function AideDetail({ data }: { data?: Aide }) {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {aide.skills.map((skill, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{skill.category}</TableCell>
-                        <TableCell>{skill.name}</TableCell>
-                        <TableCell>{skill.adventure_level}</TableCell>
-                        <TableCell>{skill.trade_level}</TableCell>
-                        <TableCell>{skill.battle_level}</TableCell>
-                        <TableCell>{skill.trait}</TableCell>
-                      </TableRow>
-                    ))}
+                    {Object.entries(
+                      aide.skills.reduce((acc, skill) => {
+                        const category = skill.category;
+                        if (!acc[category]) {
+                          acc[category] = [];
+                        }
+                        acc[category].push(skill);
+                        return acc;
+                      }, {} as Record<string, typeof aide.skills>)
+                    ).map(([category, skillsInType]) =>
+                      skillsInType.map((skill, index) => (
+                        <TableRow key={skill.id}>
+                          {index === 0 && (
+                            <TableCell rowSpan={skillsInType.length}>
+                              {category}
+                            </TableCell>
+                          )}
+                          <TableCell>{renderObjectChip(skill, navigate)}</TableCell>
+                          <TableCell>{skill.adventure_level}</TableCell>
+                          <TableCell>{skill.trade_level}</TableCell>
+                          <TableCell>{skill.battle_level}</TableCell>
+                          <TableCell>{skill.trait}</TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>
