@@ -98,20 +98,55 @@ export default function MajorDetail({ data }: { data?: Major }) {
                   <Table size="small">
                     <TableBody>
                       {Object.entries(major.acquisition_conditions).map(
-                        ([key, value]) => (
-                          <TableRow key={key}>
-                            <TableCell
-                              sx={{ fontWeight: "bold", width: "30%" }}
-                            >
-                              {key}
-                            </TableCell>
-                            <TableCell>
-                              {typeof value === "object" && value !== null
+                        ([key, value]) => {
+                          let renderedValue;
+                          switch (key) {
+                            case "building_level":
+                              renderedValue = value;
+                              break;
+                            case "thesis_submissions":
+                              renderedValue = value;
+                              break;
+                            case "skills":
+                              renderedValue = renderObjectsToChips(value, navigate);
+                              break;
+                            case "job":
+                              renderedValue = renderObjectChip(value, navigate);
+                              break;
+                            case "etc":
+                              renderedValue = value;
+                              break;
+                            default:
+                              renderedValue = typeof value === "object" && value !== null
                                 ? JSON.stringify(value)
-                                : String(value)}
-                            </TableCell>
-                          </TableRow>
-                        )
+                                : String(value);
+                          }
+                          return (
+                            <TableRow key={key}>
+                              <TableCell
+                                sx={{ fontWeight: "bold", width: "30%" }}
+                              >
+                                {(() => {
+                                  switch (key) {
+                                    case "building_level":
+                                      return "건물 레벨";
+                                    case "thesis_submissions":
+                                      return "논문 제출";
+                                    case "skills":
+                                      return "스킬";
+                                    case "job":
+                                      return "직업";
+                                    case "etc":
+                                      return "기타";
+                                    default:
+                                      return key;
+                                  }
+                                })()}
+                              </TableCell>
+                              <TableCell>{renderedValue}</TableCell>
+                            </TableRow>
+                          );
+                        }
                       )}
                     </TableBody>
                   </Table>
