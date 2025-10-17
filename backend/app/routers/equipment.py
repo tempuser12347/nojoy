@@ -76,7 +76,7 @@ GROUP BY e.id;
     # Sorting logic
     if results:
         reverse = sort_order.lower() == "desc"
-    print(f"sort by: {sort_by}, reverse: {reverse}")
+    # print(f"sort by: {sort_by}, reverse: {reverse}")
 
     def sort_key(row):
         value = getattr(row, sort_by, None)
@@ -94,7 +94,7 @@ GROUP BY e.id;
         if value is None:
             # Provide a default value for None based on expected type
             # Assuming numeric columns should sort as 0, others as empty string
-            if sort_by in ["id", "attack_power", "defense_power", "durability"]:
+            if sort_by in ["id", "attack_power", "defense_power", "durability", 'attire', 'disguise']:
                 return 0
             return ""
         return value
