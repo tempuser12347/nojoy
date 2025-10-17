@@ -83,68 +83,12 @@ export default function TitleDetail({ data }: { data?: Title }) {
           <Box sx={{ mb: 2 }}>
             <DetailItem label="설명" value={title.description} />
           </Box>
-          {title.requirements &&
-            Object.keys(title.requirements).length > 0 && (
-              <Box sx={{ mt: 3 }}>
-                <Typography variant="h6" color="text.secondary">
-                  요구 사항
-                </Typography>
-                <TableContainer component={Paper}>
-                  <Table size="small">
-                    <TableBody>
-                      {Object.entries(title.requirements).map(
-                        ([key, value]) => {
-                          let renderedValue;
-                          switch (key) {
-                            case "skills":
-                              renderedValue = renderObjectsToChips(
-                                value.map((skill: any) => ({ ...skill, value: skill.rank }))
-                                , navigate);
-                              break;
-                            case "quests":
-                              renderedValue = renderObjectsToChips(value, navigate);
-                              break;
-                            case "jobs":
-                              renderedValue = renderObjectsToChips(value, navigate);
-                              break;
-                            case "etc":
-                              renderedValue = value;
-                              break;
-                            default:
-                              renderedValue = typeof value === "object" && value !== null
-                                ? JSON.stringify(value)
-                                : String(value);
-                          }
-                          return (
-                            <TableRow key={key}>
-                              <TableCell
-                                sx={{ fontWeight: "bold", width: "30%" }}
-                              >
-                                {(() => {
-                                  switch (key) {
-                                    case "skills":
-                                      return "스킬";
-                                    case "quests":
-                                      return "퀘스트";
-                                    case "jobs":
-                                      return "직업";
-                                    case "etc":
-                                      return "기타";
-                                    default:
-                                      return key;
-                                  }
-                                })()}
-                              </TableCell>
-                              <TableCell>{renderedValue}</TableCell>
-                            </TableRow>
-                          );
-                        }
-                      )}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Box>
-            )}
+          <Box sx={{ mb: 2 }}>
+            <DetailItem
+              label="요구 사항"
+              value={title.requirements}
+            />
+          </Box>
             <Box sx={{ mt: 2 }}>
             <DetailItem label="효과" value={title.effect} />
           </Box>

@@ -19,9 +19,7 @@ router = APIRouter(prefix="/api/titles", tags=["titles"])
 def read_titles(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit the number of records returned"),
-    name_search: Optional[str] = Query(
-        None, description="Search term for name"
-    ),
+    name_search: Optional[str] = Query(None, description="Search term for name"),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("asc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
@@ -51,11 +49,11 @@ def read_titles(
     for row in paginated_results:
         item_dict = dict(row)
         # Parse JSON fields for list view if needed, though typically done in detail
-        if item_dict.get("requirements") and isinstance(item_dict["requirements"], str):
-            try:
-                item_dict["requirements"] = json.loads(item_dict["requirements"])
-            except json.JSONDecodeError:
-                item_dict["requirements"] = {}
+        # if item_dict.get("requirements") and isinstance(item_dict["requirements"], str):
+        #     try:
+        #         item_dict["requirements"] = json.loads(item_dict["requirements"])
+        #     except json.JSONDecodeError:
+        #         item_dict["requirements"] = {}
         if item_dict.get("effect") and isinstance(item_dict["effect"], str):
             try:
                 item_dict["effect"] = json.loads(item_dict["effect"])
@@ -80,12 +78,12 @@ def read_title_core(title_id: int, db: Session):
 
     ret = dict(result._mapping)
 
-    # Parse JSON fields
-    for field in ["requirements", "effect"]:
-        if ret.get(field) and isinstance(ret[field], str):
-            try:
-                ret[field] = json.loads(ret[field])
-            except json.JSONDecodeError:
-                ret[field] = None
+    # Handle requirements: attempt to parse as JSON, otherwise keep as string
+    if ret.get("requirements"):
+        ret["requirements"] = ret["requirements"]
+
+    # Handle effect as a plain string, replacing newlines with <br/> for display
+    if ret.get("effect"):
+        ret["effect"] = ret["effect"].replace("\n", "<br/>")
 
     return ret
