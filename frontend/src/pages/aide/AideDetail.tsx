@@ -24,14 +24,14 @@ interface Aide {
   name: string;
   description: string | null;
   category: string | null;
-  job: string | null;
-  nationality: string | null;
+  job: { id: number; name: string } | null;
+  nationality: { id: number; name: string } | null;
   gender: string | null;
   hiring_city: { id: number; name: string }[] | null;
-  max_required_levels: { type: string; level: number }[] | null;
-  max_required_traits: { name: string; value: number }[] | null;
+  max_required_levels: string | null;
+  max_required_traits: string | null;
   skills: { id: number; name: string; category: string; adventure_level: number; trade_level: number; battle_level: number; trait: string | null }[] | null;
-  rescue_needed: number;
+  rescue_needed: number | null;
   rescue_area: string | null;
 }
 
@@ -90,19 +90,25 @@ export default function AideDetail({ data }: { data?: Aide }) {
         <CardContent>
           <DetailItem label="설명" value={aide.description} />
           <Grid container spacing={2} sx={{ mt: 2 }}>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4} component="div">
               <DetailItem label="카테고리" value={aide.category} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <DetailItem label="직업" value={aide.job} />
+            <Grid item xs={12} sm={6} md={4} component="div">
+              <DetailItem
+                label="직업"
+                value={aide.job ? renderObjectsToChips([aide.job], navigate) : null}
+              />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <DetailItem label="국적" value={aide.nationality} />
+            <Grid item xs={12} sm={6} md={4} component="div">
+              <DetailItem
+                label="국적"
+                value={aide.nationality ? renderObjectsToChips([aide.nationality], navigate) : null}
+              />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4} component="div">
               <DetailItem label="성별" value={aide.gender} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4} component="div">
               <DetailItem
                 label="고용 도시"
                 value={
@@ -112,68 +118,28 @@ export default function AideDetail({ data }: { data?: Aide }) {
                 }
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4} component="div">
+              <DetailItem
+                label="최대 필요 레벨"
+                value={aide.max_required_levels}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} component="div">
+              <DetailItem
+                label="최대 필요 특성"
+                value={aide.max_required_traits}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} component="div">
               <DetailItem
                 label="구조 필요"
                 value={aide.rescue_needed === 1 ? "Yes" : "No"}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4} component="div">
               <DetailItem label="구조 지역" value={aide.rescue_area} />
             </Grid>
           </Grid>
-
-          {aide.max_required_levels && aide.max_required_levels.length > 0 && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" color="text.secondary">
-                최대 필요 레벨
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>유형</TableCell>
-                      <TableCell>레벨</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {aide.max_required_levels.map((level, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{level.type}</TableCell>
-                        <TableCell>{level.level}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          )}
-
-          {aide.max_required_traits && aide.max_required_traits.length > 0 && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" color="text.secondary">
-                최대 필요 특성
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>특성</TableCell>
-                      <TableCell>값</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {aide.max_required_traits.map((trait, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{trait.name}</TableCell>
-                        <TableCell>{trait.value}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          )}
 
           {aide.skills && aide.skills.length > 0 && (
             <Box sx={{ mt: 3 }}>
