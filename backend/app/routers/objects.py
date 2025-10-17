@@ -31,6 +31,7 @@ from .ganador import read_ganador_core
 from .citynpc import read_citynpc_core
 from .skillrefinementeffect import read_skillrefinementeffect_core
 from .research import read_research_core
+from .major import read_major_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -128,6 +129,7 @@ detail_data_fetch_function_dict = {
     "citynpc": read_citynpc_core,
     "skillrefinementeffect": read_skillrefinementeffect_core,
     "research": read_research_core,
+    "major": read_major_core,
 }
 
 

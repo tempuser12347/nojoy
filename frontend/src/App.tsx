@@ -38,6 +38,7 @@ import SkillRefinementEffects from "./pages/skillrefinementeffect/SkillRefinemen
 import SkillRefinementEffectDetail from "./pages/skillrefinementeffect/SkillRefinementEffectDetail";
 import Researches from "./pages/research/Researches";
 import ResearchDetail from "./pages/research/ResearchDetail";
+import Majors from "./pages/major/Majors";
 
 const queryClient = new QueryClient();
 
@@ -89,6 +90,7 @@ function App() {
               />
               <Route path="/researches" element={<Researches />} />
               <Route path="/researches/:id" element={<ResearchDetail />} />
+              <Route path="/majors" element={<Majors />} />
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -33,6 +33,7 @@ from app.routers import (
     citynpc,
     skillrefinementeffect,
     research,
+    major,
 )
 import os
 
@@ -79,6 +80,7 @@ app.include_router(ganador.router)
 app.include_router(citynpc.router)
 app.include_router(skillrefinementeffect.router)
 app.include_router(research.router)
+app.include_router(major.router)
 
 
 dist_dir = "dist"
