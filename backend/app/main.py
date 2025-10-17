@@ -36,6 +36,7 @@ from app.routers import (
     major,
     researchaction,
     technique,
+    title,
 )
 import os
 
@@ -85,6 +86,7 @@ app.include_router(research.router)
 app.include_router(major.router)
 app.include_router(researchaction.router)
 app.include_router(technique.router)
+app.include_router(title.router)
 
 
 dist_dir = "dist"

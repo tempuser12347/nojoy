@@ -41,6 +41,9 @@ import ResearchDetail from "./pages/research/ResearchDetail";
 import Majors from "./pages/major/Majors";
 import ResearchActions from "./pages/researchaction/ResearchActions";
 import Techniques from "./pages/technique/Techniques";
+import TechniqueDetail from "./pages/technique/TechniqueDetail";
+import Titles from "./pages/title/Titles";
+import TitleDetail from "./pages/title/TitleDetail";
 
 const queryClient = new QueryClient();
 
@@ -95,7 +98,9 @@ function App() {
               <Route path="/majors" element={<Majors />} />
               <Route path="/researchactions" element={<ResearchActions />} />
               <Route path="/techniques" element={<Techniques />} />
-              <Route path="/obj/:id" element={<ObjectDetail />} />
+              <Route path="/techniques/:id" element={<ObjectDetail />} />
+              <Route path="/titles" element={<Titles />} />
+              <Route path="/titles/:id" element={<TitleDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

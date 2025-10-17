@@ -35,6 +35,7 @@ import ResearchDetail from "../research/ResearchDetail";
 import MajorDetail from "../major/MajorDetail";
 import ResearchActionDetail from "../researchaction/ResearchActionDetail";
 import TechniqueDetail from "../technique/TechniqueDetail";
+import TitleDetail from "../title/TitleDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -69,6 +70,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   major: MajorDetail,
   researchaction: ResearchActionDetail,
   technique: TechniqueDetail,
+  title: TitleDetail,
 };
 
 export default function ObjectDetail() {

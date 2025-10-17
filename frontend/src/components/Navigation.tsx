@@ -105,6 +105,7 @@ const availableSections = [
   "전공",
   "연구 행동",
   "테크닉",
+  "호칭",
   "판매 npc",
   "지역",
   "필드",
@@ -213,6 +214,9 @@ const Navigation: React.FC = () => {
         break;
       case "테크닉":
         subsection = "techniques";
+        break;
+      case "호칭":
+        subsection = "titles";
         break;
       case "트레져박스":
         subsection = "treasurebox";
