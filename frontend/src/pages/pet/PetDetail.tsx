@@ -27,7 +27,9 @@ interface Pet {
   apartment_rank: number | null;
   certificate: { id: number; name: string } | null;
   feed: { item: { id: number; name: string }; closeness: number }[] | null;
-  skills: { skill: { id: number; name: string }; rank: number; closeness: number }[] | null;
+  skills:
+    | { skill: { id: number; name: string }; rank: number; closeness: number }[]
+    | null;
 }
 
 export default function PetDetail({ data }: { data?: Pet }) {
@@ -85,13 +87,17 @@ export default function PetDetail({ data }: { data?: Pet }) {
         <CardContent>
           <DetailItem label="설명" value={pet.description} />
           <Grid container spacing={2} sx={{ mt: 2 }}>
-            <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}>
+            <Grid item xs={12} sm={6} md={4} component="div" sx={{ p: 1 }}>
               <DetailItem label="아파트 랭크" value={pet.apartment_rank} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}>
+            <Grid item xs={12} sm={6} md={4} component="div" sx={{ p: 1 }}>
               <DetailItem
                 label="증명서"
-                value={pet.certificate ? renderObjectChip(pet.certificate, navigate) : null}
+                value={
+                  pet.certificate
+                    ? renderObjectChip(pet.certificate, navigate)
+                    : null
+                }
               />
             </Grid>
           </Grid>
@@ -112,7 +118,9 @@ export default function PetDetail({ data }: { data?: Pet }) {
                   <TableBody>
                     {pet.feed.map((f, index) => (
                       <TableRow key={index}>
-                        <TableCell>{renderObjectChip(f.item, navigate)}</TableCell>
+                        <TableCell>
+                          {renderObjectChip(f.item, navigate)}
+                        </TableCell>
                         <TableCell>{f.closeness}</TableCell>
                       </TableRow>
                     ))}
@@ -139,7 +147,9 @@ export default function PetDetail({ data }: { data?: Pet }) {
                   <TableBody>
                     {pet.skills.map((s, index) => (
                       <TableRow key={index}>
-                        <TableCell>{renderObjectChip(s.skill, navigate)}</TableCell>
+                        <TableCell>
+                          {renderObjectChip(s.skill, navigate)}
+                        </TableCell>
                         <TableCell>{s.rank}</TableCell>
                         <TableCell>{s.closeness}</TableCell>
                       </TableRow>
