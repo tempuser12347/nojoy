@@ -33,6 +33,7 @@ import CityNpcDetail from "../citynpc/CityNpcDetail";
 import SkillRefinementEffectDetail from "../skillrefinementeffect/SkillRefinementEffectDetail";
 import ResearchDetail from "../research/ResearchDetail";
 import MajorDetail from "../major/MajorDetail";
+import ResearchActionDetail from "../researchaction/ResearchActionDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -65,6 +66,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   skillrefinementeffect: SkillRefinementEffectDetail,
   research: ResearchDetail,
   major: MajorDetail,
+  researchaction: ResearchActionDetail,
 };
 
 export default function ObjectDetail() {
