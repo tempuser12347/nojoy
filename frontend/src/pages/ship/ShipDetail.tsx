@@ -162,16 +162,16 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>모험</TableCell>
-                      <TableCell>교역</TableCell>
-                      <TableCell>전투</TableCell>
+                      <TableCell align="center">모험</TableCell>
+                      <TableCell align="center">교역</TableCell>
+                      <TableCell align="center">전투</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     <TableRow>
-                      <TableCell>{ship.required_levels?.adventure}</TableCell>
-                      <TableCell>{ship.required_levels?.trade}</TableCell>
-                      <TableCell>{ship.required_levels?.battle}</TableCell>
+                      <TableCell align="center">{ship.required_levels?.adventure}</TableCell>
+                      <TableCell align="center">{ship.required_levels?.trade}</TableCell>
+                      <TableCell align="center">{ship.required_levels?.battle}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -224,16 +224,16 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>건조일수</TableCell>
-                      <TableCell>개발 필요</TableCell>
-                      <TableCell>투자</TableCell>
+                      <TableCell align="center">건조일수</TableCell>
+                      <TableCell align="center">개발 필요</TableCell>
+                      <TableCell align="center">투자</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     <TableRow>
-                      <TableCell>{ship.build_info?.days || '-'}</TableCell>
-                      <TableCell>{ship.build_info?.development ? '✅' : '❌'}</TableCell>
-                      <TableCell>{ship.build_info?.investment || '-'}</TableCell>
+                      <TableCell align="center">{ship.build_info?.days || '-'}</TableCell>
+                      <TableCell align="center">{ship.build_info?.development ? '✅' : '❌'}</TableCell>
+                      <TableCell align="center">{ship.build_info?.investment || '-'}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -250,34 +250,34 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>내구도</TableCell>
-                      <TableCell>세로돛</TableCell>
-                      <TableCell>가로돛</TableCell>
-                      <TableCell>조력</TableCell>
-                      <TableCell>선회</TableCell>
-                      <TableCell>내파</TableCell>
-                      <TableCell>장갑</TableCell>
+                      <TableCell align="center">내구도</TableCell>
+                      <TableCell align="center">세로돛</TableCell>
+                      <TableCell align="center">가로돛</TableCell>
+                      <TableCell align="center">조력</TableCell>
+                      <TableCell align="center">선회</TableCell>
+                      <TableCell align="center">내파</TableCell>
+                      <TableCell align="center">장갑</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     <TableRow>
-                      <TableCell>{ship.base_performance.durability}</TableCell>
-                      <TableCell>
+                      <TableCell align="center">{ship.base_performance.durability}</TableCell>
+                      <TableCell align="center">
                         {ship.base_performance.vertical_sail}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
                         {ship.base_performance.horizontal_sail}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
                         {ship.base_performance.rowing_power}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
                         {ship.base_performance.maneuverability}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
                         {ship.base_performance.wave_resistance}
                       </TableCell>
-                      <TableCell>{ship.base_performance.armor}</TableCell>
+                      <TableCell align="center">{ship.base_performance.armor}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -294,18 +294,18 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>선실</TableCell>
-                      <TableCell>필요 선원</TableCell>
-                      <TableCell>포실</TableCell>
-                      <TableCell>창고</TableCell>
+                      <TableCell align="center">선실</TableCell>
+                      <TableCell align="center">필요 선원</TableCell>
+                      <TableCell align="center">포실</TableCell>
+                      <TableCell align="center">창고</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     <TableRow>
-                      <TableCell>{ship.capacity.cabin}</TableCell>
-                      <TableCell>{ship.capacity.required_crew}</TableCell>
-                      <TableCell>{ship.capacity.gunport}</TableCell>
-                      <TableCell>{ship.capacity.cargo}</TableCell>
+                      <TableCell align="center">{ship.capacity.cabin}</TableCell>
+                      <TableCell align="center">{ship.capacity.required_crew}</TableCell>
+                      <TableCell align="center">{ship.capacity.gunport}</TableCell>
+                      <TableCell align="center">{ship.capacity.cargo}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -322,40 +322,40 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>내구도</TableCell>
-                      <TableCell>세로돛</TableCell>
-                      <TableCell>가로돛</TableCell>
-                      <TableCell>조력</TableCell>
-                      <TableCell>선회</TableCell>
-                      <TableCell>내파</TableCell>
-                      <TableCell>장갑</TableCell>
-                      <TableCell>선실</TableCell>
-                      <TableCell>포실</TableCell>
-                      <TableCell>창고</TableCell>
+                      <TableCell align="center">내구도</TableCell>
+                      <TableCell align="center">세로돛</TableCell>
+                      <TableCell align="center">가로돛</TableCell>
+                      <TableCell align="center">조력</TableCell>
+                      <TableCell align="center">선회</TableCell>
+                      <TableCell align="center">내파</TableCell>
+                      <TableCell align="center">장갑</TableCell>
+                      <TableCell align="center">선실</TableCell>
+                      <TableCell align="center">포실</TableCell>
+                      <TableCell align="center">창고</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     <TableRow>
-                      <TableCell>{ship.improvement_limit.durability}</TableCell>
-                      <TableCell>
+                      <TableCell align="center">{ship.improvement_limit.durability}</TableCell>
+                      <TableCell align="center">
                         {ship.improvement_limit.vertical_sail}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
                         {ship.improvement_limit.horizontal_sail}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
                         {ship.improvement_limit.rowing_power}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
                         {ship.improvement_limit.maneuverability}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
                         {ship.improvement_limit.wave_resistance}
                       </TableCell>
-                      <TableCell>{ship.improvement_limit.armor}</TableCell>
-                      <TableCell>{ship.improvement_limit.cabin}</TableCell>
-                      <TableCell>{ship.improvement_limit.gunport}</TableCell>
-                      <TableCell>{ship.improvement_limit.cargo}</TableCell>
+                      <TableCell align="center">{ship.improvement_limit.armor}</TableCell>
+                      <TableCell align="center">{ship.improvement_limit.cabin}</TableCell>
+                      <TableCell align="center">{ship.improvement_limit.gunport}</TableCell>
+                      <TableCell align="center">{ship.improvement_limit.cargo}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -373,7 +373,7 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                   <TableHead>
                     <TableRow>
                       {Object.keys(ship.ship_parts).map((key) => (
-                        <TableCell key={key}>
+                        <TableCell key={key} align="center">
                           {key === "studdingsail"
                             ? "보조돛"
                             : key === "figurehead"
@@ -398,7 +398,7 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                   <TableBody>
                     <TableRow>
                       {Object.values(ship.ship_parts).map((value, index) => (
-                        <TableCell key={index}>{value}</TableCell>
+                        <TableCell key={index} align="center">{value}</TableCell>
                       ))}
                     </TableRow>
                   </TableBody>
@@ -416,27 +416,27 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>스킬</TableCell>
-                      <TableCell>돛</TableCell>
-                      <TableCell>포문</TableCell>
-                      <TableCell>재료 1</TableCell>
-                      <TableCell>재료 2</TableCell>
+                      <TableCell align="center">스킬</TableCell>
+                      <TableCell align="center">돛</TableCell>
+                      <TableCell align="center">포문</TableCell>
+                      <TableCell align="center">재료 1</TableCell>
+                      <TableCell align="center">재료 2</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {ship.ship_skills.map((s, index) => (
                       <TableRow key={index}>
-                        <TableCell>
+                        <TableCell align="center">
                           {renderObjectChip(s.skill, navigate)}
                         </TableCell>
-                        <TableCell>{s.sail || "-"}</TableCell>
-                        <TableCell>{s.gunport || "-"}</TableCell>
-                        <TableCell>
+                        <TableCell align="center">{s.sail || "-"}</TableCell>
+                        <TableCell align="center">{s.gunport || "-"}</TableCell>
+                        <TableCell align="center">
                           {s.material1
                             ? renderObjectChip(s.material1, navigate)
                             : "-"}
                         </TableCell>
-                        <TableCell>
+                        <TableCell align="center">
                           {s.material2
                             ? renderObjectChip(s.material2, navigate)
                             : "-"}
@@ -459,14 +459,14 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                   <TableHead>
                     <TableRow>
                       {Object.keys(ship.ship_deco).map((key) => (
-                        <TableCell key={key}>{key}</TableCell>
+                        <TableCell key={key} align="center">{key}</TableCell>
                       ))}
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     <TableRow>
                       {Object.values(ship.ship_deco).map((value, index) => (
-                        <TableCell key={index}>{value ? "✅" : "❌"}</TableCell>
+                        <TableCell key={index} align="center">{value ? "✅" : "❌"}</TableCell>
                       ))}
                     </TableRow>
                   </TableBody>
@@ -481,37 +481,36 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                 <Typography variant="h6" color="text.secondary">
                   특수 건조 도시
                 </Typography>
-                <TableContainer component={Paper}>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>선체</TableCell>
-                        <TableCell>랭크</TableCell>
-                        <TableCell>재료</TableCell>
-                        <TableCell>지역</TableCell>
-                        <TableCell>도시</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {ship.special_build_cities.map((sbc, index) => (
-                        <TableRow key={index}>
-                          <TableCell>
-                            {renderObjectChip(sbc.hull, navigate)}
-                          </TableCell>
-                          <TableCell>{sbc.rank}</TableCell>
-                          <TableCell>
-                            {renderObjectChip(sbc.material, navigate)}
-                          </TableCell>
-                          <TableCell>{sbc.region}</TableCell>
-                          <TableCell>
-                            {renderObjectChip(sbc.city, navigate)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Box>
+                              <TableContainer component={Paper}>
+                                <Table size="small">
+                                  <TableHead>
+                                    <TableRow>
+                                      <TableCell align="center">선체</TableCell>
+                                      <TableCell align="center">랭크</TableCell>
+                                      <TableCell align="center">재료</TableCell>
+                                      <TableCell align="center">지역</TableCell>
+                                      <TableCell align="center">도시</TableCell>
+                                    </TableRow>
+                                  </TableHead>
+                                  <TableBody>
+                                    {ship.special_build_cities.map((sbc, index) => (
+                                      <TableRow key={index}>
+                                        <TableCell align="center">
+                                          {renderObjectChip(sbc.hull, navigate)}
+                                        </TableCell>
+                                        <TableCell align="center">{sbc.rank}</TableCell>
+                                        <TableCell align="center">
+                                          {renderObjectChip(sbc.material, navigate)}
+                                        </TableCell>
+                                        <TableCell align="center">{sbc.region}</TableCell>
+                                        <TableCell align="center">
+                                          {renderObjectChip(sbc.city, navigate)}
+                                        </TableCell>
+                                      </TableRow>
+                                    ))}
+                                  </TableBody>
+                                </Table>
+                              </TableContainer>              </Box>
             )}
 
           {ship.standard_build_cities &&
