@@ -157,6 +157,43 @@ export default function ShipDetail({ data }: { data?: Ship }) {
               sx={{ border: "1px solid #e0e0e0", p: 1 }}
             >
               <Typography variant="h6" color="text.secondary">
+                선박 분류
+              </Typography>
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">용도</TableCell>
+                      <TableCell align="center">크기</TableCell>
+                      <TableCell align="center">추진</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center">
+                        {ship.category?.purpose}
+                      </TableCell>
+                      <TableCell align="center">
+                        {ship.category?.size}
+                      </TableCell>
+                      <TableCell align="center">
+                        {ship.category?.propulsion}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="div"
+              sx={{ border: "1px solid #e0e0e0", p: 1 }}
+            >
+              <Typography variant="h6" color="text.secondary">
                 필요 레벨
               </Typography>
               <TableContainer component={Paper}>
@@ -249,34 +286,6 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                       <TableCell align="center">
                         {ship.build_info?.investment || "-"}
                       </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              component="div"
-              sx={{ border: "1px solid #e0e0e0", p: 1 }}
-            >
-              <Typography variant="h6" color="text.secondary">선박 분류</Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="center">용도</TableCell>
-                      <TableCell align="center">크기</TableCell>
-                      <TableCell align="center">추진</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center">{ship.category?.purpose}</TableCell>
-                      <TableCell align="center">{ship.category?.size}</TableCell>
-                      <TableCell align="center">{ship.category?.propulsion}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
