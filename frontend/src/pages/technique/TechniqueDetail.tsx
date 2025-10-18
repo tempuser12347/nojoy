@@ -124,17 +124,17 @@ export default function TechniqueDetail({ data }: { data?: Technique }) {
                           switch (key) {
                             case "skills":
                               renderedValue = renderObjectsToChips(
-                                value.map((skill: any) => ({ ...skill, value: skill.rank }))
+                                (value as any[]).map((skill: any) => ({ ...skill, value: skill.rank }))
                                 , navigate);
                               break;
                             case "technique_rank":
-                              renderedValue = Object.entries(value).map(([rankKey, rankValue]) => (
+                              renderedValue = Object.entries(value as Record<string, any>).map(([rankKey, rankValue]) => (
                                 <Typography key={rankKey}>{`${rankKey}: ${rankValue}`}</Typography>
                               ));
                               break;
                             case "techniques":
                               renderedValue = renderObjectsToChips(
-                                value.map((tech: any) => ({ ...tech, value: tech.level }))
+                                (value as any[]).map((tech: any) => ({ ...tech, value: tech.level }))
                                 , navigate);
                               break;
                             default:

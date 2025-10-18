@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -98,17 +98,17 @@ export default function MajorDetail({ data }: { data?: Major }) {
                     <TableBody>
                       {Object.entries(major.acquisition_conditions).map(
                         ([key, value]) => {
-                          let renderedValue;
+                          let renderedValue: ReactNode;
                           switch (key) {
                             case "building_level":
-                              renderedValue = value;
+                              renderedValue = value as number;
                               break;
                             case "thesis_submissions":
-                              renderedValue = value;
+                              renderedValue = value as number;
                               break;
                             case "skills":
                               renderedValue = renderObjectsToChips(
-                                value.map((skill: any) => ({
+                                (value as any[]).map((skill: any) => ({
                                   ...skill,
                                   value: skill.rank,
                                 })),
@@ -116,10 +116,13 @@ export default function MajorDetail({ data }: { data?: Major }) {
                               );
                               break;
                             case "job":
-                              renderedValue = renderObjectChip(value, navigate);
+                              renderedValue = renderObjectChip(
+                                value as { id: number; name: string },
+                                navigate
+                              );
                               break;
                             case "etc":
-                              renderedValue = value;
+                              renderedValue = value as string;
                               break;
                             default:
                               renderedValue =
