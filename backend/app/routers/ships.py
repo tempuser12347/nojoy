@@ -5,7 +5,7 @@ from sqlalchemy import asc, desc, text
 from app.database import get_db
 from app import models
 from ..common import fetch_all_obtain_methods
-import json 
+import json
 
 
 router = APIRouter(prefix="/api/ships", tags=["ships"])
@@ -21,46 +21,38 @@ def read_ships(
     db: Session = Depends(get_db),
 ):
     query = """
-        SELECT
-            id,
-            name,
-            extraname,
-            required_levels,
-            json_extract(required_levels, '$.adventure') AS required_levels_adventure,
-            json_extract(required_levels, '$.trade') AS required_levels_trade,
-            json_extract(required_levels, '$.battle') AS required_levels_battle,
-            base_material,
-            upgrade_count,
-            capacity,
-            json_extract(capacity, '$.cabin') AS capacity_cabin,
-            json_extract(capacity, '$.required_crew') AS capacity_required_crew,
-            json_extract(capacity, '$.gunport') AS capacity_gunport,
-            json_extract(capacity, '$.cargo') AS capacity_cargo,
-            category,
-            json_extract(category, '$.purpose') AS category_purpose,
-            json_extract(category, '$.size') AS category_size,
-            json_extract(category, '$.propulsion') AS category_propulsion,
-            base_performance,
-            json_extract(base_performance, '$.durability') AS base_performance_durability,
-            json_extract(base_performance, '$.vertical_sail') AS base_performance_vertical_sail,
-            json_extract(base_performance, '$.horizontal_sail') AS base_performance_horizontal_sail,
-            json_extract(base_performance, '$.rowing_power') AS base_performance_rowing_power,
-            json_extract(base_performance, '$.maneuverability') AS base_performance_maneuverability,
-            json_extract(base_performance, '$.wave_resistance') AS base_performance_wave_resistance,
-            json_extract(base_performance, '$.armor') AS base_performance_armor,
-            improvement_limit,
-            json_extract(improvement_limit, '$.durability') AS improvement_limit_durability,
-            json_extract(improvement_limit, '$.vertical_sail') AS improvement_limit_vertical_sail,
-            json_extract(improvement_limit, '$.horizontal_sail') AS improvement_limit_horizontal_sail,
-            json_extract(improvement_limit, '$.rowing_power') AS improvement_limit_rowing_power,
-            json_extract(improvement_limit, '$.maneuverability') AS improvement_limit_maneuverability,
-            json_extract(improvement_limit, '$.wave_resistance') AS improvement_limit_wave_resistance,
-            json_extract(improvement_limit, '$.armor') AS improvement_limit_armor,
-            json_extract(improvement_limit, '$.cabin') AS improvement_limit_cabin,
-            json_extract(improvement_limit, '$.gunport') AS improvement_limit_gunport,
-            json_extract(improvement_limit, '$.cargo') AS improvement_limit_cargo
-        FROM ship
-    """
+                SELECT
+                    id,
+                    name,
+                    extraname,
+                    required_levels,
+                    json_extract(required_levels, '$.adventure') AS required_levels_adventure,
+                    json_extract(required_levels, '$.trade') AS required_levels_trade,
+                    json_extract(required_levels, '$.battle') AS required_levels_battle,
+                    base_material,
+                    upgrade_count,
+                    capacity,
+                    json_extract(capacity, '$.cabin') AS capacity_cabin,
+                    json_extract(capacity, '$.required_crew') AS capacity_required_crew,
+                    json_extract(capacity, '$.gunport') AS capacity_gunport,
+                    json_extract(capacity, '$.cargo') AS capacity_cargo,
+                    category,
+                    json_extract(category, '$.purpose') AS category_purpose,
+                    json_extract(category, '$.size') AS category_size,
+                    json_extract(category, '$.propulsion') AS category_propulsion,
+                    base_performance,
+                    improvement_limit,
+                    json_extract(base_performance, '$.durability') + json_extract(improvement_limit, '$.durability') AS max_durability,
+                    json_extract(base_performance, '$.vertical_sail') + json_extract(improvement_limit, '$.vertical_sail') AS max_vertical_sail,
+                    json_extract(base_performance, '$.horizontal_sail') + json_extract(improvement_limit, '$.horizontal_sail') AS max_horizontal_sail,
+                    json_extract(base_performance, '$.rowing_power') + json_extract(improvement_limit, '$.rowing_power') AS max_rowing_power,
+                    json_extract(base_performance, '$.maneuverability') + json_extract(improvement_limit, '$.maneuverability') AS max_maneuverability,
+                    json_extract(base_performance, '$.wave_resistance') + json_extract(improvement_limit, '$.wave_resistance') AS max_wave_resistance,
+                    json_extract(base_performance, '$.armor') + json_extract(improvement_limit, '$.armor') AS max_armor,
+                    json_extract(capacity, '$.cabin') + json_extract(improvement_limit, '$.cabin') AS max_cabin,
+                    json_extract(capacity, '$.gunport') + json_extract(improvement_limit, '$.gunport') AS max_gunport,
+                    json_extract(capacity, '$.cargo') + json_extract(improvement_limit, '$.cargo') AS max_cargo
+                FROM ship    """
     results = db.execute(text(query)).fetchall()
 
     # Convert Row objects to dict for easier filtering and manipulation
@@ -75,8 +67,58 @@ def read_ships(
         ]
 
     if sort_by:
+
+        def get_sort_key(row):
+            value = row.get(sort_by, None)
+            if value is None:
+                if sort_by in [
+                    "id",
+                    "required_levels_adventure",
+                    "required_levels_trade",
+                    "required_levels_battle",
+                    "capacity_cabin",
+                    "capacity_required_crew",
+                    "capacity_gunport",
+                    "capacity_cargo",
+                    "category_purpose",
+                    "category_size",
+                    "category_propulsion",
+                    "base_performance_durability",
+                    "base_performance_vertical_sail",
+                    "base_performance_horizontal_sail",
+                    "base_performance_rowing_power",
+                    "base_performance_maneuverability",
+                    "base_performance_wave_resistance",
+                    "base_performance_armor",
+                    "improvement_limit_durability",
+                    "improvement_limit_vertical_sail",
+                    "improvement_limit_horizontal_sail",
+                    "improvement_limit_rowing_power",
+                    "improvement_limit_maneuverability",
+                    "improvement_limit_wave_resistance",
+                    "improvement_limit_armor",
+                    "improvement_limit_cabin",
+                    "improvement_limit_gunport",
+                    "improvement_limit_cargo",
+                    'max_durability',
+                    'max_vertical_sail',
+                    'max_horizontal_sail',
+                    'max_rowing_power',
+                    'max_maneuverability',
+                    'max_wave_resistance',
+                    'max_armor',
+                    'max_cabin',
+                    'max_gunport',
+                    'max_cargo',
+                ]:
+                    return -1  # Treat None as less than any number
+                else:
+                    return ""  # Treat None as less than any string
+            else:
+                return value
+
         results.sort(
-            key=lambda x: x.get(sort_by) or "",
+            key=get_sort_key,
             reverse=(sort_order.lower() == "desc"),
         )
 
