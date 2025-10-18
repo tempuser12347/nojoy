@@ -206,7 +206,7 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                 label="강화 횟수"
                 value={
                   ship.upgrade_count
-                    ? `총 ${ship.upgrade_count.total} (기본 ${ship.upgrade_count.base}, 재건조 ${ship.upgrade_count.rebuild})`
+                    ? `총 ${ship.upgrade_count.total} (기본 ${ship.upgrade_count.base}, 재강화 ${ship.upgrade_count.rebuild})`
                     : "-"
                 }
               />
@@ -219,20 +219,25 @@ export default function ShipDetail({ data }: { data?: Ship }) {
               component="div"
               sx={{ border: "1px solid #e0e0e0", p: 1 }}
             >
-              <DetailItem
-                label="건조 정보"
-                value={
-                  ship.build_info
-                    ? `${ship.build_info.days}일${
-                        ship.build_info.development ? ", 개발 필요" : ""
-                      }${
-                        ship.build_info.investment
-                          ? `, 투자 ${ship.build_info.investment}`
-                          : ""
-                      }`
-                    : "-"
-                }
-              />
+              <Typography variant="h6" color="text.secondary">건조 정보</Typography>
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>건조일수</TableCell>
+                      <TableCell>개발 필요</TableCell>
+                      <TableCell>투자</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>{ship.build_info?.days || '-'}</TableCell>
+                      <TableCell>{ship.build_info?.development ? '✅' : '❌'}</TableCell>
+                      <TableCell>{ship.build_info?.investment || '-'}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Grid>
           </Grid>
 
