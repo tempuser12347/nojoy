@@ -89,12 +89,19 @@ GROUP BY e.id;
                     if skill and skill.get("value", 0) > max_value:
                         max_value = skill.get("value", 0)
                 return max_value
-            return 0 # Default for no skills
+            return 0  # Default for no skills
 
         if value is None:
             # Provide a default value for None based on expected type
             # Assuming numeric columns should sort as 0, others as empty string
-            if sort_by in ["id", "attack_power", "defense_power", "durability", 'attire', 'disguise']:
+            if sort_by in [
+                "id",
+                "attack_power",
+                "defense_power",
+                "durability",
+                "attire",
+                "disguise",
+            ]:
                 return 0
             return ""
         return value

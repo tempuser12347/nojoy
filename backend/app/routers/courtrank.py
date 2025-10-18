@@ -19,9 +19,7 @@ router = APIRouter(prefix="/api/courtranks", tags=["courtranks"])
 def read_courtranks(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit the number of records returned"),
-    name_search: Optional[str] = Query(
-        None, description="Search term for name"
-    ),
+    name_search: Optional[str] = Query(None, description="Search term for name"),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("asc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),

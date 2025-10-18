@@ -19,9 +19,7 @@ router = APIRouter(prefix="/api/majors", tags=["majors"])
 def read_majors(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit the number of records returned"),
-    name_search: Optional[str] = Query(
-        None, description="Search term for name"
-    ),
+    name_search: Optional[str] = Query(None, description="Search term for name"),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("asc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
@@ -50,9 +48,13 @@ def read_majors(
     items = []
     for row in paginated_results:
         item_dict = dict(row)
-        if item_dict.get("acquisition_conditions") and isinstance(item_dict["acquisition_conditions"], str):
+        if item_dict.get("acquisition_conditions") and isinstance(
+            item_dict["acquisition_conditions"], str
+        ):
             try:
-                item_dict["acquisition_conditions"] = json.loads(item_dict["acquisition_conditions"])
+                item_dict["acquisition_conditions"] = json.loads(
+                    item_dict["acquisition_conditions"]
+                )
             except json.JSONDecodeError:
                 item_dict["acquisition_conditions"] = {}
         items.append(item_dict)
@@ -74,7 +76,9 @@ def read_major_core(major_id: int, db: Session):
 
     ret = dict(result._mapping)
 
-    if ret.get("acquisition_conditions") and isinstance(ret["acquisition_conditions"], str):
+    if ret.get("acquisition_conditions") and isinstance(
+        ret["acquisition_conditions"], str
+    ):
         try:
             ret["acquisition_conditions"] = json.loads(ret["acquisition_conditions"])
         except json.JSONDecodeError:
