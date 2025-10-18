@@ -1,12 +1,7 @@
 import React, { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  Box,
-  TextField,
-  Typography,
-  Button,
-} from "@mui/material";
+import { Box, TextField, Typography, Button } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
 import { renderObjectChip } from "../../common/render";
@@ -20,9 +15,8 @@ const Ships: React.FC = () => {
   const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
   const name_search = searchParams.get("name_search") || "";
   const sort_by = searchParams.get("sort_by") || "id";
-  const sort_order = (
-    searchParams.get("sort_order") as "asc" | "desc"
-  ) || "desc";
+  const sort_order =
+    (searchParams.get("sort_order") as "asc" | "desc") || "desc";
 
   // Component state for inputs
   const [searchInput, setSearchInput] = React.useState(name_search);
@@ -42,14 +36,7 @@ const Ships: React.FC = () => {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: [
-      "ships",
-      page,
-      rowsPerPage,
-      name_search,
-      sort_by,
-      sort_order,
-    ],
+    queryKey: ["ships", page, rowsPerPage, name_search, sort_by, sort_order],
     queryFn: async () => {
       const response = await api.get("/api/ships", {
         params: {
@@ -60,6 +47,7 @@ const Ships: React.FC = () => {
           limit: rowsPerPage,
         },
       });
+      console.log(response.data);
       const processedItems = response.data.items.map((item: any) => {
         if (item.extraname) {
           return { ...item, name: `${item.name} ${item.extraname}` };
@@ -73,26 +61,40 @@ const Ships: React.FC = () => {
   const columns = [
     { id: "name", label: "이름", minWidth: 170 },
     {
-      id: "required_levels",
-      label: "필요 레벨",
-      minWidth: 200,
-      format: (value: any) =>
-        value
-          ? `모험 Lv${value.adventure}, 교역 Lv${value.trade}, 전투 Lv${value.battle}`
-          : "-",
+      id: "category_purpose",
+      label: "용도",
+      minWidth: 100,
+      format: (value: any) => value || "-",
     },
     {
-      id: "base_material",
-      label: "기본 재질",
+      id: "category_size",
+      label: "크기",
       minWidth: 100,
-      format: (value: any) => (value ? renderObjectChip(value, navigate) : "-"),
+      format: (value: any) => value || "-",
     },
     {
-      id: "upgrade_count",
-      label: "강화 횟수",
+      id: "category_propulsion",
+      label: "추진",
       minWidth: 100,
-      format: (value: any) =>
-        value ? `총 ${value.total} (기본 ${value.base}, 재건조 ${value.rebuild})` : "-",
+      format: (value: any) => value || "-",
+    },
+    {
+      id: "required_levels_adventure",
+      label: "모험 Lv",
+      minWidth: 80,
+      format: (value: any) => value || "-",
+    },
+    {
+      id: "required_levels_trade",
+      label: "교역 Lv",
+      minWidth: 80,
+      format: (value: any) => value || "-",
+    },
+    {
+      id: "required_levels_battle",
+      label: "전투 Lv",
+      minWidth: 80,
+      format: (value: any) => value || "-",
     },
     {
       id: "capacity",

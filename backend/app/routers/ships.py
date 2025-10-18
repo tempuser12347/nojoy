@@ -47,12 +47,33 @@ def read_ships(
     for row in paginated_results:
         item_dict = dict(row)
         # Parse JSON fields for list view
-        for field in ["required_levels", "base_material", "upgrade_count", "capacity", "category"]:
+        for field in ["base_material", "upgrade_count", "capacity"]:
             if item_dict.get(field) and isinstance(item_dict[field], str):
                 try:
                     item_dict[field] = json.loads(item_dict[field])
                 except json.JSONDecodeError:
                     item_dict[field] = None
+
+        # Flatten 'required_levels'
+        if item_dict.get("required_levels") and isinstance(item_dict["required_levels"], str):
+            try:
+                required_levels_data = json.loads(item_dict["required_levels"])
+                item_dict["required_levels_adventure"] = required_levels_data.get("adventure")
+                item_dict["required_levels_trade"] = required_levels_data.get("trade")
+                item_dict["required_levels_battle"] = required_levels_data.get("battle")
+            except json.JSONDecodeError:
+                pass
+        
+        # Flatten 'category'
+        if item_dict.get("category") and isinstance(item_dict["category"], str):
+            try:
+                category_data = json.loads(item_dict["category"])
+                item_dict["category_purpose"] = category_data.get("purpose")
+                item_dict["category_size"] = category_data.get("size")
+                item_dict["category_propulsion"] = category_data.get("propulsion")
+            except json.JSONDecodeError:
+                pass
+
         items.append(item_dict)
 
     return {"items": items, "total": total}
