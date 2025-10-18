@@ -88,7 +88,9 @@ interface Ship {
         city: { id: number; name: string };
       }[]
     | null;
-  standard_build_cities: { id: number; name: string }[] | null;
+  standard_build_cities:
+    | { region: string; cities: { id: number; name: string }[] }[]
+    | null;
   category: { purpose: string; size: string; propulsion: string } | null;
 }
 
@@ -599,13 +601,28 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                 <Typography variant="h6" color="text.secondary">
                   일반 건조 도시
                 </Typography>
-                <DetailItem
-                  label="도시"
-                  value={renderObjectsToChips(
-                    ship.standard_build_cities,
-                    navigate
-                  )}
-                />
+                <TableContainer component={Paper}>
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align="center">지역</TableCell>
+                        <TableCell align="center">도시</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {ship.standard_build_cities.map((regionData, index) => (
+                        <TableRow key={index}>
+                          <TableCell align="center">
+                            {regionData.region}
+                          </TableCell>
+                          <TableCell>
+                            {renderObjectsToChips(regionData.cities, navigate)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Box>
             )}
         </CardContent>
