@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -25,7 +25,6 @@ export default function CourtRankDetail({ data }: { data?: CourtRank }) {
   const [courtRank, setCourtRank] = useState<CourtRank | null>(data || null);
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourtRank = async () => {
@@ -74,16 +73,19 @@ export default function CourtRankDetail({ data }: { data?: CourtRank }) {
       <Card>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="레벨" value={courtRank.level} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="오스만" value={courtRank.ottoman} />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <DetailItem label="왕실 함대 랭크" value={courtRank.royal_fleet_rank} />
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem
+                label="왕실 함대 랭크"
+                value={courtRank.royal_fleet_rank}
+              />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="명성" value={courtRank.fame} />
             </Grid>
           </Grid>

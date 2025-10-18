@@ -91,22 +91,22 @@ export default function TechniqueDetail({ data }: { data?: Technique }) {
             <DetailItem label="설명" value={technique.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12,  sm:6 }}>
               <DetailItem label="타입" value={technique.technique_type} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12,  sm:6 }}>
               <DetailItem label="무기 타입" value={technique.weapon_type} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12,  sm:6 }}>
               <DetailItem label="랭크" value={technique.rank} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12,  sm:6 }}>
               <DetailItem label="게이지 코스트" value={technique.gauge_cost} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12,  sm:6 }}>
               <DetailItem label="사거리" value={technique.hitrange} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12,  sm:6 }}>
               <DetailItem label="범위" value={technique.area} />
             </Grid>
           </Grid>

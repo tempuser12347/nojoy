@@ -33,17 +33,12 @@ import LandNpcs from "./pages/landnpc/LandNpcs";
 import MarineNpcs from "./pages/marinenpc/MarineNpcs";
 import Ganadors from "./pages/ganador/Ganadors";
 import CityNpcs from "./pages/citynpc/CityNpcs";
-import CityNpcDetail from "./pages/citynpc/CityNpcDetail";
 import SkillRefinementEffects from "./pages/skillrefinementeffect/SkillRefinementEffects";
-import SkillRefinementEffectDetail from "./pages/skillrefinementeffect/SkillRefinementEffectDetail";
 import Researches from "./pages/research/Researches";
-import ResearchDetail from "./pages/research/ResearchDetail";
 import Majors from "./pages/major/Majors";
 import ResearchActions from "./pages/researchaction/ResearchActions";
 import Techniques from "./pages/technique/Techniques";
-import TechniqueDetail from "./pages/technique/TechniqueDetail";
 import Titles from "./pages/title/Titles";
-import TitleDetail from "./pages/title/TitleDetail";
 import CourtRanks from "./pages/courtrank/CourtRanks";
 import Aides from "./pages/aide/Aides";
 import Pets from "./pages/pet/Pets";
@@ -98,7 +93,7 @@ function App() {
               <Route path="/courtranks" element={<CourtRanks />} />
               <Route path="/aides" element={<Aides />} />
               <Route path="/pets" element={<Pets />} />
-              
+
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

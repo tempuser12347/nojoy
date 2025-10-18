@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
   Card,
   CardContent,
   CircularProgress,
-  Grid,
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
@@ -18,12 +17,17 @@ interface ResearchAction {
   category: string | null;
 }
 
-export default function ResearchActionDetail({ data }: { data?: ResearchAction }) {
+export default function ResearchActionDetail({
+  data,
+}: {
+  data?: ResearchAction;
+}) {
   const { id } = useParams<{ id: string }>();
-  const [researchAction, setResearchAction] = useState<ResearchAction | null>(data || null);
+  const [researchAction, setResearchAction] = useState<ResearchAction | null>(
+    data || null
+  );
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchResearchAction = async () => {

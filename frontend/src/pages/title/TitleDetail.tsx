@@ -1,23 +1,14 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
   Card,
   CardContent,
   CircularProgress,
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
-import { renderObjectChip, renderObjectsToChips } from "../../common/render";
 
 interface Title {
   id: number;
@@ -32,7 +23,6 @@ export default function TitleDetail({ data }: { data?: Title }) {
   const [title, setTitle] = useState<Title | null>(data || null);
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTitle = async () => {
@@ -84,13 +74,15 @@ export default function TitleDetail({ data }: { data?: Title }) {
             <DetailItem label="설명" value={title.description} />
           </Box>
           <Box sx={{ mb: 2 }}>
-            <DetailItem
-              label="요구 사항"
-              value={title.requirements}
-            />
+            <DetailItem label="요구 사항" value={title.requirements} />
           </Box>
-            <Box sx={{ mt: 2 }}>
-            <DetailItem label="효과" value={<div dangerouslySetInnerHTML={{ __html: title.effect || '' }} />} />
+          <Box sx={{ mt: 2 }}>
+            <DetailItem
+              label="효과"
+              value={
+                <div dangerouslySetInnerHTML={{ __html: title.effect || "" }} />
+              }
+            />
           </Box>
         </CardContent>
       </Card>

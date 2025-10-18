@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
-import { renderObjectsToChips, renderObjectChip } from "../../common/render";
+import { renderObjectChip } from "../../common/render";
 
 interface Pet {
   id: number;
@@ -87,10 +87,10 @@ export default function PetDetail({ data }: { data?: Pet }) {
         <CardContent>
           <DetailItem label="설명" value={pet.description} />
           <Grid container spacing={2} sx={{ mt: 2 }}>
-            <Grid item xs={12} sm={6} md={4} component="div" sx={{ p: 1 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} component="div" sx={{ p: 1 }}>
               <DetailItem label="아파트 랭크" value={pet.apartment_rank} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} component="div" sx={{ p: 1 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} component="div" sx={{ p: 1 }}>
               <DetailItem
                 label="증명서"
                 value={
