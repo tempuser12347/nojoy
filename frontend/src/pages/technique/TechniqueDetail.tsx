@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate} from "react-router-dom";
 import {
   Box,
   Typography,
@@ -11,13 +11,12 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Paper,
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
-import { renderObjectChip, renderObjectsToChips } from "../../common/render";
+import { renderObjectsToChips } from "../../common/render";
 
 interface Technique {
   id: number;
