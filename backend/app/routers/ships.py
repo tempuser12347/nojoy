@@ -20,7 +20,7 @@ def read_ships(
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
 ):
-    query = "SELECT id, name, extraname, required_levels, base_material, upgrade_count, capacity FROM ship"
+    query = "SELECT id, name, extraname, required_levels, base_material, upgrade_count, capacity, category FROM ship"
     results = db.execute(text(query)).fetchall()
 
     # Convert Row objects to dict for easier filtering and manipulation
@@ -47,7 +47,7 @@ def read_ships(
     for row in paginated_results:
         item_dict = dict(row)
         # Parse JSON fields for list view
-        for field in ["required_levels", "base_material", "upgrade_count", "capacity"]:
+        for field in ["required_levels", "base_material", "upgrade_count", "capacity", "category"]:
             if item_dict.get(field) and isinstance(item_dict[field], str):
                 try:
                     item_dict[field] = json.loads(item_dict[field])
@@ -90,6 +90,7 @@ def read_ship_core(ship_id: int, db: Session):
         "ship_deco",
         "special_build_cities",
         "standard_build_cities",
+        "category",
     ]:
         if ret.get(field) and isinstance(ret[field], str):
             try:
