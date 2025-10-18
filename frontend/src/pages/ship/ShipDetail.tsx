@@ -85,7 +85,7 @@ interface Ship {
         rank: number;
         material: { id: number; name: string };
         region: string;
-        city: { id: number; name: string };
+        city: { id: number; name: string }[];
       }[]
     | null;
   standard_build_cities:
@@ -585,7 +585,7 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                           </TableCell>
                           <TableCell align="center">{sbc.region}</TableCell>
                           <TableCell align="center">
-                            {renderObjectChip(sbc.city, navigate)}
+                            {renderObjectsToChips(sbc.city, navigate)}
                           </TableCell>
                         </TableRow>
                       ))}
