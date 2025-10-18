@@ -190,46 +190,88 @@ export default function ShipDetail({ data }: { data?: Ship }) {
           {ship.capacity && (
             <Box sx={{ mt: 3 }}>
               <Typography variant="h6" color="text.secondary">선박 용량</Typography>
-              <Grid container spacing={2} sx={{ mt: 1 }}>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="선실" value={ship.capacity.cabin} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="필요 선원" value={ship.capacity.required_crew} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="포실" value={ship.capacity.gunport} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="창고" value={ship.capacity.cargo} /></Grid>
-              </Grid>
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>선실</TableCell>
+                      <TableCell>필요 선원</TableCell>
+                      <TableCell>포실</TableCell>
+                      <TableCell>창고</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>{ship.capacity.cabin}</TableCell>
+                      <TableCell>{ship.capacity.required_crew}</TableCell>
+                      <TableCell>{ship.capacity.gunport}</TableCell>
+                      <TableCell>{ship.capacity.cargo}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Box>
           )}
 
           {ship.improvement_limit && (
             <Box sx={{ mt: 3 }}>
               <Typography variant="h6" color="text.secondary">강화 한계</Typography>
-              <Grid container spacing={2} sx={{ mt: 1 }}>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="내구도" value={ship.improvement_limit.durability} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="세로돛" value={ship.improvement_limit.vertical_sail} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="가로돛" value={ship.improvement_limit.horizontal_sail} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="저항" value={ship.improvement_limit.rowing_power} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="선회" value={ship.improvement_limit.maneuverability} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="내파" value={ship.improvement_limit.wave_resistance} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="장갑" value={ship.improvement_limit.armor} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="선실" value={ship.improvement_limit.cabin} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="포실" value={ship.improvement_limit.gunport} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="창고" value={ship.improvement_limit.cargo} /></Grid>
-              </Grid>
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>내구도</TableCell>
+                      <TableCell>세로돛</TableCell>
+                      <TableCell>가로돛</TableCell>
+                      <TableCell>조력</TableCell>
+                      <TableCell>선회</TableCell>
+                      <TableCell>내파</TableCell>
+                      <TableCell>장갑</TableCell>
+                      <TableCell>선실</TableCell>
+                      <TableCell>포실</TableCell>
+                      <TableCell>창고</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>{ship.improvement_limit.durability}</TableCell>
+                      <TableCell>{ship.improvement_limit.vertical_sail}</TableCell>
+                      <TableCell>{ship.improvement_limit.horizontal_sail}</TableCell>
+                      <TableCell>{ship.improvement_limit.rowing_power}</TableCell>
+                      <TableCell>{ship.improvement_limit.maneuverability}</TableCell>
+                      <TableCell>{ship.improvement_limit.wave_resistance}</TableCell>
+                      <TableCell>{ship.improvement_limit.armor}</TableCell>
+                      <TableCell>{ship.improvement_limit.cabin}</TableCell>
+                      <TableCell>{ship.improvement_limit.gunport}</TableCell>
+                      <TableCell>{ship.improvement_limit.cargo}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Box>
           )}
 
-          {ship.ship_parts && (
+          {ship.ship_parts && Object.keys(ship.ship_parts).length > 0 && (
             <Box sx={{ mt: 3 }}>
               <Typography variant="h6" color="text.secondary">선박 부품</Typography>
-              <Grid container spacing={2} sx={{ mt: 1 }}>
-                {ship.ship_parts.studdingsail && <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="보조돛" value={ship.ship_parts.studdingsail} /></Grid>}
-                {ship.ship_parts.figurehead && <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="선수상" value={ship.ship_parts.figurehead} /></Grid>}
-                {ship.ship_parts.crest && <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="문장" value={ship.ship_parts.crest} /></Grid>}
-                {ship.ship_parts.special_equipment && <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="특수장비" value={ship.ship_parts.special_equipment} /></Grid>}
-                {ship.ship_parts.extra_armor && <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="추가장갑" value={ship.ship_parts.extra_armor} /></Grid>}
-                {ship.ship_parts.side_cannon && <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="선측포" value={ship.ship_parts.side_cannon} /></Grid>}
-                {ship.ship_parts.bow_cannon && <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="선수포" value={ship.ship_parts.bow_cannon} /></Grid>}
-                {ship.ship_parts.stern_cannon && <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="선미포" value={ship.ship_parts.stern_cannon} /></Grid>}
-              </Grid>
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      {Object.keys(ship.ship_parts).map((key) => (
+                        <TableCell key={key}>{key === "studdingsail" ? "보조돛" : key === "figurehead" ? "선수상" : key === "crest" ? "문장" : key === "special_equipment" ? "특수장비" : key === "extra_armor" ? "추가장갑" : key === "side_cannon" ? "선측포" : key === "bow_cannon" ? "선수포" : key === "stern_cannon" ? "선미포" : key}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      {Object.values(ship.ship_parts).map((value, index) => (
+                        <TableCell key={index}>{value}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Box>
           )}
 
@@ -266,13 +308,24 @@ export default function ShipDetail({ data }: { data?: Ship }) {
           {ship.ship_deco && Object.keys(ship.ship_deco).length > 0 && (
             <Box sx={{ mt: 3 }}>
               <Typography variant="h6" color="text.secondary">선박 장식</Typography>
-              <Grid container spacing={2} sx={{ mt: 1 }}>
-                {Object.entries(ship.ship_deco).map(([key, value]) => (
-                  <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }} key={key}>
-                    <DetailItem label={key} value={value ? '✅' : '❌'} />
-                  </Grid>
-                ))}
-              </Grid>
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      {Object.keys(ship.ship_deco).map((key) => (
+                        <TableCell key={key}>{key}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      {Object.values(ship.ship_deco).map((value, index) => (
+                        <TableCell key={index}>{value ? '✅' : '❌'}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Box>
           )}
 
