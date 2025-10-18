@@ -158,15 +158,32 @@ export default function ShipDetail({ data }: { data?: Ship }) {
           {ship.base_performance && (
             <Box sx={{ mt: 3 }}>
               <Typography variant="h6" color="text.secondary">기본 성능</Typography>
-              <Grid container spacing={2} sx={{ mt: 1 }}>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="내구도" value={ship.base_performance.durability} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="세로돛" value={ship.base_performance.vertical_sail} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="가로돛" value={ship.base_performance.horizontal_sail} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="저항" value={ship.base_performance.rowing_power} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="선회" value={ship.base_performance.maneuverability} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="내파" value={ship.base_performance.wave_resistance} /></Grid>
-                <Grid item xs={12} sm={6} md={4} component="div" sx={{ border: '1px solid #e0e0e0', p: 1 }}><DetailItem label="장갑" value={ship.base_performance.armor} /></Grid>
-              </Grid>
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>내구도</TableCell>
+                      <TableCell>세로돛</TableCell>
+                      <TableCell>가로돛</TableCell>
+                      <TableCell>조력</TableCell>
+                      <TableCell>선회</TableCell>
+                      <TableCell>내파</TableCell>
+                      <TableCell>장갑</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>{ship.base_performance.durability}</TableCell>
+                      <TableCell>{ship.base_performance.vertical_sail}</TableCell>
+                      <TableCell>{ship.base_performance.horizontal_sail}</TableCell>
+                      <TableCell>{ship.base_performance.rowing_power}</TableCell>
+                      <TableCell>{ship.base_performance.maneuverability}</TableCell>
+                      <TableCell>{ship.base_performance.wave_resistance}</TableCell>
+                      <TableCell>{ship.base_performance.armor}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Box>
           )}
 
