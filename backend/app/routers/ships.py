@@ -1,10 +1,11 @@
 from typing import List, Dict, Any
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import asc, desc
+from sqlalchemy import asc, desc, text
 from app.database import get_db
 from app import models
 from ..common import fetch_all_obtain_methods
+import json 
 
 
 router = APIRouter(prefix="/api/ships", tags=["ships"])
@@ -19,49 +20,42 @@ def read_ships(
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
 ):
-    query = db.query(models.Ship)
+    query = "SELECT id, name, extraname, required_levels, base_material, upgrade_count, capacity FROM ship"
+    results = db.execute(text(query)).fetchall()
+
+    # Convert Row objects to dict for easier filtering and manipulation
+    results = [dict(row._mapping) for row in results]
 
     if name_search:
-        query = query.filter(models.Ship.name.ilike(f"%{name_search}%"))
+        results = [
+            row
+            for row in results
+            if name_search.lower() in (row.get("name") or "").lower()
+            or name_search.lower() in (row.get("extraname") or "").lower()
+        ]
 
-    total = query.count()
+    if sort_by:
+        results.sort(
+            key=lambda x: x.get(sort_by) or "",
+            reverse=(sort_order.lower() == "desc"),
+        )
 
-    if hasattr(models.Ship, sort_by):
-        if sort_order.lower() == "asc":
-            query = query.order_by(asc(sort_by))
-        else:
-            query = query.order_by(desc(sort_by))
+    total = len(results)
+    paginated_results = results[skip : skip + limit]
 
-    ships = query.offset(skip).limit(limit).all()
+    items = []
+    for row in paginated_results:
+        item_dict = dict(row)
+        # Parse JSON fields for list view
+        for field in ["required_levels", "base_material", "upgrade_count", "capacity"]:
+            if item_dict.get(field) and isinstance(item_dict[field], str):
+                try:
+                    item_dict[field] = json.loads(item_dict[field])
+                except json.JSONDecodeError:
+                    item_dict[field] = None
+        items.append(item_dict)
 
-    return_fields = [
-        "id",
-        "name",
-        "type",
-        "size",
-        "category",
-        "lv_adventure",
-        "lv_trade",
-        "lv_battle",
-        "durability",
-        "vertical_sail",
-        "horizontal_sail",
-        "rowing_power",
-        "turning_performance",
-        "wave_resistance",
-        "armor",
-        "cabin_capacity",
-        "required_crew",
-        "cannon_chambers",
-        "warehouse_capacity",
-    ]
-
-    ret_list = []
-    for ship in ships:
-        ret = {field: getattr(ship, field) for field in return_fields}
-        ret_list.append(ret)
-
-    return {"items": ret_list, "total": total}
+    return {"items": items, "total": total}
 
 
 @router.get("/{ship_id}", response_model=dict)
@@ -69,63 +63,38 @@ def read_ship(ship_id: int, db: Session = Depends(get_db)):
     return read_ship_core(ship_id, db)
 
 
-def read_ship_core(ship_id: int, db: Session = Depends(get_db)):
-    ship = db.query(models.Ship).filter(models.Ship.id == ship_id).first()
-    if ship is None:
+def read_ship_core(ship_id: int, db: Session):
+    query = text("SELECT * FROM ship WHERE id = :id")
+    result = db.execute(query, {"id": ship_id}).fetchone()
+
+    if result is None:
         raise HTTPException(status_code=404, detail="Ship not found")
 
-    return_fields = [
-        "id",
-        "name",
-        "additional_name",
-        "description",
-        "type",
-        "size",
-        "category",
-        "lv_adventure",
-        "lv_trade",
-        "lv_battle",
-        "default_material",
-        "base_reinforcement",
-        "re_reinforcement",
-        "shipbuilding",
-        "dry_days",
-        "city_progress",
-        "city_invest",
-        "durability",
-        "vertical_sail",
-        "horizontal_sail",
-        "rowing_power",
-        "turning_performance",
-        "wave_resistance",
-        "armor",
-        "cabin_capacity",
-        "required_crew",
-        "cannon_chambers",
-        "warehouse_capacity",
-        "durability_plus",
-        "vertical_sail_plus",
-        "horizontal_sail_plus",
-        "rowing_power_plus",
-        "turning_performance_plus",
-        "wave_resistance_plus",
-        "armor_plus",
-        "cabin_capacity_plus",
-        "cannon_chambers_plus",
-        "warehouse_capacity_plus",
-        "auxiliary_sails",
-        "figurehead",
-        "crest",
-        "special_equipment",
-        "additional_armor",
-        "broadside_ports",
-        "bow_ports",
-        "stern_ports",
-    ]
+    ret = dict(result._mapping)
 
-    ret = {field: getattr(ship, field) for field in return_fields}
+    # Combine name and extraname
+    if ret.get("extraname"):
+        ret["name"] = f"{ret['name']} {ret['extraname']}"
 
-    obtm_list = fetch_all_obtain_methods(ship_id, db)
-    ret["obtain_method"] = obtm_list
+    # Parse JSON fields
+    for field in [
+        "required_levels",
+        "base_material",
+        "upgrade_count",
+        "build_info",
+        "base_performance",
+        "capacity",
+        "improvement_limit",
+        "ship_parts",
+        "ship_skills",
+        "ship_deco",
+        "special_build_cities",
+        "standard_build_cities",
+    ]:
+        if ret.get(field) and isinstance(ret[field], str):
+            try:
+                ret[field] = json.loads(ret[field])
+            except json.JSONDecodeError:
+                ret[field] = None
 
     return ret

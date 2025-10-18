@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
+import { renderObjectChip } from "../../common/render";
 
 const Ships: React.FC = () => {
   const navigate = useNavigate();
@@ -19,8 +20,9 @@ const Ships: React.FC = () => {
   const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
   const name_search = searchParams.get("name_search") || "";
   const sort_by = searchParams.get("sort_by") || "id";
-  const sort_order =
-    (searchParams.get("sort_order") as "asc" | "desc") || "desc";
+  const sort_order = (
+    searchParams.get("sort_order") as "asc" | "desc"
+  ) || "desc";
 
   // Component state for inputs
   const [searchInput, setSearchInput] = React.useState(name_search);
@@ -58,18 +60,49 @@ const Ships: React.FC = () => {
           limit: rowsPerPage,
         },
       });
-      return response.data; // Expecting { items: [], total: 0 }
+      const processedItems = response.data.items.map((item: any) => {
+        if (item.extraname) {
+          return { ...item, name: `${item.name} ${item.extraname}` };
+        }
+        return item;
+      });
+      return { ...response.data, items: processedItems };
     },
   });
 
   const columns = [
-    { id: 'name', label: '이름' },
-    { id: 'type', label: '종류' },
-    { id: 'size', label: '크기' },
-    { id: 'category', label: '분류' },
-    { id: 'lv_adventure', label: '모험' },
-    { id: 'lv_trade', label: '교역' },
-    { id: 'lv_battle', label: '전투' },
+    { id: "name", label: "이름", minWidth: 170 },
+    {
+      id: "required_levels",
+      label: "필요 레벨",
+      minWidth: 200,
+      format: (value: any) =>
+        value
+          ? `모험 Lv${value.adventure}, 교역 Lv${value.trade}, 전투 Lv${value.battle}`
+          : "-",
+    },
+    {
+      id: "base_material",
+      label: "기본 재질",
+      minWidth: 100,
+      format: (value: any) => (value ? renderObjectChip(value, navigate) : "-"),
+    },
+    {
+      id: "upgrade_count",
+      label: "강화 횟수",
+      minWidth: 100,
+      format: (value: any) =>
+        value ? `총 ${value.total} (기본 ${value.base}, 재건조 ${value.rebuild})` : "-",
+    },
+    {
+      id: "capacity",
+      label: "선박 용량",
+      minWidth: 250,
+      format: (value: any) =>
+        value
+          ? `선실 ${value.cabin}, 필요 선원 ${value.required_crew}, 포실 ${value.gunport}, 창고 ${value.cargo}`
+          : "-",
+    },
   ];
 
   const handleSearchInputChange = (
