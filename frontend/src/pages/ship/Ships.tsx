@@ -97,13 +97,130 @@ const Ships: React.FC = () => {
       format: (value: any) => value || "-",
     },
     {
-      id: "capacity",
-      label: "선박 용량",
-      minWidth: 250,
-      format: (value: any) =>
-        value
-          ? `선실 ${value.cabin}, 필요 선원 ${value.required_crew}, 포실 ${value.gunport}, 창고 ${value.cargo}`
-          : "-",
+      id: "capacity_cabin",
+      label: "선실",
+      minWidth: 80,
+      format: (value: any, row: any) => row.capacity_cabin || "-",
+    },
+    {
+      id: "capacity_required_crew",
+      label: "필요 선원",
+      minWidth: 80,
+      format: (value: any, row: any) => row.capacity_required_crew || "-",
+    },
+    {
+      id: "capacity_gunport",
+      label: "포실",
+      minWidth: 80,
+      format: (value: any, row: any) => row.capacity_gunport || "-",
+    },
+    {
+      id: "capacity_cargo",
+      label: "창고",
+      minWidth: 80,
+      format: (value: any, row: any) => row.capacity_cargo || "-",
+    },
+    {
+      id: "base_performance_durability",
+      label: "기본 내구도",
+      minWidth: 80,
+      format: (value: any, row: any) => row.base_performance_durability || "-",
+    },
+    {
+      id: "base_performance_vertical_sail",
+      label: "기본 세로돛",
+      minWidth: 80,
+      format: (value: any, row: any) => row.base_performance_vertical_sail || "-",
+    },
+    {
+      id: "base_performance_horizontal_sail",
+      label: "기본 가로돛",
+      minWidth: 80,
+      format: (value: any, row: any) => row.base_performance_horizontal_sail || "-",
+    },
+    {
+      id: "base_performance_rowing_power",
+      label: "기본 조력",
+      minWidth: 80,
+      format: (value: any, row: any) => row.base_performance_rowing_power || "-",
+    },
+    {
+      id: "base_performance_maneuverability",
+      label: "기본 선회",
+      minWidth: 80,
+      format: (value: any, row: any) => row.base_performance_maneuverability || "-",
+    },
+    {
+      id: "base_performance_wave_resistance",
+      label: "기본 내파",
+      minWidth: 80,
+      format: (value: any, row: any) => row.base_performance_wave_resistance || "-",
+    },
+    {
+      id: "base_performance_armor",
+      label: "기본 장갑",
+      minWidth: 80,
+      format: (value: any, row: any) => row.base_performance_armor || "-",
+    },
+    {
+      id: "improvement_limit_durability",
+      label: "강화 내구도",
+      minWidth: 80,
+      format: (value: any, row: any) => row.improvement_limit_durability || "-",
+    },
+    {
+      id: "improvement_limit_vertical_sail",
+      label: "강화 세로돛",
+      minWidth: 80,
+      format: (value: any, row: any) => row.improvement_limit_vertical_sail || "-",
+    },
+    {
+      id: "improvement_limit_horizontal_sail",
+      label: "강화 가로돛",
+      minWidth: 80,
+      format: (value: any, row: any) => row.improvement_limit_horizontal_sail || "-",
+    },
+    {
+      id: "improvement_limit_rowing_power",
+      label: "강화 조력",
+      minWidth: 80,
+      format: (value: any, row: any) => row.improvement_limit_rowing_power || "-",
+    },
+    {
+      id: "improvement_limit_maneuverability",
+      label: "강화 선회",
+      minWidth: 80,
+      format: (value: any, row: any) => row.improvement_limit_maneuverability || "-",
+    },
+    {
+      id: "improvement_limit_wave_resistance",
+      label: "강화 내파",
+      minWidth: 80,
+      format: (value: any, row: any) => row.improvement_limit_wave_resistance || "-",
+    },
+    {
+      id: "improvement_limit_armor",
+      label: "강화 장갑",
+      minWidth: 80,
+      format: (value: any, row: any) => row.improvement_limit_armor || "-",
+    },
+    {
+      id: "improvement_limit_cabin",
+      label: "강화 선실",
+      minWidth: 80,
+      format: (value: any, row: any) => row.improvement_limit_cabin || "-",
+    },
+    {
+      id: "improvement_limit_gunport",
+      label: "강화 포실",
+      minWidth: 80,
+      format: (value: any, row: any) => row.improvement_limit_gunport || "-",
+    },
+    {
+      id: "improvement_limit_cargo",
+      label: "강화 창고",
+      minWidth: 80,
+      format: (value: any, row: any) => row.improvement_limit_cargo || "-",
     },
   ];
 

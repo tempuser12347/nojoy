@@ -20,7 +20,47 @@ def read_ships(
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
 ):
-    query = "SELECT id, name, extraname, required_levels, base_material, upgrade_count, capacity, category FROM ship"
+    query = """
+        SELECT
+            id,
+            name,
+            extraname,
+            required_levels,
+            json_extract(required_levels, '$.adventure') AS required_levels_adventure,
+            json_extract(required_levels, '$.trade') AS required_levels_trade,
+            json_extract(required_levels, '$.battle') AS required_levels_battle,
+            base_material,
+            upgrade_count,
+            capacity,
+            json_extract(capacity, '$.cabin') AS capacity_cabin,
+            json_extract(capacity, '$.required_crew') AS capacity_required_crew,
+            json_extract(capacity, '$.gunport') AS capacity_gunport,
+            json_extract(capacity, '$.cargo') AS capacity_cargo,
+            category,
+            json_extract(category, '$.purpose') AS category_purpose,
+            json_extract(category, '$.size') AS category_size,
+            json_extract(category, '$.propulsion') AS category_propulsion,
+            base_performance,
+            json_extract(base_performance, '$.durability') AS base_performance_durability,
+            json_extract(base_performance, '$.vertical_sail') AS base_performance_vertical_sail,
+            json_extract(base_performance, '$.horizontal_sail') AS base_performance_horizontal_sail,
+            json_extract(base_performance, '$.rowing_power') AS base_performance_rowing_power,
+            json_extract(base_performance, '$.maneuverability') AS base_performance_maneuverability,
+            json_extract(base_performance, '$.wave_resistance') AS base_performance_wave_resistance,
+            json_extract(base_performance, '$.armor') AS base_performance_armor,
+            improvement_limit,
+            json_extract(improvement_limit, '$.durability') AS improvement_limit_durability,
+            json_extract(improvement_limit, '$.vertical_sail') AS improvement_limit_vertical_sail,
+            json_extract(improvement_limit, '$.horizontal_sail') AS improvement_limit_horizontal_sail,
+            json_extract(improvement_limit, '$.rowing_power') AS improvement_limit_rowing_power,
+            json_extract(improvement_limit, '$.maneuverability') AS improvement_limit_maneuverability,
+            json_extract(improvement_limit, '$.wave_resistance') AS improvement_limit_wave_resistance,
+            json_extract(improvement_limit, '$.armor') AS improvement_limit_armor,
+            json_extract(improvement_limit, '$.cabin') AS improvement_limit_cabin,
+            json_extract(improvement_limit, '$.gunport') AS improvement_limit_gunport,
+            json_extract(improvement_limit, '$.cargo') AS improvement_limit_cargo
+        FROM ship
+    """
     results = db.execute(text(query)).fetchall()
 
     # Convert Row objects to dict for easier filtering and manipulation
@@ -47,33 +87,12 @@ def read_ships(
     for row in paginated_results:
         item_dict = dict(row)
         # Parse JSON fields for list view
-        for field in ["base_material", "upgrade_count", "capacity"]:
+        for field in ["base_material", "upgrade_count"]:
             if item_dict.get(field) and isinstance(item_dict[field], str):
                 try:
                     item_dict[field] = json.loads(item_dict[field])
                 except json.JSONDecodeError:
                     item_dict[field] = None
-
-        # Flatten 'required_levels'
-        if item_dict.get("required_levels") and isinstance(item_dict["required_levels"], str):
-            try:
-                required_levels_data = json.loads(item_dict["required_levels"])
-                item_dict["required_levels_adventure"] = required_levels_data.get("adventure")
-                item_dict["required_levels_trade"] = required_levels_data.get("trade")
-                item_dict["required_levels_battle"] = required_levels_data.get("battle")
-            except json.JSONDecodeError:
-                pass
-        
-        # Flatten 'category'
-        if item_dict.get("category") and isinstance(item_dict["category"], str):
-            try:
-                category_data = json.loads(item_dict["category"])
-                item_dict["category_purpose"] = category_data.get("purpose")
-                item_dict["category_size"] = category_data.get("size")
-                item_dict["category_propulsion"] = category_data.get("propulsion")
-            except json.JSONDecodeError:
-                pass
-
         items.append(item_dict)
 
     return {"items": items, "total": total}
