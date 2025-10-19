@@ -67,7 +67,7 @@ const DataTable: React.FC<DataTableProps> = ({
     <Box sx={{ width: '100%', maxWidth: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2, maxWidth: '100%' }}>
         {loading && <LinearProgress />}
-        <TableContainer sx={{width: '100%', overflowX: 'auto', maxWidth: '100%', display: 'block' , whiteSpace: 'nowrap' }}>
+        <TableContainer sx={{width: '100%', overflowX: 'scroll', maxWidth: '100%', display: 'block' }}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
