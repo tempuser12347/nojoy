@@ -295,15 +295,16 @@ export default function ShipDetail({ data }: { data?: Ship }) {
             </Grid>
           </Grid>
 
-          {ship.base_performance && (
+          {(ship.base_performance || ship.improvement_limit) && (
             <Box sx={{ mt: 3 }}>
               <Typography variant="h6" color="text.secondary">
-                기본 성능
+                성능 및 강화 한계
               </Typography>
               <TableContainer component={Paper}>
                 <Table size="small">
                   <TableHead>
                     <TableRow>
+                      <TableCell align="center">구분</TableCell>
                       <TableCell align="center">내구도</TableCell>
                       <TableCell align="center">세로돛</TableCell>
                       <TableCell align="center">가로돛</TableCell>
@@ -318,100 +319,128 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow>
-                      <TableCell align="center">
-                        {ship.base_performance.durability}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.base_performance.vertical_sail}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.base_performance.horizontal_sail}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.base_performance.rowing_power}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.base_performance.maneuverability}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.base_performance.wave_resistance}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.base_performance.armor}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.capacity?.cabin}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.capacity?.required_crew}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.capacity?.gunport}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.capacity?.cargo}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          )}
-          {ship.improvement_limit && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" color="text.secondary">
-                강화 한계
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="center">내구도</TableCell>
-                      <TableCell align="center">세로돛</TableCell>
-                      <TableCell align="center">가로돛</TableCell>
-                      <TableCell align="center">조력</TableCell>
-                      <TableCell align="center">선회</TableCell>
-                      <TableCell align="center">내파</TableCell>
-                      <TableCell align="center">장갑</TableCell>
-                      <TableCell align="center">선실</TableCell>
-                      <TableCell align="center">포실</TableCell>
-                      <TableCell align="center">창고</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center">
-                        {ship.improvement_limit.durability}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.improvement_limit.vertical_sail}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.improvement_limit.horizontal_sail}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.improvement_limit.rowing_power}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.improvement_limit.maneuverability}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.improvement_limit.wave_resistance}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.improvement_limit.armor}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.improvement_limit.cabin}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.improvement_limit.gunport}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.improvement_limit.cargo}
-                      </TableCell>
-                    </TableRow>
+                    {ship.base_performance && (
+                      <TableRow>
+                        <TableCell align="center">기본 성능</TableCell>
+                        <TableCell align="center">
+                          {ship.base_performance.durability}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.base_performance.vertical_sail}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.base_performance.horizontal_sail}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.base_performance.rowing_power}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.base_performance.maneuverability}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.base_performance.wave_resistance}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.base_performance.armor}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.capacity?.cabin}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.capacity?.required_crew}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.capacity?.gunport}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.capacity?.cargo}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                    {ship.improvement_limit && (
+                      <TableRow>
+                        <TableCell align="center">강화 한계</TableCell>
+                        <TableCell align="center">
+                          {ship.improvement_limit.durability}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.improvement_limit.vertical_sail}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.improvement_limit.horizontal_sail}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.improvement_limit.rowing_power}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.improvement_limit.maneuverability}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.improvement_limit.wave_resistance}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.improvement_limit.armor}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.improvement_limit.cabin}
+                        </TableCell>
+                        <TableCell align="center"></TableCell>
+                        <TableCell align="center">
+                          {ship.improvement_limit.gunport}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.improvement_limit.cargo}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                    {(ship.base_performance || ship.improvement_limit) && (
+                      <TableRow sx={{ td: { fontWeight: "bold" } }}>
+                        <TableCell align="center">최대</TableCell>
+                        <TableCell align="center">
+                          {(ship.base_performance?.durability || 0) +
+                            (ship.improvement_limit?.durability || 0)}
+                        </TableCell>
+                        <TableCell align="center">
+                          {(ship.base_performance?.vertical_sail || 0) +
+                            (ship.improvement_limit?.vertical_sail || 0)}
+                        </TableCell>
+                        <TableCell align="center">
+                          {(ship.base_performance?.horizontal_sail || 0) +
+                            (ship.improvement_limit?.horizontal_sail || 0)}
+                        </TableCell>
+                        <TableCell align="center">
+                          {(ship.base_performance?.rowing_power || 0) +
+                            (ship.improvement_limit?.rowing_power || 0)}
+                        </TableCell>
+                        <TableCell align="center">
+                          {(ship.base_performance?.maneuverability || 0) +
+                            (ship.improvement_limit?.maneuverability || 0)}
+                        </TableCell>
+                        <TableCell align="center">
+                          {(ship.base_performance?.wave_resistance || 0) +
+                            (ship.improvement_limit?.wave_resistance || 0)}
+                        </TableCell>
+                        <TableCell align="center">
+                          {(ship.base_performance?.armor || 0) +
+                            (ship.improvement_limit?.armor || 0)}
+                        </TableCell>
+                        <TableCell align="center">
+                          {(ship.capacity?.cabin || 0) +
+                            (ship.improvement_limit?.cabin || 0)}
+                        </TableCell>
+                        <TableCell align="center">
+                          {ship.capacity?.required_crew || 0}
+                        </TableCell>
+                        <TableCell align="center">
+                          {(ship.capacity?.gunport || 0) +
+                            (ship.improvement_limit?.gunport || 0)}
+                        </TableCell>
+                        <TableCell align="center">
+                          {(ship.capacity?.cargo || 0) +
+                            (ship.improvement_limit?.cargo || 0)}
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>
