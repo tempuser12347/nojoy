@@ -58,7 +58,10 @@ def read_ships(
                     json_extract(base_performance, '$.armor') + json_extract(improvement_limit, '$.armor') AS max_armor,
                     json_extract(capacity, '$.cabin') + json_extract(improvement_limit, '$.cabin') AS max_cabin,
                     json_extract(capacity, '$.gunport') + json_extract(improvement_limit, '$.gunport') AS max_gunport,
-                    json_extract(capacity, '$.cargo') + json_extract(improvement_limit, '$.cargo') AS max_cargo
+                    json_extract(capacity, '$.cargo') + json_extract(improvement_limit, '$.cargo') AS max_cargo,
+                    -- custom metric
+                    json_extract(base_performance, '$.vertical_sail') + json_extract(improvement_limit, '$.vertical_sail') + json_extract(base_performance, '$.horizontal_sail') + json_extract(improvement_limit, '$.horizontal_sail') as max_sum_sail ,
+                    json_extract(base_performance, '$.vertical_sail') + json_extract(improvement_limit, '$.vertical_sail') + json_extract(base_performance, '$.horizontal_sail') + json_extract(improvement_limit, '$.horizontal_sail') + json_extract(base_performance, '$.rowing_power') + json_extract(improvement_limit, '$.rowing_power') as max_sum_sail_row_power
                 FROM ship    """
     results = db.execute(text(query)).fetchall()
 
@@ -117,6 +120,8 @@ def read_ships(
                     'max_cabin',
                     'max_gunport',
                     'max_cargo',
+                    'max_sum_sail',
+                    'max_sum_sail_row_power',
                 ]:
                     return -1  # Treat None as less than any number
                 else:

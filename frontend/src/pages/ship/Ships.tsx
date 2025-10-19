@@ -195,6 +195,16 @@ const Ships: React.FC = () => {
       label: "최대 창고",
       minWidth: 80,
     },
+    {
+      id: "max_sum_sail",
+      label: "최대 돛수치 합",
+      minWidth: 80,
+    },
+    {
+      id: "max_sum_sail_row_power",
+      label: "최대 돛+조력",
+      // minWidth: 80,
+    },
 
   ];
 
@@ -235,7 +245,7 @@ const Ships: React.FC = () => {
   };
 
   return (
-    <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
+    <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)", maxWidth: '100%' }}>
       <Typography variant="h4" gutterBottom>
         선박
       </Typography>

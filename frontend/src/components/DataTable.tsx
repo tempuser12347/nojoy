@@ -64,10 +64,10 @@ const DataTable: React.FC<DataTableProps> = ({
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+    <Box sx={{ width: '100%', maxWidth: '100%' }}>
+      <Paper sx={{ width: '100%', mb: 2, maxWidth: '100%' }}>
         {loading && <LinearProgress />}
-        <TableContainer>
+        <TableContainer sx={{width: '100%', overflowX: 'auto', maxWidth: '100%', display: 'block' , whiteSpace: 'nowrap' }}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -75,7 +75,7 @@ const DataTable: React.FC<DataTableProps> = ({
                   <TableCell
                     key={column.id}
                     sortDirection={sortColumn === column.id ? sortDirection : false}
-                    style={{ minWidth: column.minWidth }}
+                    style={{ minWidth: column.minWidth , wordBreak: 'keep-all' }}
                   >
                     {onSortChange ? (
                       <TableSortLabel
