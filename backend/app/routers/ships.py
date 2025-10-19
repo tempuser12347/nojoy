@@ -16,11 +16,27 @@ def read_ships(
     skip: int = Query(0, description="Skip first N records"),
     limit: int = Query(10, description="Limit the number of records returned"),
     name_search: str = Query(None, description="Search term for ship name"),
+    purpose_search: str = Query(
+        None, description="Comma-separated list of purposes to filter by"
+    ),
+    size_search: str = Query(
+        None, description="Comma-separated list of sizes to filter by"
+    ),
+    propulsion_search: str = Query(
+        None, description="Comma-separated list of propulsions to filter by"
+    ),
+    ship_skill_search: str = Query(
+        None, description="Comma-separated list of ship skills to filter by"
+    ),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("desc", description="Sort order (asc or desc)"),
     db: Session = Depends(get_db),
 ):
-    query = """
+
+    query_parts = []
+    params = {}
+
+    select_clause = """
                 SELECT
                     id,
                     name,
@@ -49,6 +65,7 @@ def read_ships(
                     json_extract(base_performance, '$.wave_resistance') AS base_performance_wave_resistance,
                     json_extract(base_performance, '$.armor') AS base_performance_armor,
                     improvement_limit,
+                    -- max limit
                     json_extract(base_performance, '$.durability') + json_extract(improvement_limit, '$.durability') AS max_durability,
                     json_extract(base_performance, '$.vertical_sail') + json_extract(improvement_limit, '$.vertical_sail') AS max_vertical_sail,
                     json_extract(base_performance, '$.horizontal_sail') + json_extract(improvement_limit, '$.horizontal_sail') AS max_horizontal_sail,
@@ -61,20 +78,70 @@ def read_ships(
                     json_extract(capacity, '$.cargo') + json_extract(improvement_limit, '$.cargo') AS max_cargo,
                     -- custom metric
                     json_extract(base_performance, '$.vertical_sail') + json_extract(improvement_limit, '$.vertical_sail') + json_extract(base_performance, '$.horizontal_sail') + json_extract(improvement_limit, '$.horizontal_sail') as max_sum_sail ,
-                    json_extract(base_performance, '$.vertical_sail') + json_extract(improvement_limit, '$.vertical_sail') + json_extract(base_performance, '$.horizontal_sail') + json_extract(improvement_limit, '$.horizontal_sail') + json_extract(base_performance, '$.rowing_power') + json_extract(improvement_limit, '$.rowing_power') as max_sum_sail_row_power
+                    json_extract(base_performance, '$.vertical_sail') + json_extract(improvement_limit, '$.vertical_sail') + json_extract(base_performance, '$.horizontal_sail') + json_extract(improvement_limit, '$.horizontal_sail') + json_extract(base_performance, '$.rowing_power') + json_extract(improvement_limit, '$.rowing_power') as max_sum_sail_row_power,
+                    ship_skills
                 FROM ship    """
-    results = db.execute(text(query)).fetchall()
+
+    query_parts.append(select_clause)
+    where_clauses = []
+    if name_search:
+        where_clauses.append("(name LIKE :name_search OR extraname LIKE :name_search)")
+        params["name_search"] = f"%{name_search}%"
+
+    if purpose_search:
+        purposes = purpose_search.split(",")
+        purpose_conditions = [
+            f"json_extract(category, '$.purpose') = :purpose_{i}"
+            for i in range(len(purposes))
+        ]
+        where_clauses.append(f"({' OR '.join(purpose_conditions)})")
+        for i, purpose in enumerate(purposes):
+            params[f"purpose_{i}"] = purpose
+
+    if size_search:
+        sizes = size_search.split(",")
+        size_conditions = [
+            f"json_extract(category, '$.size') = :size_{i}" for i in range(len(sizes))
+        ]
+        where_clauses.append(f"({' OR '.join(size_conditions)})")
+        for i, size in enumerate(sizes):
+            params[f"size_{i}"] = size
+
+    if propulsion_search:
+        propulsions = propulsion_search.split(",")
+        propulsion_conditions = [
+            f"json_extract(category, '$.propulsion') = :propulsion_{i}"
+            for i in range(len(propulsions))
+        ]
+        where_clauses.append(f"({' OR '.join(propulsion_conditions)})")
+        for i, propulsion in enumerate(propulsions):
+            params[f"propulsion_{i}"] = propulsion
+
+    if where_clauses:
+        query_parts.append("WHERE " + " AND ".join(where_clauses))
+
+    query = " ".join(query_parts)
+
+    results = db.execute(text(query), params).fetchall()
+
+    if ship_skill_search:
+        skill_terms = [s.strip() for s in ship_skill_search.split(",")]
+        # print("Filtering ship skills with terms:", skill_terms)
+        filtered_results = []
+        for row in results:
+            ship_skills = []
+            if row.ship_skills and isinstance(row.ship_skills, str):
+                try:
+                    ship_skills = json.loads(row.ship_skills)
+                except json.JSONDecodeError:
+                    raise Exception("Invalid JSON in ship_skills field")
+            skill_names = [skill.get("skill").get("name") for skill in ship_skills]
+            if all(term in skill_names for term in skill_terms):
+                filtered_results.append(row)
+        results = filtered_results
 
     # Convert Row objects to dict for easier filtering and manipulation
     results = [dict(row._mapping) for row in results]
-
-    if name_search:
-        results = [
-            row
-            for row in results
-            if name_search.lower() in (row.get("name") or "").lower()
-            or name_search.lower() in (row.get("extraname") or "").lower()
-        ]
 
     if sort_by:
 
@@ -110,18 +177,18 @@ def read_ships(
                     "improvement_limit_cabin",
                     "improvement_limit_gunport",
                     "improvement_limit_cargo",
-                    'max_durability',
-                    'max_vertical_sail',
-                    'max_horizontal_sail',
-                    'max_rowing_power',
-                    'max_maneuverability',
-                    'max_wave_resistance',
-                    'max_armor',
-                    'max_cabin',
-                    'max_gunport',
-                    'max_cargo',
-                    'max_sum_sail',
-                    'max_sum_sail_row_power',
+                    "max_durability",
+                    "max_vertical_sail",
+                    "max_horizontal_sail",
+                    "max_rowing_power",
+                    "max_maneuverability",
+                    "max_wave_resistance",
+                    "max_armor",
+                    "max_cabin",
+                    "max_gunport",
+                    "max_cargo",
+                    "max_sum_sail",
+                    "max_sum_sail_row_power",
                 ]:
                     return -1  # Treat None as less than any number
                 else:
