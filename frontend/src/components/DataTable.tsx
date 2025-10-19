@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
   Box,
   TableSortLabel,
   LinearProgress,
-} from '@mui/material';
+} from "@mui/material";
 
 interface Column {
   id: string;
@@ -31,7 +31,7 @@ interface DataTableProps {
   onRowsPerPageChange: (newRowsPerPage: number) => void;
   onRowClick?: (row: any) => void;
   sortColumn?: string;
-  sortDirection?: 'asc' | 'desc';
+  sortDirection?: "asc" | "desc";
   onSortChange?: (columnId: string) => void;
 }
 
@@ -53,7 +53,9 @@ const DataTable: React.FC<DataTableProps> = ({
     onPageChange(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     onRowsPerPageChange(parseInt(event.target.value, 10));
   };
 
@@ -64,45 +66,85 @@ const DataTable: React.FC<DataTableProps> = ({
   };
 
   return (
-    <Box sx={{ width: '100%', maxWidth: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2, maxWidth: '100%' }}>
+    <Box sx={{ width: "100%", maxWidth: "100%" }}>
+      <Paper sx={{ width: "100%", mb: 2, maxWidth: "100%" }}>
         {loading && <LinearProgress />}
-        <TableContainer sx={{width: '100%', overflowX: 'scroll', maxWidth: '100%', display: 'block' }}>
+        <TableContainer
+          sx={{
+            width: "100%",
+            overflowX: "scroll",
+            maxWidth: "100%",
+            display: "block",
+          }}
+        >
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    sortDirection={sortColumn === column.id ? sortDirection : false}
-                    style={{ minWidth: column.minWidth , wordBreak: 'keep-all' }}
-                  >
-                    {onSortChange ? (
-                      <TableSortLabel
-                        active={sortColumn === column.id}
-                        direction={sortColumn === column.id ? sortDirection : 'asc'}
-                        onClick={createSortHandler(column.id)}
-                      >
-                        {column.label}
-                      </TableSortLabel>
-                    ) : column.label}
-                  </TableCell>
-                ))}
+                {columns.map((column, index) => {
+                  let isSticky = index === 0;
+                  return (
+                    <TableCell
+                      key={column.id}
+                      sortDirection={
+                        sortColumn === column.id ? sortDirection : false
+                      }
+                      style={
+                        isSticky
+                          ? {
+                              minWidth: column.minWidth,
+                              wordBreak: "keep-all",
+                              position: "sticky",
+                              left: 0,
+                              zIndex: 1,
+                              backgroundColor: "white",
+                            }
+                          : { minWidth: column.minWidth, wordBreak: "keep-all" }
+                      }
+                    >
+                      {onSortChange ? (
+                        <TableSortLabel
+                          active={sortColumn === column.id}
+                          direction={
+                            sortColumn === column.id ? sortDirection : "asc"
+                          }
+                          onClick={createSortHandler(column.id)}
+                        >
+                          {column.label}
+                        </TableSortLabel>
+                      ) : (
+                        column.label
+                      )}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             </TableHead>
             <TableBody>
               {data.map((row, index) => (
-                <TableRow 
-                  hover 
-                  tabIndex={-1} 
+                <TableRow
+                  hover
+                  tabIndex={-1}
                   key={index}
                   onClick={() => onRowClick?.(row)}
-                  sx={{ cursor: onRowClick ? 'pointer' : 'default' }}
+                  sx={{ cursor: onRowClick ? "pointer" : "default" }}
                 >
-                  {columns.map((column) => {
+                  {columns.map((column, index) => {
                     const value = row[column.id];
+                    let isSticky = index === 0;
                     return (
-                      <TableCell key={column.id}>
+                      <TableCell
+                        key={column.id}
+                        style={
+                          isSticky
+                            ? {
+                                position: "sticky",
+                                left: 0,
+                                backgroundColor: "white",
+                                zIndex: 1,
+                              }
+                            : {}
+                        }
+                      >
                         {column.format ? column.format(value) : value}
                       </TableCell>
                     );
