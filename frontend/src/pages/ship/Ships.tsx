@@ -236,10 +236,13 @@ const Ships: React.FC = () => {
   };
 
   const handleSortChange = (columnId: string) => {
-    const isAsc = sort_by === columnId && sort_order === "asc";
+    let newSortOrder: "asc" | "desc" = "desc"; // Default to descending for first click
+    if (sort_by === columnId) {
+      newSortOrder = sort_order === "asc" ? "desc" : "asc";
+    }
     updateSearchParams({
       sort_by: columnId,
-      sort_order: isAsc ? "desc" : "asc",
+      sort_order: newSortOrder,
       page: 0,
     });
   };

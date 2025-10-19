@@ -105,7 +105,7 @@ const DataTable: React.FC<DataTableProps> = ({
                         <TableSortLabel
                           active={sortColumn === column.id}
                           direction={
-                            sortColumn === column.id ? sortDirection : "asc"
+                            sortColumn === column.id ? sortDirection : "desc"
                           }
                           onClick={createSortHandler(column.id)}
                         >
