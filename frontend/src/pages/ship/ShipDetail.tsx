@@ -311,6 +311,10 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                       <TableCell align="center">선회</TableCell>
                       <TableCell align="center">내파</TableCell>
                       <TableCell align="center">장갑</TableCell>
+                      <TableCell align="center">선실</TableCell>
+                      <TableCell align="center">필요 선원</TableCell>
+                      <TableCell align="center">포실</TableCell>
+                      <TableCell align="center">창고</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -335,6 +339,18 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                       </TableCell>
                       <TableCell align="center">
                         {ship.base_performance.armor}
+                      </TableCell>
+                      <TableCell align="center">
+                        {ship.capacity?.cabin}
+                      </TableCell>
+                      <TableCell align="center">
+                        {ship.capacity?.required_crew}
+                      </TableCell>
+                      <TableCell align="center">
+                        {ship.capacity?.gunport}
+                      </TableCell>
+                      <TableCell align="center">
+                        {ship.capacity?.cargo}
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -394,42 +410,6 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                       </TableCell>
                       <TableCell align="center">
                         {ship.improvement_limit.cargo}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          )}
-
-          {ship.capacity && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" color="text.secondary">
-                선박 용량
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="center">선실</TableCell>
-                      <TableCell align="center">필요 선원</TableCell>
-                      <TableCell align="center">포실</TableCell>
-                      <TableCell align="center">창고</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center">
-                        {ship.capacity.cabin}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.capacity.required_crew}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.capacity.gunport}
-                      </TableCell>
-                      <TableCell align="center">
-                        {ship.capacity.cargo}
                       </TableCell>
                     </TableRow>
                   </TableBody>
