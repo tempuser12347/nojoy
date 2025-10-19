@@ -214,7 +214,7 @@ const Quests: React.FC = () => {
       <Typography variant="h4" gutterBottom>
         퀘스트
       </Typography>
-      <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+      <Box sx={{ display: "flex", gap: 1, mb: 2, flexWrap: "wrap" }}>
         <TextField
           label="퀘스트 이름 검색"
           variant="outlined"
