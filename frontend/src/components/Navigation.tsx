@@ -92,6 +92,7 @@ const availableSections = [
   "침몰선",
   "장비품",
   "선박",
+  "선박 재료",
   "직업",
   "도시",
   "교역품",
@@ -232,6 +233,9 @@ const availableSections = [
               break;
             case "애완동물":
               subsection = "pets";
+              break;
+            case "선박 재료":
+              subsection = "shipmaterials";
               break;
             default:
               break;

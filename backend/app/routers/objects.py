@@ -38,6 +38,7 @@ from .title import read_title_core
 from .courtrank import read_courtrank_core
 from .aide import read_aide_core
 from .pet import read_pet_core
+from .shipmaterial import read_shipmaterial_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -142,6 +143,7 @@ detail_data_fetch_function_dict = {
     "courtrank": read_courtrank_core,
     "aide": read_aide_core,
     "pet": read_pet_core,
+    "shipmaterial": read_shipmaterial_core,
 }
 
 
