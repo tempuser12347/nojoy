@@ -519,7 +519,9 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                           {s.sail ? renderObjectChip(s.sail, navigate) : "-"}
                         </TableCell>
                         <TableCell align="center">
-                          {s.gunport ? renderObjectChip(s.gunport, navigate) : "-"}
+                          {s.gunport
+                            ? renderObjectChip(s.gunport, navigate)
+                            : "-"}
                         </TableCell>
                         <TableCell align="center">
                           {s.material1
@@ -592,11 +594,17 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                           <TableCell align="center">
                             {renderObjectChip(sbc.hull, navigate)}
                           </TableCell>
-                          <TableCell align="center">{sbc.rank}</TableCell>
                           <TableCell align="center">
-                            {renderObjectChip(sbc.material, navigate)}
+                            {sbc.rank ? sbc.rank : "-"}
                           </TableCell>
-                          <TableCell align="center">{sbc.region}</TableCell>
+                          <TableCell align="center">
+                            {sbc.material
+                              ? renderObjectChip(sbc.material, navigate)
+                              : "-"}
+                          </TableCell>
+                          <TableCell align="center">
+                            {sbc.region ? sbc.region : "-"}
+                          </TableCell>
                           <TableCell align="center">
                             {renderObjectsToChips(sbc.city, navigate)}
                           </TableCell>
