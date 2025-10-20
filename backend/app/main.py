@@ -41,6 +41,7 @@ from app.routers import (
     aide,
     pet,
     shipmaterial,
+    shipskill,
 )
 import os
 
@@ -95,6 +96,7 @@ app.include_router(courtrank.router)
 app.include_router(aide.router)
 app.include_router(pet.router)
 app.include_router(shipmaterial.router)
+app.include_router(shipskill.router)
 
 
 dist_dir = "dist"

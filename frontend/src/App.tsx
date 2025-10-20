@@ -43,6 +43,7 @@ import CourtRanks from "./pages/courtrank/CourtRanks";
 import Aides from "./pages/aide/Aides";
 import Pets from "./pages/pet/Pets";
 import ShipMaterials from "./pages/shipmaterial/ShipMaterials";
+import ShipSkills from "./pages/shipskill/ShipSkills";
 
 const queryClient = new QueryClient();
 
@@ -95,6 +96,7 @@ function App() {
               <Route path="/aides" element={<Aides />} />
               <Route path="/pets" element={<Pets />} />
               <Route path="/shipmaterials" element={<ShipMaterials />} />
+              <Route path="/shipskills" element={<ShipSkills />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

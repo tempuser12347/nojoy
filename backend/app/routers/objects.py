@@ -39,6 +39,7 @@ from .courtrank import read_courtrank_core
 from .aide import read_aide_core
 from .pet import read_pet_core
 from .shipmaterial import read_shipmaterial_core
+from .shipskill import read_shipskill_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -144,6 +145,7 @@ detail_data_fetch_function_dict = {
     "aide": read_aide_core,
     "pet": read_pet_core,
     "shipmaterial": read_shipmaterial_core,
+    "shipskill": read_shipskill_core,
 }
 
 
