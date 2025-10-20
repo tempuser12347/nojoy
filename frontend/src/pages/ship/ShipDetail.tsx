@@ -72,8 +72,8 @@ interface Ship {
   ship_skills:
     | {
         skill: { id: number; name: string };
-        sail: string | null;
-        gunport: string | null;
+        sail: { id: number; name: string } | null;
+        gunport: { id: number; name: string } | null;
         material1: { id: number; name: string } | null;
         material2: { id: number; name: string } | null;
       }[]
@@ -515,8 +515,12 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                         <TableCell align="center">
                           {renderObjectChip(s.skill, navigate)}
                         </TableCell>
-                        <TableCell align="center">{s.sail || "-"}</TableCell>
-                        <TableCell align="center">{s.gunport || "-"}</TableCell>
+                        <TableCell align="center">
+                          {s.sail ? renderObjectChip(s.sail, navigate) : "-"}
+                        </TableCell>
+                        <TableCell align="center">
+                          {s.gunport ? renderObjectChip(s.gunport, navigate) : "-"}
+                        </TableCell>
                         <TableCell align="center">
                           {s.material1
                             ? renderObjectChip(s.material1, navigate)
