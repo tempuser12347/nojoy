@@ -39,15 +39,29 @@ def read_shipbasematerials(
         ]
 
     if sort_by:
-        results.sort(
-            key=lambda x: x.get(sort_by) or "",
-            reverse=(sort_order.lower() == "desc"),
-        )
+        if sort_by in ["durability", "vertical_sail", "horizontal_sail"]:
+            results.sort(
+                key=lambda x: extract_numeric_value(x.get(sort_by)),
+                reverse=(sort_order.lower() == "desc"),
+            )
+        else:
+            results.sort(
+                key=lambda x: x.get(sort_by) or "",
+                reverse=(sort_order.lower() == "desc"),
+            )
 
     total = len(results)
     paginated_results = results[skip : skip + limit]
 
     return {"items": paginated_results, "total": total}
+
+def extract_numeric_value(value):
+    if isinstance(value, str) and value.endswith('%'):
+        try:
+            return float(value[:-1])
+        except ValueError:
+            return 0  # Default to 0 if conversion fails
+    return value
 
 
 @router.get("/{shipbasematerial_id}", response_model=dict)
