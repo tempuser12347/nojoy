@@ -61,11 +61,10 @@ const ShipBaseMaterials: React.FC = () => {
 
   const columns = [
     { id: "name", label: "이름", minWidth: 170 },
-    { id: "description", label: "설명", minWidth: 200 },
     { id: "durability", label: "내구도", minWidth: 100 },
     { id: "vertical_sail", label: "세로돛", minWidth: 100 },
     { id: "horizontal_sail", label: "가로돛", minWidth: 100 },
-    { id: "normal_build", label: "일반 건조", minWidth: 100, format: (value: any) => (value ? "Yes" : "No") },
+    { id: "normal_build", label: "일반 건조", minWidth: 100, format: (value: any) => (value ? "✅" : "❌") },
   ];
 
   const handleSearchInputChange = (
