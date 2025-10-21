@@ -44,6 +44,11 @@ def read_shipbasematerials(
                 key=lambda x: extract_numeric_value(x.get(sort_by)),
                 reverse=(sort_order.lower() == "desc"),
             )
+        elif sort_by == "normal_build":
+            results.sort(
+                key=lambda x: x.get(sort_by),
+                reverse=(sort_order.lower() == "desc"),
+            )
         else:
             results.sort(
                 key=lambda x: x.get(sort_by) or "",
