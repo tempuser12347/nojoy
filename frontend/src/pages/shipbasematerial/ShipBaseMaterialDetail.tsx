@@ -87,7 +87,7 @@ export default function ShipBaseMaterialDetail({ data }: { data?: ShipBaseMateri
               <DetailItem label="가로돛" value={shipBaseMaterial.horizontal_sail} />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <DetailItem label="일반 건조" value={shipBaseMaterial.normal_build ? 'Yes' : 'No'} />
+              <DetailItem label="일반 건조" value={shipBaseMaterial.normal_build ? '✅' : '❌'} />
             </Grid>
           </Grid>
         </CardContent>
