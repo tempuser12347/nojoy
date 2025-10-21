@@ -52,7 +52,7 @@ def read_techniques(
     for row in paginated_results:
         item_dict = dict(row)
         if item_dict.get("extraname"):
-            item_dict["name"] = f"{item_dict["name"]} {item_dict["extraname"]}"
+            item_dict["name"] = f"{item_dict['name']} {item_dict['extraname']}"
         # Parse JSON fields for list view if needed, though typically done in detail
         if item_dict.get("requirements") and isinstance(item_dict["requirements"], str):
             try:
@@ -85,7 +85,7 @@ def read_technique_core(technique_id: int, db: Session):
 
     # Combine name and extraname
     if ret.get("extraname"):
-        ret["name"] = f"{ret["name"]} {ret["extraname"]}"
+        ret["name"] = f"{ret['name']} {ret['extraname']}"
 
     # Parse JSON fields
     for field in ["requirements", "effect"]:
