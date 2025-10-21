@@ -94,6 +94,7 @@ const availableSections = [
   "선박",
   "선박 재료",
   "선박스킬",
+  "선박 기본 재질",
   "직업",
   "도시",
   "교역품",
@@ -240,6 +241,9 @@ const availableSections = [
               break;
             case "선박스킬":
               subsection = "shipskills";
+              break;
+            case "선박 기본 재질":
+              subsection = "shipbasematerials";
               break;
             default:
               break;
