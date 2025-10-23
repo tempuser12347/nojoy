@@ -99,6 +99,7 @@ const availableSections = [
             "그레이드 보너스",
             "대포",
             "보조돛",
+            "선수상",
             "직업",  "도시",
   "교역품",
   "추천장",
@@ -259,6 +260,9 @@ const availableSections = [
               break;
             case "보조돛":
               subsection = "studdingsails";
+              break;
+            case "선수상":
+              subsection = "figureheads";
               break;
             default:
               break;

@@ -47,6 +47,7 @@ from app.routers import (
     gradebonus,
     cannon,
     studdingsail,
+    figurehead,
 )
 import os
 
@@ -107,6 +108,7 @@ app.include_router(gradeperformance.router)
 app.include_router(gradebonus.router)
 app.include_router(cannon.router)
 app.include_router(studdingsail.router)
+app.include_router(figurehead.router)
 
 
 dist_dir = "dist"
