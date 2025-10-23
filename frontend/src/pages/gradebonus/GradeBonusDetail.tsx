@@ -115,10 +115,10 @@ export default function GradeBonusDetail({ data }: { data?: GradeBonus }) {
       </Typography>
       <Card>
         <CardContent>
+          <Box sx={{ mb: 2 }}>
+            <DetailItem label="설명" value={gradeBonus.description} />
+          </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <DetailItem label="설명" value={gradeBonus.description} />
-            </Grid>
             <Grid item xs={12} sm={6}>
               <DetailItem label="카테고리" value={gradeBonus.category} />
             </Grid>
@@ -139,7 +139,7 @@ export default function GradeBonusDetail({ data }: { data?: GradeBonus }) {
                 </Grid> : null
             }
             {gradeBonus.performance_improvement ?
-              <Grid item xs={12}>
+              <Grid item size={12}>
                 <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>성능 향상</Typography>
                 {renderPerformanceImprovement()}
               </Grid> : null}
