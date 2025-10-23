@@ -11,6 +11,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableHead,
   TableRow,
   Paper,
 } from "@mui/material";
@@ -101,15 +102,19 @@ export default function GradePerformanceDetail({ data }: { data?: GradePerforman
               </Typography>
               <TableContainer component={Paper}>
                 <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      {Object.keys(gradePerformance.accumulated_stats).map((key) => (
+                        <TableCell key={key}>{key}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
                   <TableBody>
-                    {Object.entries(gradePerformance.accumulated_stats).map(([key, value]) => (
-                      <TableRow key={key}>
-                        <TableCell component="th" scope="row">
-                          {key}
-                        </TableCell>
-                        <TableCell>{value !== null ? value : "-"}</TableCell>
-                      </TableRow>
-                    ))}
+                    <TableRow>
+                      {Object.values(gradePerformance.accumulated_stats).map((value, index) => (
+                        <TableCell key={index}>{value !== null ? value : "-"}</TableCell>
+                      ))}
+                    </TableRow>
                   </TableBody>
                 </Table>
               </TableContainer>
