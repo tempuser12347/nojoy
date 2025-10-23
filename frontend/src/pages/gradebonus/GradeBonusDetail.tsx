@@ -122,21 +122,27 @@ export default function GradeBonusDetail({ data }: { data?: GradeBonus }) {
             <Grid item xs={12} sm={6}>
               <DetailItem label="카테고리" value={gradeBonus.category} />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <DetailItem label="선박 스킬 증가" value={gradeBonus.ship_skill_increase} />
-            </Grid>
-            <Grid item xs={12}>
-              <DetailItem
-                label="선박 스킬"
-                value={
-                  gradeBonus.ship_skill?.map((s) => renderObjectChip(s, navigate))
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom sx={{mt: 2}}>성능 향상</Typography>
+            {gradeBonus.ship_skill_increase ?
+              <Grid item xs={12} sm={6}>
+                <DetailItem label="선박 스킬 증가" value={gradeBonus.ship_skill_increase} />
+              </Grid>
+              : null}
+            {
+              gradeBonus.ship_skill ?
+                <Grid item xs={12}>
+                  <DetailItem
+                    label="선박 스킬"
+                    value={
+                      gradeBonus.ship_skill?.map((s) => renderObjectChip(s, navigate))
+                    }
+                  />
+                </Grid> : null
+            }
+            {gradeBonus.performance_improvement ?
+              <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>성능 향상</Typography>
                 {renderPerformanceImprovement()}
-            </Grid>
+              </Grid> : null}
           </Grid>
         </CardContent>
       </Card>
