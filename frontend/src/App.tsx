@@ -45,6 +45,7 @@ import Pets from "./pages/pet/Pets";
 import ShipMaterials from "./pages/shipmaterial/ShipMaterials";
 import ShipSkills from "./pages/shipskill/ShipSkills";
 import ShipBaseMaterials from "./pages/shipbasematerial/ShipBaseMaterials";
+import GradePerformances from "./pages/gradeperformance/GradePerformances";
 
 const queryClient = new QueryClient();
 
@@ -99,6 +100,7 @@ function App() {
               <Route path="/shipmaterials" element={<ShipMaterials />} />
               <Route path="/shipskills" element={<ShipSkills />} />
               <Route path="/shipbasematerials" element={<ShipBaseMaterials />} />
+              <Route path="/gradeperformances" element={<GradePerformances />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

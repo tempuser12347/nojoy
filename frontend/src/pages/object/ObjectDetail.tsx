@@ -42,6 +42,7 @@ import PetDetail from "../pet/PetDetail";
 import ShipMaterialDetail from "../shipmaterial/ShipMaterialDetail";
 import ShipSkillDetail from "../shipskill/ShipSkillDetail";
 import ShipBaseMaterialDetail from "../shipbasematerial/ShipBaseMaterialDetail";
+import GradePerformanceDetail from "../gradeperformance/GradePerformanceDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -83,6 +84,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   shipmaterial: ShipMaterialDetail,
   shipskill: ShipSkillDetail,
   shipbasematerial: ShipBaseMaterialDetail,
+  gradeperformance: GradePerformanceDetail,
 };
 
 export default function ObjectDetail() {
