@@ -48,6 +48,7 @@ from app.routers import (
     cannon,
     studdingsail,
     figurehead,
+    extraarmor,
 )
 import os
 
@@ -109,6 +110,7 @@ app.include_router(gradebonus.router)
 app.include_router(cannon.router)
 app.include_router(studdingsail.router)
 app.include_router(figurehead.router)
+app.include_router(extraarmor.router)
 
 
 dist_dir = "dist"

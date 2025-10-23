@@ -46,6 +46,7 @@ from .gradebonus import read_gradebonus_core
 from .cannon import read_cannon_core
 from .studdingsail import read_studdingsail_core
 from .figurehead import read_figurehead_core
+from .extraarmor import read_extraarmor_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -158,6 +159,7 @@ detail_data_fetch_function_dict = {
     "cannon": read_cannon_core,
     "studdingsail": read_studdingsail_core,
     "figurehead": read_figurehead_core,
+    "extraarmor": read_extraarmor_core,
 }
 
 

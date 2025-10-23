@@ -100,6 +100,7 @@ const availableSections = [
             "대포",
             "보조돛",
             "선수상",
+            "추가장갑",
             "직업",  "도시",
   "교역품",
   "추천장",
@@ -263,6 +264,9 @@ const availableSections = [
               break;
             case "선수상":
               subsection = "figureheads";
+              break;
+            case "추가장갑":
+              subsection = "extraarmors";
               break;
             default:
               break;
