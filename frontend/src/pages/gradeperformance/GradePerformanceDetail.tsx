@@ -28,6 +28,41 @@ interface GradePerformance {
   accumulated_stats: { [key: string]: number | null } | null;
 }
 
+const change_stat_key_to_korean = (key: string) => {
+  if (key == 'durability') {
+    return '내구도'
+  }
+  else if (key == 'vertical_sail') {
+    return '세로돛'
+  }
+  else if (key == 'horizontal_sail') {
+    return '가로돛'
+  }
+  else if (key == 'rowing_power') {
+    return '조력'
+  }
+  else if (key == 'maneuverability') {
+    return '선회'
+  }
+  else if (key == 'wave_resistance') {
+    return '내파'
+  }
+  else if (key == 'armor') {
+    return '장갑'
+  }
+  else if (key == 'cabin') {
+    return '선실'
+  }
+  else if (key == 'gunport') {
+    return '포문'
+  }
+  else if (key == 'cargo') {
+    return '창고'
+  }
+  return key
+
+}
+
 export default function GradePerformanceDetail({ data }: { data?: GradePerformance }) {
   const { id } = useParams<{ id: string }>();
   const [gradePerformance, setGradePerformance] = useState<GradePerformance | null>(data || null);
@@ -105,7 +140,7 @@ export default function GradePerformanceDetail({ data }: { data?: GradePerforman
                   <TableHead>
                     <TableRow>
                       {Object.keys(gradePerformance.accumulated_stats).map((key) => (
-                        <TableCell key={key}>{key}</TableCell>
+                        <TableCell key={key}>{change_stat_key_to_korean(key)}</TableCell>
                       ))}
                     </TableRow>
                   </TableHead>
