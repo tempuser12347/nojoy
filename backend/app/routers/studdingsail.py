@@ -27,6 +27,11 @@ def read_studdingsails(
 
     results = [dict(row._mapping) for row in results]
 
+    for row in results:
+        v_sail = row.get('vertical_sail') or 0
+        h_sail = row.get('horizontal_sail') or 0
+        row['total_sail'] = 2 * v_sail + h_sail
+
     if name_search:
         results = [
             row
@@ -35,7 +40,7 @@ def read_studdingsails(
         ]
 
     if sort_by:
-        if sort_by in ['durability', 'vertical_sail', 'horizontal_sail', 'maneuverability']:
+        if sort_by in ['durability', 'vertical_sail', 'horizontal_sail', 'maneuverability', 'total_sail']:
             key_f = lambda x: x.get(sort_by) if x.get(sort_by) is not None else float('-inf')
         else:
             key_f = lambda x: x.get(sort_by, '') if x.get(sort_by) is not None else ''

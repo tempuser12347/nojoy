@@ -52,6 +52,7 @@ const StuddingSails: React.FC = () => {
     { id: "durability", label: "내구도", minWidth: 100 },
     { id: "vertical_sail", label: "세로돛", minWidth: 100 },
     { id: "horizontal_sail", label: "가로돛", minWidth: 100 },
+    { id: "total_sail", label: "세로돛x2+가로돛", minWidth: 100 },
     { id: "maneuverability", label: "선회", minWidth: 100 },
     { id: "features", label: "특징", minWidth: 170 },
   ];
