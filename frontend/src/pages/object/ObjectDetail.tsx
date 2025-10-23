@@ -86,7 +86,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   shipskill: ShipSkillDetail,
   shipbasematerial: ShipBaseMaterialDetail,
   gradeperformance: GradePerformanceDetail,
-  gradeBonus: GradeBonusDetail,
+  gradebonus: GradeBonusDetail,
 };
 
 export default function ObjectDetail() {

@@ -151,7 +151,7 @@ detail_data_fetch_function_dict = {
     "shipskill": read_shipskill_core,
     "shipbasematerial": read_shipbasematerial_core,
     "gradeperformance": read_gradeperformance_core,
-    "gradeBonus": read_gradebonus_core,
+    "gradebonus": read_gradebonus_core,
 }
 
 
