@@ -133,7 +133,7 @@ export default function GradePerformanceDetail({ data }: { data?: GradePerforman
           {gradePerformance.accumulated_stats && (
             <Box sx={{ mt: 3 }}>
               <Typography variant="h6" gutterBottom>
-                누적 스탯
+                누적 수치
               </Typography>
               <TableContainer component={Paper}>
                 <Table size="small">
