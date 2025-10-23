@@ -81,7 +81,7 @@ export default function SpecialEquipmentDetail({ data }: { data?: SpecialEquipme
     return <Typography sx={{ p: 3 }}>Special Equipment not found.</Typography>;
   }
 
-  const stats = {
+  const allStats = {
     "내구도": specialEquipment.durability,
     "세로돛": specialEquipment.vertical_sail,
     "가로돛": specialEquipment.horizontal_sail,
@@ -97,6 +97,8 @@ export default function SpecialEquipmentDetail({ data }: { data?: SpecialEquipme
     "효과": specialEquipment.effect,
   };
 
+  const stats = Object.fromEntries(Object.entries(allStats).filter(([_, v]) => v !== null && v !== undefined));
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -107,29 +109,31 @@ export default function SpecialEquipmentDetail({ data }: { data?: SpecialEquipme
           <Box sx={{ mb: 2 }}>
             <DetailItem label="설명" value={specialEquipment.description} />
           </Box>
-          <Box sx={{ mt: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              성능
-            </Typography>
-            <TableContainer component={Paper}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    {Object.keys(stats).map((key) => (
-                      <TableCell key={key}>{key}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    {Object.values(stats).map((value, index) => (
-                      <TableCell key={index}>{value !== null ? value : "-"}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
+          {Object.keys(stats).length > 0 && (
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                성능
+              </Typography>
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      {Object.keys(stats).map((key) => (
+                        <TableCell key={key}>{key}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      {Object.values(stats).map((value, index) => (
+                        <TableCell key={index}>{value}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          )}
         </CardContent>
       </Card>
     </Box>
