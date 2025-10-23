@@ -42,6 +42,7 @@ from .shipmaterial import read_shipmaterial_core
 from .shipskill import read_shipskill_core
 from .shipbasematerial import read_shipbasematerial_core
 from .gradeperformance import read_gradeperformance_core
+from .gradebonus import read_gradebonus_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -150,6 +151,7 @@ detail_data_fetch_function_dict = {
     "shipskill": read_shipskill_core,
     "shipbasematerial": read_shipbasematerial_core,
     "gradeperformance": read_gradeperformance_core,
+    "gradeBonus": read_gradebonus_core,
 }
 
 

@@ -94,10 +94,10 @@ const availableSections = [
   "선박",
   "선박 재료",
   "선박스킬",
-  "선박 기본 재질",
-  "그레이드 성능",
-  "직업",
-  "도시",
+            "선박 기본 재질",
+            "그레이드 성능",
+            "그레이드 보너스",
+            "직업",  "도시",
   "교역품",
   "추천장",
   "소비품",
@@ -248,6 +248,9 @@ const availableSections = [
               break;
             case "그레이드 성능":
               subsection = "gradeperformances";
+              break;
+            case "그레이드 보너스":
+              subsection = "gradebonuses";
               break;
             default:
               break;

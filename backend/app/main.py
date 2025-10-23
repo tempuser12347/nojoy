@@ -44,6 +44,7 @@ from app.routers import (
     shipskill,
     shipbasematerial,
     gradeperformance,
+    gradebonus,
 )
 import os
 
@@ -101,6 +102,7 @@ app.include_router(shipmaterial.router)
 app.include_router(shipskill.router)
 app.include_router(shipbasematerial.router)
 app.include_router(gradeperformance.router)
+app.include_router(gradebonus.router)
 
 
 dist_dir = "dist"
