@@ -51,6 +51,7 @@ import Cannons from "./pages/cannon/Cannons";
 import StuddingSails from "./pages/studdingsail/StuddingSails";
 import Figureheads from "./pages/figurehead/Figureheads";
 import ExtraArmors from "./pages/extraarmor/ExtraArmors";
+import SpecialEquipments from "./pages/specialequipment/SpecialEquipments";
 
 const queryClient = new QueryClient();
 
@@ -111,6 +112,7 @@ function App() {
               <Route path="/studdingsails" element={<StuddingSails />} />
               <Route path="/figureheads" element={<Figureheads />} />
               <Route path="/extraarmors" element={<ExtraArmors />} />
+              <Route path="/specialequipments" element={<SpecialEquipments />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

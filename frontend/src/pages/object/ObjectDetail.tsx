@@ -48,6 +48,7 @@ import CannonDetail from "../cannon/CannonDetail";
 import StuddingSailDetail from "../studdingsail/StuddingSailDetail";
 import FigureheadDetail from "../figurehead/FigureheadDetail";
 import ExtraArmorDetail from "../extraarmor/ExtraArmorDetail";
+import SpecialEquipmentDetail from "../specialequipment/SpecialEquipmentDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -95,6 +96,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   studdingsail: StuddingSailDetail,
   figurehead: FigureheadDetail,
   extraarmor: ExtraArmorDetail,
+  specialequipment: SpecialEquipmentDetail,
 };
 
 export default function ObjectDetail() {
