@@ -47,6 +47,7 @@ import ShipSkills from "./pages/shipskill/ShipSkills";
 import ShipBaseMaterials from "./pages/shipbasematerial/ShipBaseMaterials";
 import GradePerformances from "./pages/gradeperformance/GradePerformances";
 import GradeBonuses from "./pages/gradebonus/GradeBonuses";
+import Cannons from "./pages/cannon/Cannons";
 
 const queryClient = new QueryClient();
 
@@ -103,6 +104,7 @@ function App() {
               <Route path="/shipbasematerials" element={<ShipBaseMaterials />} />
               <Route path="/gradeperformances" element={<GradePerformances />} />
               <Route path="/gradebonuses" element={<GradeBonuses />} />
+              <Route path="/cannons" element={<Cannons />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

@@ -44,6 +44,7 @@ import ShipSkillDetail from "../shipskill/ShipSkillDetail";
 import ShipBaseMaterialDetail from "../shipbasematerial/ShipBaseMaterialDetail";
 import GradePerformanceDetail from "../gradeperformance/GradePerformanceDetail";
 import GradeBonusDetail from "../gradebonus/GradeBonusDetail";
+import CannonDetail from "../cannon/CannonDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -87,6 +88,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   shipbasematerial: ShipBaseMaterialDetail,
   gradeperformance: GradePerformanceDetail,
   gradebonus: GradeBonusDetail,
+  cannon: CannonDetail,
 };
 
 export default function ObjectDetail() {

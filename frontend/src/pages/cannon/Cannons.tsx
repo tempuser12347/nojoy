@@ -10,7 +10,7 @@ import {
 import DataTable from "../../components/DataTable";
 import api from "../../api";
 
-const GradeBonuses: React.FC = () => {
+const Cannons: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -25,7 +25,7 @@ const GradeBonuses: React.FC = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: [
-      "gradebonuses",
+      "cannons",
       page,
       rowsPerPage,
       name_search,
@@ -33,7 +33,7 @@ const GradeBonuses: React.FC = () => {
       sort_order,
     ],
     queryFn: async () => {
-      const response = await api.get("/api/gradebonuses", {
+      const response = await api.get("/api/cannons", {
         params: {
           name_search,
           sort_by,
@@ -49,6 +49,13 @@ const GradeBonuses: React.FC = () => {
   const columns = [
     { id: "name", label: "이름", minWidth: 170 },
     { id: "category", label: "카테고리", minWidth: 100 },
+    { id: "shell_type", label: "포탄 종류", minWidth: 100 },
+    { id: "durability", label: "내구도", minWidth: 100 },
+    { id: "penetration", label: "관통력", minWidth: 100 },
+    { id: "shoot_range", label: "사정거리", minWidth: 100 },
+    { id: "shell_speed", label: "탄속", minWidth: 100 },
+    { id: "blast_radius", label: "폭발 범위", minWidth: 100 },
+    { id: "reload_speed", label: "장전 속도", minWidth: 100 },
   ];
 
   const handleSearchInputChange = (
@@ -82,7 +89,7 @@ const GradeBonuses: React.FC = () => {
   return (
     <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
       <Typography variant="h4" gutterBottom>
-        그레이드 보너스
+        대포
       </Typography>
       <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
         <TextField
@@ -118,4 +125,4 @@ const GradeBonuses: React.FC = () => {
   );
 };
 
-export default GradeBonuses;
+export default Cannons;
