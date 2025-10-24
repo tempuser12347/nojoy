@@ -109,6 +109,7 @@ const availableSections = [
   "교역품",
   "추천장",
   "가구",
+  "장식품",
   "소비품",
   "레시피책",
   "레시피",
@@ -287,6 +288,9 @@ const availableSections = [
               break;
             case "가구":
               subsection = "furnitures";
+              break;
+            case "장식품":
+              subsection = "ornaments";
               break;
             default:
               break;

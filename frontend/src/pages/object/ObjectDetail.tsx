@@ -53,6 +53,7 @@ import SailorEquipmentDetail from "../sailorequipment/SailorEquipmentDetail";
 import CrestDetail from "../crest/CrestDetail";
 import ShipDecorDetail from "../shipdecor/ShipDecorDetail";
 import FurnitureDetail from "../furniture/FurnitureDetail";
+import OrnamentDetail from "../ornament/OrnamentDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -105,6 +106,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   crest: CrestDetail,
   shipdecor: ShipDecorDetail,
   furniture: FurnitureDetail,
+  ornament: OrnamentDetail,
 };
 
 export default function ObjectDetail() {
