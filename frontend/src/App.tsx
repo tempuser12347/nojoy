@@ -55,6 +55,7 @@ import SpecialEquipments from "./pages/specialequipment/SpecialEquipments";
 import SailorEquipments from "./pages/sailorequipment/SailorEquipments";
 import Crests from "./pages/crest/Crests";
 import ShipDecors from "./pages/shipdecor/ShipDecors";
+import Furnitures from "./pages/furniture/Furnitures";
 
 const queryClient = new QueryClient();
 
@@ -119,6 +120,7 @@ function App() {
               <Route path="/sailorequipments" element={<SailorEquipments />} />
               <Route path="/crests" element={<Crests />} />
               <Route path="/shipdecors" element={<ShipDecors />} />
+              <Route path="/furnitures" element={<Furnitures />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

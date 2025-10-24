@@ -51,6 +51,7 @@ from .specialequipment import read_specialequipment_core
 from .sailorequipment import read_sailorequipment_core
 from .crest import read_crest_core
 from .shipdecor import read_shipdecor_core
+from .furniture import read_furniture_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -168,6 +169,7 @@ detail_data_fetch_function_dict = {
     "sailorequipment": read_sailorequipment_core,
     "crest": read_crest_core,
     "shipdecor": read_shipdecor_core,
+    "furniture": read_furniture_core,
 }
 
 

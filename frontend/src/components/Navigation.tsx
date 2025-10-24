@@ -108,6 +108,7 @@ const availableSections = [
             "직업",  "도시",
   "교역품",
   "추천장",
+  "가구",
   "소비품",
   "레시피책",
   "레시피",
@@ -281,8 +282,11 @@ const availableSections = [
             case "문장":
               subsection = "crests";
               break;
-            case "선박 데코":
-              subsection = "shipdecors";
+            case "추천장":
+              subsection = "certificates";
+              break;
+            case "가구":
+              subsection = "furnitures";
               break;
             default:
               break;

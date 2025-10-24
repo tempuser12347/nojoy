@@ -52,7 +52,8 @@ from app.routers import (
     specialequipment,
     sailorequipment,
     crest,
-    shipdecor
+    shipdecor,
+    furniture
 )
 import os
 
@@ -119,6 +120,7 @@ app.include_router(specialequipment.router)
 app.include_router(sailorequipment.router)
 app.include_router(crest.router)
 app.include_router(shipdecor.router)
+app.include_router(furniture.router)
 
 
 dist_dir = "dist"
