@@ -113,7 +113,7 @@ export default function ExtraArmorDetail({ data }: { data?: ExtraArmor }) {
             </TableContainer>
           </Box>
           <Grid container spacing={2} sx={{mt: 2}}>
-            <Grid item xs={12}>
+            <Grid size={{xs:12}}>
                 <DetailItem
                     label="특징"
                     value={extraArmor.features}

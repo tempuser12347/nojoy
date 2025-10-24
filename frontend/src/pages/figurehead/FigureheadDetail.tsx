@@ -119,7 +119,7 @@ export default function FigureheadDetail({ data }: { data?: Figurehead }) {
             </TableContainer>
           </Box>
           <Grid container spacing={2} sx={{mt: 2}}>
-            <Grid item xs={12}>
+            <Grid size={{xs:12}} >
                 <DetailItem
                     label="사용 효과"
                     value={

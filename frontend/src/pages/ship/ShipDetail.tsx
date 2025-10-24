@@ -70,27 +70,27 @@ interface Ship {
     stern_cannon?: number;
   } | null;
   ship_skills:
-    | {
-        skill: { id: number; name: string };
-        sail: { id: number; name: string } | null;
-        gunport: { id: number; name: string } | null;
-        material1: { id: number; name: string } | null;
-        material2: { id: number; name: string } | null;
-      }[]
-    | null;
+  | {
+    skill: { id: number; name: string };
+    sail: { id: number; name: string } | null;
+    gunport: { id: number; name: string } | null;
+    material1: { id: number; name: string } | null;
+    material2: { id: number; name: string } | null;
+  }[]
+  | null;
   ship_deco: { [key: string]: boolean } | null;
   special_build_cities:
-    | {
-        hull: { id: number; name: string };
-        rank: number;
-        material: { id: number; name: string };
-        region: string;
-        city: { id: number; name: string }[];
-      }[]
-    | null;
+  | {
+    hull: { id: number; name: string };
+    rank: number;
+    material: { id: number; name: string };
+    region: string;
+    city: { id: number; name: string }[];
+  }[]
+  | null;
   standard_build_cities:
-    | { region: string; cities: { id: number; name: string }[] }[]
-    | null;
+  | { region: string; cities: { id: number; name: string }[] }[]
+  | null;
   category: { purpose: string; size: string; propulsion: string } | null;
 }
 
@@ -151,10 +151,7 @@ export default function ShipDetail({ data }: { data?: Ship }) {
           <DetailItem label="설명" value={ship.description} />
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
+              size={{ xs: 12, sm: 6, md: 4 }}
               component="div"
               sx={{ border: "1px solid #e0e0e0", p: 1 }}
             >
@@ -188,10 +185,8 @@ export default function ShipDetail({ data }: { data?: Ship }) {
             </Grid>
 
             <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
+              size={{ xs: 12, sm: 6, md: 4 }}
+
               component="div"
               sx={{ border: "1px solid #e0e0e0", p: 1 }}
             >
@@ -224,10 +219,7 @@ export default function ShipDetail({ data }: { data?: Ship }) {
               </TableContainer>
             </Grid>
             <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
+              size={{ xs: 12, sm: 6, md: 4 }}
               component="div"
               sx={{ border: "1px solid #e0e0e0", p: 1 }}
             >
@@ -241,10 +233,7 @@ export default function ShipDetail({ data }: { data?: Ship }) {
               />
             </Grid>
             <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
+              size={{ xs: 12, sm: 6, md: 4 }}
               component="div"
               sx={{ border: "1px solid #e0e0e0", p: 1 }}
             >
@@ -258,10 +247,7 @@ export default function ShipDetail({ data }: { data?: Ship }) {
               />
             </Grid>
             <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
+              size={{ xs: 12, sm: 6, md: 4 }}
               component="div"
               sx={{ border: "1px solid #e0e0e0", p: 1 }}
             >
@@ -461,20 +447,20 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                           {key === "studdingsail"
                             ? "보조돛"
                             : key === "figurehead"
-                            ? "선수상"
-                            : key === "crest"
-                            ? "문장"
-                            : key === "special_equipment"
-                            ? "특수장비"
-                            : key === "extra_armor"
-                            ? "추가장갑"
-                            : key === "side_cannon"
-                            ? "선측포"
-                            : key === "bow_cannon"
-                            ? "선수포"
-                            : key === "stern_cannon"
-                            ? "선미포"
-                            : key}
+                              ? "선수상"
+                              : key === "crest"
+                                ? "문장"
+                                : key === "special_equipment"
+                                  ? "특수장비"
+                                  : key === "extra_armor"
+                                    ? "추가장갑"
+                                    : key === "side_cannon"
+                                      ? "선측포"
+                                      : key === "bow_cannon"
+                                        ? "선수포"
+                                        : key === "stern_cannon"
+                                          ? "선미포"
+                                          : key}
                         </TableCell>
                       ))}
                     </TableRow>

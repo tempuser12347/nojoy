@@ -119,17 +119,17 @@ export default function GradeBonusDetail({ data }: { data?: GradeBonus }) {
             <DetailItem label="설명" value={gradeBonus.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12, sm: 6}}>
               <DetailItem label="카테고리" value={gradeBonus.category} />
             </Grid>
             {gradeBonus.ship_skill_increase ?
-              <Grid item xs={12} sm={6}>
+              <Grid size={{xs:12, sm: 6}} >
                 <DetailItem label="선박 스킬 증가" value={gradeBonus.ship_skill_increase} />
               </Grid>
               : null}
             {
               gradeBonus.ship_skill ?
-                <Grid item xs={12}>
+                <Grid size={{xs:12}}>
                   <DetailItem
                     label="선박 스킬"
                     value={
@@ -139,7 +139,7 @@ export default function GradeBonusDetail({ data }: { data?: GradeBonus }) {
                 </Grid> : null
             }
             {gradeBonus.performance_improvement ?
-              <Grid item size={12}>
+              <Grid  size={{xs:12}}>
                 <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>성능 향상</Typography>
                 {renderPerformanceImprovement()}
               </Grid> : null}

@@ -125,7 +125,7 @@ export default function SailorEquipmentDetail({ data }: { data?: SailorEquipment
             </Box>
           }
           <Grid container spacing={2} sx={{mt: 2}}>
-            <Grid item xs={12}>
+            <Grid size={{xs:12}} >
                 <DetailItem
                     label="장비 효과"
                     value={

@@ -119,13 +119,13 @@ export default function GradePerformanceDetail({ data }: { data?: GradePerforman
             <DetailItem label="설명" value={gradePerformance.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="선박 종류" value={gradePerformance.ship_type} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="선박 크기" value={gradePerformance.ship_size} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}}>
               <DetailItem label="등급" value={gradePerformance.grade} />
             </Grid>
           </Grid>

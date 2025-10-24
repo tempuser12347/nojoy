@@ -77,16 +77,16 @@ export default function ShipBaseMaterialDetail({ data }: { data?: ShipBaseMateri
             <DetailItem label="설명" value={shipBaseMaterial.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}}>
               <DetailItem label="내구도" value={shipBaseMaterial.durability} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="세로돛" value={shipBaseMaterial.vertical_sail} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="가로돛" value={shipBaseMaterial.horizontal_sail} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}}>
               <DetailItem label="일반 건조" value={shipBaseMaterial.normal_build ? '✅' : '❌'} />
             </Grid>
           </Grid>

@@ -97,10 +97,10 @@ export default function CannonDetail({ data }: { data?: Cannon }) {
             <DetailItem label="설명" value={cannon.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12, sm: 6}}>
               <DetailItem label="카테고리" value={cannon.category} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12, sm: 6}} >
               <DetailItem label="포탄 종류" value={cannon.shell_type} />
             </Grid>
           </Grid>

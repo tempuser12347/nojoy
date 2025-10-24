@@ -96,7 +96,7 @@ export default function ShipDecorDetail({ data }: { data?: ShipDecor }) {
             <DetailItem label="설명" value={shipDecor.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid size={{xs:12}} >
               <Typography variant="h6" gutterBottom>
                 장착 위치
               </Typography>
