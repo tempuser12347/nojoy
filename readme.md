@@ -63,12 +63,16 @@ python이 설치가 되었다면 이 스크립트로 필요한 파이썬 패키�
 
 ## 데이터베이스
 
-기본이 되는 데이터를 이미 작업해준 https://github.com/dhosql/dhoSQL 에서 가져온 db를 활용하였습다다.
+초기 기본이 되는 데이터를 이미 작업해준 https://github.com/dhosql/dhoSQL 에서 가져온 db를 활용하였습다다.
 
-가져온 db에서 한글 column 을 영어로 바꾸는 작업, 추가 table 대충이라도 생성하는 등의 수정을 가했습니다.
+이후에 dhodb.com, ssjoy 크롤링하여 데이터를 지속적으로 추가하였고 초기버전에 비해 많은 데이터들이 추가되었습니다. 크롤링 하면서 각 메뉴별로 소수의 데이터 누락이 있을 수도 있습니다만 적을 것이라고 생각합니다. 최신 데이터의 경우 누락이 되었을 수 있습니다. 잘못된 데이터나 신규 데이터 추가가 필요하다면 [issue 등록](https://github.com/tempuser12347/nojoy/issues)해주세요!
 
-이후에 dhodb.com 을 크롤링하여 데이터를 지속적으로 추가하고 있습니다. dhodb.com 크롤링 중에도 특정 페이지는 로그인에 막혀서 제대로 수집을 못하는 경우들이 발생하여 dhodb.com 데이터 100%를 가져왔다고 하기는 어렵습니다. 그래도 각 섹션(e.g. 교역품,장비품 단위) 당 80% 정도는 안 막히고 수집되어서 작업하고 있는 것 같습니다.
+기본적으로 ssjoy의 id 체계를 따라하는 것을 원칙으로 하고 있기에 ssjoy/dhodb에 변경할 데이터 페이지가 있어야 합니다. ssjoy, dhodb 에 아직 등록되지 않은 데이터는 ssjoy,dhodb에 등록되면 반영할 생각입니다.
 
-db 파일은 `dhoDatabase.sqlite3` 파일입니다.
+해당 레포에서 사용되는 db 파일은 `dhoDatabase.sqlite3` 파일입니다.
+
+추천 db browser
+- DB Browser for SQLite: https://sqlitebrowser.org/ 개발시 설치해서 db 조회, 수정 할 때 유용
+- https://inloop.github.io/sqlite-viewer/ : 온라인으로 빠르게 데이터 확인해보고자 할 시 유용
 
 
