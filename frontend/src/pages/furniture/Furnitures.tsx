@@ -73,7 +73,7 @@ const Furnitures: React.FC = () => {
     { id: "description", label: "설명", minWidth: 200 },
     { id: "category", label: "카테고리", minWidth: 100 },
     { id: "installation_effect_type", label: "설치 효과 유형", minWidth: 150 },
-    { id: "installation_effect_value", label: "설치 효과 값", minWidth: 100, render: (value: any) => (value ? `+${value}` : "-") },
+    { id: "installation_effect_value", label: "설치 효과 값", minWidth: 100, format: (value: any) => (value > 0 ? `+${value}` : value === 0 ? "0" : "-")},
   ];
 
   const handleSearchInputChange = (
