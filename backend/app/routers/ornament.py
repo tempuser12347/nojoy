@@ -53,42 +53,29 @@ def read_ornaments(
             except json.JSONDecodeError:
                 row["cost"] = None
 
-    valid_sort_columns = ["id", "name", "description", "acquisition", "crafter", "city"]
-    if sort_by not in valid_sort_columns:
-        raise HTTPException(status_code=400, detail=f"Invalid sort_by column: {sort_by}")
+    # valid_sort_columns = ["id", "name", "description", "acquisition", "crafter", "city"]
+    # if sort_by not in valid_sort_columns:
+    #     raise HTTPException(status_code=400, detail=f"Invalid sort_by column: {sort_by}")
 
     if sort_by:
+        if sort_by in ['discovery_card', 'installation_effect']:
+            sort_f = lambda x: len(x.get(sort_by, None)) if x.get(sort_by, None) is not None else -1
+        elif sort_by in  ['city']:
+            sort_f = lambda x: x.get(sort_by).get('name', '') if x.get(sort_by, None) is not None else ''
+        else:
+            sort_f = lambda x: x.get(sort_by) or ''
         results.sort(
-            key=lambda x: x.get(sort_by) or "",
+            key=sort_f,
             reverse=(sort_order.lower() == "desc"),
         )
 
     total = len(results)
     paginated_results = results[skip : skip + limit]
-    # print(paginated_results)
 
     items = []
     for row in paginated_results:
         item_dict = dict(row)
-        # Flatten installation_effect for table view
-        # if item_dict.get("installation_effect") and isinstance(item_dict["installation_effect"], list):
-        #     item_dict["installation_effect_display"] = ", ".join([
-        #         f"{effect.get("type", "")} {effect.get("value", 0) > 0 ? "+" : ""}{effect.get("value", "")}"
-        #         for effect in item_dict["installation_effect"]
-        #     ])
-        # else:
-        #     item_dict["installation_effect_display"] = "-"
-
-        # Flatten discovery_card for table view
-        # if item_dict.get("discovery_card") and isinstance(item_dict["discovery_card"], list):
-        #     item_dict["discovery_card_display"] = ", ".join([
-        #         card.get("name", "") for card in item_dict["discovery_card"]
-        #     ])
-        # else:
-        #     item_dict["discovery_card_display"] = "-"
-
         items.append(item_dict)
-    print(items)
 
     return {"items": items, "total": total}
 
