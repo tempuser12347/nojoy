@@ -104,6 +104,7 @@ const availableSections = [
             "특수장비",
             "선원 장비",
             "문장",
+            "선박 데코",
             "직업",  "도시",
   "교역품",
   "추천장",
@@ -279,6 +280,9 @@ const availableSections = [
               break;
             case "문장":
               subsection = "crests";
+              break;
+            case "선박 데코":
+              subsection = "shipdecors";
               break;
             default:
               break;
