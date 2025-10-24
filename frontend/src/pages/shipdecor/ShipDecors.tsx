@@ -71,11 +71,11 @@ const ShipDecors: React.FC = () => {
   const columns = [
     { id: "name", label: "이름", minWidth: 170 },
     { id: "description", label: "설명", minWidth: 200 },
-    { id: "flag", label: "깃발", minWidth: 80, render: (value: boolean) => (value ? "O" : "X") },
-    { id: "side_front_right", label: "우측 전면", minWidth: 80, render: (value: boolean) => (value ? "✅" : "❌") },
-    { id: "side_front_left", label: "좌측 전면", minWidth: 80, render: (value: boolean) => (value ? "✅" : "❌") },
-    { id: "side_rear_right", label: "우측 후면", minWidth: 80, render: (value: boolean) => (value ? "✅" : "❌") },
-    { id: "side_rear_left", label: "좌측 후면", minWidth: 80, render: (value: boolean) => (value ? "✅" : "❌") },
+    { id: "flag", label: "깃발", minWidth: 80, format: (value: boolean) => (value ? "✅" : "❌") },
+    { id: "side_front_right", label: "우측 전면", minWidth: 80, format: (value: boolean) => (value ? "✅" : "❌") },
+    { id: "side_front_left", label: "좌측 전면", minWidth: 80, format: (value: boolean) => (value ? "✅" : "❌") },
+    { id: "side_rear_right", label: "우측 후면", minWidth: 80, format: (value: boolean) => (value ? "✅" : "❌") },
+    { id: "side_rear_left", label: "좌측 후면", minWidth: 80, format: (value: boolean) => (value ? "✅" : "❌") },
   ];
 
   const handleSearchInputChange = (

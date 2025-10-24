@@ -58,8 +58,12 @@ def read_shipdecors(
         ]
 
     if sort_by:
+        if sort_by in ['flag', 'side_front_right', 'side_front_left', 'side_rear_right', 'side_rear_left']:
+            sort_f = lambda x: x.get(sort_by) or False
+        else:
+            sort_f =  lambda x: x.get(sort_by) or ''
         results.sort(
-            key=lambda x: x.get(sort_by) or "",
+            key=sort_f,
             reverse=(sort_order.lower() == "desc"),
         )
 
