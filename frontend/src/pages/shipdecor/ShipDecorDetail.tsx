@@ -113,7 +113,7 @@ export default function ShipDecorDetail({ data }: { data?: ShipDecor }) {
                     <TableRow>
                       {Object.keys(positionLabels).map((key) => (
                         <TableCell key={key}>
-                          {shipDecor.positions[key as keyof typeof shipDecor.positions] ? "O" : "X"}
+                          {shipDecor.positions[key as keyof typeof shipDecor.positions] ? "✅" : "❌"}
                         </TableCell>
                       ))}
                     </TableRow>
