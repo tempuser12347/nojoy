@@ -102,6 +102,7 @@ const availableSections = [
             "선수상",
             "추가장갑",
             "특수장비",
+            "선원 장비",
             "직업",  "도시",
   "교역품",
   "추천장",
@@ -271,6 +272,9 @@ const availableSections = [
               break;
             case "특수장비":
               subsection = "specialequipments";
+              break;
+            case "선원 장비":
+              subsection = "sailorequipments";
               break;
             default:
               break;

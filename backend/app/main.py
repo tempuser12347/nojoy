@@ -50,6 +50,7 @@ from app.routers import (
     figurehead,
     extraarmor,
     specialequipment,
+    sailorequipment,
 )
 import os
 
@@ -113,6 +114,7 @@ app.include_router(studdingsail.router)
 app.include_router(figurehead.router)
 app.include_router(extraarmor.router)
 app.include_router(specialequipment.router)
+app.include_router(sailorequipment.router)
 
 
 dist_dir = "dist"

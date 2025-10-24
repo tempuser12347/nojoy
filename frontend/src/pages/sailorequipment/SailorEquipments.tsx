@@ -1,0 +1,127 @@
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+} from "@mui/material";
+import DataTable from "../../components/DataTable";
+import api from "../../api";
+
+const SailorEquipments: React.FC = () => {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const page = parseInt(searchParams.get("page") || "0", 10);
+  const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
+  const name_search = searchParams.get("name_search") || "";
+  const sort_by = searchParams.get("sort_by") || "id";
+  const sort_order =
+    (searchParams.get("sort_order") as "asc" | "desc") || "asc";
+
+  const [searchInput, setSearchInput] = React.useState(name_search);
+
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      "sailorequipments",
+      page,
+      rowsPerPage,
+      name_search,
+      sort_by,
+      sort_order,
+    ],
+    queryFn: async () => {
+      const response = await api.get("/api/sailorequipments", {
+        params: {
+          name_search,
+          sort_by,
+          sort_order,
+          skip: page * rowsPerPage,
+          limit: rowsPerPage,
+        },
+      });
+      return response.data;
+    },
+  });
+
+  const columns = [
+    { id: "name", label: "이름", minWidth: 170 },
+    { id: "durability", label: "내구도", minWidth: 100 },
+    { id: "vertical_sail", label: "세로돛", minWidth: 100 },
+    { id: "horizontal_sail", label: "가로돛", minWidth: 100 },
+    { id: "wave_resistance", label: "내파", minWidth: 100 },
+    { id: "armor", label: "장갑", minWidth: 100 },
+    { id: "maneuverability", label: "선회", minWidth: 100 },
+    { id: "equipment_effect", label: "장비 효과", minWidth: 170 },
+  ];
+
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchInput(event.target.value);
+  };
+
+  const handleSearch = () => {
+    setSearchParams({ name_search: searchInput, page: "0", rowsPerPage: rowsPerPage.toString(), sort_by, sort_order });
+  };
+
+  const resetFilters = () => {
+    setSearchInput("");
+    setSearchParams({ page: "0", rowsPerPage: rowsPerPage.toString(), sort_by, sort_order });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setSearchParams({ page: newPage.toString(), rowsPerPage: rowsPerPage.toString(), name_search, sort_by, sort_order });
+  };
+
+  const handleRowsPerPageChange = (newRowsPerPage: number) => {
+    setSearchParams({ page: "0", rowsPerPage: newRowsPerPage.toString(), name_search, sort_by, sort_order });
+  };
+
+  const handleSortChange = (columnId: string) => {
+    const newSortOrder = sort_by === columnId && sort_order === "asc" ? "desc" : "asc";
+    setSearchParams({ page: page.toString(), rowsPerPage: rowsPerPage.toString(), name_search, sort_by: columnId, sort_order: newSortOrder });
+  };
+
+  return (
+    <Box sx={{ width: "100%", p: 3, height: "calc(100vh - 100px)" }}>
+      <Typography variant="h4" gutterBottom>
+        선원 장비
+      </Typography>
+      <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+        <TextField
+          label="이름 검색"
+          variant="outlined"
+          value={searchInput}
+          onChange={handleSearchInputChange}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+        />
+        <Button variant="contained" onClick={handleSearch}>
+          검색
+        </Button>
+        <Button variant="outlined" onClick={resetFilters}>
+          초기화
+        </Button>
+      </Box>
+
+      <DataTable
+        columns={columns}
+        data={data?.items || []}
+        loading={isLoading}
+        total={data?.total || 0}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        sortColumn={sort_by}
+        sortDirection={sort_order}
+        onSortChange={handleSortChange}
+        onRowClick={(row) => navigate(`/obj/${row.id}`)}
+      />
+    </Box>
+  );
+};
+
+export default SailorEquipments;

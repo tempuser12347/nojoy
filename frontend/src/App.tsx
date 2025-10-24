@@ -52,6 +52,7 @@ import StuddingSails from "./pages/studdingsail/StuddingSails";
 import Figureheads from "./pages/figurehead/Figureheads";
 import ExtraArmors from "./pages/extraarmor/ExtraArmors";
 import SpecialEquipments from "./pages/specialequipment/SpecialEquipments";
+import SailorEquipments from "./pages/sailorequipment/SailorEquipments";
 
 const queryClient = new QueryClient();
 
@@ -113,6 +114,7 @@ function App() {
               <Route path="/figureheads" element={<Figureheads />} />
               <Route path="/extraarmors" element={<ExtraArmors />} />
               <Route path="/specialequipments" element={<SpecialEquipments />} />
+              <Route path="/sailorequipments" element={<SailorEquipments />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

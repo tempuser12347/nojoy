@@ -48,6 +48,7 @@ from .studdingsail import read_studdingsail_core
 from .figurehead import read_figurehead_core
 from .extraarmor import read_extraarmor_core
 from .specialequipment import read_specialequipment_core
+from .sailorequipment import read_sailorequipment_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -162,6 +163,7 @@ detail_data_fetch_function_dict = {
     "figurehead": read_figurehead_core,
     "extraarmor": read_extraarmor_core,
     "specialequipment": read_specialequipment_core,
+    "sailorequipment": read_sailorequipment_core,
 }
 
 
