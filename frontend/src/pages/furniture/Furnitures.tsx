@@ -155,6 +155,7 @@ const Furnitures: React.FC = () => {
         onRowsPerPageChange={handleRowsPerPageChange}
         sortColumn={sort_by}
         sortDirection={sort_order}
+        onSortChange={handleSortChange}
         onRowClick={(row) => navigate(`/obj/${row.id}`)}
       />
     </Box>

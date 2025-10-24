@@ -50,9 +50,18 @@ def read_furnitures(
             or name_search.lower() in (row.get("extraname") or "").lower()
         ]
 
+    valid_sort_columns = ["id", "name", "extraname", "description", "category", "installation_effect_type", "installation_effect_value"]
+    if sort_by not in valid_sort_columns:
+        raise HTTPException(status_code=400, detail=f"Invalid sort_by column: {sort_by}")
+
     if sort_by:
+        if sort_by in ['installation_effect_value']:
+            sort_f = lambda x: x.get(sort_by) if x.get(sort_by) is not None else -1
+        else:
+            sort_f = lambda x: x.get(sort_by) if x.get(sort_by) is not None else ''
+
         results.sort(
-            key=lambda x: x.get(sort_by) or "",
+            key=sort_f,
             reverse=(sort_order.lower() == "desc"),
         )
 
