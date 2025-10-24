@@ -89,13 +89,13 @@ export default function ShipSkillDetail({ data }: { data?: ShipSkill }) {
         <CardContent>
           <DetailItem label="설명" value={shipSkill.description} />
           <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12, sm:6}}>
               <DetailItem label="행동력" value={shipSkill.action_points} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12, sm:6}} >
               <DetailItem label="적용범위" value={shipSkill.apply_range} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{xs:12}} >
               <DetailItem
                 label="필요스킬"
                 value={

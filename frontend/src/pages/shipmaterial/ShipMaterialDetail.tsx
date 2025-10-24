@@ -90,46 +90,46 @@ export default function ShipMaterialDetail({ data }: { data?: ShipMaterial }) {
             <DetailItem label="설명" value={shipMaterial.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}}>
               <DetailItem label="종류" value={shipMaterial.material_type} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="가능" value={shipMaterial.availability} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="내구도" value={shipMaterial.durability} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="장갑" value={shipMaterial.armor} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="선실" value={shipMaterial.cabin} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="창고" value={shipMaterial.cargo} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="내파" value={shipMaterial.wave_resistance} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="선회" value={shipMaterial.maneuverability} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="노젓기" value={shipMaterial.rowing_power} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="세로돛" value={shipMaterial.vertical_sail} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="가로돛" value={shipMaterial.horizontal_sail} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6, md: 4}} >
               <DetailItem label="포문" value={shipMaterial.gunport} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{xs: 12}}>
               <DetailItem label="특징" value={shipMaterial.features} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{xs: 12}} >
               <DetailItem
                 label="기본 재료"
                 value={

@@ -93,10 +93,10 @@ export default function StuddingSailDetail({ data }: { data?: StuddingSail }) {
             <DetailItem label="설명" value={studdingSail.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12, sm:6}} >
               <DetailItem label="카테고리" value={studdingSail.category} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12, sm:6}} >
               <DetailItem label="특징" value={studdingSail.features} />
             </Grid>
           </Grid>
