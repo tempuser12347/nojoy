@@ -9,7 +9,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100%', maxWidth: '100%' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100%', maxWidth: '100%', overflowX: 'auto' }}>
       <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ mr: 4 }}>
@@ -39,7 +39,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container component="main" sx={{ mt: 8, mb: 4, flex: 1, width: '100%', maxWidth: '100vw', overflowX: 'scroll' }}>
+      <Container component="main" sx={{ mt: 8, mb: 4, flex: 1, width: '100%', maxWidth: '100vw', overflowX: 'auto' }}>
         {children}
       </Container>
     </Box>

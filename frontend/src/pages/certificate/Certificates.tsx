@@ -86,7 +86,7 @@ const Certificates: React.FC = () => {
       format: (value: string) => (
         <Typography
           variant="body2"
-          sx={{ maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}
+          sx={{ maxWidth: 200, overflow: "auto", textOverflow: "ellipsis" }}
         >
           {value || ""}
         </Typography>
