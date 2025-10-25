@@ -26,8 +26,8 @@ interface Ornament {
   acquisition: string | null;
   crafter: string | null;
   discovery_card: Array<{ id: number; name: string }> | null;
-  installation_effect: Array<{ type: string; value: number }> | null;
-  city: string | null;
+  installation_effect: Array<{ id: number, name: string, value: number }> | null;
+  city: { id: number, name: string } | null;
   cost: { value: number; unit: string } | null;
 }
 
@@ -88,17 +88,18 @@ export default function OrnamentDetail({ data }: { data?: Ornament }) {
             <DetailItem label="설명" value={ornament.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="획득" value={ornament.acquisition} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="제작자" value={ornament.crafter} />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <DetailItem label="도시" value={ornament.city} />
+            <Grid size={{ xs: 12, sm: 6 }}>
+              {ornament.city ?
+                <DetailItem label="도시" value={renderObjectChip(ornament.city, navigate)} /> : null}
             </Grid>
             {ornament.cost && (
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <DetailItem
                   label="비용"
                   value={`${ornament.cost.value.toLocaleString()} ${ornament.cost.unit}`}
@@ -106,7 +107,7 @@ export default function OrnamentDetail({ data }: { data?: Ornament }) {
               </Grid>
             )}
             {ornament.discovery_card && ornament.discovery_card.length > 0 && (
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Typography variant="h6" gutterBottom>
                   발견물 카드
                 </Typography>
@@ -114,14 +115,12 @@ export default function OrnamentDetail({ data }: { data?: Ornament }) {
                   <Table size="small">
                     <TableHead>
                       <TableRow>
-                        <TableCell>ID</TableCell>
                         <TableCell>이름</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {ornament.discovery_card.map((card, index) => (
                         <TableRow key={index}>
-                          <TableCell>{card.id}</TableCell>
                           <TableCell>{renderObjectChip(card, navigate)}</TableCell>
                         </TableRow>
                       ))}
@@ -131,7 +130,7 @@ export default function OrnamentDetail({ data }: { data?: Ornament }) {
               </Grid>
             )}
             {ornament.installation_effect && ornament.installation_effect.length > 0 && (
-              <Grid item xs={12}>
+              <Grid item xs={12} lg={12}>
                 <Typography variant="h6" gutterBottom>
                   설치 효과
                 </Typography>
@@ -146,7 +145,7 @@ export default function OrnamentDetail({ data }: { data?: Ornament }) {
                     <TableBody>
                       {ornament.installation_effect.map((effect, index) => (
                         <TableRow key={index}>
-                          <TableCell>{effect.type}</TableCell>
+                          <TableCell>{renderObjectChip(effect, navigate)}</TableCell>
                           <TableCell>{`${effect.value > 0 ? "+" : ""}${effect.value}`}</TableCell>
                         </TableRow>
                       ))}

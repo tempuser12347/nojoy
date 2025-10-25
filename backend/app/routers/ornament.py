@@ -95,7 +95,7 @@ def read_ornament_core(ornament_id: int, db: Session):
     ret = dict(result._mapping)
 
     # Parse JSON fields
-    for field in ["discovery_card", "installation_effect", "cost"]:
+    for field in ["discovery_card", "installation_effect", "cost", 'city']:
         if ret.get(field) and isinstance(ret[field], str):
             try:
                 ret[field] = json.loads(ret[field])
