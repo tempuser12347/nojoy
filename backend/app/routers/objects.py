@@ -56,6 +56,7 @@ from .ornament import read_ornament_core
 from .tarotcard import read_tarotcard_core
 from .transmutation import read_transmutation_core
 from .itemeffect import read_itemeffect_core
+from .equippedeffect import read_equippedeffect_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -177,6 +178,7 @@ detail_data_fetch_function_dict = {
     "tarotcard": read_tarotcard_core,
     "transmutation": read_transmutation_core,
     "itemeffect": read_itemeffect_core,
+    "equippedeffect": read_equippedeffect_core,
 }
 
 
