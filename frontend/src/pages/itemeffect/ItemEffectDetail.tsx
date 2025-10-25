@@ -78,15 +78,17 @@ export default function ItemEffectDetail({ data }: { data?: ItemEffect }) {
             <DetailItem label="설명" value={itemEffect.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="분류" value={itemEffect.category} />
             </Grid>
-            <Grid item xs={12}>
-              <DetailItem
-                label="스킬"
-                value={itemEffect.skill ? renderObjectsToChips(itemEffect.skill, navigate) : null}
-              />
-            </Grid>
+            {itemEffect.skill ?
+              <Grid size={{ xs: 12 }}>
+                <DetailItem
+                  label="스킬"
+                  value={renderObjectsToChips(itemEffect.skill, navigate)}
+                />
+              </Grid> : null
+            }
           </Grid>
         </CardContent>
       </Card>
