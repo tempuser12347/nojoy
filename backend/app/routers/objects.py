@@ -54,6 +54,7 @@ from .shipdecor import read_shipdecor_core
 from .furniture import read_furniture_core
 from .ornament import read_ornament_core
 from .tarotcard import read_tarotcard_core
+from .transmutation import read_transmutation_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -79,9 +80,8 @@ recipeBook
 relic
 relicPiece
 memorialAlbum
-crest
-transmutation
-treasureMap
+    "crest",
+    "transmutation",
 studdingSail
 aide
 ship
@@ -174,6 +174,7 @@ detail_data_fetch_function_dict = {
     "furniture": read_furniture_core,
     "ornament": read_ornament_core,
     "tarotcard": read_tarotcard_core,
+    "transmutation": read_transmutation_core,
 }
 
 

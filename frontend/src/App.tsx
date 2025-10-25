@@ -58,6 +58,7 @@ import ShipDecors from "./pages/shipdecor/ShipDecors";
 import Furnitures from "./pages/furniture/Furnitures";
 import Ornaments from "./pages/ornament/Ornaments";
 import TarotCards from "./pages/tarotcard/TarotCards";
+import Transmutations from "./pages/transmutation/Transmutations";
 
 const queryClient = new QueryClient();
 
@@ -125,6 +126,7 @@ function App() {
               <Route path="/furnitures" element={<Furnitures />} />
               <Route path="/ornaments" element={<Ornaments />} />
               <Route path="/tarotcards" element={<TarotCards />} />
+              <Route path="/transmutations" element={<Transmutations />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

@@ -114,6 +114,7 @@ const availableSections = [
   "소비품",
   "레시피책",
   "레시피",
+  "변성 연금",
   "스킬",
   "스킬 연성 효과",
   "연구",
@@ -293,8 +294,11 @@ const availableSections = [
             case "장식품":
               subsection = "ornaments";
               break;
-            case "타로카드":
-              subsection = "tarotcards";
+            case "레시피":
+              subsection = "recipes";
+              break;
+            case "변성 연금":
+              subsection = "transmutations";
               break;
             default:
               break;
