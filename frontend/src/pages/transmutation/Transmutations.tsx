@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
+import { renderObjectChip, renderObjectsToChips } from "../../common/render";
 
 const Transmutations: React.FC = () => {
   const navigate = useNavigate();
@@ -70,10 +71,10 @@ const Transmutations: React.FC = () => {
 
   const columns = [
     { id: "name", label: "이름", minWidth: 170 },
-    { id: "base_material", label: "기본 재료", minWidth: 100 },
-    { id: "requirements_skill", label: "요구 스킬", minWidth: 150 },
-    { id: "requirements_material", label: "요구 재료", minWidth: 200 },
-    { id: "products_display", label: "생성물", minWidth: 200 },
+    { id: "base_material", label: "기본 재료", minWidth: 100, format: (value) => renderObjectChip(value, navigate) },
+    { id: "requirements_skill", label: "요구 스킬", minWidth: 150, format: (value: any[]) => renderObjectsToChips(value, navigate) },
+    { id: "requirements_material", label: "요구 재료", minWidth: 200, format: (value: any[]) => renderObjectsToChips(value, navigate) },
+    { id: "products", label: "생성물", minWidth: 200, format: (value: any[]) => renderObjectsToChips(value.map(x => { return { id: x.id, name: x.name, value: x.quantity } }), navigate, x => 'x' + x) },
   ];
 
   const handleSearchInputChange = (

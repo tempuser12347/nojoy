@@ -45,17 +45,24 @@ def read_transmutations(
         if row.get("requirements") and isinstance(row["requirements"], str):
             try:
                 reqs = json.loads(row["requirements"])
-                row["requirements_skill"] = ", ".join([f"{r['content'][0]['name']} Lv.{r['content'][0]['value']}" for r in reqs if r["type"] == "스킬" and r["content"]])
-                row["requirements_material"] = ", ".join([f"{m['name']} x{m['value']}" for r in reqs if r["type"] == "재료" for m in r["content"]])
+                row["requirements_skill"] = [skill for r in reqs if r["type"] == "스킬" for skill in r["content"]]
+                row["requirements_material"] = [material for r in reqs if r["type"] == "재료" for material in r["content"]]
             except json.JSONDecodeError:
-                row["requirements_skill"] = ""
-                row["requirements_material"] = ""
+                raise Exception()
         if row.get("products") and isinstance(row["products"], str):
             try:
                 prods = json.loads(row["products"])
-                row["products_display"] = ", ".join([f"{p['product']['name']} x{p['quantity']}" for p in prods if p["result"] == "성공"])
+                prod_list = []
+                for p in prods:
+                    obj = p['product']
+                    quantity = p['quantity']
+                    obj['quantity'] = quantity
+                    prod_list.append(obj)
+                row['products'] = prod_list
             except json.JSONDecodeError:
-                row["products_display"] = ""
+                raise Exception()
+        if row.get('base_material'):
+            row['base_material'] = json.loads(row['base_material'])
 
     if sort_by:
         results.sort(
