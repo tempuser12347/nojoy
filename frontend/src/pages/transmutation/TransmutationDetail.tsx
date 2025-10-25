@@ -17,14 +17,14 @@ import {
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
-import { renderObjectChip } from "../../common/render";
+import { renderObjectChip, renderObjectsToChips } from "../../common/render";
 
 interface Transmutation {
   id: number;
   name: string;
   extraname: string | null;
   description: string | null;
-  base_material: string | null;
+  base_material: {id: number, name: string} ;
   policy: string | null;
   requirements: any[];
   products: any[];
@@ -77,54 +77,45 @@ export default function TransmutationDetail({ data }: { data?: Transmutation }) 
   }
 
   const renderRequirements = (requirements: any[]) => {
-    return requirements.map((req, index) => (
-      <Box key={index} sx={{ mb: 2 }}>
-        <Typography variant="subtitle1">{req.type}</Typography>
-        {req.type === "소피아" && (
-          <Typography variant="body2">{req.content}</Typography>
-        )}
-        {req.type === "스킬" && (
-          <TableContainer component={Paper} sx={{ mt: 1 }}>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>스킬 이름</TableCell>
-                  <TableCell>레벨</TableCell>
+      return <TableContainer component={Paper} sx={{mt: 1}}>
+        <Table size='small'>
+          <TableHead>
+            <TableRow>
+              <TableCell>종류</TableCell>
+              <TableCell>내용</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {requirements.map(x=>{
+              if(x.type=='소피아'){
+                return <TableRow>
+                  <TableCell>소피아</TableCell>
+                  <TableCell>{x.content}</TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {req.content.map((skill: any, skillIndex: number) => (
-                  <TableRow key={skillIndex}>
-                    <TableCell>{renderObjectChip(skill, navigate)}</TableCell>
-                    <TableCell>{skill.value}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-        {req.type === "재료" && (
-          <TableContainer component={Paper} sx={{ mt: 1 }}>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>재료 이름</TableCell>
-                  <TableCell>수량</TableCell>
+              }
+              else if(x.type == '스킬'){
+                return <TableRow>
+                  <TableCell>스킬</TableCell>
+                  <TableCell>{renderObjectsToChips(x.content, navigate)}</TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {req.content.map((material: any, materialIndex: number) => (
-                  <TableRow key={materialIndex}>
-                    <TableCell>{renderObjectChip(material, navigate)}</TableCell>
-                    <TableCell>{material.value}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </Box>
-    ));
+              }
+              else if(x.type == '재료'){
+                return <TableRow>
+                  <TableCell>재료</TableCell>
+                  <TableCell>{renderObjectsToChips(x.content, navigate, x=>'x' + x)}</TableCell>
+                </TableRow>
+              }
+              else{
+                return <TableRow>
+                  <TableCell>{x.type}</TableCell>
+                  <TableCell>{JSON.stringify(x.content)}</TableCell>
+                </TableRow>
+
+              }
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
   };
 
   const renderProducts = (products: any[]) => {
