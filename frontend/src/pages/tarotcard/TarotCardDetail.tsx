@@ -75,10 +75,10 @@ export default function TarotCardDetail({ data }: { data?: TarotCard }) {
             <DetailItem label="설명" value={tarotCard.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid size={{xs: 12}}>
               <DetailItem label="효과" value={tarotCard.effect} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{xs: 12}}>
               <DetailItem label="요약" value={tarotCard.summary} />
             </Grid>
           </Grid>
