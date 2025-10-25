@@ -24,7 +24,7 @@ interface Transmutation {
   name: string;
   extraname: string | null;
   description: string | null;
-  base_material: {id: number, name: string} ;
+  base_material: { id: number, name: string };
   policy: string | null;
   requirements: any[];
   products: any[];
@@ -77,45 +77,45 @@ export default function TransmutationDetail({ data }: { data?: Transmutation }) 
   }
 
   const renderRequirements = (requirements: any[]) => {
-      return <TableContainer component={Paper} sx={{mt: 1}}>
-        <Table size='small'>
-          <TableHead>
-            <TableRow>
-              <TableCell>종류</TableCell>
-              <TableCell>내용</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {requirements.map(x=>{
-              if(x.type=='소피아'){
-                return <TableRow>
-                  <TableCell>소피아</TableCell>
-                  <TableCell>{x.content}</TableCell>
-                </TableRow>
-              }
-              else if(x.type == '스킬'){
-                return <TableRow>
-                  <TableCell>스킬</TableCell>
-                  <TableCell>{renderObjectsToChips(x.content, navigate)}</TableCell>
-                </TableRow>
-              }
-              else if(x.type == '재료'){
-                return <TableRow>
-                  <TableCell>재료</TableCell>
-                  <TableCell>{renderObjectsToChips(x.content, navigate, x=>'x' + x)}</TableCell>
-                </TableRow>
-              }
-              else{
-                return <TableRow>
-                  <TableCell>{x.type}</TableCell>
-                  <TableCell>{JSON.stringify(x.content)}</TableCell>
-                </TableRow>
+    return <TableContainer component={Paper} sx={{ mt: 1 }}>
+      <Table size='small'>
+        <TableHead>
+          <TableRow>
+            <TableCell>종류</TableCell>
+            <TableCell>내용</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {requirements.map(x => {
+            if (x.type == '소피아') {
+              return <TableRow>
+                <TableCell>소피아</TableCell>
+                <TableCell>{x.content}</TableCell>
+              </TableRow>
+            }
+            else if (x.type == '스킬') {
+              return <TableRow>
+                <TableCell>스킬</TableCell>
+                <TableCell>{renderObjectsToChips(x.content, navigate)}</TableCell>
+              </TableRow>
+            }
+            else if (x.type == '재료') {
+              return <TableRow>
+                <TableCell>재료</TableCell>
+                <TableCell>{renderObjectsToChips(x.content, navigate, x => 'x' + x)}</TableCell>
+              </TableRow>
+            }
+            else {
+              return <TableRow>
+                <TableCell>{x.type}</TableCell>
+                <TableCell>{JSON.stringify(x.content)}</TableCell>
+              </TableRow>
 
-              }
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            }
+          })}
+        </TableBody>
+      </Table>
+    </TableContainer>
   };
 
   const renderProducts = (products: any[]) => {
@@ -154,24 +154,34 @@ export default function TransmutationDetail({ data }: { data?: Transmutation }) 
             <DetailItem label="설명" value={transmutation.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid size={{xs: 12, sm: 6}}>
-              <DetailItem label="기본 재료" value={renderObjectChip(transmutation.base_material, navigate)} />
-            </Grid>
-            <Grid size={{xs: 12, sm: 6}} >
-              <DetailItem label="정책" value={transmutation.policy} />
-            </Grid>
-            <Grid size={{xs: 12}}>
+            {transmutation.base_material ?
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <DetailItem label="기본 재료" value={renderObjectChip(transmutation.base_material, navigate)} />
+              </Grid> : null
+            }
+            {transmutation.policy ?
+
+              <Grid size={{ xs: 12, sm: 6 }} >
+                <DetailItem label="정책" value={transmutation.policy} />
+              </Grid> : null
+            }
+            <Grid size={{ xs: 12 }}>
               <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                 요구 사항
               </Typography>
               {transmutation.requirements && renderRequirements(transmutation.requirements)}
             </Grid>
-            <Grid size={{xs: 12}}>
-              <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                생성물
-              </Typography>
-              {transmutation.products && renderProducts(transmutation.products)}
-            </Grid>
+            {
+              transmutation.products ?
+
+                <Grid size={{ xs: 12 }}>
+                  <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+                    생성물
+                  </Typography>
+                  {renderProducts(transmutation.products)}
+                </Grid> : null
+            }
           </Grid>
         </CardContent>
       </Card>

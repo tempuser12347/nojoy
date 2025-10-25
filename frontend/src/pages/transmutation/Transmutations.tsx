@@ -71,10 +71,10 @@ const Transmutations: React.FC = () => {
 
   const columns = [
     { id: "name", label: "이름", minWidth: 170 },
-    { id: "base_material", label: "기본 재료", minWidth: 100, format: (value) => renderObjectChip(value, navigate) },
+    { id: "base_material", label: "기본 재료", minWidth: 100, format: (value: {id: number, name: string}|null) => value ? renderObjectChip(value, navigate): null },
     { id: "requirements_skill", label: "요구 스킬", minWidth: 150, format: (value: any[]) => renderObjectsToChips(value, navigate) },
-    { id: "requirements_material", label: "요구 재료", minWidth: 200, format: (value: any[]) => renderObjectsToChips(value, navigate) },
-    { id: "products", label: "생성물", minWidth: 200, format: (value: any[]) => renderObjectsToChips(value.map(x => { return { id: x.id, name: x.name, value: x.quantity } }), navigate, x => 'x' + x) },
+    { id: "requirements_material", label: "요구 재료", minWidth: 200, format: (value: any[]) => value ? renderObjectsToChips(value, navigate): null },
+    { id: "products", label: "생성물", minWidth: 200, format: (value: any[]) => value ? renderObjectsToChips(value.map(x => { return { id: x.id, name: x.name, value: x.quantity } }), navigate, x => 'x' + x) : null},
   ];
 
   const handleSearchInputChange = (
