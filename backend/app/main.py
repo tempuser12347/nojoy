@@ -56,7 +56,8 @@ from app.routers import (
     furniture,
     ornament,
     tarotcard,
-    transmutation
+    transmutation,
+    itemeffect
 )
 import os
 
@@ -127,6 +128,7 @@ app.include_router(furniture.router)
 app.include_router(ornament.router)
 app.include_router(tarotcard.router)
 app.include_router(transmutation.router)
+app.include_router(itemeffect.router)
 
 
 dist_dir = "dist"

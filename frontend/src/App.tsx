@@ -59,6 +59,7 @@ import Furnitures from "./pages/furniture/Furnitures";
 import Ornaments from "./pages/ornament/Ornaments";
 import TarotCards from "./pages/tarotcard/TarotCards";
 import Transmutations from "./pages/transmutation/Transmutations";
+import ItemEffects from "./pages/itemeffect/ItemEffects";
 
 const queryClient = new QueryClient();
 
@@ -127,6 +128,7 @@ function App() {
               <Route path="/ornaments" element={<Ornaments />} />
               <Route path="/tarotcards" element={<TarotCards />} />
               <Route path="/transmutations" element={<Transmutations />} />
+              <Route path="/itemeffects" element={<ItemEffects />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

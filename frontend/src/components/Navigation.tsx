@@ -115,6 +115,7 @@ const availableSections = [
   "레시피책",
   "레시피",
   "변성 연금",
+  "아이템 효과",
   "스킬",
   "스킬 연성 효과",
   "연구",
@@ -299,6 +300,9 @@ const availableSections = [
               break;
             case "변성 연금":
               subsection = "transmutations";
+              break;
+            case "아이템 효과":
+              subsection = "itemeffects";
               break;
             default:
               break;
