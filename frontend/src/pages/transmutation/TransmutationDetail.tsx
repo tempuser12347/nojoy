@@ -163,19 +163,19 @@ export default function TransmutationDetail({ data }: { data?: Transmutation }) 
             <DetailItem label="설명" value={transmutation.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <DetailItem label="기본 재료" value={transmutation.base_material} />
+            <Grid size={{xs: 12, sm: 6}}>
+              <DetailItem label="기본 재료" value={renderObjectChip(transmutation.base_material, navigate)} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs: 12, sm: 6}} >
               <DetailItem label="정책" value={transmutation.policy} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{xs: 12}}>
               <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                 요구 사항
               </Typography>
               {transmutation.requirements && renderRequirements(transmutation.requirements)}
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{xs: 12}}>
               <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                 생성물
               </Typography>

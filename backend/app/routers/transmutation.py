@@ -102,7 +102,7 @@ def read_transmutation_core(transmutation_id: int, db: Session):
         ret["name"] = f'{ret["name"]} {ret["extraname"]}'
 
     # Parse JSON fields
-    for field in ["requirements", "products"]:
+    for field in ["requirements", "products", 'base_material']:
         if ret.get(field) and isinstance(ret[field], str):
             try:
                 ret[field] = json.loads(ret[field])
