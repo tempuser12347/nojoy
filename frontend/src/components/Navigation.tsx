@@ -110,6 +110,7 @@ const availableSections = [
   "추천장",
   "가구",
   "장식품",
+  "타로카드",
   "소비품",
   "레시피책",
   "레시피",
@@ -291,6 +292,9 @@ const availableSections = [
               break;
             case "장식품":
               subsection = "ornaments";
+              break;
+            case "타로카드":
+              subsection = "tarotcards";
               break;
             default:
               break;
