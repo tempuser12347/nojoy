@@ -16,6 +16,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Tooltip,
 } from "@mui/material";
 import api from "../../api";
 import {
@@ -201,8 +202,9 @@ export default function QuestDetail({ data }: { data?: Quest }) {
                       <TableCell>1회 한정</TableCell>
                       <TableCell>희귀</TableCell>
                       <TableCell>조합 필요</TableCell>
-                      {quest.era && <TableCell>시대</TableCell>}
-                      {quest.deadline && <TableCell>마감일</TableCell>}
+                      {quest.era ? <TableCell>시대</TableCell> : null}
+                      {quest.deadline ? <TableCell>마감일</TableCell> : null}
+                      {quest.episode ? <TableCell>에피소드</TableCell> : null}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -213,8 +215,9 @@ export default function QuestDetail({ data }: { data?: Quest }) {
                       <TableCell>{quest.one_time_only ? "Yes" : "No"}</TableCell>
                       <TableCell>{quest.rare ? "Yes" : "No"}</TableCell>
                       <TableCell>{quest.association_required ? "Yes" : "No"}</TableCell>
-                      {quest.era && <TableCell>{quest.era}</TableCell>}
-                      {quest.deadline && <TableCell>{quest.deadline}</TableCell>}
+                      {quest.era ? <TableCell>{quest.era}</TableCell> : null}
+                      {quest.deadline ? <TableCell>{quest.deadline}</TableCell> : null}
+                      {quest.episode ? <TableCell>{quest.episode}</TableCell> : null}
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -222,7 +225,7 @@ export default function QuestDetail({ data }: { data?: Quest }) {
             </Box>
             <Box sx={{ gridColumn: "1 / -1" }}>
               <Typography variant="h6" gutterBottom>
-                세부 정보
+                위치 및 발견물
               </Typography>
               <TableContainer component={Paper}>
                 <Table size="small">
@@ -236,7 +239,13 @@ export default function QuestDetail({ data }: { data?: Quest }) {
                   <TableBody>
                     <TableRow>
                       <TableCell>{quest.location}</TableCell>
-                      <TableCell>{quest.destination ? renderObjectChip(quest.destination, navigate) : null}</TableCell>
+                      <TableCell>
+                        {quest.destination ? (
+                          <Tooltip title={'좌표:' + quest.destination_coordinates || ""} arrow>
+                            {renderObjectChip(quest.destination, navigate)}
+                          </Tooltip>
+                        ) : null}
+                      </TableCell>
                       <TableCell>{quest.discovery ? renderObjectChip(quest.discovery, navigate) : null}</TableCell>
                     </TableRow>
                   </TableBody>
@@ -252,9 +261,14 @@ export default function QuestDetail({ data }: { data?: Quest }) {
                   <TableHead>
                     <TableRow>
                       <TableCell>필요 스킬</TableCell>
-                      {(quest.required_items != null && quest.required_items.length != 0) ? <TableCell>필요 아이템</TableCell>: null}
-                      {quest.preceding_discovery_quest ? <TableCell>선행 발견 퀘스트</TableCell>: null}
-                      {quest.previous_continuous_quest? <TableCell>이전 연속 퀘스트</TableCell>: null}
+                      {(quest.required_items != null && quest.required_items.length != 0) ? <TableCell>필요 아이템</TableCell> : null}
+                      {quest.preceding_discovery_quest ? <TableCell>선행 발견 퀘스트</TableCell> : null}
+                      {quest.additional_skills && <TableCell>추가 스킬</TableCell>}
+                      {quest.association_skills && <TableCell>조합 스킬</TableCell>}
+                      {quest.nationality && <TableCell>국적</TableCell>}
+                      {quest.occupation && <TableCell>직업</TableCell>}
+                      {quest.port_permission && <TableCell>항구 허가</TableCell>}
+                      {quest.reputation && <TableCell>평판</TableCell>}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -262,31 +276,18 @@ export default function QuestDetail({ data }: { data?: Quest }) {
                       <TableCell>{renderObjectsToChips(quest.skills, navigate)}</TableCell>
                       {(quest.required_items != null && quest.required_items.length != 0) ? <TableCell>{renderItemsWithAmount(quest.required_items, navigate)}</TableCell> : null}
                       {quest.preceding_discovery_quest ? <TableCell>{renderPrecedingDiscoveryQuest(quest.preceding_discovery_quest, navigate)}</TableCell> : null}
-                      {quest.previous_continuous_quest ? <TableCell>{renderObjectChip(quest.previous_continuous_quest, navigate)}</TableCell>: null}
+                      {quest.previous_continuous_quest ? <TableCell>이전 연속 퀘스트</TableCell> : null}
+                      {quest.additional_skills && <TableCell>{quest.additional_skills}</TableCell>}
+                      {quest.association_skills && <TableCell>{quest.association_skills}</TableCell>}
+                      {quest.nationality && <TableCell>{quest.nationality}</TableCell>}
+                      {quest.occupation && <TableCell>{quest.occupation}</TableCell>}
+                      {quest.port_permission && <TableCell>{quest.port_permission}</TableCell>}
+                      {quest.reputation && <TableCell>{quest.reputation}</TableCell>}
                     </TableRow>
                   </TableBody>
                 </Table>
               </TableContainer>
             </Box>
-            <DetailItem
-              label="목적지 좌표"
-              value={quest.destination_coordinates}
-            />
-            <DetailItem
-              label="이전 연속 퀘스트"
-              value={
-                quest.previous_continuous_quest
-                  ? renderObjectChip(quest.previous_continuous_quest, navigate)
-                  : null
-              }
-            />
-            <DetailItem label="에피소드" value={quest.episode} />
-            <DetailItem label="추가 스킬" value={quest.additional_skills} />
-            <DetailItem label="조합 스킬" value={quest.association_skills} />
-            <DetailItem label="국적" value={quest.nationality} />
-            <DetailItem label="직업" value={quest.occupation} />
-            <DetailItem label="항구 허가" value={quest.port_permission} />
-            <DetailItem label="평판" value={quest.reputation} />
             <Box sx={{ gridColumn: "1 / -1" }}>
               <Typography variant="h6" gutterBottom>
                 보상 정보
@@ -295,24 +296,24 @@ export default function QuestDetail({ data }: { data?: Quest }) {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>소피아 랭크</TableCell>
-                      <TableCell>소피아 포인트</TableCell>
-                      <TableCell>보상 (돈)</TableCell>
-                      <TableCell>선금</TableCell>
-                      <TableCell>보고 경험치</TableCell>
-                      <TableCell>보고 평판</TableCell>
-                      <TableCell>보상 (아이템)</TableCell>
+                      {quest.sophia_rank ? <TableCell>소피아 랭크</TableCell> : null}
+                      {quest.sophia_points ? <TableCell>소피아 포인트</TableCell> : null}
+                      {quest.reward_money ? <TableCell>보상 (돈)</TableCell> : null}
+                      {quest.advance_payment ? <TableCell>선금</TableCell> : null}
+                      {quest.report_experience ? <TableCell>보고 경험치</TableCell> : null}
+                      {quest.report_reputation ? <TableCell>보고 평판</TableCell> : null}
+                      {quest.reward_items != null && quest.reward_items.length > 0 ? <TableCell>보상 (아이템)</TableCell> : null}
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     <TableRow>
-                      <TableCell>{quest.sophia_rank}</TableCell>
-                      <TableCell>{quest.sophia_points}</TableCell>
-                      <TableCell>{quest.reward_money}</TableCell>
-                      <TableCell>{quest.advance_payment}</TableCell>
-                      <TableCell>{quest.report_experience}</TableCell>
-                      <TableCell>{quest.report_reputation}</TableCell>
-                      <TableCell>{renderItemsWithAmount(quest.reward_items, navigate)}</TableCell>
+                      {quest.sophia_rank ? <TableCell>{quest.sophia_rank}</TableCell> : null}
+                      {quest.sophia_points ? <TableCell>{quest.sophia_points}</TableCell> : null}
+                      {quest.reward_money ? <TableCell>{quest.reward_money}</TableCell> : null}
+                      {quest.advance_payment ? <TableCell>{quest.advance_payment}</TableCell> : null}
+                      {quest.report_experience ? <TableCell>{quest.report_experience}</TableCell> : null}
+                      {quest.report_reputation ? <TableCell>{quest.report_reputation}</TableCell> : null}
+                      {quest.reward_items != null && quest.reward_items.length > 0 ? <TableCell>{renderItemsWithAmount(quest.reward_items, navigate)}</TableCell> : null}
                     </TableRow>
                   </TableBody>
                 </Table>
