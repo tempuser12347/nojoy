@@ -92,11 +92,11 @@ export default function DungeonDetail({ data }: { data?: Dungeon }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {requirements.map((req, index) => (
-              <TableRow key={index}>
-                <TableCell>{req.type}</TableCell>
-                <TableCell>
-                  {req.type === "선행 발견/퀘스트" && (
+            {requirements.map((req, index) => {
+              if (req.type == '선행 발견/퀘스트' || req.type == '장비품') {
+                return <TableRow key={index}>
+                  <TableCell>{req.type}</TableCell>
+                  <TableCell>
                     <Box>
                       {req.content.map((item: any, itemIndex: number) => (
                         <Typography key={itemIndex} variant="body2">
@@ -104,10 +104,24 @@ export default function DungeonDetail({ data }: { data?: Dungeon }) {
                         </Typography>
                       ))}
                     </Box>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+                  </TableCell>
+                </TableRow>
+              }
+              else if (req.type == '기타') {
+                return <TableRow key={index}>
+                  <TableCell>{req.type}</TableCell>
+                  <TableCell>{req.content}</TableCell>
+                </TableRow>
+              }
+              else {
+                return <TableRow key={index}>
+                  <TableCell>{req.type}</TableCell>
+                  <TableCell>
+                    {JSON.stringify(req.content)}
+                  </TableCell>
+                </TableRow>
+              }
+            })}
           </TableBody>
         </Table>
       </TableContainer>
@@ -156,8 +170,8 @@ export default function DungeonDetail({ data }: { data?: Dungeon }) {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell sx={{minWidth: '10rem'}}>구분</TableCell>
-              <TableCell sx={{minWidth: '5rem'}}>종류</TableCell>
+              <TableCell sx={{ minWidth: '10rem' }}>구분</TableCell>
+              <TableCell sx={{ minWidth: '5rem' }}>종류</TableCell>
               <TableCell>아이템</TableCell>
             </TableRow>
           </TableHead>
@@ -196,40 +210,40 @@ export default function DungeonDetail({ data }: { data?: Dungeon }) {
             <DetailItem label="설명" value={dungeon.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid size={{xs: 12, sm: 6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="분류" value={dungeon.category} />
             </Grid>
-            <Grid size={{xs: 12, sm: 6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="층수" value={dungeon.floors} />
             </Grid>
-            <Grid size={{xs: 12, sm: 6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="랭크" value={dungeon.dungeon_rank} />
             </Grid>
-            <Grid size={{xs: 12, sm: 6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="유적 탐험도" value={dungeon.dungeon_exploration} />
             </Grid>
-            <Grid size={{xs: 12, sm: 6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="승선권" value={dungeon.boarding_pass} />
             </Grid>
-            <Grid size={{xs: 12, sm: 6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 label="입구"
                 value={dungeon.entrance ? renderObjectChip(dungeon.entrance, navigate) : null}
               />
             </Grid>
-            <Grid size={{xs: 12}}>
+            <Grid size={{ xs: 12 }}>
               <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                 요구 사항
               </Typography>
               {dungeon.requirements && renderRequirements(dungeon.requirements)}
             </Grid>
-            <Grid size={{xs: 12}}>
+            <Grid size={{ xs: 12 }}>
               <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                 발견물
               </Typography>
               {dungeon.discoveries && renderDiscoveries(dungeon.discoveries)}
             </Grid>
-            <Grid size={{xs: 12}}>
+            <Grid size={{ xs: 12 }}>
               <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                 획득 아이템
               </Typography>
