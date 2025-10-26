@@ -179,7 +179,7 @@ detail_data_fetch_function_dict = {
     "tarotcard": read_tarotcard_core,
     "transmutation": read_transmutation_core,
     "itemeffect": read_itemeffect_core,
-    "equippedEffect": read_equippedeffect_core,
+    "equippedeffect": read_equippedeffect_core,
     "protection": read_protection_core,
 }
 
