@@ -79,11 +79,11 @@ export default function FurnitureDetail({ data }: { data?: Furniture }) {
             <DetailItem label="설명" value={furniture.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs: 12, sm: 6}}>
               <DetailItem label="카테고리" value={furniture.category} />
             </Grid>
             {furniture.installation_effect && (
-              <Grid item xs={12} sm={6}>
+              <Grid size={{xs: 12, sm: 6}}>
                 <DetailItem
                   label="설치 효과"
                   value={`${

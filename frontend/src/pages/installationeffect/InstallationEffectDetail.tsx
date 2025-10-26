@@ -74,7 +74,7 @@ export default function InstallationEffectDetail({ data }: { data?: Installation
             <DetailItem label="설명" value={installationEffect.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid size={{xs: 12}}>
               <DetailItem label="범위" value={installationEffect.scope} />
             </Grid>
           </Grid>

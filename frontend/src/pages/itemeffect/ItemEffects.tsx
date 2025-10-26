@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
-import { renderObjectsToChips } from "../../common/render";
 
 const ItemEffects: React.FC = () => {
   const navigate = useNavigate();

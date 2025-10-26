@@ -130,7 +130,7 @@ export default function OrnamentDetail({ data }: { data?: Ornament }) {
               </Grid>
             )}
             {ornament.installation_effect && ornament.installation_effect.length > 0 && (
-              <Grid item xs={12} lg={12}>
+              <Grid size={{xs:12}}>
                 <Typography variant="h6" gutterBottom>
                   설치 효과
                 </Typography>
