@@ -58,6 +58,7 @@ import TarotCardDetail from "../tarotcard/TarotCardDetail";
 import TransmutationDetail from "../transmutation/TransmutationDetail";
 import ItemEffectDetail from "../itemeffect/ItemEffectDetail";
 import EquippedEffectDetail from "../equippedeffect/EquippedEffectDetail";
+import ProtectionDetail from "../protection/ProtectionDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -115,6 +116,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   transmutation: TransmutationDetail,
   itemeffect: ItemEffectDetail,
   equippedeffect: EquippedEffectDetail,
+  protection: ProtectionDetail,
 };
 
 export default function ObjectDetail() {

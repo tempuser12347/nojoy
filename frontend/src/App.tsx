@@ -61,6 +61,7 @@ import TarotCards from "./pages/tarotcard/TarotCards";
 import Transmutations from "./pages/transmutation/Transmutations";
 import ItemEffects from "./pages/itemeffect/ItemEffects";
 import EquippedEffects from "./pages/equippedeffect/EquippedEffects";
+import Protections from "./pages/protection/Protections";
 
 const queryClient = new QueryClient();
 
@@ -131,6 +132,7 @@ function App() {
               <Route path="/transmutations" element={<Transmutations />} />
               <Route path="/itemeffects" element={<ItemEffects />} />
               <Route path="/equippedeffects" element={<EquippedEffects />} />
+              <Route path="/protections" element={<Protections />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

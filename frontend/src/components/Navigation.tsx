@@ -117,6 +117,7 @@ const availableSections = [
   "변성 연금",
   "아이템 효과",
   "장비효과",
+  "가호",
   "스킬",
   "스킬 연성 효과",
   "연구",
@@ -307,6 +308,9 @@ const availableSections = [
               break;
             case "장비효과":
               subsection = "equippedeffects";
+              break;
+            case "가호":
+              subsection = "protections";
               break;
             default:
               break;

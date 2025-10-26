@@ -58,7 +58,8 @@ from app.routers import (
     tarotcard,
     transmutation,
     itemeffect,
-    equippedeffect
+    equippedeffect,
+    protection
 )
 import os
 
@@ -131,6 +132,7 @@ app.include_router(tarotcard.router)
 app.include_router(transmutation.router)
 app.include_router(itemeffect.router)
 app.include_router(equippedeffect.router)
+app.include_router(protection.router)
 
 
 dist_dir = "dist"
