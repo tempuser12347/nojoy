@@ -64,8 +64,14 @@ def read_dungeons(
                 row["acquisition_items_objects"] = {}
 
     if sort_by:
+        if sort_by in ['floors', 'dungeon_rank', 'dungeon_exploration', 'boarding_pass']:
+            sort_f = lambda x: x.get(sort_by) or -1
+        elif sort_by in ['discoveries_objects']:
+            sort_f = lambda x: len(x.get(sort_by)) if x.get(sort_by, None) is not None else -1
+        else:
+            sort_f = lambda x: x.get(sort_by) or ''
         results.sort(
-            key=lambda x: x.get(sort_by) or "",
+            key=sort_f,
             reverse=(sort_order.lower() == "desc"),
         )
 
