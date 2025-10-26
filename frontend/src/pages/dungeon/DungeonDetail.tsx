@@ -138,32 +138,51 @@ export default function DungeonDetail({ data }: { data?: Dungeon }) {
   };
 
   const renderAcquisitionItems = (acquisitionItems: any) => {
-    return Object.keys(acquisitionItems).map((key) => (
-      <Box key={key} sx={{ mb: 2 }}>
-        <Typography variant="subtitle1">{key}</Typography>
-        {acquisitionItems[key].map((category: any, categoryIndex: number) => (
-          <Box key={categoryIndex} sx={{ ml: 2 }}>
-            <Typography variant="body2">{category.type}</Typography>
-            <TableContainer component={Paper} sx={{ mt: 1 }}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>아이템</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {category.items.map((item: any, itemIndex: number) => (
-                    <TableRow key={itemIndex}>
-                      <TableCell>{renderObjectChip(item, navigate)}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
-        ))}
-      </Box>
-    ));
+    const rows: any[] = [];
+    Object.keys(acquisitionItems).forEach((key) => {
+      const categories = acquisitionItems[key];
+      categories.forEach((category: any, categoryIndex: number) => {
+        rows.push({
+          key: key,
+          type: category.type,
+          items: category.items,
+          rowSpan: categoryIndex === 0 ? categories.length : 0,
+        });
+      });
+    });
+
+    return (
+      <TableContainer component={Paper} sx={{ mt: 1 }}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{minWidth: '10rem'}}>구분</TableCell>
+              <TableCell sx={{minWidth: '5rem'}}>종류</TableCell>
+              <TableCell>아이템</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, index) => (
+              <TableRow key={index}>
+                {row.rowSpan > 0 && (
+                  <TableCell rowSpan={row.rowSpan} sx={{ verticalAlign: "top" }}>
+                    {row.key}
+                  </TableCell>
+                )}
+                <TableCell>{row.type}</TableCell>
+                <TableCell>
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {row.items.map((item: any, itemIndex: number) => (
+                      <Box key={itemIndex}>{renderObjectChip(item, navigate)}</Box>
+                    ))}
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
   };
 
   return (
@@ -187,7 +206,7 @@ export default function DungeonDetail({ data }: { data?: Dungeon }) {
               <DetailItem label="랭크" value={dungeon.dungeon_rank} />
             </Grid>
             <Grid size={{xs: 12, sm: 6}}>
-              <DetailItem label="탐험" value={dungeon.dungeon_exploration} />
+              <DetailItem label="유적 탐험도" value={dungeon.dungeon_exploration} />
             </Grid>
             <Grid size={{xs: 12, sm: 6}}>
               <DetailItem label="승선권" value={dungeon.boarding_pass} />
