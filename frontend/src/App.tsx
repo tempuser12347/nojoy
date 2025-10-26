@@ -63,6 +63,7 @@ import ItemEffects from "./pages/itemeffect/ItemEffects";
 import EquippedEffects from "./pages/equippedeffect/EquippedEffects";
 import Protections from "./pages/protection/Protections";
 import InstallationEffects from "./pages/installationeffect/InstallationEffects";
+import Dungeons from "./pages/dungeon/Dungeons";
 
 const queryClient = new QueryClient();
 
@@ -135,6 +136,7 @@ function App() {
               <Route path="/equippedeffects" element={<EquippedEffects />} />
               <Route path="/protections" element={<Protections />} />
               <Route path="/installationeffects" element={<InstallationEffects />} />
+              <Route path="/dungeons" element={<Dungeons />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

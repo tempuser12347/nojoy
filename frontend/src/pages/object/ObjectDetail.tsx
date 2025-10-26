@@ -60,6 +60,7 @@ import ItemEffectDetail from "../itemeffect/ItemEffectDetail";
 import EquippedEffectDetail from "../equippedeffect/EquippedEffectDetail";
 import ProtectionDetail from "../protection/ProtectionDetail";
 import InstallationEffectDetail from "../installationeffect/InstallationEffectDetail";
+import DungeonDetail from "../dungeon/DungeonDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -119,6 +120,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   equippedeffect: EquippedEffectDetail,
   protection: ProtectionDetail,
   installationeffect: InstallationEffectDetail,
+  dungeon: DungeonDetail,
 };
 
 export default function ObjectDetail() {

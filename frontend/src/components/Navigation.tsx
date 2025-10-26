@@ -90,6 +90,7 @@ const availableSections = [
   "퀘스트",
   "보물지도",
   "침몰선",
+  "유적던전",
   "장비품",
   "선박",
   "선박 재료",
@@ -313,8 +314,11 @@ const availableSections = [
             case "장식품 설치 효과":
               subsection = "installationeffects";
               break;
-            case "가호":
-              subsection = "protections";
+            case "침몰선":
+              subsection = "shipwrecks";
+              break;
+            case "유적던전":
+              subsection = "dungeons";
               break;
             default:
               break;
