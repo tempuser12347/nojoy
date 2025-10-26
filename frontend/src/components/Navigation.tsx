@@ -91,6 +91,7 @@ const availableSections = [
   "보물지도",
   "침몰선",
   "유적던전",
+  "레거시 테마",
   "장비품",
   "선박",
   "선박 재료",
@@ -319,6 +320,9 @@ const availableSections = [
               break;
             case "유적던전":
               subsection = "dungeons";
+              break;
+            case '레거시 테마':
+              subsection = 'legacythemes';
               break;
             default:
               break;

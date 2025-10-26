@@ -60,6 +60,7 @@ from .equippedeffect import read_equippedeffect_core
 from .protection import read_protection_core
 from .installationeffect import read_installationeffect_core
 from .dungeon import read_dungeon_core
+from .legacytheme import read_legacytheme_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -185,6 +186,7 @@ detail_data_fetch_function_dict = {
     "protection": read_protection_core,
     "installationeffect": read_installationeffect_core,
     "dungeon": read_dungeon_core,
+    "legacytheme": read_legacytheme_core,
 }
 
 

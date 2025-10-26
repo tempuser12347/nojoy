@@ -61,7 +61,8 @@ from app.routers import (
     equippedeffect,
     protection,
     installationeffect,
-    dungeon
+    dungeon,
+    legacytheme
 )
 import os
 
@@ -137,6 +138,7 @@ app.include_router(equippedeffect.router)
 app.include_router(protection.router)
 app.include_router(installationeffect.router)
 app.include_router(dungeon.router)
+app.include_router(legacytheme.router)
 
 
 dist_dir = "dist"

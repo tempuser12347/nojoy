@@ -64,6 +64,7 @@ import EquippedEffects from "./pages/equippedeffect/EquippedEffects";
 import Protections from "./pages/protection/Protections";
 import InstallationEffects from "./pages/installationeffect/InstallationEffects";
 import Dungeons from "./pages/dungeon/Dungeons";
+import LegacyThemes from "./pages/legacytheme/LegacyThemes";
 
 const queryClient = new QueryClient();
 
@@ -137,6 +138,7 @@ function App() {
               <Route path="/protections" element={<Protections />} />
               <Route path="/installationeffects" element={<InstallationEffects />} />
               <Route path="/dungeons" element={<Dungeons />} />
+              <Route path="/legacythemes" element={<LegacyThemes />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

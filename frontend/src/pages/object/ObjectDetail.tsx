@@ -61,6 +61,7 @@ import EquippedEffectDetail from "../equippedeffect/EquippedEffectDetail";
 import ProtectionDetail from "../protection/ProtectionDetail";
 import InstallationEffectDetail from "../installationeffect/InstallationEffectDetail";
 import DungeonDetail from "../dungeon/DungeonDetail";
+import LegacyThemeDetail from "../legacytheme/LegacyThemeDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -121,6 +122,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   protection: ProtectionDetail,
   installationeffect: InstallationEffectDetail,
   dungeon: DungeonDetail,
+  legacytheme: LegacyThemeDetail,
 };
 
 export default function ObjectDetail() {
