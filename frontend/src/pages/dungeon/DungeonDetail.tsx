@@ -177,40 +177,40 @@ export default function DungeonDetail({ data }: { data?: Dungeon }) {
             <DetailItem label="설명" value={dungeon.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs: 12, sm: 6}}>
               <DetailItem label="분류" value={dungeon.category} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs: 12, sm: 6}}>
               <DetailItem label="층수" value={dungeon.floors} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs: 12, sm: 6}}>
               <DetailItem label="랭크" value={dungeon.dungeon_rank} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs: 12, sm: 6}}>
               <DetailItem label="탐험" value={dungeon.dungeon_exploration} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs: 12, sm: 6}}>
               <DetailItem label="승선권" value={dungeon.boarding_pass} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs: 12, sm: 6}}>
               <DetailItem
                 label="입구"
                 value={dungeon.entrance ? renderObjectChip(dungeon.entrance, navigate) : null}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{xs: 12}}>
               <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                 요구 사항
               </Typography>
               {dungeon.requirements && renderRequirements(dungeon.requirements)}
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{xs: 12}}>
               <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                 발견물
               </Typography>
               {dungeon.discoveries && renderDiscoveries(dungeon.discoveries)}
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{xs: 12}}>
               <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                 획득 아이템
               </Typography>
