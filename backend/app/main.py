@@ -59,7 +59,8 @@ from app.routers import (
     transmutation,
     itemeffect,
     equippedeffect,
-    protection
+    protection,
+    installationeffect
 )
 import os
 
@@ -133,6 +134,7 @@ app.include_router(transmutation.router)
 app.include_router(itemeffect.router)
 app.include_router(equippedeffect.router)
 app.include_router(protection.router)
+app.include_router(installationeffect.router)
 
 
 dist_dir = "dist"

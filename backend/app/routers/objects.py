@@ -58,6 +58,7 @@ from .transmutation import read_transmutation_core
 from .itemeffect import read_itemeffect_core
 from .equippedeffect import read_equippedeffect_core
 from .protection import read_protection_core
+from .installationeffect import read_installationeffect_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -181,6 +182,7 @@ detail_data_fetch_function_dict = {
     "itemeffect": read_itemeffect_core,
     "equippedeffect": read_equippedeffect_core,
     "protection": read_protection_core,
+    "installationeffect": read_installationeffect_core,
 }
 
 

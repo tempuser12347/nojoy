@@ -59,6 +59,7 @@ import TransmutationDetail from "../transmutation/TransmutationDetail";
 import ItemEffectDetail from "../itemeffect/ItemEffectDetail";
 import EquippedEffectDetail from "../equippedeffect/EquippedEffectDetail";
 import ProtectionDetail from "../protection/ProtectionDetail";
+import InstallationEffectDetail from "../installationeffect/InstallationEffectDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -117,6 +118,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   itemeffect: ItemEffectDetail,
   equippedeffect: EquippedEffectDetail,
   protection: ProtectionDetail,
+  installationeffect: InstallationEffectDetail,
 };
 
 export default function ObjectDetail() {
