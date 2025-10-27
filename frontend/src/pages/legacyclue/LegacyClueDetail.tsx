@@ -78,16 +78,16 @@ export default function LegacyClueDetail({ data }: { data?: LegacyClue }) {
             <DetailItem label="설명" value={legacyClue.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12, sm:6}}>
               <DetailItem
                 label="테마"
                 value={legacyClue.theme ? renderObjectChip(legacyClue.theme, navigate) : null}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{xs:12, sm:6}}>
               <DetailItem label="획득 방법" value={legacyClue.acquisition_method} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{xs:12}}>
               <DetailItem
                 label="획득 방법 상세"
                 value={
