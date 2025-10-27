@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
+import { renderObjectChip } from "../../common/render";
 
 const TreasureHuntThemes: React.FC = () => {
   const navigate = useNavigate();
@@ -57,13 +58,13 @@ const TreasureHuntThemes: React.FC = () => {
       const processedItems = response.data.items.map((item: any) => {
         const requirements = item.requirements && item.requirements.length > 0 ? item.requirements[0] : {};
         const eraContent = requirements.type === "시대" ? requirements.content : "";
-        const historicalEventContent = requirements.type === "역사적사건" ? requirements.content : "";
+        // const historicalEventContent = requirements.type === "역사적 사건" ? requirements.content : "";
         return {
           ...item,
           era: eraContent,
-          historical_event: historicalEventContent,
         };
       });
+      console.log(processedItems)
       return { ...response.data, items: processedItems };
     },
   });
@@ -72,7 +73,10 @@ const TreasureHuntThemes: React.FC = () => {
     { id: "name", label: "이름", minWidth: 170 },
     { id: "theme_rank", label: "테마 랭크", minWidth: 100 },
     { id: "era", label: "시대", minWidth: 200 },
-    { id: "historical_event", label: "역사적 사건", minWidth: 200 },
+    {
+      id: "historical_event", label: "역사적 사건", minWidth: 200, format: (value: any) => {
+      return value ? renderObjectChip(value, navigate): null}
+    },
   ];
 
   const handleSearchInputChange = (

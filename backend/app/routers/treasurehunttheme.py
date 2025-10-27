@@ -31,6 +31,22 @@ def read_treasurehuntthemes(
 
     results = [dict(row._mapping) for row in results]
 
+    for row in results:
+        print(row.get('requirements'))
+        req_list = json.loads(row.get('requirements')) if row.get('requirements') is not None else None
+        if not req_list:
+            row['historical_event'] = None
+            continue
+        processed = False
+        for req in req_list:
+            if req['type'] == '역사적 사건':
+                processed = True
+                row['historical_event'] = req['content']
+                break
+        if not processed:
+            row['historical_event'] = None
+        
+
     if name_search:
         results = [
             row
@@ -39,8 +55,12 @@ def read_treasurehuntthemes(
         ]
 
     if sort_by:
+        if sort_by == 'historical_event':
+            sort_f = lambda x: x[sort_by].get('name', '') if x[sort_by] is not None else ''
+        else:
+            sort_f = lambda x: x.get(sort_by) or ''
         results.sort(
-            key=lambda x: x.get(sort_by) or "",
+            key=sort_f,
             reverse=(sort_order.lower() == "desc"),
         )
 
