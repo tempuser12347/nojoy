@@ -48,8 +48,12 @@ def read_legacyclues(
                 row["theme"] = None
 
     if sort_by:
+        if sort_by == 'theme':
+            sort_f = lambda x: x.get(sort_by)['name'] if x.get(sort_by) is not None else ''
+        else:
+            sort_f = lambda x: x.get(sort_by) or ''
         results.sort(
-            key=lambda x: x.get(sort_by) or "",
+            key=sort_f,
             reverse=(sort_order.lower() == "desc"),
         )
 
