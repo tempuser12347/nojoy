@@ -67,6 +67,7 @@ import Dungeons from "./pages/dungeon/Dungeons";
 import LegacyThemes from "./pages/legacytheme/LegacyThemes";
 import Legacies from "./pages/legacy/Legacies";
 import LegacyClues from "./pages/legacyclue/LegacyClues";
+import TreasureHuntThemes from "./pages/treasurehunttheme/TreasureHuntThemes";
 
 const queryClient = new QueryClient();
 
@@ -143,6 +144,7 @@ function App() {
               <Route path="/legacythemes" element={<LegacyThemes />} />
               <Route path="/legacies" element={<Legacies />} />
               <Route path="/legacyclues" element={<LegacyClues />} />
+              <Route path="/treasurehuntthemes" element={<TreasureHuntThemes />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

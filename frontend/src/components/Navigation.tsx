@@ -13,7 +13,7 @@ const sections = {
     "레거시 테마",
     "레거시",
     "레거시 피스",
-    "트레저 헌트 테마",
+    "트레져 헌트 테마",
     "렐릭",
     "렐릭 피스",
     "논전 콤보",
@@ -94,6 +94,7 @@ const availableSections = [
   "레거시 테마",
   "레거시",
   "레거시 피스",
+  "트레져 헌트 테마",
   "장비품",
   "선박",
   "선박 재료",
@@ -331,6 +332,9 @@ const availableSections = [
               break;
             case "레거시 피스":
               subsection = "legacyclues";
+              break;
+            case "트레져 헌트 테마":
+              subsection = "treasurehuntthemes";
               break;
             default:
               break;

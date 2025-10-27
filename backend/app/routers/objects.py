@@ -63,6 +63,7 @@ from .dungeon import read_dungeon_core
 from .legacytheme import read_legacytheme_core
 from .legacy import read_legacy_core
 from .legacyclue import read_legacyclue_core
+from .treasurehunttheme import read_treasurehunttheme_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -191,6 +192,7 @@ detail_data_fetch_function_dict = {
     "legacytheme": read_legacytheme_core,
     "legacy": read_legacy_core,
     "legacyclue": read_legacyclue_core,
+    "treasurehunttheme": read_treasurehunttheme_core,
 }
 
 
