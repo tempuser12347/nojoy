@@ -155,22 +155,25 @@ export default function LegacyDetail({ data }: { data?: Legacy }) {
             <DetailItem label="설명" value={legacy.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 label="테마"
                 value={legacy.theme ? renderObjectChip(legacy.theme, navigate) : null}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }} >
               <DetailItem label="위치" value={legacy.destination ? renderObjectChip(legacy.destination, navigate) : null} />
             </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                요구 사항
-              </Typography>
-              {legacy.requirements && renderRequirements(legacy.requirements)}
-            </Grid>
-            <Grid item xs={12}>
+            {legacy.requirements ?
+
+              <Grid size={{ xs: 12 }}>
+                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+                  요구 사항
+                </Typography>
+                {renderRequirements(legacy.requirements)}
+              </Grid>
+              : null}
+            <Grid size={{ xs: 12 }}>
               <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                 보상
               </Typography>
