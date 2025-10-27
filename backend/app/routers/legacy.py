@@ -67,8 +67,14 @@ def read_legacies(
                 row["requirements_display"] = ""
 
     if sort_by:
+        if sort_by in ['theme', 'destination']:
+            sort_f = lambda x: x.get(sort_by)['name'] if x.get(sort_by, None) is not None else ''
+        elif sort_by in ['rewards_items']:
+            sort_f = lambda x: len(x.get(sort_by)) if x.get(sort_by) is not None else -1
+        else:
+            sort_f = lambda x: x.get(sort_by) or ''
         results.sort(
-            key=lambda x: x.get(sort_by) or "",
+            key=sort_f,
             reverse=(sort_order.lower() == "desc"),
         )
 
