@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
+  Paper,
   Typography,
   Card,
   CardContent,
   CircularProgress,
   Grid,
+  TableContainer, Table, TableHead, TableBody, TableCell, TableRow
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
+import { renderObjectChip, renderObjectsToChips } from "../../common/render";
 
 interface TreasureHuntTheme {
   id: number;
@@ -29,6 +32,61 @@ export default function TreasureHuntThemeDetail({
   const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+
+  const renderRequirements = (requirements: any[]) => {
+    return (
+      <TableContainer component={Paper} sx={{ mt: 1 }}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>구분</TableCell>
+              <TableCell>내용</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {requirements.map((req, index) => {
+              if (req.type == '선행 발견/퀘스트' || req.type == '장비품') {
+                return <TableRow key={index}>
+                  <TableCell>{req.type}</TableCell>
+                  <TableCell>
+                    <Box>
+                      {req.content.map((item: any, itemIndex: number) => (
+                        <Typography key={itemIndex} variant="body2">
+                          {renderObjectChip(item, navigate)}
+                        </Typography>
+                      ))}
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              }
+              else if (req.type == '기타' || req.type == '시대') {
+                return <TableRow key={index}>
+                  <TableCell>{req.type}</TableCell>
+                  <TableCell>{req.content}</TableCell>
+                </TableRow>
+              }
+              else if (req.type == '아이템') {
+
+                return <TableRow key={index}>
+                  <TableCell>{req.type}</TableCell>
+                  <TableCell>{renderObjectsToChips(req.content, navigate)}</TableCell>
+                </TableRow>
+              }
+              else {
+                return <TableRow key={index}>
+                  <TableCell>{req.type}</TableCell>
+                  <TableCell>
+                    {JSON.stringify(req.content)}
+                  </TableCell>
+                </TableRow>
+              }
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  };
 
   useEffect(() => {
     const fetchTreasureHuntTheme = async () => {
@@ -80,15 +138,12 @@ export default function TreasureHuntThemeDetail({
             <DetailItem label="설명" value={treasureHuntTheme.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem label="테마 랭크" value={treasureHuntTheme.theme_rank} />
             </Grid>
-            {treasureHuntTheme.requirements &&
-              treasureHuntTheme.requirements.map((req, index) => (
-                <Grid item xs={12} key={index}>
-                  <DetailItem label={req.type} value={req.content} />
-                </Grid>
-              ))}
+            {treasureHuntTheme.requirements ? <Grid size={{ xs: 12 }}>
+              <DetailItem label='요구사항' value={renderRequirements(treasureHuntTheme.requirements)} />
+            </Grid> : null}
           </Grid>
         </CardContent>
       </Card>
