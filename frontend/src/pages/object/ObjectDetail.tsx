@@ -63,6 +63,7 @@ import InstallationEffectDetail from "../installationeffect/InstallationEffectDe
 import DungeonDetail from "../dungeon/DungeonDetail";
 import LegacyThemeDetail from "../legacytheme/LegacyThemeDetail";
 import LegacyDetail from "../legacy/LegacyDetail";
+import LegacyClueDetail from "../legacyclue/LegacyClueDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -125,6 +126,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   dungeon: DungeonDetail,
   legacytheme: LegacyThemeDetail,
   legacy: LegacyDetail,
+  legacyclue: LegacyClueDetail,
 };
 
 export default function ObjectDetail() {

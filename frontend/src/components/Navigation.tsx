@@ -93,6 +93,7 @@ const availableSections = [
   "유적던전",
   "레거시 테마",
   "레거시",
+  "레거시 피스",
   "장비품",
   "선박",
   "선박 재료",
@@ -327,6 +328,9 @@ const availableSections = [
               break;
             case "레거시":
               subsection = "legacies";
+              break;
+            case "레거시 피스":
+              subsection = "legacyclues";
               break;
             default:
               break;

@@ -63,8 +63,8 @@ from app.routers import (
     installationeffect,
     dungeon,
     legacytheme,
-    legacy
-)
+    legacy,
+    legacyclue)
 import os
 
 app = FastAPI(title="DHO Database API")
@@ -141,6 +141,7 @@ app.include_router(installationeffect.router)
 app.include_router(dungeon.router)
 app.include_router(legacytheme.router)
 app.include_router(legacy.router)
+app.include_router(legacyclue.router)
 
 
 dist_dir = "dist"
