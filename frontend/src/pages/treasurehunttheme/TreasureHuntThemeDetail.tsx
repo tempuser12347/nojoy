@@ -73,6 +73,13 @@ export default function TreasureHuntThemeDetail({
                   <TableCell>{renderObjectsToChips(req.content, navigate)}</TableCell>
                 </TableRow>
               }
+              else if(req.type == '역사적 사건'){
+
+                return <TableRow key={index}>
+                  <TableCell>{req.type}</TableCell>
+                  <TableCell>{renderObjectChip(req.content, navigate)}</TableCell>
+                </TableRow>
+              }
               else {
                 return <TableRow key={index}>
                   <TableCell>{req.type}</TableCell>
