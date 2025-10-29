@@ -81,27 +81,32 @@ export default function RelicPieceDetail({
             <DetailItem label="설명" value={relicPiece.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4}>
-              <DetailItem label="피스 랭크" value={relicPiece.piece_rank} />
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <DetailItem label="랭크" value={relicPiece.piece_rank} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <DetailItem
                 label="테마"
                 value={relicPiece.theme ? renderObjectChip(relicPiece.theme, navigate) : null}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <DetailItem
-                label="퀘스트"
-                value={relicPiece.quest ? renderObjectChip(relicPiece.quest, navigate) : null}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <DetailItem
-                label="관련 렐릭"
-                value={relicPiece.associated_relic ? renderObjectChip(relicPiece.associated_relic, navigate) : null}
-              />
-            </Grid>
+            {relicPiece.quest ?
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <DetailItem
+                  label="퀘스트"
+                  value={relicPiece.quest ? renderObjectChip(relicPiece.quest, navigate) : null}
+                />
+              </Grid> : null
+            }
+            {relicPiece.associated_relic ?
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <DetailItem
+                  label="관련 렐릭"
+                  value={relicPiece.associated_relic ? renderObjectChip(relicPiece.associated_relic, navigate) : null}
+                />
+              </Grid> : null
+            }
           </Grid>
         </CardContent>
       </Card>

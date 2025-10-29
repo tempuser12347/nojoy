@@ -90,15 +90,27 @@ def read_relicpiece_core(relicpiece_id: int, db: Session):
         except json.JSONDecodeError:
             ret["quest"] = None
 
+    print(f'relic piece id: {relicpiece_id}')
     # Find associated relic
-    relic_query = text("SELECT id, name, extraname FROM relic WHERE JSON_EXTRACT(relic_pieces, '$.relic_piece.id') = :relicpiece_id")
+    relic_query = text(''' 
+SELECT
+    r.id,
+    r.name,
+    r.extraname
+FROM relic AS r
+JOIN json_each(r.relic_pieces) AS p
+  ON json_extract(p.value, '$.relic_piece.id') = :relicpiece_id
+
+''')
     relic_result = db.execute(relic_query, {"relicpiece_id": relicpiece_id}).fetchone()
     if relic_result:
+        print('Associated relic found')
         relic_dict = dict(relic_result._mapping)
         if relic_dict.get("extraname"):
             relic_dict["name"] = f'{relic_dict["name"]} {relic_dict["extraname"]}'
         ret["associated_relic"] = relic_dict
     else:
+        print('No associated relic found')
         ret["associated_relic"] = None
 
     return ret
