@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
+import { renderObjectChip } from "../../common/render";
 
 const Relics: React.FC = () => {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ const Relics: React.FC = () => {
 
   const columns = [
     { id: "name", label: "이름", minWidth: 170 },
-    { id: "theme", label: "테마", minWidth: 100 },
+    { id: "theme", label: "테마", minWidth: 100, format: value => value ? renderObjectChip(value, navigate): null },
   ];
 
   const handleSearchInputChange = (

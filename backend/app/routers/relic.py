@@ -57,7 +57,9 @@ def read_relics(
             try:
                 item_dict["relic_pieces"] = json.loads(item_dict["relic_pieces"])
             except json.JSONDecodeError:
-                item_dict["relic_pieces"] = None
+                raise Exception()
+        if item_dict.get('theme'):
+            item_dict['theme'] = json.loads(item_dict.get('theme'))
         items.append(item_dict)
 
     return {"items": items, "total": total}
@@ -84,6 +86,8 @@ def read_relic_core(relic_id: int, db: Session):
         try:
             ret["relic_pieces"] = json.loads(ret["relic_pieces"])
         except json.JSONDecodeError:
-            ret["relic_pieces"] = None
+            raise Exception(f'json decode fail on relic_pieces')
+    if ret.get('theme'):
+        ret['theme'] = json.loads(ret.get('theme'))
 
     return ret

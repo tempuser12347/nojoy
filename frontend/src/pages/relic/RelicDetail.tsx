@@ -92,7 +92,7 @@ export default function RelicDetail({ data }: { data?: Relic }) {
           </Box>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4}>
-              <DetailItem label="테마" value={relic.theme} />
+              <DetailItem label="테마" value={relic.theme ? renderObjectChip(relic.theme, navigate) : null} />
             </Grid>
             <Grid item xs={12}>
               <DetailItem label="모험담" value={relic.adventure_log} />
