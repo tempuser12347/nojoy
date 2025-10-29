@@ -95,23 +95,23 @@ export default function MemorialAlbumDetail({
             <DetailItem label="설명" value={memorialAlbum.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs: 12, sm: 6}}>
               <DetailItem label="카테고리" value={memorialAlbum.category} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs: 12, sm: 6}} >
               <DetailItem
                 label="보상 NPC"
                 value={memorialAlbum.reward_npc ? renderObjectChip(memorialAlbum.reward_npc, navigate) : null}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs: 12, sm: 6}} >
               <DetailItem
                 label="보상 아이템"
                 value={memorialAlbum.reward_item ? renderObjectChip(memorialAlbum.reward_item, navigate) : null}
               />
             </Grid>
             {memorialAlbum.items && memorialAlbum.items.length > 0 && (
-              <Grid item xs={12}>
+              <Grid size={{xs: 12}}>
                 <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                   아이템 목록
                 </Typography>
