@@ -51,8 +51,8 @@ def read_relics(
     items = []
     for row in paginated_results:
         item_dict = dict(row)
-        if item_dict.get("extraname"):
-            item_dict["name"] = f'{item_dict["name"]} {item_dict["extraname"]}'
+        # if item_dict.get("extraname"):
+        #     item_dict["name"] = f'{item_dict["name"]} {item_dict["extraname"]}'
         if item_dict.get("relic_pieces") and isinstance(item_dict["relic_pieces"], str):
             try:
                 item_dict["relic_pieces"] = json.loads(item_dict["relic_pieces"])
@@ -89,5 +89,18 @@ def read_relic_core(relic_id: int, db: Session):
             raise Exception(f'json decode fail on relic_pieces')
     if ret.get('theme'):
         ret['theme'] = json.loads(ret.get('theme'))
+
+    # for each relic piece, add quest info if available
+    for rp in ret['relic_pieces']:
+        relic_piece_id = rp.get('relic_piece', {}).get('id')
+        print(f'relic piece id: {relic_piece_id}')
+        if relic_piece_id:
+            rp_query = text("SELECT quest FROM relicpiece WHERE id = :id")
+            rp_result = db.execute(rp_query, {"id": relic_piece_id}).fetchone()
+            quest = rp_result[0]
+            if quest:
+                rp['quest'] = json.loads(quest)
+            else:
+                rp['quest'] = None
 
     return ret

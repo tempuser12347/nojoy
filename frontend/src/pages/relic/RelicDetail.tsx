@@ -22,6 +22,7 @@ import { renderObjectChip } from "../../common/render";
 interface RelicPiece {
   rank: number;
   relic_piece: { id: number; name: string };
+  quest: {id: number; name: string} | null;
 }
 
 interface Relic {
@@ -105,6 +106,7 @@ export default function RelicDetail({ data }: { data?: Relic }) {
                       <TableRow>
                         <TableCell>랭크</TableCell>
                         <TableCell>렐릭 피스</TableCell>
+                        <TableCell>퀘스트</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -132,6 +134,11 @@ export default function RelicDetail({ data }: { data?: Relic }) {
                             <TableCell>
                               {renderObjectChip(rp.relic_piece, navigate)}
                             </TableCell>
+                            <TableCell>
+                              {rp.quest
+                                ? renderObjectChip(rp.quest, navigate)
+                                : "-"}
+                            </TableCell>
                           </TableRow>
                         );
                       })}
@@ -140,7 +147,7 @@ export default function RelicDetail({ data }: { data?: Relic }) {
                 </TableContainer>
               </Grid>
             )}
-            <Grid item xs={12}>
+            <Grid size={{xs: 12}}>
               <DetailItem label="모험담" value={relic.adventure_log} />
             </Grid>
           </Grid>
