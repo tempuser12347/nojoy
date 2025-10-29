@@ -65,7 +65,8 @@ from app.routers import (
     legacytheme,
     legacy,
     legacyclue,
-    treasurehunttheme)
+    treasurehunttheme,
+    relic)
 import os
 
 app = FastAPI(title="DHO Database API")
@@ -144,6 +145,7 @@ app.include_router(legacytheme.router)
 app.include_router(legacy.router)
 app.include_router(legacyclue.router)
 app.include_router(treasurehunttheme.router)
+app.include_router(relic.router)
 
 
 dist_dir = "dist"

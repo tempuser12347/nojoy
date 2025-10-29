@@ -65,6 +65,7 @@ import LegacyThemeDetail from "../legacytheme/LegacyThemeDetail";
 import LegacyDetail from "../legacy/LegacyDetail";
 import LegacyClueDetail from "../legacyclue/LegacyClueDetail";
 import TreasureHuntThemeDetail from "../treasurehunttheme/TreasureHuntThemeDetail";
+import RelicDetail from "../relic/RelicDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -129,6 +130,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   legacy: LegacyDetail,
   legacyclue: LegacyClueDetail,
   treasurehunttheme: TreasureHuntThemeDetail,
+  relic: RelicDetail,
 };
 
 export default function ObjectDetail() {
