@@ -29,7 +29,7 @@ interface Relic {
   name: string;
   extraname: string | null;
   description: string | null;
-  theme: string | null;
+  theme: {id: number, name: string} | null;
   relic_pieces: RelicPiece[] | null;
   adventure_log: string | null;
 }
@@ -91,14 +91,11 @@ export default function RelicDetail({ data }: { data?: Relic }) {
             <DetailItem label="설명" value={relic.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs: 12, sm: 6}}>
               <DetailItem label="테마" value={relic.theme ? renderObjectChip(relic.theme, navigate) : null} />
             </Grid>
-            <Grid item xs={12}>
-              <DetailItem label="모험담" value={relic.adventure_log} />
-            </Grid>
             {relic.relic_pieces && relic.relic_pieces.length > 0 && (
-              <Grid item xs={12}>
+              <Grid size={{xs: 12}}>
                 <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                   렐릭 피스
                 </Typography>
@@ -124,6 +121,9 @@ export default function RelicDetail({ data }: { data?: Relic }) {
                 </TableContainer>
               </Grid>
             )}
+            <Grid item xs={12}>
+              <DetailItem label="모험담" value={relic.adventure_log} />
+            </Grid>
           </Grid>
         </CardContent>
       </Card>
