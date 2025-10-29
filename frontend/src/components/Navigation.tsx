@@ -96,6 +96,7 @@ const availableSections = [
   "레거시 피스",
   "트레져 헌트 테마",
   "렐릭",
+  "렐릭 피스",
   "장비품",
   "선박",
   "선박 재료",
@@ -339,6 +340,9 @@ const availableSections = [
               break;
             case "렐릭":
               subsection = "relics";
+              break;
+            case "렐릭 피스":
+              subsection = "relicpieces";
               break;
             default:
               break;
