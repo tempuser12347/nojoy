@@ -108,14 +108,33 @@ export default function RelicDetail({ data }: { data?: Relic }) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {relic.relic_pieces.map((rp, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{rp.rank}</TableCell>
-                          <TableCell>
-                            {renderObjectChip(rp.relic_piece, navigate)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {relic.relic_pieces.map((rp, index) => {
+                        const currentRowRank = rp.rank;
+                        const previousRowRank = index > 0 ? relic.relic_pieces[index - 1].rank : undefined;
+                        const isFirstOfGroup = currentRowRank !== previousRowRank;
+
+                        let rowSpan = 1;
+                        if (isFirstOfGroup) {
+                          for (let i = index + 1; i < relic.relic_pieces.length; i++) {
+                            if (relic.relic_pieces[i].rank === currentRowRank) {
+                              rowSpan++;
+                            } else {
+                              break;
+                            }
+                          }
+                        }
+
+                        return (
+                          <TableRow key={index}>
+                            {isFirstOfGroup && (
+                              <TableCell rowSpan={rowSpan}>{rp.rank}</TableCell>
+                            )}
+                            <TableCell>
+                              {renderObjectChip(rp.relic_piece, navigate)}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
                     </TableBody>
                   </Table>
                 </TableContainer>
