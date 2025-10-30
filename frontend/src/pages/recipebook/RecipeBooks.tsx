@@ -21,7 +21,11 @@ const skillOptions: SkillOption[] = [
   { id: "조리", name: "조리" },
   { id: "주조", name: "주조" },
   { id: "공예", name: "공예" },
-  { id: "기타", name: "기타" },
+  { id: "봉제", name: "봉제" },
+  { id: "연금술", name: "연금술" },
+  { id: "보관", name: "보관" },
+  { id: "언어학", name: "언어학" },
+  { id: "통합", name: "통합" },
 ];
 
 const Recipebooks: React.FC = () => {
@@ -88,6 +92,7 @@ const Recipebooks: React.FC = () => {
           skills_search: skills_search_ids.join(","),
         },
       });
+      console.log(response.data);
       return response.data; // { items: [], total: number }
     },
   });
@@ -95,7 +100,7 @@ const Recipebooks: React.FC = () => {
   // --- Table Columns ---
   const columns = [
     { id: "name", label: "이름", minWidth: 150 },
-    { id: "additionalname", label: "추가 이름", minWidth: 120 },
+    // { id: "additionalname", label: "추가 이름", minWidth: 120 },
     { id: "skill", label: "스킬", minWidth: 100 },
     { id: "productionNPC", label: "생산 NPC", minWidth: 120 },
     { id: "era", label: "시대", minWidth: 100 },

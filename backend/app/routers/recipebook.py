@@ -45,7 +45,7 @@ def read_recipebooks(
     if skills_search:
         term_list = skills_search.split(",")
         # if row's 'sveries' field is in term_list then include. otherwise exclude
-        results = [row for row in results if row.get("sveries") in term_list]
+        results = [row for row in results if row.get("skill") in term_list]
 
     # Sorting
     reverse = sort_order.lower() == "desc"
@@ -70,7 +70,7 @@ def read_recipebooks(
         dict_item = {}
         for field in fetch_field_list:
             dict_item[field] = item.get(field)
-        dict_item["skill"] = item.get("sveries")
+        dict_item["skill"] = item.get("skill")
         dict_list.append(dict_item)
 
     return {"items": dict_list, "total": total}
@@ -104,7 +104,7 @@ def read_recipebook_core(recipebook_id: int, db: Session = Depends(get_db)):
     for field in fetch_field_list:
         ret[field] = getattr(result, field, None)
 
-    ret["skill"] = result.sveries
+    ret["skill"] = result.skill
 
     obtm_list = fetch_all_obtain_methods(recipebook_id, db)
     ret["obtain_method"] = obtm_list
