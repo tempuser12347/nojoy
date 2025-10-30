@@ -1,4 +1,4 @@
-import { Box, Typography, Card, CardContent } from "@mui/material";
+import { Box, Typography, Card, CardContent, Grid } from "@mui/material";
 import { renderObjectsToChips } from "../../common/render";
 import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 import DetailItem from "../../components/DetailItem";
@@ -32,39 +32,24 @@ export default function ConsumableDetail({ data }: { data: Consumable }) {
       )}
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-            }}
-          >
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                카테고리
-              </Typography>
-              <Typography variant="body1">{consumable.category}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                타입
-              </Typography>
-              <Typography variant="body1">{consumable.type}</Typography>
-            </Box>
-            <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
-              <Typography variant="subtitle1" color="text.secondary">
-                설명
-              </Typography>
-              <Typography variant="body1">{consumable.description}</Typography>
-            </Box>
-            <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
-              <Typography variant="subtitle1" color="text.secondary">
-                특징
-              </Typography>
-              <Typography variant="body1">{consumable.features}</Typography>
-            </Box>
+          <Grid container spacing={2}>
+            <Grid size={{xs: 12}}>
+              <DetailItem label="설명" value={consumable.description} />
+            </Grid>
+            <Grid size={{xs: 12, sm: 6}}>
+              <DetailItem label="카테고리" value={consumable.category} />
+            </Grid>
+            <Grid size={{xs: 12, sm: 6}}>
+              <DetailItem label="타입" value={consumable.type} />
+            </Grid>
+            {consumable.features ? 
+            
+            <Grid size={{xs: 12, sm: 6}}>
+              <DetailItem label="특징" value={consumable.features} />
+            </Grid> : null
+          }
             {consumable.usage_Effect && (
-              <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
+              <Grid size={{xs: 12}}>
                 <Typography variant="subtitle1" color="text.secondary">
                   사용효과
                 </Typography>
@@ -82,30 +67,30 @@ export default function ConsumableDetail({ data }: { data: Consumable }) {
                     ? JSON.stringify(consumable.usage_Effect, null, 2)
                     : consumable.usage_Effect}
                 </Typography>
-              </Box>
+              </Grid>
             )}
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                아이템
-              </Typography>
-              <Typography variant="body1">
-                {renderObjectsToChips(
-                  consumable.item,
-                  null,
-                  (value) => "x" + value
-                )}
-              </Typography>
-            </Box>
+            <Grid size={{xs: 12}}>
+              <DetailItem
+                label="아이템"
+                value={
+                  renderObjectsToChips(
+                    consumable.item,
+                    null,
+                    (value) => "x" + value
+                  )
+                }
+              />
+            </Grid>
 
             {consumable.obtain_method ? (
-              <Box sx={{ gridColumn: "1 / -1" }}>
+              <Grid size={{xs: 12}}>
                 <DetailItem
                   label="획득방법"
                   value={<ObtainMethodTabs data={consumable.obtain_method} />}
                 />
-              </Box>
+              </Grid>
             ) : null}
-          </Box>
+          </Grid>
         </CardContent>
       </Card>
     </Box>

@@ -15,16 +15,18 @@ def normalize_items(raw):
     Convert [{"1881": 1}, {"1890": 1}] → [{"id": 1881, "value": 1}, ...]
     """
     if not raw:
-        return []
+        return None
     try:
         lst = json.loads(raw)
         normalized = []
         for d in lst:
             for k, v in d.items():
                 normalized.append({"id": int(k), "value": v})
+        if not normalized:
+            return None
         return normalized
     except Exception:
-        return []
+        return None
 
 
 def handle_usage_effect(raw):
