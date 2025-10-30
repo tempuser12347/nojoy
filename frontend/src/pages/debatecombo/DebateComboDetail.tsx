@@ -94,24 +94,24 @@ export default function DebateComboDetail({
             <DetailItem label="설명" value={debateCombo.description} />
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6}}>
               <DetailItem
                 label="카테고리"
                 value={debateCombo.category_info ? debateCombo.category_info.category : null}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6}}>
               <DetailItem
                 label="보너스"
                 value={debateCombo.category_info ? debateCombo.category_info.bonus : null}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{xs:12, sm: 6}}>
               <DetailItem label="총 포인트" value={debateCombo.total_points} />
             </Grid>
             {debateCombo.discovery_cards &&
               debateCombo.discovery_cards.length > 0 && (
-                <Grid item xs={12}>
+                <Grid size={{xs:12}}>
                   <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                     발견물 카드
                   </Typography>
