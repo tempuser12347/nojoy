@@ -6,9 +6,27 @@ import {
   TextField,
   Typography,
   Button,
+  FormControl,
+  FormLabel,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
+
+const MEMORIAL_ALBUM_CATEGORIES = [
+  "장비품",
+  "아이템",
+  "교역품",
+  "유적",
+  "장식물",
+  "낚시",
+  "선박품",
+  "음식",
+  "지도",
+  "답례품",
+];
 
 const MemorialAlbums: React.FC = () => {
   const navigate = useNavigate();
@@ -17,14 +35,19 @@ const MemorialAlbums: React.FC = () => {
   const page = parseInt(searchParams.get("page") || "0", 10);
   const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
   const name_search = searchParams.get("name_search") || "";
+  const category_search = searchParams.get("category_search") || "";
   const sort_by = searchParams.get("sort_by") || "id";
   const sort_order = (searchParams.get("sort_order") as "asc" | "desc") || "desc";
 
   const [searchInput, setSearchInput] = React.useState(name_search);
+  const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
+    category_search ? category_search.split(",") : []
+  );
 
   useEffect(() => {
     setSearchInput(name_search);
-  }, [name_search]);
+    setSelectedCategories(category_search ? category_search.split(",") : []);
+  }, [name_search, category_search]);
 
   const updateSearchParams = (newParams: Record<string, any>) => {
     const currentParams = new URLSearchParams(searchParams);
@@ -40,6 +63,7 @@ const MemorialAlbums: React.FC = () => {
       page,
       rowsPerPage,
       name_search,
+      category_search,
       sort_by,
       sort_order,
     ],
@@ -47,6 +71,7 @@ const MemorialAlbums: React.FC = () => {
       const response = await api.get("/api/memorialalbums", {
         params: {
           name_search,
+          category_search,
           sort_by,
           sort_order,
           skip: page * rowsPerPage,
@@ -78,9 +103,17 @@ const MemorialAlbums: React.FC = () => {
     setSearchInput(event.target.value);
   };
 
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.name;
+    setSelectedCategories((prev) =>
+      event.target.checked ? [...prev, value] : prev.filter((c) => c !== value)
+    );
+  };
+
   const handleSearch = () => {
     const newParams: Record<string, any> = {
       name_search: searchInput,
+      category_search: selectedCategories.join(","),
       page: 0,
     };
     updateSearchParams(newParams);
@@ -88,6 +121,7 @@ const MemorialAlbums: React.FC = () => {
 
   const resetFilters = () => {
     setSearchInput("");
+    setSelectedCategories([]);
     setSearchParams({ rowsPerPage: searchParams.get("rowsPerPage") || "10" });
   };
 
@@ -132,6 +166,24 @@ const MemorialAlbums: React.FC = () => {
           sx={{ minWidth: 200 }}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
+        <FormControl component="fieldset" variant="standard">
+          <FormLabel component="legend">카테고리</FormLabel>
+          <FormGroup row>
+            {MEMORIAL_ALBUM_CATEGORIES.map((category) => (
+              <FormControlLabel
+                key={category}
+                control={
+                  <Checkbox
+                    checked={selectedCategories.includes(category)}
+                    onChange={handleCategoryChange}
+                    name={category}
+                  />
+                }
+                label={category}
+              />
+            ))}
+          </FormGroup>
+        </FormControl>
         <Button variant="contained" onClick={handleSearch}>
           검색
         </Button>
