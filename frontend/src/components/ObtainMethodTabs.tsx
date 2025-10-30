@@ -63,41 +63,57 @@ const renderTabContent = (method: any) => {
           </Table>
         </TableContainer>
       );
-    case "npcsale":
-      return (
-
-
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>npc</TableCell>
-                <TableCell>지역</TableCell>
-                <TableCell>위치</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {method.npcsale_list.map((item: any) => (
-                <TableRow>
-                  <TableCell>{item.npc}</TableCell>
-                  <TableCell>
-                  {item.region}
-                </TableCell>
-                  <TableCell>
-                    {item.locations.map((value: { id: number, name: string }, index: number) => (
-                      <span key={value.id}>
-                        <Link to={`/obj/${value.id}`}>{value.name}</Link>
-                        {index < item.locations.length - 1 ? ", " : ""}
-                      </span>
-                    ))}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-      );
+        case "npcsale":
+          return (
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>npc</TableCell>
+                    <TableCell>지역</TableCell>
+                    <TableCell>위치</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {method.npcsale_list.map((item: any, index: number) => {
+                    const currentRowNpc = item.npc;
+                    const previousRowNpc = index > 0 ? method.npcsale_list[index - 1].npc : undefined;
+                    const isFirstOfGroup = currentRowNpc !== previousRowNpc;
+    
+                    let rowSpan = 1;
+                    if (isFirstOfGroup) {
+                      for (let i = index + 1; i < method.npcsale_list.length; i++) {
+                        if (method.npcsale_list[i].npc === currentRowNpc) {
+                          rowSpan++;
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+    
+                    return (
+                      <TableRow key={index}>
+                        {isFirstOfGroup && (
+                          <TableCell rowSpan={rowSpan}>{item.npc}</TableCell>
+                        )}
+                        <TableCell>
+                          {item.region}
+                        </TableCell>
+                        <TableCell>
+                          {item.locations.map((value: { id: number, name: string }, idx: number) => (
+                            <span key={value.id}>
+                              <Link to={`/obj/${value.id}`}>{value.name}</Link>
+                              {idx < item.locations.length - 1 ? ", " : ""}
+                            </span>
+                          ))}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          );
     case "shipwreck":
       return (
         <ul>
