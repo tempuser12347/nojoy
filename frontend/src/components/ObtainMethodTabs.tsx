@@ -166,6 +166,28 @@ const renderTabContent = (method: any) => {
           </Table>
         </TableContainer>
       );
+      case "landnpc_drop":
+      return (
+        
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>육상npc</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {method.landnpc_list.map((item: any) => (
+                <TableRow>
+                  <TableCell>
+                    <Link to={`/obj/${item.id}`}>{item.name}</Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )
     default:
       return null;
   }
@@ -220,6 +242,8 @@ const ObtainMethodTabs: React.FC<{ data: { from: string }[] }> = ({ data }) => {
               label = "육지재조사보상";
             } else if (method.from == "consumable") {
               label = "아이템 사용";
+            } else if (method.from == "landnpc_drop") {
+              label = "육상NPC드랍";
             }
 
             return <Tab label={label} key={index} />;

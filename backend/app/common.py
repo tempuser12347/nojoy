@@ -218,6 +218,23 @@ WHERE i.value ->> '$.id' = :itemid;
     return None
 
 
+def fetch_field_npc_drop_producing_id(item_id: int, db: Session):
+
+    fetched = db.execute(
+        text(
+            """ SELECT DISTINCT l.id, l.name
+FROM landnpc AS l
+JOIN json_each(l.drop_items) AS je
+WHERE json_extract(je.value, '$.id') = :drop_item_id;"""), {'drop_item_id': item_id}).fetchall();
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {"id": row.id, "name": row.name}
+            obj_list.append(obj)
+        return obj_list
+
+    return None
+
 def fetch_field_resurvey_reward_producing_id(item_id: int, db: Session):
 
     fetched = db.execute(
@@ -339,6 +356,15 @@ def fetch_all_obtain_methods(itemid: int, db: Session):
         obtain_method_list.append(
             {"from": "consumable", "consumable_list": obt_consumable_list}
         )
+
+    obt_landnpc_drop_list = fetch_field_npc_drop_producing_id(itemid, db)
+    if obt_landnpc_drop_list:
+        obtain_method_list.append(
+            {"from": "landnpc_drop", "landnpc_list": obt_landnpc_drop_list}
+        )
+
+
+    
 
     # if empty return None
     if not obtain_method_list:
