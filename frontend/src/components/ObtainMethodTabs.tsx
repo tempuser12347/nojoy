@@ -297,6 +297,59 @@ const renderTabContent = (method: any) => {
           </Table>
         </TableContainer>
       )
+    case "ganador":
+      return (
+
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>유형</TableCell>
+                <TableCell>난이도</TableCell>
+                <TableCell>가나돌</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {method.ganador_list.map((item: any, index: number) => {
+                const currentRowMethod = item.category;
+                const previousRowMethod = index > 0 ? method.ganador_list[index - 1].category : undefined;
+                const isFirstOfGroup = currentRowMethod !== previousRowMethod;
+
+                let rowSpan = 1;
+                if (isFirstOfGroup) {
+                  for (let i = index + 1; i < method.ganador_list.length; i++) {
+                    if (method.ganador_list[i].category === currentRowMethod) {
+                      rowSpan++;
+                    } else {
+                      break;
+                    }
+                  }
+                }
+
+                return (
+                  <TableRow key={index}>
+                    {isFirstOfGroup && (
+                      <TableCell rowSpan={rowSpan}>{item.category}</TableCell>
+                    )}
+                    <TableCell>
+                      {JSON.stringify(item.difficulty)}
+                    </TableCell>
+                    <TableCell>
+                      {item.ganador_list.map((value: { id: number, name: string }, idx: number) => (
+                        <span key={value.id}>
+                          <Link to={`/obj/${value.id}`}>{value.name}</Link>
+                          {idx < item.ganador_list.length - 1 ? ", " : ""}
+                        </span>
+                      ))}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+      )
     default:
       return null;
   }
@@ -356,6 +409,9 @@ const ObtainMethodTabs: React.FC<{ data: { from: string }[] }> = ({ data }) => {
             }
             else if (method.from == "marinenpc_drop") {
               label = "해상NPC드랍";
+            }
+            else if (method.from == "ganador") {
+              label = "가나돌";
             }
 
             return <Tab label={label} key={index} />;

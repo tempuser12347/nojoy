@@ -362,6 +362,52 @@ WHERE json_valid(c.Item)
         return obj_list
     return None
 
+def fetch_ganador_producing_id(itemid: int, db: Session):
+
+    fetched = db.execute(
+        text(
+            """
+        SELECT
+    g.id,
+    g.name,
+    g.category,
+    g.difficulty
+FROM ganador AS g,
+     json_each(g.acquired_items) AS je
+WHERE json_extract(je.value, '$.id') = :itemid;
+            """), {'itemid': itemid}).fetchall()
+    
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {
+                "id": row.id,
+                "name": row.name,
+                "category": row.category,
+                "difficulty": row.difficulty
+            }
+            obj_list.append(obj)
+        # group by (category, difficulty)
+        grouped = {}
+        for item in obj_list:
+            key = (item['category'], item['difficulty'])
+            if key not in grouped:
+                grouped[key] = {
+                    "category": item['category'],
+                    "difficulty": item['difficulty'],
+                    "ganador_list": []
+                }
+            grouped[key]['ganador_list'].append({
+                "id": item['id'],
+                "name": item['name']
+            })
+        obj_list = list(grouped.values())
+        # sort by category, difficulty (where difficulty none or empty goes last)
+        obj_list.sort(key=lambda x: (x['category'], x['difficulty'] or ''))
+        return obj_list
+
+    return None
+
 
 def fetch_all_obtain_methods(itemid: int, db: Session):
 
@@ -435,6 +481,12 @@ def fetch_all_obtain_methods(itemid: int, db: Session):
     if obt_marinenpc_drop_list:
         obtain_method_list.append(
             {"from": "marinenpc_drop", "marinenpc_list": obt_marinenpc_drop_list}
+        )
+
+    obt_ganador_list = fetch_ganador_producing_id(itemid, db)
+    if obt_ganador_list:
+        obtain_method_list.append(
+            {"from": "ganador", "ganador_list": obt_ganador_list}
         )
     
 
