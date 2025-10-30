@@ -6,9 +6,25 @@ import {
   TextField,
   Typography,
   Button,
+  FormControl,
+  FormLabel,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Grid,
 } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
+
+const FURNITURE_CATEGORIES = [
+  "서류",
+  "마네킹",
+  "교역품",
+  "장비품",
+  "선박부품",
+  "소비품",
+  "스킬북",
+];
 
 const Furnitures: React.FC = () => {
   const navigate = useNavigate();
@@ -18,16 +34,21 @@ const Furnitures: React.FC = () => {
   const page = parseInt(searchParams.get("page") || "0", 10);
   const rowsPerPage = parseInt(searchParams.get("rowsPerPage") || "10", 10);
   const name_search = searchParams.get("name_search") || "";
+  const category_search = searchParams.get("category_search") || "";
   const sort_by = searchParams.get("sort_by") || "id";
   const sort_order = (searchParams.get("sort_order") as "asc" | "desc") || "desc";
 
   // Component state for inputs
   const [searchInput, setSearchInput] = React.useState(name_search);
+  const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
+    category_search ? category_search.split(",") : []
+  );
 
   // Sync local state with URL search params on mount/change
   useEffect(() => {
     setSearchInput(name_search);
-  }, [name_search]);
+    setSelectedCategories(category_search ? category_search.split(",") : []);
+  }, [name_search, category_search]);
 
   // Helper to update search params
   const updateSearchParams = (newParams: Record<string, any>) => {
@@ -44,6 +65,7 @@ const Furnitures: React.FC = () => {
       page,
       rowsPerPage,
       name_search,
+      category_search,
       sort_by,
       sort_order,
     ],
@@ -51,6 +73,7 @@ const Furnitures: React.FC = () => {
       const response = await api.get("/api/furnitures", {
         params: {
           name_search,
+          category_search,
           sort_by,
           sort_order,
           skip: page * rowsPerPage,
@@ -82,9 +105,17 @@ const Furnitures: React.FC = () => {
     setSearchInput(event.target.value);
   };
 
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.name;
+    setSelectedCategories((prev) =>
+      event.target.checked ? [...prev, value] : prev.filter((c) => c !== value)
+    );
+  };
+
   const handleSearch = () => {
     const newParams: Record<string, any> = {
       name_search: searchInput,
+      category_search: selectedCategories.join(","),
       page: 0,
     };
     updateSearchParams(newParams);
@@ -92,6 +123,7 @@ const Furnitures: React.FC = () => {
 
   const resetFilters = () => {
     setSearchInput("");
+    setSelectedCategories([]);
     setSearchParams({ rowsPerPage: searchParams.get("rowsPerPage") || "10" });
   };
 
@@ -127,22 +159,46 @@ const Furnitures: React.FC = () => {
       <Typography variant="h4" gutterBottom>
         가구
       </Typography>
-      <Box sx={{ display: "flex", gap: 1, mb: 2, flexWrap: "wrap" }}>
-        <TextField
-          label="가구 이름 검색"
-          variant="outlined"
-          value={searchInput}
-          onChange={handleSearchInputChange}
-          sx={{ minWidth: 200 }}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-        />
-        <Button variant="contained" onClick={handleSearch}>
-          검색
-        </Button>
-        <Button variant="outlined" onClick={resetFilters}>
-          초기화
-        </Button>
-      </Box>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4} sx={{ justifyContent: "center", alignItems: "center", display: "flex" }}>
+          <TextField
+            label="가구 이름 검색"
+            variant="outlined"
+            value={searchInput}
+            onChange={handleSearchInputChange}
+            sx={{ minWidth: 200 }}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          />
+        </Grid>
+        <Grid item xs={12} md={8} sx={{ justifyContent: "center", alignItems: "center", display: "flex", border: '1px solid #ccc', borderRadius: '4px', padding: '8px' }}>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">카테고리</FormLabel>
+            <FormGroup row>
+              {FURNITURE_CATEGORIES.map((category) => (
+                <FormControlLabel
+                  key={category}
+                  control={
+                    <Checkbox
+                      checked={selectedCategories.includes(category)}
+                      onChange={handleCategoryChange}
+                      name={category}
+                    />
+                  }
+                  label={category}
+                />
+              ))}
+            </FormGroup>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sx={{ justifyContent: "center", alignItems: "center", display: "flex", gap: 1 }}>
+          <Button variant="contained" onClick={handleSearch}>
+            검색
+          </Button>
+          <Button variant="outlined" onClick={resetFilters}>
+            초기화
+          </Button>
+        </Grid>
+      </Grid>
 
       <DataTable
         columns={columns}
@@ -161,5 +217,6 @@ const Furnitures: React.FC = () => {
     </Box>
   );
 };
+
 
 export default Furnitures;
