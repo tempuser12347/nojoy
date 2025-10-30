@@ -304,8 +304,8 @@ const renderTabContent = (method: any) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>유형</TableCell>
-                <TableCell>난이도</TableCell>
+                <TableCell sx={{minWidth: '80px'}}>유형</TableCell>
+                <TableCell sx={{minWidth: '80px'}}>난이도</TableCell>
                 <TableCell>가나돌</TableCell>
               </TableRow>
             </TableHead>
