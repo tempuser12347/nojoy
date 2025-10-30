@@ -33,8 +33,8 @@ const renderTabContent = (method: any) => {
                 <TableCell>의뢰도시</TableCell>
                 <TableCell>목적지</TableCell>
               </TableRow>
-              </TableHead>
-              <TableBody>
+            </TableHead>
+            <TableBody>
               {method.quest_list.map((item: any) => (
                 <TableRow>
                   <TableCell>{item.series}</TableCell>
@@ -53,9 +53,9 @@ const renderTabContent = (method: any) => {
                   </TableCell>
                 </TableRow>
               ))}
-                </TableBody>
+            </TableBody>
           </Table>
-          </TableContainer>
+        </TableContainer>
       );
     case "recipe":
       return (
@@ -77,7 +77,11 @@ const renderTabContent = (method: any) => {
                   <TableCell>
                     <Link to={`/obj/${item.id}`}>{item.name}</Link>
                   </TableCell>
-                  <TableCell>{item.skill.map((x: { id: number, name: string }) => <Link to={`/obj/${x.id}`}>{x.name}</Link>)}</TableCell>
+                  <TableCell>{item.skill.map((x: { id: number, name: string, value: number }, index: number) => <>
+                    <Link to={`/obj/${x.id}`}>{x.name}</Link>
+                    {x.value}
+                    {index < item.skill.length - 1 ? ", " : ""}
+                  </>)}</TableCell>
                   <TableCell>{item.ingredients.map((x: { id: number, name: string, value: number }, i: number) => (<span key={i}>
                     <Link to={`/obj/${x.id}`}>{x.name}</Link> {x.value}
                     {i < item.ingredients.length - 1 ? ", " : ""}
@@ -88,57 +92,57 @@ const renderTabContent = (method: any) => {
           </Table>
         </TableContainer>
       );
-        case "npcsale":
-          return (
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>npc</TableCell>
-                    <TableCell>지역</TableCell>
-                    <TableCell>위치</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {method.npcsale_list.map((item: any, index: number) => {
-                    const currentRowNpc = item.npc;
-                    const previousRowNpc = index > 0 ? method.npcsale_list[index - 1].npc : undefined;
-                    const isFirstOfGroup = currentRowNpc !== previousRowNpc;
-    
-                    let rowSpan = 1;
-                    if (isFirstOfGroup) {
-                      for (let i = index + 1; i < method.npcsale_list.length; i++) {
-                        if (method.npcsale_list[i].npc === currentRowNpc) {
-                          rowSpan++;
-                        } else {
-                          break;
-                        }
-                      }
+    case "npcsale":
+      return (
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>npc</TableCell>
+                <TableCell>지역</TableCell>
+                <TableCell>위치</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {method.npcsale_list.map((item: any, index: number) => {
+                const currentRowNpc = item.npc;
+                const previousRowNpc = index > 0 ? method.npcsale_list[index - 1].npc : undefined;
+                const isFirstOfGroup = currentRowNpc !== previousRowNpc;
+
+                let rowSpan = 1;
+                if (isFirstOfGroup) {
+                  for (let i = index + 1; i < method.npcsale_list.length; i++) {
+                    if (method.npcsale_list[i].npc === currentRowNpc) {
+                      rowSpan++;
+                    } else {
+                      break;
                     }
-    
-                    return (
-                      <TableRow key={index}>
-                        {isFirstOfGroup && (
-                          <TableCell rowSpan={rowSpan}>{item.npc}</TableCell>
-                        )}
-                        <TableCell>
-                          {item.region}
-                        </TableCell>
-                        <TableCell>
-                          {item.locations.map((value: { id: number, name: string }, idx: number) => (
-                            <span key={value.id}>
-                              <Link to={`/obj/${value.id}`}>{value.name}</Link>
-                              {idx < item.locations.length - 1 ? ", " : ""}
-                            </span>
-                          ))}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          );
+                  }
+                }
+
+                return (
+                  <TableRow key={index}>
+                    {isFirstOfGroup && (
+                      <TableCell rowSpan={rowSpan}>{item.npc}</TableCell>
+                    )}
+                    <TableCell>
+                      {item.region}
+                    </TableCell>
+                    <TableCell>
+                      {item.locations.map((value: { id: number, name: string }, idx: number) => (
+                        <span key={value.id}>
+                          <Link to={`/obj/${value.id}`}>{value.name}</Link>
+                          {idx < item.locations.length - 1 ? ", " : ""}
+                        </span>
+                      ))}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      );
     case "shipwreck":
       return (
         <ul>
@@ -329,8 +333,8 @@ const renderTabContent = (method: any) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{minWidth: '80px'}}>유형</TableCell>
-                <TableCell sx={{minWidth: '80px'}}>난이도</TableCell>
+                <TableCell sx={{ minWidth: '80px' }}>유형</TableCell>
+                <TableCell sx={{ minWidth: '80px' }}>난이도</TableCell>
                 <TableCell>가나돌</TableCell>
               </TableRow>
             </TableHead>
@@ -382,9 +386,9 @@ const renderTabContent = (method: any) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{minWidth: '80px'}}>지역</TableCell>
-                <TableCell sx={{minWidth: '80px'}}>도시</TableCell>
-                <TableCell sx={{minWidth: '80px'}}>npc</TableCell>
+                <TableCell sx={{ minWidth: '80px' }}>지역</TableCell>
+                <TableCell sx={{ minWidth: '80px' }}>도시</TableCell>
+                <TableCell sx={{ minWidth: '80px' }}>npc</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
