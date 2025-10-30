@@ -155,18 +155,8 @@ SELECT
     json_object(
         'id', adisc.id,
         'name', adisc.name
-    ) AS discovery_resolved,
+    ) AS discovery_resolved
 
-    -- preceding as JSON array
-    COALESCE(
-        json_group_array(
-            json_object(
-                'id', apre.id,
-                'name', apre.name
-            )
-        ),
-        '[]'
-    ) AS preceding_resolved
 
 FROM treasuremap t
 
@@ -178,16 +168,7 @@ LEFT JOIN allData adest
 LEFT JOIN allData adisc
     ON CAST(t.discovery AS INT) = adisc.id
 
--- expand preceding JSON array safely, then join
-LEFT JOIN json_each(
-    CASE
-        WHEN json_valid(t.preceding) THEN t.preceding
-        ELSE '[]'
-    END
-) je
-    ON 1=1
-LEFT JOIN allData apre
-    ON apre.id = CAST(je.value AS INT)
+
 
 WHERE t.id = :treasuremap_id
 
@@ -203,6 +184,8 @@ GROUP BY t.id;
 
     if not result:
         raise HTTPException(status_code=404, detail="TreasureMap not found")
+    
+    # fill preceding data
 
     return_fields = [
         "id",
@@ -226,9 +209,23 @@ GROUP BY t.id;
         json.loads(result.destination_resolved) if result.destination_resolved else None
     )
 
-    ret["preceding"] = (
-        json.loads(result.preceding_resolved) if result.preceding_resolved else None
-    )
+    if ret['preceding']:
+        preceding_ids = [int(pid) for pid in ret['preceding'].split(",") if pid.strip().isdigit()]
+        preceding_data = []
+        for pid in preceding_ids:
+            pdata = db.execute(
+                text("SELECT id, name FROM allData WHERE id = :id"),
+                {"id": pid}
+            ).fetchone()
+            if pdata:
+                preceding_data.append({"id": pdata.id, "name": pdata.name})
+        # override preceding with resolved data
+        ret['preceding'] = preceding_data
+    else:
+        ret['preceding'] = None
+    # ret["preceding"] = (
+    #     json.loads(result.preceding_resolved) if result.preceding_resolved else None
+    # )
     ret["discovery"] = (
         json.loads(result.discovery_resolved) if result.discovery_resolved else None
     )
