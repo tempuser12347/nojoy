@@ -88,8 +88,17 @@ def fetch_sellernpc_selling_id(item_id: int, db: Session):
     fetched = db.execute(
         text(
             """
-select npcsale.id, npcsale.npc, allData.name as location_name, location_id
-from npcsale left join allData on allData.id = npcsale.location_id
+
+            with field_region as (
+            select f.id, r.name from field  as f 
+            left join allData as r on f.region = r.id
+            )
+select npcsale.id, npcsale.npc, allData.name as location_name, npcsale.location_id, coalesce(city.region , fr.name) as region
+from npcsale 
+left join allData on allData.id = npcsale.location_id
+left join city on city.id = npcsale.location_id
+left join field_region as fr on fr.id = npcsale.location_id
+
     where item_id = :itemid
                               """
         ),
@@ -104,9 +113,28 @@ from npcsale left join allData on allData.id = npcsale.location_id
                 "npc": row.npc,
                 "location_name": row.location_name,
                 "location_id": row.location_id,
+                'region': row.region
             }
             obj_list.append(obj)
-        return obj_list
+        # group by (npc, region)
+        grouped = {}
+        for item in obj_list:
+            key = (item['npc'], item['region'])
+            if key not in grouped:
+                grouped[key] = {
+                    "npc": item['npc'],
+                    "region": item['region'],
+                    "locations": []
+                }
+            grouped[key]['locations'].append({
+                "id": item['location_id'],
+                "name": item['location_name']
+            })
+
+        grouped_list = list(grouped.values())
+        # sort by npc, region (where region none or empty goes last)
+        grouped_list.sort(key=lambda x: (x['npc'], x['region'] or ''))
+        return grouped_list
     return None
 
 

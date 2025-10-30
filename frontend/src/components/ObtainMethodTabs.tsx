@@ -65,26 +65,38 @@ const renderTabContent = (method: any) => {
       );
     case "npcsale":
       return (
-        <table className="inner-table">
-          <thead>
-            <tr>
-              <th>NPC</th>
-              <th>위치</th>
-            </tr>
-          </thead>
-          <tbody>
-            {method.npcsale_list.map((item: any) => (
-              <tr key={item.id}>
-                <td>{item.npc}</td>
-                <td>
-                  <Link to={`/obj/${item.location_id}`}>
-                    {item.location_name}
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>npc</TableCell>
+                <TableCell>지역</TableCell>
+                <TableCell>위치</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {method.npcsale_list.map((item: any) => (
+                <TableRow>
+                  <TableCell>{item.npc}</TableCell>
+                  <TableCell>
+                  {item.region}
+                </TableCell>
+                  <TableCell>
+                    {item.locations.map((value: { id: number, name: string }, index: number) => (
+                      <span key={value.id}>
+                        <Link to={`/obj/${value.id}`}>{value.name}</Link>
+                        {index < item.locations.length - 1 ? ", " : ""}
+                      </span>
+                    ))}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
       );
     case "shipwreck":
       return (
