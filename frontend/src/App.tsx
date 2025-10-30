@@ -88,7 +88,7 @@ function App() {
               <Route path="/퀘스트" element={<Quests />} />
               <Route path="/도시" element={<Cities />} />
               <Route path="/레시피" element={<Recipes />} />
-              <Route path="/침몰선" element={<Shipwrecks />} />
+              <Route path="/shipwrecks" element={<Shipwrecks />} />
               <Route path="/소비품" element={<Consumables />} />
               <Route path="/선박" element={<Ships />} />
               <Route path="/보물지도" element={<TreasureMaps />} />
