@@ -67,6 +67,7 @@ from .treasurehunttheme import read_treasurehunttheme_core
 from .relic import read_relic_core
 from .relicpiece import read_relicpiece_core
 from .memorialalbum import read_memorialalbum_core
+from .debatecombo import read_debatecombo_core
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -199,6 +200,7 @@ detail_data_fetch_function_dict = {
     "relic": read_relic_core,
     "relicpiece": read_relicpiece_core,
     "memorialalbum": read_memorialalbum_core,
+    "debatecombo": read_debatecombo_core,
 }
 
 

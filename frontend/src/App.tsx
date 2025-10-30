@@ -71,6 +71,7 @@ import TreasureHuntThemes from "./pages/treasurehunttheme/TreasureHuntThemes";
 import Relics from "./pages/relic/Relics";
 import RelicPieces from "./pages/relicpiece/RelicPieces";
 import MemorialAlbums from "./pages/memorialalbum/MemorialAlbums";
+import DebateCombos from "./pages/debatecombo/DebateCombos";
 
 const queryClient = new QueryClient();
 
@@ -151,6 +152,7 @@ function App() {
               <Route path="/relics" element={<Relics />} />
               <Route path="/relicpieces" element={<RelicPieces />} />
               <Route path="/memorialalbums" element={<MemorialAlbums />} />
+              <Route path="/debatecombos" element={<DebateCombos />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />

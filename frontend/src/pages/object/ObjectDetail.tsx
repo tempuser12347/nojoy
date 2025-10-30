@@ -68,6 +68,7 @@ import TreasureHuntThemeDetail from "../treasurehunttheme/TreasureHuntThemeDetai
 import RelicDetail from "../relic/RelicDetail";
 import RelicPieceDetail from "../relicpiece/RelicPieceDetail";
 import MemorialAlbumDetail from "../memorialalbum/MemorialAlbumDetail";
+import DebateComboDetail from "../debatecombo/DebateComboDetail";
 
 const componentMapping: { [key: string]: React.ComponentType<any> } = {
   certificate: CertificateDetail,
@@ -135,6 +136,7 @@ const componentMapping: { [key: string]: React.ComponentType<any> } = {
   relic: RelicDetail,
   relicpiece: RelicPieceDetail,
   memorialalbum: MemorialAlbumDetail,
+  debatecombo: DebateComboDetail,
 };
 
 export default function ObjectDetail() {

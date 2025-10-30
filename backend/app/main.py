@@ -68,7 +68,8 @@ from app.routers import (
     treasurehunttheme,
     relic,
     relicpiece,
-    memorialalbum)
+    memorialalbum,
+    debatecombo)
 import os
 
 app = FastAPI(title="DHO Database API")
@@ -150,6 +151,7 @@ app.include_router(treasurehunttheme.router)
 app.include_router(relic.router)
 app.include_router(relicpiece.router)
 app.include_router(memorialalbum.router)
+app.include_router(debatecombo.router)
 
 
 dist_dir = "dist"

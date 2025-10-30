@@ -96,9 +96,9 @@ const availableSections = [
   "레거시 피스",
   "트레져 헌트 테마",
   "렐릭",
-  "렐릭 피스",
-  "메모리얼 앨범",
-  "장비품",
+      "렐릭 피스",
+      "논전 콤보",
+      "메모리얼 앨범",  "장비품",
   "선박",
   "선박 재료",
   "선박스킬",
@@ -347,6 +347,9 @@ const availableSections = [
               break;
             case "메모리얼 앨범":
               subsection = "memorialalbums";
+              break;
+            case "논전 콤보":
+              subsection = "debatecombos";
               break;
             default:
               break;
