@@ -67,6 +67,7 @@ const MemorialAlbums: React.FC = () => {
 
   const columns = [
     { id: "name", label: "이름", minWidth: 170 },
+    { id: "category", label: "카테고리", minWidth: 100 },
     { id: "reward_item_name", label: "보상 아이템", minWidth: 100 },
     { id: "reward_npc_name", label: "보상 NPC", minWidth: 100 },
   ];
