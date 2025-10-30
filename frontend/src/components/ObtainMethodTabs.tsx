@@ -48,7 +48,7 @@ const renderTabContent = (method: any) => {
           <thead>
             <tr>
               <th>NPC</th>
-              <th>Location</th>
+              <th>위치</th>
             </tr>
           </thead>
           <tbody>
@@ -209,22 +209,41 @@ const renderTabContent = (method: any) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {method.marinenpc_list.map((item: any) => (
-                <TableRow>
-                  <TableCell>{item.method}</TableCell>
-                  <TableCell>
-                    <Link to={`/obj/${item.id}`}>{item.name}</Link>
-                  </TableCell>
-                  <TableCell>
-                    {item.sea_areas.map((value: { id: number, name: string }, index: number) => (
-                      <span key={value.id}>
-                        <Link to={`/obj/${value.id}`}>{value.name}</Link>
-                        {index < item.sea_areas.length - 1 ? ", " : ""}
-                      </span>
-                    ))}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {method.marinenpc_list.map((item: any, index: number) => {
+                const currentRowMethod = item.method;
+                const previousRowMethod = index > 0 ? method.marinenpc_list[index - 1].method : undefined;
+                const isFirstOfGroup = currentRowMethod !== previousRowMethod;
+
+                let rowSpan = 1;
+                if (isFirstOfGroup) {
+                  for (let i = index + 1; i < method.marinenpc_list.length; i++) {
+                    if (method.marinenpc_list[i].method === currentRowMethod) {
+                      rowSpan++;
+                    } else {
+                      break;
+                    }
+                  }
+                }
+
+                return (
+                  <TableRow key={index}>
+                    {isFirstOfGroup && (
+                      <TableCell rowSpan={rowSpan}>{item.method}</TableCell>
+                    )}
+                    <TableCell>
+                      <Link to={`/obj/${item.id}`}>{item.name}</Link>
+                    </TableCell>
+                    <TableCell>
+                      {item.sea_areas.map((value: { id: number, name: string }, idx: number) => (
+                        <span key={value.id}>
+                          <Link to={`/obj/${value.id}`}>{value.name}</Link>
+                          {idx < item.sea_areas.length - 1 ? ", " : ""}
+                        </span>
+                      ))}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
