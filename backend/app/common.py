@@ -513,6 +513,55 @@ WHERE json_extract(item.value, '$.id') = :itemid;
 
     return None
 
+def fetch_sea_producing_id(itemid: int, db: Session):
+    fetched = db.execute( text(""" 
+WITH A as (SELECT
+distinct
+  t.id, t.name, t.region, activity.key as activity, json_extract(rank_type.value, '$.랭크') as reqrank
+FROM
+  sea t,
+  json_each(t.gatherable) AS activity,
+  json_each(activity.value) AS rank_type,
+  json_each(rank_type.value, '$.아이템') AS item_list
+
+where json_extract(item_list.value, '$.id') = :itemid)
+                         select A.id, A.name, json_extract(r.value, '$.name') as region_name, A.activity, A.reqrank 
+                         from A,
+                         json_each(A.region) as r;
+    """), {'itemid': itemid}).fetchall()
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {
+                "id": row.id,
+                "name": row.name,
+                "region_name": row.region_name,
+                "activity": row.activity,
+                "reqrank": row.reqrank
+            }
+            obj_list.append(obj)
+        # group by (activity, rank, region_name)
+        grouped = {}
+        for item in obj_list:
+            key = (item['activity'], item['reqrank'], item['region_name'])
+            if key not in grouped:
+                grouped[key] = {
+                    "activity": item['activity'],
+                    "reqrank": item['reqrank'],
+                    "region_name": item['region_name'],
+                    "sea_list": []
+                }
+            grouped[key]['sea_list'].append({
+                "id": item['id'],
+                "name": item['name']
+            })
+        obj_list = list(grouped.values())
+        # sort by (activity, reqrank, region_name)
+        obj_list.sort(key=lambda x: (x['activity'], x['reqrank'] or '', x['region_name'] or ''))
+        return obj_list
+    return None
+
+
 def fetch_all_obtain_methods(itemid: int, db: Session):
 
     # fetch obtain from quest
@@ -603,6 +652,11 @@ def fetch_all_obtain_methods(itemid: int, db: Session):
     if obt_dungoen_list:
         obtain_method_list.append(
             {"from": "dungeon", "dungeon_list": obt_dungoen_list}
+        )
+    obt_sea_list = fetch_sea_producing_id(itemid, db)
+    if obt_sea_list:
+        obtain_method_list.append(
+            {"from": "sea", "sea_list": obt_sea_list}
         )
     
 
