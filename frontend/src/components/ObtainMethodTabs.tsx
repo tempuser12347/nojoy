@@ -52,7 +52,7 @@ const renderTabContent = (method: any) => {
                   <TableCell>
                     <Link to={`/obj/${item.id}`}>{item.name}</Link>
                   </TableCell>
-                  <TableCell>{item.skill.map(x => <Link to={`/obj/${x.id}`}>{x.name}</Link>)}</TableCell>
+                  <TableCell>{item.skill.map((x: { id: number, name: string }) => <Link to={`/obj/${x.id}`}>{x.name}</Link>)}</TableCell>
                   <TableCell>{item.ingredients.map((x: { id: number, name: string, value: number }, i: number) => (<span key={i}>
                     <Link to={`/obj/${x.id}`}>{x.name}</Link> {x.value}
                     {i < item.ingredients.length - 1 ? ", " : ""}
