@@ -28,7 +28,8 @@ def fetch_recipe_producing_id(item_id: int, db: Session):
     fetched = db.execute(
         text(
             """
-SELECT id, name
+            WITH A as (
+SELECT id, name, recipe_book_id, required_Skill, ingredients
 FROM recipe
 WHERE
 json_valid(greatsuccess) = 1 AND
@@ -39,7 +40,7 @@ json_valid(greatsuccess) = 1 AND
         WHERE json_extract(value, '$.ref') = :itemid
     )
 UNION
-SELECT id, name
+SELECT id, name, recipe_book_id, required_Skill, ingredients
 FROM recipe
 WHERE
 json_valid(success) = 1 AND
@@ -50,7 +51,7 @@ json_valid(success) = 1 AND
         WHERE json_extract(value, '$.ref') = :itemid
     )
 UNION
-SELECT id, name
+SELECT id, name, recipe_book_id, required_Skill, ingredients
 FROM recipe
 WHERE
 json_valid(failure) = 1 AND
@@ -61,6 +62,10 @@ json_valid(failure) = 1 AND
         WHERE json_extract(value, '$.ref') = :itemid
     )
 
+    )
+    select distinct A.id, A.name, recipe_book_id as bookid, B.name as bookname, A.required_Skill, A.ingredients from A 
+    left join recipebook as B on A.recipe_book_id = B.id
+
 """
         ),
         {"itemid": item_id},
@@ -70,6 +75,9 @@ json_valid(failure) = 1 AND
         obj_list = []
         for row in fetched:
             obj = {"id": row.id, "name": row.name}
+            obj['recipe_book'] = {"id": row.bookid, "name": row.bookname}
+            obj['skill'] = json.loads(row.required_Skill)
+            obj['ingredients'] = json.loads(row.ingredients)
             obj_list.append(obj)
         return obj_list
     return None

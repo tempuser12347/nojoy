@@ -34,13 +34,34 @@ const renderTabContent = (method: any) => {
       );
     case "recipe":
       return (
-        <ul>
-          {method.recipe_list.map((item: any) => (
-            <li key={item.id}>
-              <Link to={`/obj/${item.id}`}>{item.name}</Link>
-            </li>
-          ))}
-        </ul>
+
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>레시피책</TableCell>
+                <TableCell>레시피</TableCell>
+                <TableCell>스킬</TableCell>
+                <TableCell>재료</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {method.recipe_list.map((item: any) => (
+                <TableRow>
+                  <TableCell><Link to={`/obj/${item.recipe_book.id}`}>{item.recipe_book.name}</Link>{item.method}</TableCell>
+                  <TableCell>
+                    <Link to={`/obj/${item.id}`}>{item.name}</Link>
+                  </TableCell>
+                  <TableCell>{item.skill.map(x => <Link to={`/obj/${x.id}`}>{x.name}</Link>)}</TableCell>
+                  <TableCell>{item.ingredients.map((x: { id: number, name: string, value: number }, i: number) => (<span key={i}>
+                    <Link to={`/obj/${x.id}`}>{x.name}</Link> {x.value}
+                    {i < item.ingredients.length - 1 ? ", " : ""}
+                  </span>))}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       );
     case "npcsale":
       return (
