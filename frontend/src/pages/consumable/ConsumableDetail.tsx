@@ -18,7 +18,6 @@ interface Consumable {
 }
 
 export default function ConsumableDetail({ data }: { data: Consumable }) {
-  // const [consumable, setConsumable] = useState<Consumable>(data);
   const consumable = data;
   return (
     <Box sx={{ p: 3 }}>
