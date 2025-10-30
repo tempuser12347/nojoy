@@ -166,9 +166,9 @@ const renderTabContent = (method: any) => {
           </Table>
         </TableContainer>
       );
-      case "landnpc_drop":
+    case "landnpc_drop":
       return (
-        
+
         <TableContainer>
           <Table>
             <TableHead>
@@ -184,13 +184,45 @@ const renderTabContent = (method: any) => {
                     <Link to={`/obj/${item.id}`}>{item.name}</Link>
                   </TableCell>
                   <TableCell>
-                    {item.fields.map((value: {id: number, name: string}, index: number) => (
+                    {item.fields.map((value: { id: number, name: string }, index: number) => (
                       <span key={value.id}>
                         <Link to={`/obj/${value.id}`}>{value.name}</Link>
                         {index < item.fields.length - 1 ? ", " : ""}
                       </span>
                     ))}
-                    </TableCell>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )
+    case "marinenpc_drop":
+      return (
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>방식</TableCell>
+                <TableCell>해상npc</TableCell>
+                <TableCell>해역</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {method.marinenpc_list.map((item: any) => (
+                <TableRow>
+                  <TableCell>{item.method}</TableCell>
+                  <TableCell>
+                    <Link to={`/obj/${item.id}`}>{item.name}</Link>
+                  </TableCell>
+                  <TableCell>
+                    {item.sea_areas.map((value: { id: number, name: string }, index: number) => (
+                      <span key={value.id}>
+                        <Link to={`/obj/${value.id}`}>{value.name}</Link>
+                        {index < item.sea_areas.length - 1 ? ", " : ""}
+                      </span>
+                    ))}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -253,6 +285,9 @@ const ObtainMethodTabs: React.FC<{ data: { from: string }[] }> = ({ data }) => {
               label = "아이템 사용";
             } else if (method.from == "landnpc_drop") {
               label = "육상NPC드랍";
+            }
+            else if (method.from == "marinenpc_drop") {
+              label = "해상NPC드랍";
             }
 
             return <Tab label={label} key={index} />;

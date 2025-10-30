@@ -247,6 +247,26 @@ WHERE json_extract(je.value, '$.id') = :drop_item_id;"""), {'drop_item_id': item
 
     return None
 
+def fetch_marine_npc_drop_producing_id(item_id: int, db: Session):
+
+    # fetch (npc id, 획득방법 ) from marinenpc table for given item_id , looking into 'acquire_items' column
+    fetched = db.execute(
+        text(
+            """ SELECT DISTINCT m.id, m.name, m.sea_areas, json_extract(je.value, '$."획득 방법"') AS method
+FROM marinenpc AS m
+JOIN json_each(m.acquired_items) AS je
+WHERE json_extract(je.value, '$.id') = :drop_item_id;"""), {'drop_item_id': item_id}).fetchall()
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {"id": row.id, "name": row.name, "method": row.method, 'sea_areas': json.loads(row.sea_areas)}
+            obj_list.append(obj)
+        # sort by method
+        obj_list.sort(key=lambda x: x["method"])
+        return obj_list
+
+    return None
+
 def fetch_field_resurvey_reward_producing_id(item_id: int, db: Session):
 
     fetched = db.execute(
@@ -375,7 +395,11 @@ def fetch_all_obtain_methods(itemid: int, db: Session):
             {"from": "landnpc_drop", "landnpc_list": obt_landnpc_drop_list}
         )
 
-
+    obt_marinenpc_drop_list = fetch_marine_npc_drop_producing_id(itemid, db)
+    if obt_marinenpc_drop_list:
+        obtain_method_list.append(
+            {"from": "marinenpc_drop", "marinenpc_list": obt_marinenpc_drop_list}
+        )
     
 
     # if empty return None
