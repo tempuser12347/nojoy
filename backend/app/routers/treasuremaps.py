@@ -220,6 +220,8 @@ GROUP BY t.id;
             if pdata:
                 preceding_data.append({"id": pdata.id, "name": pdata.name})
         # override preceding with resolved data
+        if not preceding_data:
+            preceding_data = None
         ret['preceding'] = preceding_data
     else:
         ret['preceding'] = None

@@ -129,6 +129,8 @@ export default function TreasureMapDetail({ data }: { data?: TreasureMap }) {
                   : null
               }
             />
+            {treasureMap.discovery ? 
+            
             <DetailItem
               label="발견물"
               value={
@@ -136,15 +138,19 @@ export default function TreasureMapDetail({ data }: { data?: TreasureMap }) {
                   ? renderObjectChip(treasureMap.discovery, navigate)
                   : null
               }
-            />
-            <DetailItem label="목적지" value={treasureMap.name} />
-            <DetailItem label="도시 조건" value={treasureMap.city_conditions} />
+            />: null
+          }
+            {treasureMap.city_conditions ? 
+            <DetailItem label="도시 조건" value={treasureMap.city_conditions} />:null
+          }
+          {treasureMap.preceding ? 
             <DetailItem
               label="선행"
               value={treasureMap.preceding?.map((x) =>
                 renderObjectChip(x, navigate)
               )}
-            />
+            /> : null
+        }
             <DetailItem label="보상 (두캇)" value={treasureMap.reward_dukat} />
             <DetailItem label="보상 (아이템)" value={treasureMap.reward_item} />
             <Box sx={{ gridColumn: "1 / -1" }}>
