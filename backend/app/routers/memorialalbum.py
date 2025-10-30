@@ -24,6 +24,9 @@ def read_memorialalbums(
     ),
     sort_by: str = Query("id", description="Column to sort by"),
     sort_order: str = Query("asc", description="Sort order (asc or desc)"),
+    category_search: Optional[str] = Query(
+        None, description="Comma-separated list of categories to filter by"
+    ),
     db: Session = Depends(get_db),
 ):
     query = "SELECT id, name, description, category, reward_npc, reward_item, items FROM memorialalbum"
@@ -36,6 +39,12 @@ def read_memorialalbums(
             row
             for row in results
             if name_search.lower() in (row.get("name") or "").lower()
+        ]
+
+    if category_search:
+        categories = [c.strip().lower() for c in category_search.split(",")]
+        results = [
+            row for row in results if (row.get("category") or "").lower() in categories
         ]
 
     if sort_by:
