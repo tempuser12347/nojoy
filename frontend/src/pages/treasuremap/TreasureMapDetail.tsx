@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Grid
 } from "@mui/material";
 import { renderObjectChip } from "../../common/render";
 import api from "../../api";
@@ -105,55 +106,8 @@ export default function TreasureMapDetail({ data }: { data?: TreasureMap }) {
       </Typography>
       <Card>
         <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "1fr 1fr",
-                md: "1fr 1fr 1fr",
-                lg: "1fr 1fr 1fr 1fr",
-              },
-            }}
-          >
-            <DetailItem label="분류" value={treasureMap.category} />
-            <DetailItem label="필요 스킬" value={treasureMap.required_skill} />
-            <DetailItem label="학문" value={treasureMap.academic_field} />
-            <DetailItem label="서고" value={treasureMap.library} />
-            <DetailItem
-              label="목적지"
-              value={
-                treasureMap.destination
-                  ? renderObjectChip(treasureMap.destination, navigate)
-                  : null
-              }
-            />
-            {treasureMap.discovery ? 
-            
-            <DetailItem
-              label="발견물"
-              value={
-                treasureMap.discovery
-                  ? renderObjectChip(treasureMap.discovery, navigate)
-                  : null
-              }
-            />: null
-          }
-            {treasureMap.city_conditions ? 
-            <DetailItem label="도시 조건" value={treasureMap.city_conditions} />:null
-          }
-          {treasureMap.preceding ? 
-            <DetailItem
-              label="선행"
-              value={treasureMap.preceding?.map((x) =>
-                renderObjectChip(x, navigate)
-              )}
-            /> : null
-        }
-            <DetailItem label="보상 (두캇)" value={treasureMap.reward_dukat} />
-            <DetailItem label="보상 (아이템)" value={treasureMap.reward_item} />
-            <Box sx={{ gridColumn: "1 / -1" }}>
+          <Grid container spacing={2}>
+            <Grid size={{xs:12}}>
               <DetailItem
                 label="설명"
                 value={
@@ -162,8 +116,66 @@ export default function TreasureMapDetail({ data }: { data?: TreasureMap }) {
                   </Typography>
                 }
               />
-            </Box>
-            <Box sx={{ gridColumn: "1 / -1" }}>
+            </Grid>
+            <Grid size={{xs: 12, sm: 6}}>
+              <DetailItem label="분류" value={treasureMap.category} />
+            </Grid>
+            <Grid size={{xs: 12, sm: 6}} >
+              <DetailItem label="필요 스킬" value={treasureMap.required_skill} />
+            </Grid>
+            <Grid size={{xs: 12, sm: 6}} >
+              <DetailItem label="학문" value={treasureMap.academic_field} />
+            </Grid>
+            <Grid size={{xs: 12, sm: 6}} >
+              <DetailItem label="서고" value={treasureMap.library} />
+            </Grid>
+            <Grid size={{xs: 12, sm: 6}} >
+              <DetailItem
+                label="목적지"
+                value={
+                  treasureMap.destination
+                    ? renderObjectChip(treasureMap.destination, navigate)
+                    : null
+                }
+              />
+            </Grid>
+            {treasureMap.discovery ? (
+            <Grid size={{xs: 12, sm: 6}} >
+                <DetailItem
+                  label="발견물"
+                  value={
+                    treasureMap.discovery
+                      ? renderObjectChip(treasureMap.discovery, navigate)
+                      : null
+                  }
+                />
+              </Grid>
+            ) : null}
+            {treasureMap.city_conditions ? (
+            <Grid size={{xs: 12, sm: 6}} >
+                <DetailItem
+                  label="도시 조건"
+                  value={treasureMap.city_conditions}
+                />
+              </Grid>
+            ) : null}
+            {treasureMap.preceding ? (
+            <Grid size={{xs: 12, sm: 6}} >
+                <DetailItem
+                  label="선행"
+                  value={treasureMap.preceding?.map((x) =>
+                    renderObjectChip(x, navigate)
+                  )}
+                />
+              </Grid>
+            ) : null}
+            <Grid size={{xs: 12, sm: 6}} >
+              <DetailItem label="보상 (두캇)" value={treasureMap.reward_dukat} />
+            </Grid>
+            <Grid size={{xs: 12, sm: 6}} >
+              <DetailItem label="보상 (아이템)" value={treasureMap.reward_item} />
+            </Grid>
+            <Grid size={{xs:12}}>
               <DetailItem
                 label="공략"
                 value={
@@ -172,8 +184,8 @@ export default function TreasureMapDetail({ data }: { data?: TreasureMap }) {
                   </Typography>
                 }
               />
-            </Box>
-          </Box>
+            </Grid>
+          </Grid>
         </CardContent>
       </Card>
     </Box>
