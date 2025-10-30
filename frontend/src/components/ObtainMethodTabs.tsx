@@ -478,11 +478,45 @@ const renderTabContent = (method: any) => {
             </TableHead>
             <TableBody>
               {method.sea_list.map((item: any, index: number) => {
+                const currentRowActivity = item.activity;
+                const previousRowActivity = index > 0 ? method.sea_list[index - 1].activity : undefined;
+                const currentRowRank = item.reqrank;
+                const previousRowRank = index > 0 ? method.sea_list[index - 1].reqrank : undefined;
 
+                const isFirstOfGroupActivity = currentRowActivity !== previousRowActivity;
+                const isFirstOfGroupRank = isFirstOfGroupActivity || (currentRowRank !== previousRowRank);
 
-                  return <TableRow key={index}>
-                      <TableCell>{item.activity}</TableCell>
-                      <TableCell>{item.reqrank}</TableCell>
+                let rowSpanActivity = 1;
+                let rowSpanRank = 1;
+
+                if (isFirstOfGroupActivity) {
+                  for (let i = index + 1; i < method.sea_list.length; i++) {
+                    if (method.sea_list[i].activity === currentRowActivity) {
+                      rowSpanActivity++;
+                    } else {
+                      break;
+                    }
+                  }
+                }
+
+                if (isFirstOfGroupRank) {
+                  for (let i = index + 1; i < method.sea_list.length; i++) {
+                    if (method.sea_list[i].activity === currentRowActivity && method.sea_list[i].reqrank === currentRowRank) {
+                      rowSpanRank++;
+                    } else {
+                      break;
+                    }
+                  }
+                }
+
+                return (
+                  <TableRow key={index}>
+                    {isFirstOfGroupActivity && (
+                      <TableCell rowSpan={rowSpanActivity}>{item.activity}</TableCell>
+                    )}
+                    {isFirstOfGroupRank && (
+                      <TableCell rowSpan={rowSpanRank}>{item.reqrank}</TableCell>
+                    )}
                       <TableCell>{item.region_name}</TableCell>
                     <TableCell>
                       {item.sea_list.map((value: { id: number, name: string }, idx: number) => (
@@ -493,6 +527,7 @@ const renderTabContent = (method: any) => {
                       ))}
                     </TableCell>
                   </TableRow>
+                );
               })}
             </TableBody>
           </Table>
