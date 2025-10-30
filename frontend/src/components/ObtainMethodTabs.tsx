@@ -533,6 +533,40 @@ const renderTabContent = (method: any) => {
           </Table>
         </TableContainer>
       )
+    case "private_farm":
+      return ( 
+
+
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ minWidth: '80px' }}>시설</TableCell>
+                <TableCell sx={{ minWidth: '80px' }}>농장</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {method.privatefarm_list.map((item: any, index: number) => {
+
+
+                return (
+                  <TableRow key={index}>
+                    <TableCell>{item.facility}</TableCell>
+                    <TableCell>
+                      {item.privatefarm_list.map((value: { id: number, name: string }, idx: number) => (
+                        <span key={value.id}>
+                          <Link to={`/obj/${value.id}`}>{value.name}</Link>
+                          {idx < item.privatefarm_list.length - 1 ? ", " : ""}
+                        </span>
+                      ))}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )
     default:
       return null;
   }
@@ -604,6 +638,9 @@ const ObtainMethodTabs: React.FC<{ data: { from: string }[] }> = ({ data }) => {
             }
             else if (method.from == "sea") {
               label = "해상채집";
+            }
+            else if (method.from == "private_farm") {
+              label = "개인농장";
             }
 
             return <Tab label={label} key={index} />;

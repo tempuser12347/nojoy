@@ -561,6 +561,44 @@ where json_extract(item_list.value, '$.id') = :itemid)
         return obj_list
     return None
 
+def fetch_private_farm_producing_id(itemid: int, db: Session):
+
+    fetched = db.execute(text(""" 
+                select t.id, t.name, json_extract(item.value, '$.id') , json_extract(facility.value , '$.facility') as fname from privatefarm t,
+        json_each(t.products) as ftype,
+        json_each(ftype.value) as facility,
+        json_each(facility.value, '$.items') as itemsets,
+        json_each(itemsets.value) as item
+        where json_extract(item.value, '$.id') = :itemid;
+ 
+                              """), {'itemid': itemid}).fetchall()
+    
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {
+                "id": row.id,
+                "name": row.name,
+                "facility": row.fname
+            }
+            obj_list.append(obj)
+        # group by facility
+        grouped = {}
+        for item in obj_list:
+            key = item['facility']
+            if key not in grouped:
+                grouped[key] = {
+                    "facility": item['facility'],
+                    "privatefarm_list": []
+                }
+            grouped[key]['privatefarm_list'].append({
+                "id": item['id'],
+                "name": item['name']
+            })
+        return list(grouped.values())
+
+    return None
+
 
 def fetch_all_obtain_methods(itemid: int, db: Session):
 
@@ -658,7 +696,12 @@ def fetch_all_obtain_methods(itemid: int, db: Session):
         obtain_method_list.append(
             {"from": "sea", "sea_list": obt_sea_list}
         )
-    
+
+    obt_privatefarm_list = fetch_private_farm_producing_id(itemid, db)
+    if obt_privatefarm_list:
+        obtain_method_list.append(
+            {"from": "private_farm", "privatefarm_list": obt_privatefarm_list}
+        )    
 
     # if empty return None
     if not obtain_method_list:
