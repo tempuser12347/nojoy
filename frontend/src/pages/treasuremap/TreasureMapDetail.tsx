@@ -175,6 +175,8 @@ export default function TreasureMapDetail({ data }: { data?: TreasureMap }) {
             <Grid size={{xs: 12, sm: 6}} >
               <DetailItem label="보상 (아이템)" value={treasureMap.reward_item} />
             </Grid>
+            {treasureMap.strategy ? 
+            
             <Grid size={{xs:12}}>
               <DetailItem
                 label="공략"
@@ -184,7 +186,8 @@ export default function TreasureMapDetail({ data }: { data?: TreasureMap }) {
                   </Typography>
                 }
               />
-            </Grid>
+            </Grid> : null
+          }
           </Grid>
         </CardContent>
       </Card>
