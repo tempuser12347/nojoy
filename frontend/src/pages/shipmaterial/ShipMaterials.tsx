@@ -10,6 +10,14 @@ import {
 import DataTable from '../../components/DataTable';
 import api from '../../api';
 
+const parseSortValue = (value: any) => {
+  if (typeof value === 'string') {
+    const match = value.match(/^(-?\d+)/);
+    return match ? parseInt(match[1], 10) : value;
+  }
+  return value;
+};
+
 const columns = [
   { id: 'name', label: '이름', minWidth: 170 },
   { id: 'durability', label: '내구도', minWidth: 100 },
@@ -31,12 +39,14 @@ const ShipMaterials: React.FC = () => {
   const page = parseInt(searchParams.get('page') || '0', 10);
   const rowsPerPage = parseInt(searchParams.get('rowsPerPage') || '10', 10);
   const name_search = searchParams.get('name_search') || '';
+  const sort_by = searchParams.get('sort_by') || 'id';
+  const sort_order = (searchParams.get('sort_order') as 'asc' | 'desc') || 'desc';
 
   const [searchInput, setSearchInput] = React.useState(name_search);
 
   useEffect(() => {
     setSearchInput(name_search);
-  }, [name_search]);
+  }, [name_search, sort_by, sort_order]);
 
   const updateSearchParams = (newParams: Record<string, any>) => {
     const currentParams = new URLSearchParams(searchParams);
@@ -47,11 +57,13 @@ const ShipMaterials: React.FC = () => {
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ['shipmaterials', page, rowsPerPage, name_search],
+    queryKey: ['shipmaterials', page, rowsPerPage, name_search, sort_by, sort_order],
     queryFn: async () => {
       const response = await api.get('/api/shipmaterials', {
         params: {
           name_search,
+          sort_by,
+          sort_order,
           skip: page * rowsPerPage,
           limit: rowsPerPage,
         },
@@ -79,6 +91,18 @@ const ShipMaterials: React.FC = () => {
 
   const handleRowsPerPageChange = (newRowsPerPage: number) => {
     updateSearchParams({ rowsPerPage: newRowsPerPage, page: 0 });
+  };
+
+  const handleSortChange = (columnId: string) => {
+    let newSortOrder: "asc" | "desc" = "desc"; // Default to descending for first click
+    if (sort_by === columnId) {
+      newSortOrder = sort_order === "asc" ? "desc" : "asc";
+    }
+    updateSearchParams({
+      sort_by: columnId,
+      sort_order: newSortOrder,
+      page: 0,
+    });
   };
 
   return (
@@ -110,6 +134,9 @@ const ShipMaterials: React.FC = () => {
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
+        sortColumn={sort_by}
+        sortDirection={sort_order}
+        onSortChange={handleSortChange}
         onRowClick={(row) => navigate(`/obj/${row.id}`)}
       />
     </Box>

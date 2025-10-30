@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from sqlalchemy import text
 from ..database import get_db
 import json
+import re
 
 
 class ShipMaterialResponse(BaseModel):
@@ -32,6 +33,14 @@ def read_shipmaterials(
     # Convert Row objects to dict for easier filtering and manipulation
     results = [dict(row._mapping) for row in results]
 
+    def parse_sort_value(value):
+        if isinstance(value, str):
+            match = re.match(r"^(-?\d+)", value)
+            return int(match.group(1)) if match else value
+        if value is None:
+            return float('-inf')  # Treat None as smallest possible
+        return value
+
     if name_search:
         results = [
             row
@@ -41,10 +50,21 @@ def read_shipmaterials(
         ]
 
     if sort_by:
-        results.sort(
-            key=lambda x: x.get(sort_by) or "",
-            reverse=(sort_order.lower() == "desc"),
-        )
+        # Define columns that require custom numeric parsing
+        numeric_string_columns = [
+            "durability", "vertical_sail", "horizontal_sail", "rowing_power",
+            "maneuverability", "wave_resistance", "armor", "cabin", "gunport", "cargo"
+        ]
+        if sort_by in numeric_string_columns:
+            results.sort(
+                key=lambda x: parse_sort_value(x.get(sort_by, "")), # Default to empty string for missing values
+                reverse=(sort_order.lower() == "desc"),
+            )
+        else:
+            results.sort(
+                key=lambda x: x.get(sort_by) or "",
+                reverse=(sort_order.lower() == "desc"),
+            )
 
     total = len(results)
     paginated_results = results[skip : skip + limit]
