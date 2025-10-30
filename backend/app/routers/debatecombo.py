@@ -39,8 +39,16 @@ def read_debatecombos(
         ]
 
     if sort_by:
+        if sort_by == 'category':
+            sort_f = lambda x: json.loads(x.get('category_info')).get('category') if x.get('category_info') else ""
+        elif sort_by == 'bonus':
+            sort_f = lambda x: json.loads(x.get('category_info')).get('bonus') if x.get('category_info') else ""
+        elif sort_by == 'total_points':
+            sort_f = lambda x: x.get('total_points') or -1
+        else:
+            sort_f = lambda x: x.get(sort_by) or ""
         results.sort(
-            key=lambda x: x.get(sort_by) or "",
+            key=sort_f,
             reverse=(sort_order.lower() == "desc"),
         )
 
