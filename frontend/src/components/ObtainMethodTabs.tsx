@@ -24,13 +24,38 @@ const renderTabContent = (method: any) => {
   switch (method.from) {
     case "quest":
       return (
-        <ul>
-          {method.quest_list.map((item: any) => (
-            <li key={item.id}>
-              <Link to={`/obj/${item.id}`}>{item.name}</Link>
-            </li>
-          ))}
-        </ul>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>종류</TableCell>
+                <TableCell>퀘스트</TableCell>
+                <TableCell>의뢰도시</TableCell>
+                <TableCell>목적지</TableCell>
+              </TableRow>
+              </TableHead>
+              <TableBody>
+              {method.quest_list.map((item: any) => (
+                <TableRow>
+                  <TableCell>{item.series}</TableCell>
+                  <TableCell>
+                    <Link to={`/obj/${item.id}`}>{item.name}</Link>
+                  </TableCell>
+                  <TableCell>{item.location}</TableCell>
+                  <TableCell>
+                    {item.destination ? (
+                      <Link to={`/obj/${item.destination.id}`}>
+                        {item.destination.name}
+                      </Link>
+                    ) : (
+                      "-"
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+                </TableBody>
+          </Table>
+          </TableContainer>
       );
     case "recipe":
       return (

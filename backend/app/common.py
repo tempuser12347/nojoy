@@ -7,9 +7,11 @@ def fetch_quest_rewarding_id(item_id: int, db: Session):
     fetched = db.execute(
         text(
             """
-        SELECT id, name
+        with A as (SELECT id, name, series, location, destination
         FROM quest
-        WHERE json_valid(reward_items) = 1 AND json_extract(reward_items, '$."' || :itemid || '"') IS NOT NULL
+        WHERE json_valid(reward_items) = 1 AND json_extract(reward_items, '$."' || :itemid || '"') IS NOT NULL)
+        select A.id, A.name, A.series, A.location, A.destination as destination_id, allData.name as destination_name from A 
+        left join allData on A.destination = allData.id;
     """
         ),
         {"itemid": item_id},
@@ -17,7 +19,8 @@ def fetch_quest_rewarding_id(item_id: int, db: Session):
     if fetched:
         obj_list = []
         for row in fetched:
-            obj = {"id": row.id, "name": row.name}
+            obj = {"id": row.id, "name": row.name, 'series': row.series, "location": row.location,
+                   "destination": {"id": row.destination_id, "name": row.destination_name} if row.destination_id else None}
             obj_list.append(obj)
         return obj_list
     return None
