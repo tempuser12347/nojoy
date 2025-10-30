@@ -1,5 +1,6 @@
 from sqlalchemy.orm.session import Session
 from sqlalchemy import text
+import json
 
 
 def fetch_quest_rewarding_id(item_id: int, db: Session):
@@ -231,6 +232,17 @@ WHERE json_extract(je.value, '$.id') = :drop_item_id;"""), {'drop_item_id': item
         for row in fetched:
             obj = {"id": row.id, "name": row.name}
             obj_list.append(obj)
+
+        # for each landnpc, fetch field info
+        for landnpc in obj_list:
+            fetched_field = db.execute(
+                text(
+                    """ SELECT fields from landnpc where id = :landnpc_id;"""
+                ),
+                {"landnpc_id": landnpc["id"]},
+            ).fetchone()
+            field_list = json.loads(fetched_field.fields)
+            landnpc["fields"] = field_list
         return obj_list
 
     return None

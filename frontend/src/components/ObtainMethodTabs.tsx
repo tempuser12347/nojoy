@@ -174,6 +174,7 @@ const renderTabContent = (method: any) => {
             <TableHead>
               <TableRow>
                 <TableCell>육상npc</TableCell>
+                <TableCell>필드</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -182,6 +183,14 @@ const renderTabContent = (method: any) => {
                   <TableCell>
                     <Link to={`/obj/${item.id}`}>{item.name}</Link>
                   </TableCell>
+                  <TableCell>
+                    {item.fields.map((value: {id: number, name: string}, index: number) => (
+                      <span key={value.id}>
+                        <Link to={`/obj/${value.id}`}>{value.name}</Link>
+                        {index < item.fields.length - 1 ? ", " : ""}
+                      </span>
+                    ))}
+                    </TableCell>
                 </TableRow>
               ))}
             </TableBody>
