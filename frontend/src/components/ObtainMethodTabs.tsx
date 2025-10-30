@@ -350,6 +350,58 @@ const renderTabContent = (method: any) => {
         </TableContainer>
 
       )
+    case "citynpc_gift":
+      return (
+
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{minWidth: '80px'}}>지역</TableCell>
+                <TableCell sx={{minWidth: '80px'}}>도시</TableCell>
+                <TableCell sx={{minWidth: '80px'}}>npc</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {method.citynpc_list.map((item: any, index: number) => {
+                const currentRowMethod = item.region;
+                const previousRowMethod = index > 0 ? method.citynpc_list[index - 1].region : undefined;
+                const isFirstOfGroup = currentRowMethod !== previousRowMethod;
+
+                let rowSpan = 1;
+                if (isFirstOfGroup) {
+                  for (let i = index + 1; i < method.citynpc_list.length; i++) {
+                    if (method.citynpc_list[i].region === currentRowMethod) {
+                      rowSpan++;
+                    } else {
+                      break;
+                    }
+                  }
+                }
+
+                return (
+                  <TableRow key={index}>
+                    {isFirstOfGroup && (
+                      <TableCell rowSpan={rowSpan}>{item.region}</TableCell>
+                    )}
+                    <TableCell>
+                      <Link to={`/obj/${item.city.id}`}>{item.city.name}</Link>
+                    </TableCell>
+                    <TableCell>
+                      {item.citynpc_list.map((value: { id: number, name: string }, idx: number) => (
+                        <span key={value.id}>
+                          <Link to={`/obj/${value.id}`}>{value.name}</Link>
+                          {idx < item.citynpc_list.length - 1 ? ", " : ""}
+                        </span>
+                      ))}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )
     default:
       return null;
   }
@@ -412,6 +464,9 @@ const ObtainMethodTabs: React.FC<{ data: { from: string }[] }> = ({ data }) => {
             }
             else if (method.from == "ganador") {
               label = "가나돌";
+            }
+            else if (method.from == "citynpc_gift") {
+              label = "답례품";
             }
 
             return <Tab label={label} key={index} />;

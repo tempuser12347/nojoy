@@ -408,6 +408,71 @@ WHERE json_extract(je.value, '$.id') = :itemid;
 
     return None
 
+def fetch_citynpc_gift_producing_id(itemid: int, db: Session):
+    fetched = db.execute(
+        text(
+            """
+        WITH A AS (
+    SELECT DISTINCT
+        c.id,
+        c.name,
+        c.extraname,
+        c.city
+    FROM citynpc AS c
+    JOIN json_each(
+        CASE
+            WHEN json_valid(c.gifts) THEN c.gifts
+            ELSE '[]'
+        END
+    ) AS je
+    WHERE json_extract(je.value, '$.id') = :itemid
+)
+SELECT
+    A.id,
+    A.name,
+    A.extraname,
+    A.city,
+    city.region
+FROM A
+LEFT JOIN city
+    ON json_extract(A.city, '$.id') = city.id;
+
+          """
+        ), {'itemid': itemid}).fetchall()
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {
+                "id": row.id,
+                "name": row.name,
+                "extraname": row.extraname,
+                "city": json.loads(row.city),
+                "region": row.region
+            }
+            obj_list.append(obj)
+
+        # group by (region, city)
+        grouped = {}
+        for item in obj_list:
+            key = (item['region'], item['city']['id'])
+            if key not in grouped:
+                grouped[key] = {
+                    "region": item['region'],
+                    "city": item['city'],
+                    "citynpc_list": []
+                }
+            grouped[key]['citynpc_list'].append({
+                "id": item['id'],
+                "name": item['name'],
+                "extraname": item['extraname']
+            })
+        obj_list = list(grouped.values())
+        # sort by (region, )
+        obj_list.sort(key=lambda x: (x['region'] or '', x['city']['name']))
+
+
+        return obj_list
+    return None
 
 def fetch_all_obtain_methods(itemid: int, db: Session):
 
@@ -487,6 +552,12 @@ def fetch_all_obtain_methods(itemid: int, db: Session):
     if obt_ganador_list:
         obtain_method_list.append(
             {"from": "ganador", "ganador_list": obt_ganador_list}
+        )
+
+    obt_citynpc_gift_list = fetch_citynpc_gift_producing_id(itemid, db)
+    if obt_citynpc_gift_list:
+        obtain_method_list.append(
+            {"from": "citynpc_gift", "citynpc_list": obt_citynpc_gift_list}
         )
     
 
