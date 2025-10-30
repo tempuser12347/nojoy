@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Grid,
 } from "@mui/material";
 import api from "../../api";
 import ObtainMethodTabs from "../../components/ObtainMethodTabs";
@@ -93,32 +94,28 @@ export default function TradegoodDetail({ data }: { data?: Tradegood }) {
       </Typography>
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "1fr 1fr",
-              },
-            }}
-          >
-            <Box sx={{ gridColumn: "1 / -1" }}>
+          <Grid container spacing={2}>
+            <Grid size={{xs: 12}}>
               <DetailItem label="설명" value={tradegood.description} />
-            </Box>
-            <DetailItem label="카테고리" value={tradegood.category} />
-            <DetailItem label="분류" value={tradegood.classification} />
-            <DetailItem label="문화권" value={tradegood.culture?.name} />
-          </Box>
-
-          {tradegood.obtain_method ? (
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <DetailItem
-                label="획득방법"
-                value={<ObtainMethodTabs data={tradegood.obtain_method} />}
-              />
-            </Box>
-          ) : null}
+            </Grid>
+            <Grid size={{xs: 12, sm: 6}}>
+              <DetailItem label="카테고리" value={tradegood.category} />
+            </Grid>
+            <Grid size={{xs: 12, sm: 6}}>
+              <DetailItem label="분류" value={tradegood.classification} />
+            </Grid>
+            <Grid size={{xs: 12, sm: 6}}>
+              <DetailItem label="문화권" value={tradegood.culture?.name} />
+            </Grid>
+            {tradegood.obtain_method && (
+              <Grid size={{xs: 12}}>
+                <DetailItem
+                  label="획득방법"
+                  value={<ObtainMethodTabs data={tradegood.obtain_method} />}
+                />
+              </Grid>
+            )}
+          </Grid>
         </CardContent>
       </Card>
     </Box>
