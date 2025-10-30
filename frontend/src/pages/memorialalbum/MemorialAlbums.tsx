@@ -10,7 +10,7 @@ import {
   FormLabel,
   FormGroup,
   FormControlLabel,
-  Checkbox,
+  Checkbox, Grid
 } from "@mui/material";
 import DataTable from "../../components/DataTable";
 import api from "../../api";
@@ -157,7 +157,9 @@ const MemorialAlbums: React.FC = () => {
       <Typography variant="h4" gutterBottom>
         메모리얼 앨범
       </Typography>
-      <Box sx={{ display: "flex", gap: 1, mb: 2, flexWrap: "wrap" }}>
+      <Grid container spacing={2} >
+      <Grid size={{xs: 12, md: 4}} sx={{justifyContent: "center", alignItems: "center", display: "flex"}}>
+
         <TextField
           label="이름 검색"
           variant="outlined"
@@ -166,7 +168,10 @@ const MemorialAlbums: React.FC = () => {
           sx={{ minWidth: 200 }}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
-        <FormControl component="fieldset" variant="standard">
+      </Grid>
+      <Grid size={{xs:12, md: 8}} sx={{justifyContent: "center", alignItems: "center", display: "flex", border: '1px solid #ccc', borderRadius: '4px', padding: '8px'}} >
+
+        <FormControl component="fieldset" >
           <FormLabel component="legend">카테고리</FormLabel>
           <FormGroup row>
             {MEMORIAL_ALBUM_CATEGORIES.map((category) => (
@@ -184,12 +189,17 @@ const MemorialAlbums: React.FC = () => {
             ))}
           </FormGroup>
         </FormControl>
+      </Grid>
+      <Grid size={{xs: 12}} sx={{justifyContent: "center", alignItems: "center", display: "flex", gap: 1}} >
         <Button variant="contained" onClick={handleSearch}>
           검색
         </Button>
         <Button variant="outlined" onClick={resetFilters}>
           초기화
         </Button>
+      </Grid>
+      </Grid>
+      <Box sx={{ display: "flex", gap: 1, mb: 2, flexWrap: "wrap" }}>
       </Box>
 
       <DataTable
