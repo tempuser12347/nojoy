@@ -431,6 +431,38 @@ const renderTabContent = (method: any) => {
           </Table>
         </TableContainer>
       )
+    case "dungeon":
+      return (
+
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ minWidth: '80px' }}>유형</TableCell>
+                <TableCell sx={{ minWidth: '80px' }}>던전</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {method.dungeon_list.map((item: any, index: number) => {
+
+
+                  return <TableRow key={index}>
+                      <TableCell>{item.boxtype}</TableCell>
+                    <TableCell>
+                      {item.dungeon_list.map((value: { id: number, name: string }, idx: number) => (
+                        <span key={value.id}>
+                          <Link to={`/obj/${value.id}`}>{value.name}</Link>
+                          {idx < item.dungeon_list.length - 1 ? ", " : ""}
+                        </span>
+                      ))}
+                    </TableCell>
+                  </TableRow>
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+      )
     default:
       return null;
   }
@@ -496,6 +528,9 @@ const ObtainMethodTabs: React.FC<{ data: { from: string }[] }> = ({ data }) => {
             }
             else if (method.from == "citynpc_gift") {
               label = "답례품";
+            }
+            else if (method.from == "dungeon") {
+              label = "던전";
             }
 
             return <Tab label={label} key={index} />;

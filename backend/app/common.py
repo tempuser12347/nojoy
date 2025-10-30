@@ -477,6 +477,42 @@ LEFT JOIN city
         return obj_list
     return None
 
+def fetch_dungeon_producing_id(itemid: int, db: Session):
+    
+    fetched = db.execute(
+        text(
+            """
+            SELECT distinct d.id, d.name, box.key as boxname
+FROM dungeon AS d
+JOIN json_each(d.acquisition_items) AS box
+JOIN json_each(box.value) AS content
+JOIN json_each(content.value, '$.items') AS item
+WHERE json_extract(item.value, '$.id') = :itemid;
+    """), {'itemid': itemid}).fetchall()
+
+    if fetched:
+        obj_list = []
+        for row in fetched:
+            obj = {"id": row.id, "name": row.name, "box_name": row.boxname}
+            obj_list.append(obj)
+
+        # group by boxname
+        grouped = {}
+        for item in obj_list:
+            key = item['box_name']
+            if key not in grouped:
+                grouped[key] = {
+                    "boxtype": item['box_name'],
+                    "dungeon_list": []
+                }
+            grouped[key]['dungeon_list'].append({
+                "id": item['id'],
+                "name": item['name']
+            })
+        return list(grouped.values())
+
+    return None
+
 def fetch_all_obtain_methods(itemid: int, db: Session):
 
     # fetch obtain from quest
@@ -561,6 +597,12 @@ def fetch_all_obtain_methods(itemid: int, db: Session):
     if obt_citynpc_gift_list:
         obtain_method_list.append(
             {"from": "citynpc_gift", "citynpc_list": obt_citynpc_gift_list}
+        )
+
+    obt_dungoen_list = fetch_dungeon_producing_id(itemid, db)
+    if obt_dungoen_list:
+        obtain_method_list.append(
+            {"from": "dungeon", "dungeon_list": obt_dungoen_list}
         )
     
 
