@@ -69,8 +69,10 @@ from app.routers import (
     relic,
     relicpiece,
     memorialalbum,
-    debatecombo)
+    debatecombo,
+    completed)
 import os
+import asyncio
 
 app = FastAPI(title="DHO Database API")
 
@@ -83,6 +85,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+async def startup_event():
+    completed.load_completed_ids()
+    asyncio.create_task(completed.save_completed_ids_periodically())
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    completed.save_completed_ids()
 
 # Include routers
 app.include_router(discoveries.router)
@@ -152,6 +162,7 @@ app.include_router(relic.router)
 app.include_router(relicpiece.router)
 app.include_router(memorialalbum.router)
 app.include_router(debatecombo.router)
+app.include_router(completed.router)
 
 
 dist_dir = "dist"
