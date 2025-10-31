@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface StuddingSail {
   id: number;
@@ -28,6 +29,7 @@ interface StuddingSail {
   horizontal_sail: number | null;
   maneuverability: number | null;
   features: string | null;
+  obtain_method: any[] | null;
 }
 
 export default function StuddingSailDetail({ data }: { data?: StuddingSail }) {
@@ -89,18 +91,18 @@ export default function StuddingSailDetail({ data }: { data?: StuddingSail }) {
       </Typography>
       <Card>
         <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={studdingSail.description} />
-          </Box>
           <Grid container spacing={2}>
+          <Grid size={{xs:12}} >
+            <DetailItem label="설명" value={studdingSail.description} />
+          </Grid>
             <Grid size={{xs:12, sm:6}} >
               <DetailItem label="카테고리" value={studdingSail.category} />
             </Grid>
             <Grid size={{xs:12, sm:6}} >
               <DetailItem label="특징" value={studdingSail.features} />
             </Grid>
-          </Grid>
-          <Box sx={{ mt: 3 }}>
+            <Grid size={{xs:12}}>
+
             <Typography variant="h6" gutterBottom>
               성능
             </Typography>
@@ -122,7 +124,16 @@ export default function StuddingSailDetail({ data }: { data?: StuddingSail }) {
                 </TableBody>
               </Table>
             </TableContainer>
-          </Box>
+            </Grid>
+            {studdingSail.obtain_method && (
+              <Grid size={{xs: 12}} sx={{mt: 2}}>
+                <DetailItem
+                  label="획득방법"
+                  value={<ObtainMethodTabs data={studdingSail.obtain_method} />}
+                />
+              </Grid>
+            )}
+          </Grid>
         </CardContent>
       </Card>
     </Box>
