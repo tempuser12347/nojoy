@@ -18,6 +18,7 @@ import {
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
 import { renderObjectChip } from "../../common/render";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface Figurehead {
   id: number;
@@ -29,6 +30,7 @@ interface Figurehead {
   crew_control: number | null;
   shell_evasion: number | null;
   use_effect: { id: number; name: string } | null;
+  obtain_method: any[] | null;
 }
 
 export default function FigureheadDetail({ data }: { data?: Figurehead }) {
@@ -129,6 +131,16 @@ export default function FigureheadDetail({ data }: { data?: Figurehead }) {
                   }
                 />
               </Grid>)}
+              {figurehead.obtain_method && (
+                <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+                  <DetailItem
+                    label="획득 방법"
+                    value={
+                      <ObtainMethodTabs data={figurehead.obtain_method} />
+                    }
+                  />
+                </Grid>
+              )}
           </Grid>
         </CardContent>
       </Card>

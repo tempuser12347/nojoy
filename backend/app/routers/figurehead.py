@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from sqlalchemy import text
 from ..database import get_db
+from ..common import fetch_all_obtain_methods
 
 class FigureheadResponse(BaseModel):
     items: List[dict]
@@ -75,4 +76,9 @@ def read_figurehead_core(figurehead_id: int, db: Session):
             ret['use_effect'] = json.loads(ret['use_effect'])
         except json.JSONDecodeError:
             pass
+
+
+    obtain_method_list = fetch_all_obtain_methods(figurehead_id, db)
+    if obtain_method_list:
+        ret["obtain_method"] = obtain_method_list
     return ret
