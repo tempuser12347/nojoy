@@ -92,41 +92,43 @@ export default function FigureheadDetail({ data }: { data?: Figurehead }) {
       </Typography>
       <Card>
         <CardContent>
+
           <Box sx={{ mb: 2 }}>
             <DetailItem label="설명" value={figurehead.description} />
           </Box>
-          <Box sx={{ mt: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              성능
-            </Typography>
-            <TableContainer component={Paper}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    {Object.keys(stats).map((key) => (
-                      <TableCell key={key}>{key}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    {Object.values(stats).map((value, index) => (
-                      <TableCell key={index}>{value !== null ? value : "-"}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
-          <Grid container spacing={2} sx={{mt: 2}}>
-            <Grid size={{xs:12}} >
-                <DetailItem
-                    label="사용 효과"
-                    value={
-                    figurehead.use_effect ? renderObjectChip(figurehead.use_effect, navigate) : null
-                    }
-                />
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12 }}>
+              <Typography variant="h6" gutterBottom>
+                성능
+              </Typography>
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      {Object.keys(stats).map((key) => (
+                        <TableCell key={key}>{key}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      {Object.values(stats).map((value, index) => (
+                        <TableCell key={index}>{value !== null ? value : "-"}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Grid>
+            {figurehead.use_effect && (
+              <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+                <DetailItem
+                  label="사용 효과"
+                  value={
+                    figurehead.use_effect ? renderObjectChip(figurehead.use_effect, navigate) : null
+                  }
+                />
+              </Grid>)}
           </Grid>
         </CardContent>
       </Card>
