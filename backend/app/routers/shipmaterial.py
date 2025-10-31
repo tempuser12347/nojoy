@@ -6,6 +6,7 @@ from sqlalchemy import text
 from ..database import get_db
 import json
 import re
+from ..common import fetch_all_obtain_methods
 
 
 class ShipMaterialResponse(BaseModel):
@@ -104,5 +105,10 @@ def read_shipmaterial_core(shipmaterial_id: int, db: Session):
                 ret[field] = json.loads(ret[field])
             except json.JSONDecodeError:
                 ret[field] = None
+
+    
+    obtain_method_list = fetch_all_obtain_methods(shipmaterial_id, db)
+    if obtain_method_list:
+        ret["obtain_method"] = obtain_method_list
 
     return ret
