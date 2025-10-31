@@ -95,7 +95,7 @@ function App() {
               <Route path="/직업" element={<Jobs />} />
               <Route path="/장비품" element={<Equipments />} />
               <Route path="/교역품" element={<Tradegoods />} />
-              <Route path="/추천장" element={<Certificates />} />
+              <Route path="/certificates" element={<Certificates />} />
               <Route path="/레시피책" element={<Recipebooks />} />
               <Route path="/skills" element={<Skills />} />
               <Route path="/npcsales" element={<NpcSales />} />
