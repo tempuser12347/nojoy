@@ -6,14 +6,17 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Grid
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface Crest {
-    id: number;
-    name: string;
-    description: string | null;
+  id: number;
+  name: string;
+  description: string | null;
+  obtain_method: any[] | null;
 }
 
 export default function CrestDetail({ data }: { data?: Crest }) {
@@ -68,7 +71,18 @@ export default function CrestDetail({ data }: { data?: Crest }) {
       </Typography>
       <Card>
         <CardContent>
-          <DetailItem label="설명" value={crest.description} />
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12 }}>
+              <DetailItem label="설명" value={crest.description} />
+            </Grid>
+            {/* Add more crest details here if available */}
+          </Grid>
+          {crest.obtain_method ? (
+            <Grid size={{xs: 12}}>
+              <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>획득 방법</Typography>
+              <ObtainMethodTabs data={crest.obtain_method} />
+            </Grid>
+          ) : null}
         </CardContent>
       </Card>
     </Box>

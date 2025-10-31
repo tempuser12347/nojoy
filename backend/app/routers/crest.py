@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from sqlalchemy import text
 from ..database import get_db
+from ..common import fetch_all_obtain_methods
 
 class CrestResponse(BaseModel):
     items: List[dict]
@@ -55,5 +56,11 @@ def read_crest_core(crest_id: int, db: Session):
 
     if result is None:
         raise HTTPException(status_code=404, detail="Crest not found")
+    
+    ret = dict(result._mapping)
 
-    return dict(result._mapping)
+    obtain_method_list = fetch_all_obtain_methods(crest_id, db)
+    if obtain_method_list:
+        ret["obtain_method"] = obtain_method_list
+
+    return ret
