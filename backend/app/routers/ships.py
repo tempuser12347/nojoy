@@ -259,4 +259,8 @@ def read_ship_core(ship_id: int, db: Session):
             except json.JSONDecodeError:
                 ret[field] = None
 
+    obtain_method_list = fetch_all_obtain_methods(ship_id, db)
+    if obtain_method_list:
+        ret["obtain_method"] = obtain_method_list
+
     return ret
