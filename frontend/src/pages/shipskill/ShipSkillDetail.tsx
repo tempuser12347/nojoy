@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -81,65 +79,72 @@ export default function ShipSkillDetail({ data }: { data?: ShipSkill }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {shipSkill.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <DetailItem label="설명" value={shipSkill.description} />
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid size={{xs:12, sm:6}}>
-              <DetailItem label="행동력" value={shipSkill.action_points} />
-            </Grid>
-            <Grid size={{xs:12, sm:6}} >
-              <DetailItem label="적용범위" value={shipSkill.apply_range} />
-            </Grid>
-            <Grid size={{xs:12}} >
-              <DetailItem
-                label="필요스킬"
-                value={
-                  shipSkill.required_skill
-                    ? renderObjectsToChips(shipSkill.required_skill.map(s => ({...s, name: `${s.name} ${s.rank}`})), navigate)
-                    : null
-                }
-              />
-            </Grid>
-          </Grid>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={shipSkill.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="행동력" value={shipSkill.action_points} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="적용범위" value={shipSkill.apply_range} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem
+          label="필요스킬"
+          value={
+            shipSkill.required_skill
+              ? renderObjectsToChips(
+                  shipSkill.required_skill.map((s) => ({
+                    ...s,
+                    name: `${s.name} ${s.rank}`,
+                  })),
+                  navigate
+                )
+              : null
+          }
+        />
+      </Grid>
 
-          {shipSkill.dedicated_skill && shipSkill.dedicated_skill.length > 0 && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" color="text.secondary">
-                전용함 스킬 부여
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>조선 랭크</TableCell>
-                      <TableCell>전용함 건조증</TableCell>
-                      <TableCell>재료</TableCell>
-                      <TableCell>제외 선박</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {shipSkill.dedicated_skill.map((skill, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{skill["조선 랭크"]}</TableCell>
-                        <TableCell>{skill["전용함 건조증"]}</TableCell>
-                        <TableCell>
-                          {skill["재료"] ? renderObjectsToChips(skill["재료"].map(m => ({...m, name: `${m.name} ${m.quantity}`})), navigate) : null}
-                        </TableCell>
-                        <TableCell>{skill["제외 선박"]}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          )}
-        </CardContent>
-      </Card>
-    </Box>
+      {shipSkill.dedicated_skill && shipSkill.dedicated_skill.length > 0 && (
+        <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+          <Typography variant="h6" color="text.secondary">
+            전용함 스킬 부여
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>조선 랭크</TableCell>
+                  <TableCell>전용함 건조증</TableCell>
+                  <TableCell>재료</TableCell>
+                  <TableCell>제외 선박</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {shipSkill.dedicated_skill.map((skill, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{skill["조선 랭크"]}</TableCell>
+                    <TableCell>{skill["전용함 건조증"]}</TableCell>
+                    <TableCell>
+                      {skill["재료"]
+                        ? renderObjectsToChips(
+                            skill["재료"].map((m) => ({
+                              ...m,
+                              name: `${m.name} ${m.quantity}`,
+                            })),
+                            navigate
+                          )
+                        : null}
+                    </TableCell>
+                    <TableCell>{skill["제외 선박"]}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      )}
+    </Grid>
   );
 }
