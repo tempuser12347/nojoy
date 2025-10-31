@@ -297,6 +297,9 @@ const availableSections = [
             case "문장":
               subsection = "crests";
               break;
+            case "선박 데코":
+              subsection = "shipdecors";
+              break;
             case "추천장":
               subsection = "certificates";
               break;
