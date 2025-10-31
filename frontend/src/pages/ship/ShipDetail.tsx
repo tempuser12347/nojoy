@@ -148,12 +148,13 @@ export default function ShipDetail({ data }: { data?: Ship }) {
       </Typography>
       <Card>
         <CardContent>
+          <Box>
           <DetailItem label="설명" value={ship.description} />
-          <Grid container spacing={2} sx={{ mt: 2 }}>
+          </Box>
+          <Grid container spacing={2}>
             <Grid
               size={{ xs: 12, sm: 6, md: 4 }}
-              component="div"
-              sx={{ border: "1px solid #e0e0e0", p: 1 }}
+              sx={{ border: "1px solid #e0e0e0", p: 1}}
             >
               <Typography variant="h6" color="text.secondary">
                 선박 분류
@@ -282,7 +283,7 @@ export default function ShipDetail({ data }: { data?: Ship }) {
           </Grid>
 
           {(ship.base_performance || ship.improvement_limit) && (
-            <Box sx={{ mt: 3 }}>
+            <Grid sx={{ xs: 12 , mt: 2}}>
               <Typography variant="h6" color="text.secondary">
                 성능 및 강화 한계
               </Typography>
@@ -430,11 +431,11 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                   </TableBody>
                 </Table>
               </TableContainer>
-            </Box>
+            </Grid>
           )}
 
           {ship.ship_parts && Object.keys(ship.ship_parts).length > 0 && (
-            <Box sx={{ mt: 3 }}>
+            <Grid size={{xs:12}} sx={{mt: 2}}>
               <Typography variant="h6" color="text.secondary">
                 선박 부품
               </Typography>
@@ -476,11 +477,11 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                   </TableBody>
                 </Table>
               </TableContainer>
-            </Box>
+            </Grid>
           )}
 
           {ship.ship_skills && ship.ship_skills.length > 0 && (
-            <Box sx={{ mt: 3 }}>
+            <Grid size={{xs: 12}} sx={{mt: 2}}>
               <Typography variant="h6" color="text.secondary">
                 선박 스킬
               </Typography>
@@ -524,11 +525,11 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                   </TableBody>
                 </Table>
               </TableContainer>
-            </Box>
+            </Grid>
           )}
 
           {ship.ship_deco && Object.keys(ship.ship_deco).length > 0 && (
-            <Box sx={{ mt: 3 }}>
+            <Grid size={{xs:12}} sx={{mt: 2}}>
               <Typography variant="h6" color="text.secondary">
                 선박 장식
               </Typography>
@@ -554,12 +555,12 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                   </TableBody>
                 </Table>
               </TableContainer>
-            </Box>
+            </Grid>
           )}
 
           {ship.special_build_cities &&
             ship.special_build_cities.length > 0 && (
-              <Box sx={{ mt: 3 }}>
+              <Grid size={{xs: 12}} sx={{mt: 2}}>
                 <Typography variant="h6" color="text.secondary">
                   특수 건조 도시
                 </Typography>
@@ -599,12 +600,12 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                     </TableBody>
                   </Table>
                 </TableContainer>{" "}
-              </Box>
+              </Grid>
             )}
 
           {ship.standard_build_cities &&
             ship.standard_build_cities.length > 0 && (
-              <Box sx={{ mt: 3 }}>
+              <Grid size={{xs: 12}} sx={{mt: 2}}>
                 <Typography variant="h6" color="text.secondary">
                   일반 건조 도시
                 </Typography>
@@ -630,7 +631,7 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                     </TableBody>
                   </Table>
                 </TableContainer>
-              </Box>
+              </Grid>
             )}
         </CardContent>
       </Card>
