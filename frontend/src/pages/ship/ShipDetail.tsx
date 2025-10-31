@@ -18,6 +18,7 @@ import {
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
 import { renderObjectChip, renderObjectsToChips } from "../../common/render";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface Ship {
   id: number;
@@ -92,6 +93,7 @@ interface Ship {
   | { region: string; cities: { id: number; name: string }[] }[]
   | null;
   category: { purpose: string; size: string; propulsion: string } | null;
+  obtain_method: any[] | null
 }
 
 export default function ShipDetail({ data }: { data?: Ship }) {
@@ -632,6 +634,16 @@ export default function ShipDetail({ data }: { data?: Ship }) {
                   </Table>
                 </TableContainer>
               </Grid>
+            )}
+            {ship.obtain_method && (
+
+              <Grid size={{xs: 12}} sx={{mt: 2}}>
+                <DetailItem
+                  label="획득방법"
+                  value={<ObtainMethodTabs data={ship.obtain_method} />}
+                />
+              </Grid>
+
             )}
         </CardContent>
       </Card>
