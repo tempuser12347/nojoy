@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
+  Grid,
   Card,
   CardContent,
   CircularProgress,
@@ -166,168 +167,147 @@ export default function QuestDetail({ data }: { data?: Quest }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {quest.name}
-        {quest.additional_name && ` (${quest.additional_name})`}
-      </Typography>
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "1fr 1fr",
-                md: "1fr 1fr 1fr",
-                lg: "1fr 1fr 1fr 1fr",
-              },
-            }}
-          >
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <DetailItem label="설명" value={quest.description} />
-            </Box>
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <Typography variant="h6" gutterBottom>
-                기본 정보
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>카테고리</TableCell>
-                      <TableCell>난이도</TableCell>
-                      <TableCell>시리즈</TableCell>
-                      <TableCell>1회 한정</TableCell>
-                      <TableCell>희귀</TableCell>
-                      <TableCell>조합 필요</TableCell>
-                      {quest.era ? <TableCell>시대</TableCell> : null}
-                      {quest.deadline ? <TableCell>마감일</TableCell> : null}
-                      {quest.episode ? <TableCell>에피소드</TableCell> : null}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>{quest.category}</TableCell>
-                      <TableCell>{quest.difficulty}</TableCell>
-                      <TableCell>{quest.series}</TableCell>
-                      <TableCell>{quest.one_time_only ? "Yes" : "No"}</TableCell>
-                      <TableCell>{quest.rare ? "Yes" : "No"}</TableCell>
-                      <TableCell>{quest.association_required ? "Yes" : "No"}</TableCell>
-                      {quest.era ? <TableCell>{quest.era}</TableCell> : null}
-                      {quest.deadline ? <TableCell>{quest.deadline}</TableCell> : null}
-                      {quest.episode ? <TableCell>{quest.episode}</TableCell> : null}
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <Typography variant="h6" gutterBottom>
-                위치 및 발견물
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>의뢰 도시</TableCell>
-                      <TableCell>목적지</TableCell>
-                      <TableCell>발견물</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>{quest.location}</TableCell>
-                      <TableCell>
-                        {quest.destination ? (
-                          <Tooltip title={'좌표:' + quest.destination_coordinates || ""} arrow>
-                            {renderObjectChip(quest.destination, navigate)}
-                          </Tooltip>
-                        ) : null}
-                      </TableCell>
-                      <TableCell>{quest.discovery ? renderObjectChip(quest.discovery, navigate) : null}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <Typography variant="h6" gutterBottom>
-                요구 사항
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>필요 스킬</TableCell>
-                      {(quest.required_items != null && quest.required_items.length != 0) ? <TableCell>필요 아이템</TableCell> : null}
-                      {quest.preceding_discovery_quest ? <TableCell>선행 발견 퀘스트</TableCell> : null}
-                      {quest.additional_skills && <TableCell>추가 스킬</TableCell>}
-                      {quest.association_skills && <TableCell>조합 스킬</TableCell>}
-                      {quest.nationality && <TableCell>국적</TableCell>}
-                      {quest.occupation && <TableCell>직업</TableCell>}
-                      {quest.port_permission && <TableCell>항구 허가</TableCell>}
-                      {quest.reputation && <TableCell>평판</TableCell>}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>{renderObjectsToChips(quest.skills, navigate)}</TableCell>
-                      {(quest.required_items != null && quest.required_items.length != 0) ? <TableCell>{renderItemsWithAmount(quest.required_items, navigate)}</TableCell> : null}
-                      {quest.preceding_discovery_quest ? <TableCell>{renderPrecedingDiscoveryQuest(quest.preceding_discovery_quest, navigate)}</TableCell> : null}
-                      {quest.previous_continuous_quest ? <TableCell>이전 연속 퀘스트</TableCell> : null}
-                      {quest.additional_skills && <TableCell>{quest.additional_skills}</TableCell>}
-                      {quest.association_skills && <TableCell>{quest.association_skills}</TableCell>}
-                      {quest.nationality && <TableCell>{quest.nationality}</TableCell>}
-                      {quest.occupation && <TableCell>{quest.occupation}</TableCell>}
-                      {quest.port_permission && <TableCell>{quest.port_permission}</TableCell>}
-                      {quest.reputation && <TableCell>{quest.reputation}</TableCell>}
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <Typography variant="h6" gutterBottom>
-                보상 정보
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      {quest.sophia_rank ? <TableCell>소피아 랭크</TableCell> : null}
-                      {quest.sophia_points ? <TableCell>소피아 포인트</TableCell> : null}
-                      {quest.reward_money ? <TableCell>보상 (돈)</TableCell> : null}
-                      {quest.advance_payment ? <TableCell>선금</TableCell> : null}
-                      {quest.report_experience ? <TableCell>보고 경험치</TableCell> : null}
-                      {quest.report_reputation ? <TableCell>보고 평판</TableCell> : null}
-                      {quest.reward_items != null && quest.reward_items.length > 0 ? <TableCell>보상 (아이템)</TableCell> : null}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      {quest.sophia_rank ? <TableCell>{quest.sophia_rank}</TableCell> : null}
-                      {quest.sophia_points ? <TableCell>{quest.sophia_points}</TableCell> : null}
-                      {quest.reward_money ? <TableCell>{quest.reward_money}</TableCell> : null}
-                      {quest.advance_payment ? <TableCell>{quest.advance_payment}</TableCell> : null}
-                      {quest.report_experience ? <TableCell>{quest.report_experience}</TableCell> : null}
-                      {quest.report_reputation ? <TableCell>{quest.report_reputation}</TableCell> : null}
-                      {quest.reward_items != null && quest.reward_items.length > 0 ? <TableCell>{renderItemsWithAmount(quest.reward_items, navigate)}</TableCell> : null}
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <DetailItem label="공략" value={quest.guide} />
-            </Box>
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <DetailItem label="진행" value={quest.progress} />
-            </Box>
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={quest.description} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" gutterBottom>
+          기본 정보
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>카테고리</TableCell>
+                <TableCell>난이도</TableCell>
+                <TableCell>시리즈</TableCell>
+                <TableCell>1회 한정</TableCell>
+                <TableCell>희귀</TableCell>
+                <TableCell>조합 필요</TableCell>
+                {quest.era ? <TableCell>시대</TableCell> : null}
+                {quest.deadline ? <TableCell>마감일</TableCell> : null}
+                {quest.episode ? <TableCell>에피소드</TableCell> : null}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>{quest.category}</TableCell>
+                <TableCell>{quest.difficulty}</TableCell>
+                <TableCell>{quest.series}</TableCell>
+                <TableCell>{quest.one_time_only ? "Yes" : "No"}</TableCell>
+                <TableCell>{quest.rare ? "Yes" : "No"}</TableCell>
+                <TableCell>{quest.association_required ? "Yes" : "No"}</TableCell>
+                {quest.era ? <TableCell>{quest.era}</TableCell> : null}
+                {quest.deadline ? <TableCell>{quest.deadline}</TableCell> : null}
+                {quest.episode ? <TableCell>{quest.episode}</TableCell> : null}
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" gutterBottom>
+          위치 및 발견물
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>의뢰 도시</TableCell>
+                <TableCell>목적지</TableCell>
+                <TableCell>발견물</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>{quest.location}</TableCell>
+                <TableCell>
+                  {quest.destination ? (
+                    <Tooltip title={'좌표:' + quest.destination_coordinates || ""} arrow>
+                      {renderObjectChip(quest.destination, navigate)}
+                    </Tooltip>
+                  ) : null}
+                </TableCell>
+                <TableCell>{quest.discovery ? renderObjectChip(quest.discovery, navigate) : null}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" gutterBottom>
+          요구 사항
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>필요 스킬</TableCell>
+                {(quest.required_items != null && quest.required_items.length != 0) ? <TableCell>필요 아이템</TableCell> : null}
+                {quest.preceding_discovery_quest ? <TableCell>선행 발견 퀘스트</TableCell> : null}
+                {quest.additional_skills && <TableCell>추가 스킬</TableCell>}
+                {quest.association_skills && <TableCell>조합 스킬</TableCell>}
+                {quest.nationality && <TableCell>국적</TableCell>}
+                {quest.occupation && <TableCell>직업</TableCell>}
+                {quest.port_permission && <TableCell>항구 허가</TableCell>}
+                {quest.reputation && <TableCell>평판</TableCell>}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>{renderObjectsToChips(quest.skills, navigate)}</TableCell>
+                {(quest.required_items != null && quest.required_items.length != 0) ? <TableCell>{renderItemsWithAmount(quest.required_items, navigate)}</TableCell> : null}
+                {quest.preceding_discovery_quest ? <TableCell>{renderPrecedingDiscoveryQuest(quest.preceding_discovery_quest, navigate)}</TableCell> : null}
+                {quest.previous_continuous_quest ? <TableCell>이전 연속 퀘스트</TableCell> : null}
+                {quest.additional_skills && <TableCell>{quest.additional_skills}</TableCell>}
+                {quest.association_skills && <TableCell>{quest.association_skills}</TableCell>}
+                {quest.nationality && <TableCell>{quest.nationality}</TableCell>}
+                {quest.occupation && <TableCell>{quest.occupation}</TableCell>}
+                {quest.port_permission && <TableCell>{quest.port_permission}</TableCell>}
+                {quest.reputation && <TableCell>{quest.reputation}</TableCell>}
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" gutterBottom>
+          보상 정보
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                {quest.sophia_rank ? <TableCell>소피아 랭크</TableCell> : null}
+                {quest.sophia_points ? <TableCell>소피아 포인트</TableCell> : null}
+                {quest.reward_money ? <TableCell>보상 (돈)</TableCell> : null}
+                {quest.advance_payment ? <TableCell>선금</TableCell> : null}
+                {quest.report_experience ? <TableCell>보고 경험치</TableCell> : null}
+                {quest.report_reputation ? <TableCell>보고 평판</TableCell> : null}
+                {quest.reward_items != null && quest.reward_items.length > 0 ? <TableCell>보상 (아이템)</TableCell> : null}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                {quest.sophia_rank ? <TableCell>{quest.sophia_rank}</TableCell> : null}
+                {quest.sophia_points ? <TableCell>{quest.sophia_points}</TableCell> : null}
+                {quest.reward_money ? <TableCell>{quest.reward_money}</TableCell> : null}
+                {quest.advance_payment ? <TableCell>{quest.advance_payment}</TableCell> : null}
+                {quest.report_experience ? <TableCell>{quest.report_experience}</TableCell> : null}
+                {quest.report_reputation ? <TableCell>{quest.report_reputation}</TableCell> : null}
+                {quest.reward_items != null && quest.reward_items.length > 0 ? <TableCell>{renderItemsWithAmount(quest.reward_items, navigate)}</TableCell> : null}
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="공략" value={quest.guide} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="진행" value={quest.progress} />
+      </Grid>
+    </Grid>
   );
 }
