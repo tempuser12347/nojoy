@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface Furniture {
   id: number;
@@ -21,6 +22,7 @@ interface Furniture {
     type: string;
     value: number;
   } | null;
+  obtain_method: any[] | null;
 }
 
 export default function FurnitureDetail({ data }: { data?: Furniture }) {
@@ -94,6 +96,16 @@ export default function FurnitureDetail({ data }: { data?: Furniture }) {
                 />
               </Grid>
             )}
+            {furniture.obtain_method ? (
+              <Grid size={{xs: 12}} sx={{ mt: 2 }}>
+                <DetailItem
+                  label="획득 방법"
+                  value={
+                    <ObtainMethodTabs data={furniture.obtain_method} />
+                  }
+                />
+              </Grid>
+            ) : null}
           </Grid>
         </CardContent>
       </Card>

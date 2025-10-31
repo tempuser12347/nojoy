@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from sqlalchemy import text
 from ..database import get_db
 import json
+from ..common import fetch_all_obtain_methods
 
 
 class FurnitureResponse(BaseModel):
@@ -111,5 +112,10 @@ def read_furniture_core(furniture_id: int, db: Session):
             ret["installation_effect"] = json.loads(ret["installation_effect"])
         except json.JSONDecodeError:
             ret["installation_effect"] = None
+
+    
+    obtain_method_list = fetch_all_obtain_methods(furniture_id, db)
+    if obtain_method_list:
+        ret["obtain_method"] = obtain_method_list
 
     return ret
