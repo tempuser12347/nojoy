@@ -71,16 +71,10 @@ export default function FurnitureDetail({ data }: { data?: Furniture }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {furniture.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={furniture.description} />
-          </Box>
           <Grid container spacing={2}>
+            <Grid size={{xs: 12}}>
+            <DetailItem label="설명" value={furniture.description} />
+            </Grid>
             <Grid size={{xs: 12, sm: 6}}>
               <DetailItem label="카테고리" value={furniture.category} />
             </Grid>
@@ -107,8 +101,5 @@ export default function FurnitureDetail({ data }: { data?: Furniture }) {
               </Grid>
             ) : null}
           </Grid>
-        </CardContent>
-      </Card>
-    </Box>
   );
 }

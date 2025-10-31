@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
+  Divider,
   Box,
   Typography,
   Card,
@@ -18,6 +19,7 @@ import {
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
 import { renderObjectChip } from "../../common/render";
+import DetailPageTitle from "../../components/DetailPageTitle";
 
 interface Ornament {
   id: number;
@@ -31,7 +33,7 @@ interface Ornament {
   cost: { value: number; unit: string } | null;
 }
 
-export default function OrnamentDetail({ data }: { data?: Ornament }) {
+export default function OrnamentDetail({ data, type }: { data?: Ornament, type: string }) {
   const { id } = useParams<{ id: string }>();
   const [ornament, setOrnament] = useState<Ornament | null>(data || null);
   const [loading, setLoading] = useState(!data);
@@ -78,85 +80,77 @@ export default function OrnamentDetail({ data }: { data?: Ornament }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {ornament.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={ornament.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="획득" value={ornament.acquisition} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="제작자" value={ornament.crafter} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              {ornament.city ?
-                <DetailItem label="도시" value={renderObjectChip(ornament.city, navigate)} /> : null}
-            </Grid>
-            {ornament.cost && (
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <DetailItem
-                  label="비용"
-                  value={`${ornament.cost.value.toLocaleString()} ${ornament.cost.unit}`}
-                />
-              </Grid>
-            )}
-            {ornament.discovery_card && ornament.discovery_card.length > 0 && (
-              <Grid size={{ xs: 12 }}>
-                <Typography variant="h6" gutterBottom>
-                  발견물 카드
-                </Typography>
-                <TableContainer component={Paper}>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>이름</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {ornament.discovery_card.map((card, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{renderObjectChip(card, navigate)}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-            )}
-            {ornament.installation_effect && ornament.installation_effect.length > 0 && (
-              <Grid size={{xs:12}}>
-                <Typography variant="h6" gutterBottom>
-                  설치 효과
-                </Typography>
-                <TableContainer component={Paper}>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>유형</TableCell>
-                        <TableCell>값</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {ornament.installation_effect.map((effect, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{renderObjectChip(effect, navigate)}</TableCell>
-                          <TableCell>{`${effect.value > 0 ? "+" : ""}${effect.value}`}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-            )}
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+
+        <DetailItem label="설명" value={ornament.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="획득" value={ornament.acquisition} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="제작자" value={ornament.crafter} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        {ornament.city ?
+          <DetailItem label="도시" value={renderObjectChip(ornament.city, navigate)} /> : null}
+      </Grid>
+      {ornament.cost && (
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <DetailItem
+            label="비용"
+            value={`${ornament.cost.value.toLocaleString()} ${ornament.cost.unit}`}
+          />
+        </Grid>
+      )}
+      {ornament.discovery_card && ornament.discovery_card.length > 0 && (
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="h6" gutterBottom>
+            발견물 카드
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>이름</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {ornament.discovery_card.map((card, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{renderObjectChip(card, navigate)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      )}
+      {ornament.installation_effect && ornament.installation_effect.length > 0 && (
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="h6" gutterBottom>
+            설치 효과
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>유형</TableCell>
+                  <TableCell>값</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {ornament.installation_effect.map((effect, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{renderObjectChip(effect, navigate)}</TableCell>
+                    <TableCell>{`${effect.value > 0 ? "+" : ""}${effect.value}`}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      )}
+    </Grid>
   );
 }

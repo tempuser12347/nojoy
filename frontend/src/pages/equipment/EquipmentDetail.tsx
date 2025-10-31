@@ -3,9 +3,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
+  Paper,
   Card,
   CardContent,
   CircularProgress,
+  Grid,
+  TableRow,
+  TableContainer,
+  Table,
+  TableHead,
+  TableCell,
+  TableBody
 } from "@mui/material";
 import api from "../../api";
 import {
@@ -102,63 +110,80 @@ export default function EquipmentDetail({ data }: { data?: Equipment }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {equipment.name}
-      </Typography>
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "1fr 1fr",
-                md: "1fr 1fr 1fr",
-                lg: "1fr 1fr 1fr 1fr",
-              },
-            }}
-          >
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <DetailItem label="설명" value={equipment.description} />
-            </Box>
-            <DetailItem label="종류" value={equipment.type} />
-            <DetailItem label="분류" value={equipment.classification} />
-            <DetailItem label="공격력" value={equipment.attack_power} />
-            <DetailItem label="방어력" value={equipment.defense_power} />
-            <DetailItem label="내구도" value={equipment.durability} />
-            <DetailItem label="변장도" value={equipment.disguise} />
-            <DetailItem label="필요명성" value={equipment.attire} />
-            <DetailItem
-              label="사용효과"
-              value={equipment.use_effect?.name || "-"}
-            />
-            <DetailItem
-              label="장착효과"
-              value={equipment.equipped_effect?.name || "-"}
-            />
-            <DetailItem
-              label="스킬"
-              value={renderObjectsToChips(equipment.skills, navigate)}
-            />
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <DetailItem
-                label="요구사항"
-                value={renderRequirementsTable(equipment.requirements)}
-              />
-            </Box>
-            {equipment.obtain_method ? (
-              <Box sx={{ gridColumn: "1 / -1" }}>
-                <DetailItem
-                  label="획득방법"
-                  value={<ObtainMethodTabs data={equipment.obtain_method} />}
-                />
-              </Box>
-            ) : null}
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2} >
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={equipment.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="종류" value={equipment.type} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="분류" value={equipment.classification} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
+          주요 속성
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table size='small'>
+            <TableHead>
+              <TableRow>
+                {equipment.durability && <TableCell>내구도</TableCell>}
+                {equipment.attack_power && <TableCell>공격력</TableCell>}
+                {equipment.defense_power && <TableCell>방어력</TableCell>}
+                {equipment.disguise && <TableCell>변장도</TableCell>}
+                {equipment.attire && <TableCell>복장예절</TableCell>}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                {equipment.durability && <TableCell>{equipment.durability}</TableCell>}
+                {equipment.attack_power && <TableCell>{equipment.attack_power}</TableCell>}
+                {equipment.defense_power && <TableCell>{equipment.defense_power}</TableCell>}
+                {equipment.disguise && <TableCell>{equipment.disguise}</TableCell>}
+                {equipment.attire && <TableCell>{equipment.attire}</TableCell>}
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      {equipment.use_effect ?
+
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <DetailItem
+            label="사용효과"
+            value={equipment.use_effect?.name || "-"}
+          />
+        </Grid> : null
+      }
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="장착효과"
+          value={equipment.equipped_effect?.name || "-"}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="스킬"
+          value={renderObjectsToChips(equipment.skills, navigate, v => '+' + v)}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+
+        <DetailItem
+          label="요구사항"
+          value={renderRequirementsTable(equipment.requirements)}
+        />
+      </Grid>
+      {equipment.obtain_method ? (
+        <Grid size={{ xs: 12 }}>
+          <DetailItem
+            label="획득방법"
+            value={<ObtainMethodTabs data={equipment.obtain_method} />}
+          />
+        </Grid>
+
+      ) : null}
+    </Grid>
   );
 }

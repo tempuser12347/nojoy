@@ -19,6 +19,7 @@ import api from "../../api";
 import DetailItem from "../../components/DetailItem";
 import { renderObjectChip, renderObjectsToChips } from "../../common/render";
 import ObtainMethodTabs from "../../components/ObtainMethodTabs";
+import DetailPageTitle from "../../components/DetailPageTitle";
 
 interface Ship {
   id: number;
@@ -96,7 +97,7 @@ interface Ship {
   obtain_method: any[] | null
 }
 
-export default function ShipDetail({ data }: { data?: Ship }) {
+export default function ShipDetail({ data , type }: { data?: Ship, type: string }) {
   const { id } = useParams<{ id: string }>();
   const [ship, setShip] = useState<Ship | null>(data || null);
   const [loading, setLoading] = useState(!data);
@@ -144,16 +145,12 @@ export default function ShipDetail({ data }: { data?: Ship }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {ship.name} {ship.extraname && `(${ship.extraname})`}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box>
-          <DetailItem label="설명" value={ship.description} />
-          </Box>
+    <>
           <Grid container spacing={2}>
+            <Grid size={{ xs: 12 }}>
+
+          <DetailItem label="설명" value={ship.description} />
+              </Grid>
             <Grid
               size={{ xs: 12, sm: 6, md: 4 }}
               sx={{ border: "1px solid #e0e0e0", p: 1}}
@@ -645,8 +642,5 @@ export default function ShipDetail({ data }: { data?: Ship }) {
               </Grid>
 
             )}
-        </CardContent>
-      </Card>
-    </Box>
-  );
+  </>);
 }

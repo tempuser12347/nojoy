@@ -1,6 +1,6 @@
 import "./render.css";
 // import mui chip
-import { Chip, Table, TableBody, TableCell, TableRow } from "@mui/material";
+import {Paper, Chip, Table,TableContainer, TableBody, TableCell, TableRow } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 type NavigateFunction = ReturnType<typeof useNavigate>;
@@ -83,7 +83,9 @@ export function renderRequirementsTable(
   if (!data) return null;
   // render table with two columns. first is 'type' second is 'content'. and then show data as rows
   return (
-    <Table>
+    <TableContainer component={Paper}>
+
+    <Table size='small'>
       <TableBody>
         {data.map((item, index) => (
           <TableRow key={index}>
@@ -93,6 +95,7 @@ export function renderRequirementsTable(
         ))}
       </TableBody>
     </Table>
+    </TableContainer>
   );
 }
 
