@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface Cannon {
   id: number;
@@ -30,6 +31,7 @@ interface Cannon {
   shell_speed: number | null;
   blast_radius: number | null;
   reload_speed: number | null;
+  obtain_method: any[] | null;
 }
 
 export default function CannonDetail({ data }: { data?: Cannon }) {
@@ -103,8 +105,7 @@ export default function CannonDetail({ data }: { data?: Cannon }) {
             <Grid size={{xs:12, sm: 6}} >
               <DetailItem label="포탄 종류" value={cannon.shell_type} />
             </Grid>
-          </Grid>
-          <Box sx={{ mt: 3 }}>
+            <Grid size={{xs:12}}>
             <Typography variant="h6" gutterBottom>
               성능
             </Typography>
@@ -126,7 +127,16 @@ export default function CannonDetail({ data }: { data?: Cannon }) {
                 </TableBody>
               </Table>
             </TableContainer>
-          </Box>
+            </Grid>
+            {cannon.obtain_method && (
+              <Grid size={{xs: 12}} sx={{mt: 2}}>
+                <DetailItem
+                  label="획득방법"
+                  value={<ObtainMethodTabs data={cannon.obtain_method} />}
+                />
+              </Grid>
+            )}
+          </Grid>
         </CardContent>
       </Card>
     </Box>
