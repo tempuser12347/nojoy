@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from sqlalchemy import text
 from ..database import get_db
+from ..common import fetch_all_obtain_methods
 
 class SailorEquipmentResponse(BaseModel):
     items: List[dict]
@@ -75,4 +76,9 @@ def read_sailorequipment_core(sailorequipment_id: int, db: Session):
             ret['equipment_effect'] = json.loads(ret['equipment_effect'])
         except json.JSONDecodeError:
             pass
+
+
+    obtain_method_list = fetch_all_obtain_methods(sailorequipment_id, db)
+    if obtain_method_list:
+        ret["obtain_method"] = obtain_method_list
     return ret

@@ -18,6 +18,7 @@ import {
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
 import { renderObjectChip } from "../../common/render";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface SailorEquipment {
     id: number;
@@ -30,6 +31,7 @@ interface SailorEquipment {
     equipment_effect: { id: number; name: string } | null;
     armor: number | null;
     maneuverability: number | null;
+    obtain_method: any[] | null;
 }
 
 export default function SailorEquipmentDetail({ data }: { data?: SailorEquipment }) {
@@ -99,8 +101,10 @@ export default function SailorEquipmentDetail({ data }: { data?: SailorEquipment
           <Box sx={{ mb: 2 }}>
             <DetailItem label="설명" value={sailorEquipment.description} />
           </Box>
+          <Grid container spacing={2}>
+
           {Object.keys(filteredStats).length > 0 &&
-            <Box sx={{ mt: 3 }}>
+            <Grid size={{xs: 12}}>
               <Typography variant="h6" gutterBottom>
                 성능
               </Typography>
@@ -122,9 +126,9 @@ export default function SailorEquipmentDetail({ data }: { data?: SailorEquipment
                   </TableBody>
                 </Table>
               </TableContainer>
-            </Box>
+            </Grid>
           }
-          <Grid container spacing={2} sx={{mt: 2}}>
+
             <Grid size={{xs:12}} >
                 <DetailItem
                     label="장비 효과"
@@ -133,6 +137,17 @@ export default function SailorEquipmentDetail({ data }: { data?: SailorEquipment
                     }
                 />
             </Grid>
+
+            {sailorEquipment.obtain_method && (
+              <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+                <DetailItem
+                  label="획득 방법"
+                  value={
+                    <ObtainMethodTabs data={sailorEquipment.obtain_method} />
+                  }
+                />
+              </Grid>
+            )}
           </Grid>
         </CardContent>
       </Card>
