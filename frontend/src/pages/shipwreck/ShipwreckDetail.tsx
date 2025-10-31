@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Grid, Box, Typography, Card, CardContent, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
+import { Grid, Box, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
-import { Link } from "react-router-dom";
 
 interface Shipwreck {
   id: number;
