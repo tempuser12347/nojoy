@@ -81,6 +81,16 @@ json_valid(failure) = 1 AND
             obj['recipe_book'] = {"id": row.bookid, "name": row.bookname}
             obj['skill'] = json.loads(row.required_Skill)
             obj['ingredients'] = json.loads(row.ingredients)
+
+            # change ref -> id in skill, ingredients
+            if obj['ingredients']:
+                for ingredient in obj['ingredients']:
+                    if 'ref' in ingredient:
+                        ingredient['id'] = ingredient.pop('ref')
+            if obj['skill']:
+                for skill in obj['skill']:
+                    if 'ref' in skill:
+                        skill['id'] = skill.pop('ref')
             obj_list.append(obj)
         return obj_list
     return None
