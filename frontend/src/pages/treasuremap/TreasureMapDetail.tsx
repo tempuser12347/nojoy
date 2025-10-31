@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { renderObjectChip } from "../../common/render";
 import api from "../../api";
+import DetailItem from "../../components/DetailItem";
 
 interface TreasureMap {
   id: number;
@@ -28,21 +29,6 @@ interface TreasureMap {
   strategy: string;
 }
 
-const DetailItem = ({
-  label,
-  value,
-}: {
-  label: string;
-  value: React.ReactNode;
-}) =>
-  value ? (
-    <Box>
-      <Typography variant="subtitle1" color="text.secondary">
-        {label}
-      </Typography>
-      <Typography variant="body1">{value}</Typography>
-    </Box>
-  ) : null;
 
 export default function TreasureMapDetail({ data }: { data?: TreasureMap }) {
   const { id } = useParams<{ id: string }>();
@@ -100,97 +86,81 @@ export default function TreasureMapDetail({ data }: { data?: TreasureMap }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {treasureMap.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid size={{xs:12}}>
-              <DetailItem
-                label="설명"
-                value={
-                  <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
-                    {treasureMap.description}
-                  </Typography>
-                }
-              />
-            </Grid>
-            <Grid size={{xs: 12, sm: 6}}>
-              <DetailItem label="분류" value={treasureMap.category} />
-            </Grid>
-            <Grid size={{xs: 12, sm: 6}} >
-              <DetailItem label="필요 스킬" value={treasureMap.required_skill} />
-            </Grid>
-            <Grid size={{xs: 12, sm: 6}} >
-              <DetailItem label="학문" value={treasureMap.academic_field} />
-            </Grid>
-            <Grid size={{xs: 12, sm: 6}} >
-              <DetailItem label="서고" value={treasureMap.library} />
-            </Grid>
-            <Grid size={{xs: 12, sm: 6}} >
-              <DetailItem
-                label="목적지"
-                value={
-                  treasureMap.destination
-                    ? renderObjectChip(treasureMap.destination, navigate)
-                    : null
-                }
-              />
-            </Grid>
-            {treasureMap.discovery ? (
-            <Grid size={{xs: 12, sm: 6}} >
-                <DetailItem
-                  label="발견물"
-                  value={
-                    treasureMap.discovery
-                      ? renderObjectChip(treasureMap.discovery, navigate)
-                      : null
-                  }
-                />
-              </Grid>
-            ) : null}
-            {treasureMap.city_conditions ? (
-            <Grid size={{xs: 12, sm: 6}} >
-                <DetailItem
-                  label="도시 조건"
-                  value={treasureMap.city_conditions}
-                />
-              </Grid>
-            ) : null}
-            {treasureMap.preceding ? (
-            <Grid size={{xs: 12, sm: 6}} >
-                <DetailItem
-                  label="선행"
-                  value={treasureMap.preceding?.map((x) =>
-                    renderObjectChip(x, navigate)
-                  )}
-                />
-              </Grid>
-            ) : null}
-            <Grid size={{xs: 12, sm: 6}} >
-              <DetailItem label="보상 (두캇)" value={treasureMap.reward_dukat} />
-            </Grid>
-            <Grid size={{xs: 12, sm: 6}} >
-              <DetailItem label="보상 (아이템)" value={treasureMap.reward_item} />
-            </Grid>
-            {treasureMap.strategy ? 
-            
-            <Grid size={{xs:12}}>
-              <DetailItem
-                label="공략"
-                value={
-                  <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
-                    {treasureMap.strategy}
-                  </Typography>
-                }
-              />
-            </Grid> : null
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={treasureMap.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="분류" value={treasureMap.category} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }} >
+        <DetailItem label="필요 스킬" value={treasureMap.required_skill} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }} >
+        <DetailItem label="학문" value={treasureMap.academic_field} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }} >
+        <DetailItem label="서고" value={treasureMap.library} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }} >
+        <DetailItem
+          label="목적지"
+          value={
+            treasureMap.destination
+              ? renderObjectChip(treasureMap.destination, navigate)
+              : null
           }
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+        />
+      </Grid>
+      {treasureMap.discovery ? (
+        <Grid size={{ xs: 12, sm: 6 }} >
+          <DetailItem
+            label="발견물"
+            value={
+              treasureMap.discovery
+                ? renderObjectChip(treasureMap.discovery, navigate)
+                : null
+            }
+          />
+        </Grid>
+      ) : null}
+      {treasureMap.city_conditions ? (
+        <Grid size={{ xs: 12, sm: 6 }} >
+          <DetailItem
+            label="도시 조건"
+            value={treasureMap.city_conditions}
+          />
+        </Grid>
+      ) : null}
+      {treasureMap.preceding ? (
+        <Grid size={{ xs: 12, sm: 6 }} >
+          <DetailItem
+            label="선행"
+            value={treasureMap.preceding?.map((x) =>
+              renderObjectChip(x, navigate)
+            )}
+          />
+        </Grid>
+      ) : null}
+      <Grid size={{ xs: 12, sm: 6 }} >
+        <DetailItem label="보상 (두캇)" value={treasureMap.reward_dukat} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }} >
+        <DetailItem label="보상 (아이템)" value={treasureMap.reward_item} />
+      </Grid>
+      {treasureMap.strategy ?
+
+        <Grid size={{ xs: 12 }}>
+          <DetailItem
+            label="공략"
+            value={
+              <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
+                {treasureMap.strategy}
+              </Typography>
+            }
+          />
+        </Grid> : null
+      }
+    </Grid>
   );
 }

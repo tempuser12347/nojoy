@@ -17,6 +17,7 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../api";
+import DetailItem from "../../components/DetailItem";
 
 interface Discovery {
   id: number;
@@ -41,23 +42,23 @@ interface Discovery {
   coordinates: string | null;
 }
 
-const DetailItem = ({
-  label,
-  value,
-}: {
-  label: string;
-  value: React.ReactNode;
-}) =>
-  value ? (
-    <Box>
-      <Typography variant="h6" color="text.secondary">
-        {label}
-      </Typography>
-      <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
-        {value}
-      </Typography>
-    </Box>
-  ) : null;
+// const DetailItem = ({
+//   label,
+//   value,
+// }: {
+//   label: string;
+//   value: React.ReactNode;
+// }) =>
+//   value ? (
+//     <Box>
+//       <Typography variant="h6" color="text.secondary">
+//         {label}
+//       </Typography>
+//       <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
+//         {value}
+//       </Typography>
+//     </Box>
+//   ) : null;
 
 const generateDiscoveryLocationPrefixString = (
   method: string,
