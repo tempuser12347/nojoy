@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface ShipDecor {
   id: number;
@@ -30,6 +31,7 @@ interface ShipDecor {
     side_rear_right: boolean;
     side_rear_left: boolean;
   };
+  obtain_method: any[] | null;
 }
 
 export default function ShipDecorDetail({ data }: { data?: ShipDecor }) {
@@ -121,6 +123,16 @@ export default function ShipDecorDetail({ data }: { data?: ShipDecor }) {
                 </Table>
               </TableContainer>
             </Grid>
+            {shipDecor.obtain_method ? (
+              <Grid size={{xs: 12}} sx={{ mt: 2 }}>
+                <DetailItem
+                  label="획득 방법"
+                  value={
+                    <ObtainMethodTabs data={shipDecor.obtain_method} />
+                  }
+                />
+              </Grid>
+            ) : null}
           </Grid>
         </CardContent>
       </Card>

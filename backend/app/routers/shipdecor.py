@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from sqlalchemy import text
 from ..database import get_db
 import json
+from ..common import fetch_all_obtain_methods
 
 
 class ShipDecorResponse(BaseModel):
@@ -105,4 +106,7 @@ def read_shipdecor_core(shipdecor_id: int, db: Session):
         except json.JSONDecodeError:
             ret["positions"] = {}
 
+    obtain_method_list = fetch_all_obtain_methods(shipdecor_id, db)
+    if obtain_method_list:
+        ret["obtain_method"] = obtain_method_list
     return ret
