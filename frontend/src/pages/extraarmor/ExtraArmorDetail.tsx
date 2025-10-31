@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
+import ObtainMethodTabs from "../../components/ObtainMethodTabs";
 
 interface ExtraArmor {
   id: number;
@@ -26,6 +27,7 @@ interface ExtraArmor {
   armor: number | null;
   speed: number | null;
   features: string | null;
+  obtain_method: any[] | null;
 }
 
 export default function ExtraArmorDetail({ data }: { data?: ExtraArmor }) {
@@ -89,36 +91,46 @@ export default function ExtraArmorDetail({ data }: { data?: ExtraArmor }) {
           <Box sx={{ mb: 2 }}>
             <DetailItem label="설명" value={extraArmor.description} />
           </Box>
-          <Box sx={{ mt: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              성능
-            </Typography>
-            <TableContainer component={Paper}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    {Object.keys(stats).map((key) => (
-                      <TableCell key={key}>{key}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    {Object.values(stats).map((value, index) => (
-                      <TableCell key={index}>{value !== null ? value : "-"}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
-          <Grid container spacing={2} sx={{mt: 2}}>
-            <Grid size={{xs:12}}>
-                <DetailItem
-                    label="특징"
-                    value={extraArmor.features}
-                />
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12 }} >
+              <Typography variant="h6" gutterBottom>
+                성능
+              </Typography>
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      {Object.keys(stats).map((key) => (
+                        <TableCell key={key}>{key}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      {Object.values(stats).map((value, index) => (
+                        <TableCell key={index}>{value !== null ? value : "-"}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Grid>
+            <Grid size={{ xs: 12 }}>
+              <DetailItem
+                label="특징"
+                value={extraArmor.features}
+              />
+            </Grid>
+            {extraArmor.obtain_method && (
+              <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+                <DetailItem
+                  label="획득 방법"
+                  value={
+                    <ObtainMethodTabs data={extraArmor.obtain_method} />
+                  }
+                />
+              </Grid>
+            )}
           </Grid>
         </CardContent>
       </Card>
