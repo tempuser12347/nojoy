@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -89,56 +87,47 @@ export default function CannonDetail({ data }: { data?: Cannon }) {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {cannon.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={cannon.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{xs:12, sm: 6}}>
-              <DetailItem label="카테고리" value={cannon.category} />
-            </Grid>
-            <Grid size={{xs:12, sm: 6}} >
-              <DetailItem label="포탄 종류" value={cannon.shell_type} />
-            </Grid>
-            <Grid size={{xs:12}}>
-            <Typography variant="h6" gutterBottom>
-              성능
-            </Typography>
-            <TableContainer component={Paper}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    {Object.keys(stats).map((key) => (
-                      <TableCell key={key}>{key}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    {Object.values(stats).map((value, index) => (
-                      <TableCell key={index}>{value !== null ? value : "-"}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-            </Grid>
-            {cannon.obtain_method && (
-              <Grid size={{xs: 12}} sx={{mt: 2}}>
-                <DetailItem
-                  label="획득방법"
-                  value={<ObtainMethodTabs data={cannon.obtain_method} />}
-                />
-              </Grid>
-            )}
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={cannon.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="카테고리" value={cannon.category} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }} >
+        <DetailItem label="포탄 종류" value={cannon.shell_type} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" gutterBottom>
+          성능
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                {Object.keys(stats).map((key) => (
+                  <TableCell key={key}>{key}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                {Object.values(stats).map((value, index) => (
+                  <TableCell key={index}>{value !== null ? value : "-"}</TableCell>
+                ))}
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      {cannon.obtain_method && (
+        <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+          <DetailItem
+            label="획득방법"
+            value={<ObtainMethodTabs data={cannon.obtain_method} />}
+          />
+        </Grid>
+      )}
+    </Grid>
   );
 }
