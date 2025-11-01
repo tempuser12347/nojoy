@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -109,54 +107,45 @@ export default function GradePerformanceDetail({ data }: { data?: GradePerforman
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {gradePerformance.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={gradePerformance.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{xs:12, sm: 6, md: 4}} >
-              <DetailItem label="선박 종류" value={gradePerformance.ship_type} />
-            </Grid>
-            <Grid size={{xs:12, sm: 6, md: 4}} >
-              <DetailItem label="선박 크기" value={gradePerformance.ship_size} />
-            </Grid>
-            <Grid size={{xs:12, sm: 6, md: 4}}>
-              <DetailItem label="등급" value={gradePerformance.grade} />
-            </Grid>
-          </Grid>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={gradePerformance.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <DetailItem label="선박 종류" value={gradePerformance.ship_type} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <DetailItem label="선박 크기" value={gradePerformance.ship_size} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <DetailItem label="등급" value={gradePerformance.grade} />
+      </Grid>
 
-          {gradePerformance.accumulated_stats && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" gutterBottom>
-                누적 수치
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      {Object.keys(gradePerformance.accumulated_stats).map((key) => (
-                        <TableCell key={key}>{change_stat_key_to_korean(key)}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      {Object.values(gradePerformance.accumulated_stats).map((value, index) => (
-                        <TableCell key={index}>{value !== null ? value : "-"}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          )}
-        </CardContent>
-      </Card>
-    </Box>
+      {gradePerformance.accumulated_stats && (
+        <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            누적 수치
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  {Object.keys(gradePerformance.accumulated_stats).map((key) => (
+                    <TableCell key={key}>{change_stat_key_to_korean(key)}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  {Object.values(gradePerformance.accumulated_stats).map((value, index) => (
+                    <TableCell key={index}>{value !== null ? value : "-"}</TableCell>
+                  ))}
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      )}
+    </Grid>
   );
 }
