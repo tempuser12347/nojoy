@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -215,61 +213,47 @@ export default function MarineNpcDetail({ data }: { data?: MarineNpc }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {npc.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12 }}>
-              <DetailItem label="설명" value={npc.description} />
-            </Grid>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="함대 수" value={npc.fleet_count} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="특징" value={npc.feature} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="국적"
-                value={
-                  npc.nationality
-                    ? renderObjectChip(npc.nationality, navigate)
-                    : "-"
-                }
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="백병전" value={npc.deck_battle} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="패널티 레벨" value={npc.penalty_level} />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={npc.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="함대 수" value={npc.fleet_count} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="특징" value={npc.feature} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="국적"
+          value={
+            npc.nationality ? renderObjectChip(npc.nationality, navigate) : "-"
+          }
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="백병전" value={npc.deck_battle} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="패널티 레벨" value={npc.penalty_level} />
+      </Grid>
       {npc.sea_areas && npc.sea_areas.length > 0 && (
-        <Box mt={3}>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             해역
           </Typography>
           <SeaAreasTable data={npc.sea_areas} />
-        </Box>
+        </Grid>
       )}
 
       {npc.acquired_items && npc.acquired_items.length > 0 && (
-        <Box mt={3}>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             획득 아이템
           </Typography>
           <AcquiredItemsTable data={npc.acquired_items} />
-        </Box>
+        </Grid>
       )}
-    </Box>
+    </Grid>
   );
 }

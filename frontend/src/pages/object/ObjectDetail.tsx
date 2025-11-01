@@ -155,7 +155,7 @@ const typeNameMapping: { [key: string]: string } = {
   tradegoods: '교역품',
   treasuremap: '보물지도',
   skill: '스킬',
-  sellernpc: '상인 NPC',
+  sellernpc: '판매NPC',
   region: '지역',
   treasurebox: '트레쳐박스',
   field: '필드',
@@ -208,6 +208,16 @@ const typeNameMapping: { [key: string]: string } = {
   memorialalbum: '메모리얼 앨범',
   debatecombo: '논전콤보',
 };
+
+const fetchTitleName = (data: any, type: string)=>{
+  if(data.name){
+    return data.name;
+  }
+  if(type=='sellernpc'){
+    return data.npc;
+  }
+  return null
+}
 
 export default function ObjectDetail() {
   const { id } = useParams<{ id: string }>();
@@ -294,7 +304,7 @@ export default function ObjectDetail() {
   }
 
   return <Box sx={{width: '100%', p: 3 }}>
-    <DetailPageTitle title={data.name} typename={typeNameMapping[type]} />
+    <DetailPageTitle title={fetchTitleName(data, type)} typename={typeNameMapping[type]} />
 <DetailComponent data={data} type={typeNameMapping[type]} />
     </Box>;
 }

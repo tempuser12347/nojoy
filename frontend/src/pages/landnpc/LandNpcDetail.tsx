@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -198,52 +196,42 @@ export default function LandNpcDetail({ data }: { data?: LandNpc }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {npc.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12 }}>
-              <DetailItem label="설명" value={npc.description} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="레벨" value={npc.level} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="특징" value={npc.feature} />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={npc.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="레벨" value={npc.level} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="특징" value={npc.feature} />
+      </Grid>
       {npc.fields && npc.fields.length > 0 && (
-        <Box mt={3}>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             필드
           </Typography>
           <FieldsTable data={npc.fields} />
-        </Box>
+        </Grid>
       )}
 
       {npc.techniques && npc.techniques.length > 0 && (
-        <Box mt={3}>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             테크닉
           </Typography>
           <TechniquesTable data={npc.techniques} />
-        </Box>
+        </Grid>
       )}
 
       {npc.drop_items && npc.drop_items.length > 0 && (
-        <Box mt={3}>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             드롭 아이템
           </Typography>
           <DropItemsTable data={npc.drop_items} />
-        </Box>
+        </Grid>
       )}
-    </Box>
+    </Grid>
   );
 }

@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -174,71 +172,55 @@ export default function GanadorDetail({ data }: { data?: Ganador }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {ganador.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12 }}>
-              <DetailItem label="설명" value={ganador.description} />
-            </Grid>
-          </Grid>
-          {/* New Grid container for StatsTable */}
-          <Grid container spacing={2} sx={{ mt: 2 }}>
-            <Grid size={{ xs: 12 }}>
-              <Typography variant="h6" gutterBottom>
-                능력치
-              </Typography>
-              <StatsTable ganador={ganador} />
-            </Grid>
-          </Grid>
-          {/* Original Grid container for other DetailItems */}
-          <Grid container spacing={2} sx={{ mt: 2 }}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="카테고리" value={ganador.category} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="시대" value={ganador.era} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="난이도" value={ganador.difficulty} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="준비물"
-                value={
-                  ganador.preparation_item
-                    ? `${ganador.preparation_item.name} x ${ganador.preparation_item.quantity}`
-                    : "-"
-                }
-              />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <DetailItem label="특징" value={ganador.feature} />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={ganador.description} />
+      </Grid>
+      <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+        <Typography variant="h6" gutterBottom>
+          능력치
+        </Typography>
+        <StatsTable ganador={ganador} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="카테고리" value={ganador.category} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="시대" value={ganador.era} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="난이도" value={ganador.difficulty} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="준비물"
+          value={
+            ganador.preparation_item
+              ? `${ganador.preparation_item.name} x ${ganador.preparation_item.quantity}`
+              : "-"
+          }
+        />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="특징" value={ganador.feature} />
+      </Grid>
       {ganador.requirements && ganador.requirements.length > 0 && (
-        <Box mt={3}>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             요구 사항
           </Typography>
           <RequirementsTable data={ganador.requirements} />
-        </Box>
+        </Grid>
       )}
 
       {ganador.acquired_items && ganador.acquired_items.length > 0 && (
-        <Box mt={3}>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             획득 아이템
           </Typography>
           <AcquiredItemsTable data={ganador.acquired_items} />
-        </Box>
+        </Grid>
       )}
-    </Box>
+    </Grid>
   );
 }

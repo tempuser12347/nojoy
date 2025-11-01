@@ -3,8 +3,6 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -86,100 +84,89 @@ export default function CityNpcDetail({ data }: { data?: CityNpc }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {cityNpc.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={cityNpc.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="도시"
-                value={
-                  cityNpc.city ? renderObjectChip(cityNpc.city, navigate) : null
-                }
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="우대 보고"
-                value={cityNpc.preferential_report}
-              />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <DetailItem
-                label="스킬"
-                value={
-                  cityNpc.skills
-                    ? renderObjectsToChips(cityNpc.skills, navigate)
-                    : null
-                }
-              />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <DetailItem
-                label="타로 카드"
-                value={
-                  cityNpc.tarot_cards
-                    ? renderObjectsToChips(cityNpc.tarot_cards, navigate)
-                    : null
-                }
-              />
-            </Grid>
-          </Grid>
-          {cityNpc.gifts && cityNpc.gifts.length > 0 && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" color="text.secondary">
-                선물
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>종류</TableCell>
-                      <TableCell>아이템</TableCell>
-                      <TableCell>수량</TableCell>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={cityNpc.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="도시"
+          value={cityNpc.city ? renderObjectChip(cityNpc.city, navigate) : null}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="우대 보고"
+          value={cityNpc.preferential_report}
+        />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem
+          label="스킬"
+          value={
+            cityNpc.skills
+              ? renderObjectsToChips(cityNpc.skills, navigate)
+              : null
+          }
+        />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem
+          label="타로 카드"
+          value={
+            cityNpc.tarot_cards
+              ? renderObjectsToChips(cityNpc.tarot_cards, navigate)
+              : null
+          }
+        />
+      </Grid>
+      {cityNpc.gifts && cityNpc.gifts.length > 0 && (
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
+          <Typography variant="h6" color="text.secondary">
+            선물
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>종류</TableCell>
+                  <TableCell>아이템</TableCell>
+                  <TableCell>수량</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Object.entries(
+                  cityNpc.gifts.reduce((acc, gift) => {
+                    const type = gift.종류 || "기타";
+                    if (!acc[type]) {
+                      acc[type] = [];
+                    }
+                    acc[type].push(gift);
+                    return acc;
+                  }, {} as Record<string, typeof cityNpc.gifts>)
+                ).map(([type, giftsInType]) =>
+                  giftsInType.map((gift, index) => (
+                    <TableRow key={gift.id}>
+                      {index === 0 && (
+                        <TableCell rowSpan={giftsInType.length}>
+                          {type}
+                        </TableCell>
+                      )}
+                      <TableCell>
+                        <Link to={`/obj/${gift.id}`}>
+                          {gift.name}
+                          {gift.extraname && ` ${gift.extraname}`}
+                        </Link>
+                      </TableCell>
+                      <TableCell>{gift.quantity}</TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {Object.entries(
-                      cityNpc.gifts.reduce((acc, gift) => {
-                        const type = gift.종류 || "기타";
-                        if (!acc[type]) {
-                          acc[type] = [];
-                        }
-                        acc[type].push(gift);
-                        return acc;
-                      }, {} as Record<string, typeof cityNpc.gifts>)
-                    ).map(([type, giftsInType]) =>
-                      giftsInType.map((gift, index) => (
-                        <TableRow key={gift.id}>
-                          {index === 0 && (
-                            <TableCell rowSpan={giftsInType.length}>
-                              {type}
-                            </TableCell>
-                          )}
-                          <TableCell>
-                            <Link to={`/obj/${gift.id}`}>
-                              {gift.name}
-                              {gift.extraname && ` ${gift.extraname}`}
-                            </Link>
-                          </TableCell>
-                          <TableCell>{gift.quantity}</TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          )}
-        </CardContent>
-      </Card>
-    </Box>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      )}
+    </Grid>
   );
 }

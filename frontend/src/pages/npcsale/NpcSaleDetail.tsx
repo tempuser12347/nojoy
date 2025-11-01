@@ -7,14 +7,13 @@ import {
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  Grid,
 } from "@mui/material";
 import api from "../../api";
 import { renderObjectChip } from "../../common/render";
@@ -157,37 +156,19 @@ export default function NpcSaleDetail({ data }: { data?: NpcSale }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {npcSale.npc}
-      </Typography>
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "1fr 1fr",
-              },
-            }}
-          >
-            <DetailItem
-              label="위치"
-              value={renderObjectChip(npcSale.location, navigate)}
-            />
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <Typography variant="h6" color="text.secondary">
-                판매 아이템
-              </Typography>
-              {npcSale.items
-                ? renderTableForItems(npcSale.items, navigate)
-                : null}
-            </Box>
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="위치"
+          value={renderObjectChip(npcSale.location, navigate)}
+        />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" color="text.secondary">
+          판매 아이템
+        </Typography>
+        {npcSale.items ? renderTableForItems(npcSale.items, navigate) : null}
+      </Grid>
+    </Grid>
   );
 }
