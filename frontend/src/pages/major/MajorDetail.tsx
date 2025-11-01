@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -73,95 +71,86 @@ export default function MajorDetail({ data }: { data?: Major }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {major.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={major.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="카테고리" value={major.category} />
-            </Grid>
-          </Grid>
-          {major.acquisition_conditions &&
-            Object.keys(major.acquisition_conditions).length > 0 && (
-              <Box sx={{ mt: 3 }}>
-                <Typography variant="h6" color="text.secondary">
-                  획득 조건
-                </Typography>
-                <TableContainer component={Paper}>
-                  <Table size="small">
-                    <TableBody>
-                      {Object.entries(major.acquisition_conditions).map(
-                        ([key, value]) => {
-                          let renderedValue: ReactNode;
-                          switch (key) {
-                            case "building_level":
-                              renderedValue = value as number;
-                              break;
-                            case "thesis_submissions":
-                              renderedValue = value as number;
-                              break;
-                            case "skills":
-                              renderedValue = renderObjectsToChips(
-                                (value as any[]).map((skill: any) => ({
-                                  ...skill,
-                                  value: skill.rank,
-                                })),
-                                navigate
-                              );
-                              break;
-                            case "job":
-                              renderedValue = renderObjectChip(
-                                value as { id: number; name: string },
-                                navigate
-                              );
-                              break;
-                            case "etc":
-                              renderedValue = value as string;
-                              break;
-                            default:
-                              renderedValue =
-                                typeof value === "object" && value !== null
-                                  ? JSON.stringify(value)
-                                  : String(value);
-                          }
-                          return (
-                            <TableRow key={key}>
-                              <TableCell sx={{ fontWeight: "bold" }}>
-                                {(() => {
-                                  switch (key) {
-                                    case "building_level":
-                                      return "건물 레벨";
-                                    case "thesis_submissions":
-                                      return "논문 제출";
-                                    case "skills":
-                                      return "스킬";
-                                    case "job":
-                                      return "직업";
-                                    case "etc":
-                                      return "기타";
-                                    default:
-                                      return key;
-                                  }
-                                })()}
-                              </TableCell>
-                              <TableCell>{renderedValue}</TableCell>
-                            </TableRow>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={major.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="카테고리" value={major.category} />
+      </Grid>
+      {major.acquisition_conditions &&
+        Object.keys(major.acquisition_conditions).length > 0 && (
+          <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
+            <Typography variant="h6" color="text.secondary">
+              획득 조건
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table size="small">
+                <TableBody>
+                  {Object.entries(major.acquisition_conditions).map(
+                    ([key, value]) => {
+                      let renderedValue: ReactNode;
+                      switch (key) {
+                        case "building_level":
+                          renderedValue = value as number;
+                          break;
+                        case "thesis_submissions":
+                          renderedValue = value as number;
+                          break;
+                        case "skills":
+                          renderedValue = renderObjectsToChips(
+                            (value as any[]).map((skill: any) => ({
+                              ...skill,
+                              value: skill.rank,
+                            })),
+                            navigate
                           );
-                        }
-                      )}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Box>
-            )}
-        </CardContent>
-      </Card>
-    </Box>
+                          break;
+                        case "job":
+                          renderedValue = renderObjectChip(
+                            value as { id: number; name: string },
+                            navigate
+                          );
+                          break;
+                        case "etc":
+                          renderedValue = value as string;
+                          break;
+                        default:
+                          renderedValue =
+                            typeof value === "object" && value !== null
+                              ? JSON.stringify(value)
+                              : String(value);
+                      }
+                      return (
+                        <TableRow key={key}>
+                          <TableCell sx={{ fontWeight: "bold" }}>
+                            {(() => {
+                              switch (key) {
+                                case "building_level":
+                                  return "건물 레벨";
+                                case "thesis_submissions":
+                                  return "논문 제출";
+                                case "skills":
+                                  return "스킬";
+                                case "job":
+                                  return "직업";
+                                case "etc":
+                                  return "기타";
+                                default:
+                                  return key;
+                              }
+                            })()}
+                          </TableCell>
+                          <TableCell>{renderedValue}</TableCell>
+                        </TableRow>
+                      );
+                    }
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+        )}
+    </Grid>
   );
 }

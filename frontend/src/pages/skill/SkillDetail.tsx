@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -37,10 +35,10 @@ interface Skill {
   acquire_requirement: { 종류: string; 내용: string }[] | null;
 }
 
-export default function SkillDetail() {
+export default function SkillDetail({ data }: { data?: Skill }) {
   const { id } = useParams<{ id: string }>();
-  const [skill, setSkill] = useState<Skill | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [skill, setSkill] = useState<Skill | null>(data || null);
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -54,7 +52,9 @@ export default function SkillDetail() {
 
   useEffect(() => {
     const fetchSkill = async () => {
+      if (!id) return;
       try {
+        setLoading(true);
         const response = await api.get(`/api/skills/${id}`);
         setSkill(response.data);
       } catch (err) {
@@ -65,10 +65,10 @@ export default function SkillDetail() {
       }
     };
 
-    if (id) {
+    if (!data && id) {
       fetchSkill();
     }
-  }, [id]);
+  }, [id, data]);
 
   if (loading) {
     return (
@@ -80,76 +80,62 @@ export default function SkillDetail() {
 
   if (error) {
     return (
-      <Box sx={{ p: 3 }}>
-        <Typography color="error">{error}</Typography>
-      </Box>
+      <Typography color="error" sx={{ p: 3 }}>
+        {error}
+      </Typography>
     );
   }
 
   if (!skill) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Typography>Skill not found.</Typography>
-      </Box>
-    );
+    return <Typography sx={{ p: 3 }}>Skill not found.</Typography>;
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {skill.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={skill.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="타입" value={skill.type} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="행동력" value={skill.action_point} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="적용 범위" value={skill.apply_range} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="습득 비용" value={skill.acquire_cost} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="장착 비용" value={skill.equip_cost} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="최대 랭크 조정"
-                value={skill.max_rank_adjustment}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="부관 배치" value={skill.adjutant_position} />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <DetailItem
-                label="연성 효과"
-                value={
-                  skill.refinement_effect
-                    ? renderObjectsToChips(
-                        Array.isArray(skill.refinement_effect)
-                          ? skill.refinement_effect
-                          : [skill.refinement_effect],
-                        navigate
-                      )
-                    : null
-                }
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={skill.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="타입" value={skill.type} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="행동력" value={skill.action_point} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="적용 범위" value={skill.apply_range} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="습득 비용" value={skill.acquire_cost} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="장착 비용" value={skill.equip_cost} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="최대 랭크 조정"
+          value={skill.max_rank_adjustment}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="부관 배치" value={skill.adjutant_position} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem
+          label="연성 효과"
+          value={
+            skill.refinement_effect
+              ? renderObjectsToChips(
+                  Array.isArray(skill.refinement_effect)
+                    ? skill.refinement_effect
+                    : [skill.refinement_effect],
+                  navigate
+                )
+              : null
+          }
+        />
+      </Grid>
       {skill.acquire_requirement && skill.acquire_requirement.length > 0 && (
-        <Box sx={{ mt: 3 }}>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             습득 조건
           </Typography>
@@ -173,8 +159,8 @@ export default function SkillDetail() {
               </TableBody>
             </Table>
           </TableContainer>
-        </Box>
+        </Grid>
       )}
-    </Box>
+    </Grid>
   );
 }

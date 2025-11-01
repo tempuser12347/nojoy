@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -155,63 +153,53 @@ export default function ResearchDetail({ data }: { data?: Research }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {research.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={research.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="카테고리" value={research.category} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="건물 레벨" value={research.building_level} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="전공"
-                value={
-                  research.major
-                    ? renderObjectChip(research.major, navigate)
-                    : null
-                }
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="직업"
-                value={
-                  research.job ? renderObjectChip(research.job, navigate) : null
-                }
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="필요 페이지" value={research.required_pages} />
-            </Grid>
-          </Grid>
-          {research.research_actions &&
-            research.research_actions.length > 0 && (
-              <Box sx={{ mt: 3 }}>
-                <Typography variant="h6" gutterBottom>
-                  연구 행동
-                </Typography>
-                <ResearchActionsTable data={research.research_actions} />
-              </Box>
-            )}
-          {research.rewards && research.rewards.length > 0 && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" gutterBottom>
-                보상
-              </Typography>
-              <RewardsTable data={research.rewards} />
-            </Box>
-          )}
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={research.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="카테고리" value={research.category} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="건물 레벨" value={research.building_level} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="전공"
+          value={
+            research.major
+              ? renderObjectChip(research.major, navigate)
+              : null
+          }
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="직업"
+          value={
+            research.job ? renderObjectChip(research.job, navigate) : null
+          }
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="필요 페이지" value={research.required_pages} />
+      </Grid>
+      {research.research_actions && research.research_actions.length > 0 && (
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            연구 행동
+          </Typography>
+          <ResearchActionsTable data={research.research_actions} />
+        </Grid>
+      )}
+      {research.rewards && research.rewards.length > 0 && (
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            보상
+          </Typography>
+          <RewardsTable data={research.rewards} />
+        </Grid>
+      )}
+    </Grid>
   );
 }

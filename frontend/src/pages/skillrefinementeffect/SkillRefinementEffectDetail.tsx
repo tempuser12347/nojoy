@@ -3,8 +3,6 @@ import { useParams } from 'react-router-dom';
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
 } from '@mui/material';
@@ -56,20 +54,13 @@ export default function SkillRefinementEffectDetail({ data }: { data?: SkillRefi
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>{skillRefinementEffect.name}</Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={skillRefinementEffect.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{xs: 12, sm: 6}}>
-              <DetailItem label="행동력" value={skillRefinementEffect.action_power} />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{xs: 12}}>
+        <DetailItem label="설명" value={skillRefinementEffect.description} />
+      </Grid>
+      <Grid size={{xs: 12, sm: 6}}>
+        <DetailItem label="행동력" value={skillRefinementEffect.action_power} />
+      </Grid>
+    </Grid>
   );
 }
