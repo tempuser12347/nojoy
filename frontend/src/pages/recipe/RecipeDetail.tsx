@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Box, Typography, Card, CardContent } from "@mui/material";
+import { Paper,Box, Typography, Grid, CircularProgress, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
 import api from "../../api";
 import { renderObjectsToChips } from "../../common/render";
+import DetailItem from "../../components/DetailItem";
 
 interface Recipe {
   id: number;
@@ -33,6 +34,112 @@ export default function RecipeDetail({ data }: { data?: Recipe }) {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const renderIngredientAndOutput = (recipe: Recipe | null) => {
+    if (recipe == null) {
+      return null;
+    }
+
+    const outcomes = [
+      {
+        type: "성공",
+        data: recipe.success,
+      },
+      {
+        type: "대성공",
+        data: recipe.greatsuccess,
+      },
+      {
+        type: "실패",
+        data: recipe.failure,
+      },
+    ].filter((outcome) => outcome.data && outcome.data.length > 0);
+
+    if (outcomes.length === 0) {
+      return null;
+    }
+
+    return (
+      <Grid size={{xs: 12}}>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>재료</TableCell>
+                <TableCell sx={{ width: "100px" }}>유형</TableCell>
+                <TableCell>생산물</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {outcomes.map((outcome, index) => (
+                <TableRow key={outcome.type}>
+                  {index === 0 && (
+                    <TableCell rowSpan={outcomes.length}>
+                      {renderObjectsToChips(
+                        recipe.ingredients.map((x) => ({ ...x, id: parseInt(x.ref) })),
+                        navigate,
+                        (value) => "x " + value
+                      )}
+                    </TableCell>
+                  )}
+                  <TableCell>{outcome.type}</TableCell>
+                  <TableCell>
+                    {renderObjectsToChips(outcome.data.map((x) => ({ ...x, id: parseInt(x.ref) })), navigate, (v) => "x " + v)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+    )
+  };
+
+  const renderRequirements = (recipe: Recipe|null) => {
+    if(recipe==null){
+      return null;
+    }
+    if (!(recipe.sophia || recipe.era || recipe.central_city || recipe.Investment_cost || recipe.home_production || recipe.Industrial_revolution)){
+      return null;
+    }
+    return  (
+
+      <Grid size={{xs: 12}}>
+        <Typography>요구사항</Typography>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {recipe.sophia && <TableCell>소피아</TableCell>}
+                {recipe.era && <TableCell>시대</TableCell>}
+                {recipe.central_city && <TableCell>중앙도시</TableCell>}
+                {recipe.Investment_cost && <TableCell>투자</TableCell>}
+                {recipe.home_production && <TableCell>자택생산</TableCell>}
+                {recipe.Industrial_revolution && <TableCell>산업혁명</TableCell>}
+                {recipe.own_Industrial_city && <TableCell>자영산업도시</TableCell>}
+                {recipe.title && <TableCell>칭호</TableCell>}
+                {recipe.consumption_contribution && <TableCell>소비 공헌도</TableCell>}
+                {recipe.other && <TableCell>기타</TableCell>}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                {recipe.sophia && <TableCell>{recipe.sophia}</TableCell>}
+                {recipe.era && <TableCell>{recipe.era}</TableCell>}
+                {recipe.Investment_cost && <TableCell>{recipe.Investment_cost}</TableCell>}
+                {recipe.home_production && <TableCell>{recipe.home_production}</TableCell>}
+                {recipe.Industrial_revolution && <TableCell>{recipe.Industrial_revolution}</TableCell>}
+                {recipe.own_Industrial_city && <TableCell>{recipe.own_Industrial_city}</TableCell>}
+                {recipe.title && <TableCell>{recipe.title}</TableCell>}
+                {recipe.consumption_contribution && <TableCell>{recipe.consumption_contribution}</TableCell>}
+                {recipe.other && <TableCell>{recipe.other}</TableCell>}
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+    )
+  }
+
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
@@ -60,181 +167,30 @@ export default function RecipeDetail({ data }: { data?: Recipe }) {
 
   if (!recipe) {
     return (
-      <Box sx={{ p: 3 }}>
-        <Typography>Loading...</Typography>
+      <Box sx={{ display: "flex", justifyContent: "center", p: 3 }}>
+        <CircularProgress />
       </Box>
     );
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {recipe.name}
-      </Typography>
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "1fr 1fr",
-                md: "1fr 1fr 1fr",
-                lg: "1fr 1fr 1fr 1fr",
-              },
-            }}
-          >
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                필요 스킬
-              </Typography>
-              <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-                {renderObjectsToChips(
-                  recipe.required_Skill.map((x) => {
-                    return { ...x, id: parseInt(x.ref) };
-                  }),
-                  navigate
-                )}
-              </Box>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                소피아
-              </Typography>
-              <Typography variant="body1">{recipe.sophia}</Typography>
-            </Box>
-            <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
-              <Typography variant="subtitle1" color="text.secondary">
-                설명
-              </Typography>
-              <Typography variant="body1">{recipe.description}</Typography>
-            </Box>
-            <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
-              <Typography variant="subtitle1" color="text.secondary">
-                재료
-              </Typography>
-              <Typography variant="body1">
-                {renderObjectsToChips(
-                  recipe.ingredients.map((x) => {
-                    return { ...x, id: parseInt(x.ref) };
-                  }),
-                  navigate,
-                  (value) => "x " + value
-                )}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                시대
-              </Typography>
-              <Typography variant="body1">{recipe.era}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                중앙도시
-              </Typography>
-              <Typography variant="body1">{recipe.central_city}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                투자비용
-              </Typography>
-              <Typography variant="body1">{recipe.Investment_cost}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                가내수공업
-              </Typography>
-              <Typography variant="body1">{recipe.home_production}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                개발
-              </Typography>
-              <Typography variant="body1">{recipe.development}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                산업혁명
-              </Typography>
-              <Typography variant="body1">
-                {recipe.Industrial_revolution}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                자영산업도시
-              </Typography>
-              <Typography variant="body1">
-                {recipe.own_Industrial_city}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                칭호
-              </Typography>
-              <Typography variant="body1">{recipe.title}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                소비 공헌도
-              </Typography>
-              <Typography variant="body1">
-                {recipe.consumption_contribution}
-              </Typography>
-            </Box>
-            <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
-              <Typography variant="subtitle1" color="text.secondary">
-                기타
-              </Typography>
-              <Typography variant="body1">{recipe.other}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                성공
-              </Typography>
-              <Typography variant="body1">
-                {renderObjectsToChips(
-                  recipe.success?.map((x) => {
-                    return { ...x, id: parseInt(x.ref) };
-                  }),
-                  navigate,
-                  (value) => "x " + value
-                )}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                대성공
-              </Typography>
-              <Typography variant="body1">
-                {renderObjectsToChips(
-                  recipe.greatsuccess?.map((x) => {
-                    return { ...x, id: parseInt(x.ref) };
-                  }),
-                  navigate,
-                  (value) => "x " + value
-                )}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                실패
-              </Typography>
-              <Typography variant="body1">
-                {renderObjectsToChips(
-                  recipe.failure?.map((x) => {
-                    return { ...x, id: parseInt(x.ref) };
-                  }),
-                  navigate,
-                  (value) => "x " + value
-                )}
-              </Typography>
-            </Box>
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{xs: 12}}>
+        <DetailItem label="설명" value={recipe.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="필요 스킬"
+          value={renderObjectsToChips(
+            recipe.required_Skill.map((x) => ({ ...x, id: parseInt(x.ref) })),
+            navigate
+          )}
+        />
+      </Grid>
+      {renderRequirements(recipe)}
+      
+      {renderIngredientAndOutput(recipe)}
+
+    </Grid>
   );
 }
