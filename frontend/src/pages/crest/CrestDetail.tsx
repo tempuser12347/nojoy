@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid
 } from "@mui/material";
@@ -65,26 +63,18 @@ export default function CrestDetail({ data }: { data?: Crest }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {crest.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12 }}>
-              <DetailItem label="설명" value={crest.description} />
-            </Grid>
-            {/* Add more crest details here if available */}
-          </Grid>
-          {crest.obtain_method ? (
-            <Grid size={{xs: 12}}>
-              <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>획득 방법</Typography>
-              <ObtainMethodTabs data={crest.obtain_method} />
-            </Grid>
-          ) : null}
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={crest.description} />
+      </Grid>
+      {crest.obtain_method ? (
+        <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+          <DetailItem
+            label="획득 방법"
+            value={<ObtainMethodTabs data={crest.obtain_method} />}
+          />
+        </Grid>
+      ) : null}
+    </Grid>
   );
 }
