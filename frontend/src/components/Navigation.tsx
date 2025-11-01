@@ -324,6 +324,9 @@ const availableSections = [
             case "장식품 설치 효과":
               subsection = "installationeffects";
               break;
+            case "타로카드":
+              subsection = "tarotcards";
+              break;
             case "침몰선":
               subsection = "shipwrecks";
               break;
