@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -88,54 +86,43 @@ export default function ShipDecorDetail({ data }: { data?: ShipDecor }) {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {shipDecor.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={shipDecor.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{xs:12}} >
-              <Typography variant="h6" gutterBottom>
-                장착 위치
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      {Object.values(positionLabels).map((label) => (
-                        <TableCell key={label}>{label}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      {Object.keys(positionLabels).map((key) => (
-                        <TableCell key={key}>
-                          {shipDecor.positions[key as keyof typeof shipDecor.positions] ? "✅" : "❌"}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-            {shipDecor.obtain_method ? (
-              <Grid size={{xs: 12}} sx={{ mt: 2 }}>
-                <DetailItem
-                  label="획득 방법"
-                  value={
-                    <ObtainMethodTabs data={shipDecor.obtain_method} />
-                  }
-                />
-              </Grid>
-            ) : null}
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={shipDecor.description} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" gutterBottom>
+          장착 위치
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                {Object.values(positionLabels).map((label) => (
+                  <TableCell key={label}>{label}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                {Object.keys(positionLabels).map((key) => (
+                  <TableCell key={key}>
+                    {shipDecor.positions[key as keyof typeof shipDecor.positions] ? "✅" : "❌"}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      {shipDecor.obtain_method ? (
+        <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+          <DetailItem
+            label="획득 방법"
+            value={<ObtainMethodTabs data={shipDecor.obtain_method} />}
+          />
+        </Grid>
+      ) : null}
+    </Grid>
   );
 }
