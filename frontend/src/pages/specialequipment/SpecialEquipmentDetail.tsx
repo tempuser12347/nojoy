@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Table,
   TableBody,
@@ -103,56 +101,45 @@ export default function SpecialEquipmentDetail({ data }: { data?: SpecialEquipme
   const stats = Object.fromEntries(Object.entries(allStats).filter(([_, v]) => v !== null && v !== undefined));
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {specialEquipment.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={specialEquipment.description} />
-          </Box>
-          <Grid container spacing={2}>
-
-          {Object.keys(stats).length > 0 && (
-            <Grid size={{xs:12}}>
-              <Typography variant="h6" gutterBottom>
-                성능
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      {Object.keys(stats).map((key) => (
-                        <TableCell key={key}>{key}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      {Object.values(stats).map((value, index) => (
-                        <TableCell key={index}>{value}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-          )}
-          {specialEquipment.obtain_method && (
-              <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
-                <DetailItem
-                  label="획득 방법"
-                  value={
-                    <ObtainMethodTabs data={specialEquipment.obtain_method} />
-                  }
-                />
-              </Grid>
-            )}
-
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={specialEquipment.description} />
+      </Grid>
+      {Object.keys(stats).length > 0 && (
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="h6" gutterBottom>
+            성능
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  {Object.keys(stats).map((key) => (
+                    <TableCell key={key}>{key}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  {Object.values(stats).map((value, index) => (
+                    <TableCell key={index}>{value}</TableCell>
+                  ))}
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      )}
+      {specialEquipment.obtain_method && (
+        <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+          <DetailItem
+            label="획득 방법"
+            value={
+              <ObtainMethodTabs data={specialEquipment.obtain_method} />
+            }
+          />
+        </Grid>
+      )}
+    </Grid>
   );
 }
