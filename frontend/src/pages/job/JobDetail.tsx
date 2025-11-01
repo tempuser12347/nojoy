@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Paper,
   Table,
@@ -12,6 +10,7 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Grid,
 } from "@mui/material";
 import api from "../../api";
 import { renderObjectsToChips, renderObjectChip } from "../../common/render";
@@ -126,52 +125,40 @@ export default function JobDetail({ data }: { data?: Job }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {job.name}
-      </Typography>
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "1fr 1fr",
-                md: "1fr 1fr 1fr",
-                lg: "1fr 1fr 1fr 1fr",
-              },
-            }}
-          >
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <DetailItem label="설명" value={job.description} />
-            </Box>
-            <DetailItem label="카테고리" value={job.category} />
-            <DetailItem
-              label="추천장"
-              value={
-                job.reference_letter
-                  ? renderObjectChip(job.reference_letter, navigate)
-                  : null
-              }
-            />
-            <DetailItem label="비용" value={job.cost} />
-            <DetailItem
-              label="우대 스킬"
-              value={renderObjectsToChips(job.preferred_skills, navigate)}
-            />
-            {job.requirements && Object.keys(job.requirements).length > 0 && (
-              <Box sx={{ gridColumn: "1 / -1" }}>
-                <Typography variant="h6" color="text.secondary">
-                  요구 사항
-                </Typography>
-                <RequirementsTable requirements={job.requirements} />
-              </Box>
-            )}
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={job.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <DetailItem label="카테고리" value={job.category} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <DetailItem
+          label="추천장"
+          value={
+            job.reference_letter
+              ? renderObjectChip(job.reference_letter, navigate)
+              : null
+          }
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <DetailItem label="비용" value={job.cost} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem
+          label="우대 스킬"
+          value={renderObjectsToChips(job.preferred_skills, navigate)}
+        />
+      </Grid>
+      {job.requirements && Object.keys(job.requirements).length > 0 && (
+        <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+          <Typography variant="h6" color="text.secondary">
+            요구 사항
+          </Typography>
+          <RequirementsTable requirements={job.requirements} />
+        </Grid>
+      )}
+    </Grid>
   );
 }

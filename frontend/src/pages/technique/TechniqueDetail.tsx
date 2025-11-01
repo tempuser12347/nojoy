@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -80,101 +78,105 @@ export default function TechniqueDetail({ data }: { data?: Technique }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {technique.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={technique.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{xs:12,  sm:6 }}>
-              <DetailItem label="타입" value={technique.technique_type} />
-            </Grid>
-            <Grid size={{xs:12,  sm:6 }}>
-              <DetailItem label="무기 타입" value={technique.weapon_type} />
-            </Grid>
-            <Grid size={{xs:12,  sm:6 }}>
-              <DetailItem label="랭크" value={technique.rank} />
-            </Grid>
-            <Grid size={{xs:12,  sm:6 }}>
-              <DetailItem label="게이지 코스트" value={technique.gauge_cost} />
-            </Grid>
-            <Grid size={{xs:12,  sm:6 }}>
-              <DetailItem label="사거리" value={technique.hitrange} />
-            </Grid>
-            <Grid size={{xs:12,  sm:6 }}>
-              <DetailItem label="범위" value={technique.area} />
-            </Grid>
-          </Grid>
-          {technique.requirements &&
-            Object.keys(technique.requirements).length > 0 && (
-              <Box sx={{ mt: 3 }}>
-                <Typography variant="h6" color="text.secondary">
-                  요구 사항
-                </Typography>
-                <TableContainer component={Paper}>
-                  <Table size="small">
-                    <TableBody>
-                      {Object.entries(technique.requirements).map(
-                        ([key, value]) => {
-                          let renderedValue;
-                          switch (key) {
-                            case "skills":
-                              renderedValue = renderObjectsToChips(
-                                (value as any[]).map((skill: any) => ({ ...skill, value: skill.rank }))
-                                , navigate);
-                              break;
-                            case "technique_rank":
-                              renderedValue = Object.entries(value as Record<string, any>).map(([rankKey, rankValue]) => (
-                                <Typography key={rankKey}>{`${rankKey}: ${rankValue}`}</Typography>
-                              ));
-                              break;
-                            case "techniques":
-                              renderedValue = renderObjectsToChips(
-                                (value as any[]).map((tech: any) => ({ ...tech, value: tech.level }))
-                                , navigate);
-                              break;
-                            default:
-                              renderedValue = typeof value === "object" && value !== null
-                                ? JSON.stringify(value)
-                                : String(value);
-                          }
-                          return (
-                            <TableRow key={key}>
-                              <TableCell
-                                sx={{ fontWeight: "bold", width: "30%" }}
-                              >
-                                {(() => {
-                                  switch (key) {
-                                    case "skills":
-                                      return "스킬";
-                                    case "technique_rank":
-                                      return "테크닉 랭크";
-                                    case "techniques":
-                                      return "테크닉";
-                                    default:
-                                      return key;
-                                  }
-                                })()}
-                              </TableCell>
-                              <TableCell>{renderedValue}</TableCell>
-                            </TableRow>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={technique.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="타입" value={technique.technique_type} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="무기 타입" value={technique.weapon_type} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="랭크" value={technique.rank} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="게이지 코스트" value={technique.gauge_cost} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="사거리" value={technique.hitrange} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="범위" value={technique.area} />
+      </Grid>
+      {technique.requirements &&
+        Object.keys(technique.requirements).length > 0 && (
+          <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
+            <Typography variant="h6" color="text.secondary">
+              요구 사항
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table size="small">
+                <TableBody>
+                  {Object.entries(technique.requirements).map(
+                    ([key, value]) => {
+                      let renderedValue;
+                      switch (key) {
+                        case "skills":
+                          renderedValue = renderObjectsToChips(
+                            (value as any[]).map((skill: any) => ({
+                              ...skill,
+                              value: skill.rank,
+                            })),
+                            navigate
                           );
-                        }
-                      )}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Box>
-            )}
-            <Box sx={{ mt: 2 }}>
-            <DetailItem label="효과" value={technique.effect} />
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+                          break;
+                        case "technique_rank":
+                          renderedValue = Object.entries(
+                            value as Record<string, any>
+                          ).map(([rankKey, rankValue]) => (
+                            <Typography
+                              key={rankKey}
+                            >{`${rankKey}: ${rankValue}`}</Typography>
+                          ));
+                          break;
+                        case "techniques":
+                          renderedValue = renderObjectsToChips(
+                            (value as any[]).map((tech: any) => ({
+                              ...tech,
+                              value: tech.level,
+                            })),
+                            navigate
+                          );
+                          break;
+                        default:
+                          renderedValue =
+                            typeof value === "object" && value !== null
+                              ? JSON.stringify(value)
+                              : String(value);
+                      }
+                      return (
+                        <TableRow key={key}>
+                          <TableCell
+                            sx={{ fontWeight: "bold", width: "30%" }}
+                          >
+                            {(() => {
+                              switch (key) {
+                                case "skills":
+                                  return "스킬";
+                                case "technique_rank":
+                                  return "테크닉 랭크";
+                                case "techniques":
+                                  return "테크닉";
+                                default:
+                                  return key;
+                              }
+                            })()}
+                          </TableCell>
+                          <TableCell>{renderedValue}</TableCell>
+                        </TableRow>
+                      );
+                    }
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+        )}
+      <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+        <DetailItem label="효과" value={technique.effect} />
+      </Grid>
+    </Grid>
   );
 }

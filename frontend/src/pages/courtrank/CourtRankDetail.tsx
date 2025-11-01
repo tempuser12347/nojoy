@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
 } from "@mui/material";
@@ -66,31 +64,22 @@ export default function CourtRankDetail({ data }: { data?: CourtRank }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {courtRank.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="레벨" value={courtRank.level} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="오스만" value={courtRank.ottoman} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="왕실 함대 랭크"
-                value={courtRank.royal_fleet_rank}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="명성" value={courtRank.fame} />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="레벨" value={courtRank.level} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="오스만" value={courtRank.ottoman} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="왕실 함대 랭크"
+          value={courtRank.royal_fleet_rank}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="명성" value={courtRank.fame} />
+      </Grid>
+    </Grid>
   );
 }

@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -79,88 +77,81 @@ export default function PetDetail({ data }: { data?: Pet }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {pet.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <DetailItem label="설명" value={pet.description} />
-          <Grid container spacing={2} sx={{ mt: 2 }}>
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} component="div" sx={{ p: 1 }}>
-              <DetailItem label="아파트 랭크" value={pet.apartment_rank} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} component="div" sx={{ p: 1 }}>
-              <DetailItem
-                label="증명서"
-                value={
-                  pet.certificate
-                    ? renderObjectChip(pet.certificate, navigate)
-                    : null
-                }
-              />
-            </Grid>
-          </Grid>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={pet.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <DetailItem label="아파트 랭크" value={pet.apartment_rank} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <DetailItem
+          label="증명서"
+          value={
+            pet.certificate
+              ? renderObjectChip(pet.certificate, navigate)
+              : null
+          }
+        />
+      </Grid>
 
-          {pet.feed && pet.feed.length > 0 && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" color="text.secondary">
-                먹이
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>아이템</TableCell>
-                      <TableCell>친밀도</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {pet.feed.map((f, index) => (
-                      <TableRow key={index}>
-                        <TableCell>
-                          {renderObjectChip(f.item, navigate)}
-                        </TableCell>
-                        <TableCell>{f.closeness}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          )}
+      {pet.feed && pet.feed.length > 0 && (
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
+          <Typography variant="h6" color="text.secondary">
+            먹이
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>아이템</TableCell>
+                  <TableCell>친밀도</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {pet.feed.map((f, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      {renderObjectChip(f.item, navigate)}
+                    </TableCell>
+                    <TableCell>{f.closeness}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      )}
 
-          {pet.skills && pet.skills.length > 0 && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" color="text.secondary">
-                스킬
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>스킬</TableCell>
-                      <TableCell>랭크</TableCell>
-                      <TableCell>친밀도</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {pet.skills.map((s, index) => (
-                      <TableRow key={index}>
-                        <TableCell>
-                          {renderObjectChip(s.skill, navigate)}
-                        </TableCell>
-                        <TableCell>{s.rank}</TableCell>
-                        <TableCell>{s.closeness}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          )}
-        </CardContent>
-      </Card>
-    </Box>
+      {pet.skills && pet.skills.length > 0 && (
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
+          <Typography variant="h6" color="text.secondary">
+            스킬
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>스킬</TableCell>
+                  <TableCell>랭크</TableCell>
+                  <TableCell>친밀도</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {pet.skills.map((s, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      {renderObjectChip(s.skill, navigate)}
+                    </TableCell>
+                    <TableCell>{s.rank}</TableCell>
+                    <TableCell>{s.closeness}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      )}
+    </Grid>
   );
 }

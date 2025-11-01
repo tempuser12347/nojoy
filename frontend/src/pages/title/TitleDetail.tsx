@@ -3,9 +3,8 @@ import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
+  Grid,
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
@@ -64,28 +63,21 @@ export default function TitleDetail({ data }: { data?: Title }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {title.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={title.description} />
-          </Box>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="요구 사항" value={title.requirements} />
-          </Box>
-          <Box sx={{ mt: 2 }}>
-            <DetailItem
-              label="효과"
-              value={
-                <div dangerouslySetInnerHTML={{ __html: title.effect || "" }} />
-              }
-            />
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={title.description} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="요구 사항" value={title.requirements} />
+      </Grid>
+      <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+        <DetailItem
+          label="효과"
+          value={
+            <div dangerouslySetInnerHTML={{ __html: title.effect || "" }} />
+          }
+        />
+      </Grid>
+    </Grid>
   );
 }
