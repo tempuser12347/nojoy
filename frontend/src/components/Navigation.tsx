@@ -336,6 +336,9 @@ const availableSections = [
             case "레거시 테마":
               subsection = "legacythemes";
               break;
+            case "가호":
+              subsection = "protections";
+              break;
             case "레거시":
               subsection = "legacies";
               break;
