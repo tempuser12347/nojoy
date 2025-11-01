@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Typography, Card, CardContent } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 import api from "../../api";
+import DetailItem from "../../components/DetailItem";
 
 interface City {
   id: number;
@@ -57,108 +58,49 @@ export default function CityDetail({ data }: { data: City }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {city.name}
-      </Typography>
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-            }}
-          >
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                지역
-              </Typography>
-              <Typography variant="body1">{city.region}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                해역
-              </Typography>
-              <Typography variant="body1">{city.sea_area}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                문화권
-              </Typography>
-              <Typography variant="body1">{city.culture}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                언어
-              </Typography>
-              <Typography variant="body1">{city.language}</Typography>
-            </Box>
-            <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
-              <Typography variant="subtitle1" color="text.secondary">
-                설명
-              </Typography>
-              <Typography variant="body1">{city.description}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                카테고리
-              </Typography>
-              <Typography variant="body1">{city.category}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                입항허가
-              </Typography>
-              <Typography variant="body1">
-                {city.port_enter_permission}
-              </Typography>
-            </Box>
-            <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
-              <Typography variant="subtitle1" color="text.secondary">
-                진입로
-              </Typography>
-              <Typography variant="body1">{city.entry_point}</Typography>
-            </Box>
-            <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
-              <Typography variant="subtitle1" color="text.secondary">
-                시설
-              </Typography>
-              <Typography variant="body1">{city.facility}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                투자액
-              </Typography>
-              <Typography variant="body1">{city.investment_amount}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                투자보상
-              </Typography>
-              <Typography variant="body1">{city.investment_reward}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                거래액
-              </Typography>
-              <Typography variant="body1">{city.transaction_amount}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle1" color="text.secondary">
-                거래보상
-              </Typography>
-              <Typography variant="body1">{city.transaction_reward}</Typography>
-            </Box>
-            <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
-              <Typography variant="subtitle1" color="text.secondary">
-                낚시
-              </Typography>
-              <Typography variant="body1">{city.fishing}</Typography>
-            </Box>
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="지역" value={city.region} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="해역" value={city.sea_area} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="문화권" value={city.culture} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="언어" value={city.language} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={city.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="카테고리" value={city.category} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="입항허가" value={city.port_enter_permission} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="진입로" value={city.entry_point} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="시설" value={city.facility} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="투자액" value={city.investment_amount} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="투자보상" value={city.investment_reward} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="거래액" value={city.transaction_amount} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="거래보상" value={city.transaction_reward} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="낚시" value={city.fishing} />
+      </Grid>
+    </Grid>
   );
 }

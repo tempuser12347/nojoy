@@ -4,9 +4,8 @@ import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
+  Grid,
 } from "@mui/material";
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
@@ -65,27 +64,10 @@ export default function RegionDetail({ data }: { data?: Region }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {region.name}
-      </Typography>
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "1fr 1fr",
-              },
-            }}
-          >
-            {/* <DetailItem label="ID" value={region.id} /> */}
-            <DetailItem label="이름" value={region.name} />
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="이름" value={region.name} />
+      </Grid>
+    </Grid>
   );
 }

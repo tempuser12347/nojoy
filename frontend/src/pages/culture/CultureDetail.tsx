@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
 } from "@mui/material";
@@ -18,10 +16,10 @@ interface Culture {
   category: string;
 }
 
-export default function CultureDetail() {
+export default function CultureDetail({ data }: { data?: Culture }) {
   const { id } = useParams<{ id: string }>();
-  const [culture, setCulture] = useState<Culture | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [culture, setCulture] = useState<Culture | null>(data || null);
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -39,8 +37,10 @@ export default function CultureDetail() {
       }
     };
 
-    fetchCulture();
-  }, [id]);
+    if (!data && id) {
+      fetchCulture();
+    }
+  }, [id, data]);
 
   if (loading) {
     return (
@@ -63,22 +63,13 @@ export default function CultureDetail() {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {culture.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-              <DetailItem label="분류" value={culture.category} />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <DetailItem label="설명" value={culture.description} />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <DetailItem label="분류" value={culture.category} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={culture.description} />
+      </Grid>
+    </Grid>
   );
 }

@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Table,
   TableBody,
@@ -13,9 +11,9 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Grid,
 } from "@mui/material";
 import api from "../../api";
-import DetailItem from "../../components/DetailItem";
 import { renderObjectChip } from "../../common/render";
 
 interface Field {
@@ -120,61 +118,52 @@ export default function FieldDetail({ data }: { data?: Field }) {
     return acc;
   }, [] as { method: string; ranks: { rank: number; rows: typeof field.gatherable }[] }[]);
 
+  const renderBasicInfoTable = (field: Field | null) => {
+    if (field == null) {
+      return null;
+    }
+    return (
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {field.coordinates && (<TableCell>좌표</TableCell>)}
+              {field.sea && (<TableCell>해역</TableCell>)}
+              {field.region && (<TableCell>해역</TableCell>)}
+              {field.entrance && (<TableCell>입구</TableCell>)}
+              {field.flag_quest && (<TableCell>선행퀘스트</TableCell>)}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              {field.coordinates && (<TableCell>{field.coordinates}</TableCell>)}
+              {field.sea && (<TableCell>{renderObjectChip(field.sea, navigate)}</TableCell>)}
+              {field.region && (<TableCell>{renderObjectChip(field.region, navigate)}</TableCell>)}
+              {field.entrance && (<TableCell>{renderObjectChip(field.entrance, navigate)}</TableCell>)}
+              {field.flag_quest && (<TableCell>{renderObjectChip(field.flag_quest, navigate)}</TableCell>)}
+            </TableRow>
+          </TableBody>
+      </Table>
+      </TableContainer>
+
+    )
+  }
+
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {field.name}
-      </Typography>
-      <Typography variant="body1" gutterBottom>
-        {field.description}
-      </Typography>
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "1fr 1fr",
-                md: "1fr 1fr 1fr",
-                lg: "1fr 1fr 1fr 1fr",
-              },
-            }}
-          >
-            <DetailItem label="좌표" value={field.coordinates} />
-            <DetailItem
-              label="해역"
-              value={field.sea ? renderObjectChip(field.sea, navigate) : null}
-            />
-            <DetailItem
-              label="지역"
-              value={
-                field.region ? renderObjectChip(field.region, navigate) : null
-              }
-            />
-            <DetailItem
-              label="입구"
-              value={
-                field.entrance
-                  ? renderObjectChip(field.entrance, navigate)
-                  : null
-              }
-            />
-            <DetailItem
-              label="선행퀘스트"
-              value={
-                field.flag_quest
-                  ? renderObjectChip(field.flag_quest, navigate)
-                  : null
-              }
-            />
-          </Box>
-        </CardContent>
-      </Card>
+    <Grid container spacing={2}>
+      {field.description && (
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="body1" gutterBottom>
+            {field.description}
+          </Typography>
+        </Grid>
+      )}
+      <Grid size={{ xs: 12 }}>
+        {renderBasicInfoTable(field)}
+      </Grid>
 
       {data?.survey ? (
-        <>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             필드 조사
           </Typography>
@@ -212,11 +201,11 @@ export default function FieldDetail({ data }: { data?: Field }) {
               </TableBody>
             </Table>
           </TableContainer>
-        </>
+        </Grid>
       ) : null}
 
       {data?.resurvey_reward ? (
-        <>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             재조사 보상
           </Typography>
@@ -238,11 +227,11 @@ export default function FieldDetail({ data }: { data?: Field }) {
               </TableBody>
             </Table>
           </TableContainer>
-        </>
+        </Grid>
       ) : null}
 
       {data?.gatherable ? (
-        <>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             채집물
           </Typography>
@@ -293,8 +282,8 @@ export default function FieldDetail({ data }: { data?: Field }) {
               </TableBody>
             </Table>
           </TableContainer>
-        </>
+        </Grid>
       ) : null}
-    </Box>
+    </Grid>
   );
 }

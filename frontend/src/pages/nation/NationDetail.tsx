@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
 } from "@mui/material";
@@ -69,33 +67,22 @@ export default function NationDetail({ data }: { data?: Nation }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {nation.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12 }}>
-              <DetailItem label="설명" value={nation.description} />
-            </Grid>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="NPC 국가"
-                value={renderBooleanEmoji(nation.npc_nation)}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="기본 국가"
-                value={renderBooleanEmoji(nation.is_basic)}
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={nation.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="NPC 국가"
+          value={renderBooleanEmoji(nation.npc_nation)}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="기본 국가"
+          value={renderBooleanEmoji(nation.is_basic)}
+        />
+      </Grid>
+    </Grid>
   );
 }

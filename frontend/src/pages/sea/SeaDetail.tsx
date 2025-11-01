@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -105,10 +103,10 @@ const GatherableTable: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-export default function SeaDetail() {
+export default function SeaDetail({ data }: { data?: Sea }) {
   const { id } = useParams<{ id: string }>();
-  const [sea, setSea] = useState<Sea | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [sea, setSea] = useState<Sea | null>(data || null);
+  const [loading, setLoading] = useState(!data);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -126,8 +124,10 @@ export default function SeaDetail() {
       }
     };
 
-    fetchSea();
-  }, [id]);
+    if (!data && id) {
+      fetchSea();
+    }
+  }, [id, data]);
 
   if (loading) {
     return (
@@ -149,59 +149,63 @@ export default function SeaDetail() {
     return <Typography sx={{ p: 3 }}>Sea not found.</Typography>;
   }
 
-  return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {sea.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Typography variant="body1" paragraph>
-            {sea.description}
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-              <DetailItem label="분류" value={sea.category} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-              <DetailItem
-                label="해역"
-                value={sea.region?.map((r) => r.name).join(", ")}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-              <DetailItem label="파도" value={sea.wave} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-              <DetailItem label="해류" value={sea.seacurrent} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-              <DetailItem
-                label="최대 속도 증가"
-                value={sea.max_speed_increase}
-              />
-            </Grid>
-            {sea.boundary && (
-              <Grid size={{ xs: 12 }}>
-                <DetailItem
-                  label="경계"
-                  value={Object.entries(sea.boundary)
+  const renderBasicInfoTable = (sea: Sea | null)=>{
+    if(sea==null){
+      return null;
+    }
+    return (
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {sea.category && (<TableCell>분류</TableCell>)}
+              {sea.region && (<TableCell>해역</TableCell>)}
+              {sea.wave && (<TableCell>파도</TableCell>)}
+              {sea.seacurrent && (<TableCell>해류</TableCell>)}
+              {sea.max_speed_increase && (<TableCell>최대 속도 증가</TableCell>)}
+              {sea.boundary && (<TableCell>경계</TableCell>)}
+            </TableRow>
+          </TableHead>
+          <TableBody> 
+            <TableRow>
+              {sea.category && (<TableCell>{sea.category}</TableCell>)}
+              {sea.region && (<TableCell>{sea.region.map((r) => r.name).join(", ")}</TableCell>)}
+              {sea.wave && (<TableCell>{sea.wave}</TableCell>)}
+              {sea.seacurrent && (<TableCell>{sea.seacurrent}</TableCell>)}
+              {sea.max_speed_increase && (<TableCell>{sea.max_speed_increase}</TableCell>)}
+              {sea.boundary && (
+                <TableCell>
+                  {Object.entries(sea.boundary)
                     .map(([key, value]) => `${key}: ${value}`)
                     .join(", ")}
-                />
-              </Grid>
-            )}
-          </Grid>
-        </CardContent>
-      </Card>
+                </TableCell>
+              )}
+            </TableRow>
+          </TableBody>
+          </Table>
+      </TableContainer>
+    )
+  }
+
+  return (
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="body1" paragraph>
+          {sea.description}
+        </Typography>
+      </Grid>
+      <Grid size={{xs: 12}}>
+        {renderBasicInfoTable(sea)}
+      </Grid>
       {sea.gatherable && (
-        <Box mt={3}>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             채집 정보
           </Typography>
           <GatherableTable data={sea.gatherable} />
-        </Box>
+        </Grid>
       )}
-    </Box>
+    </Grid>
   );
 }

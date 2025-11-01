@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -144,41 +142,31 @@ export default function PortPermitDetail({ data }: { data?: PortPermit }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {permit.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12 }}>
-              <DetailItem label="설명" value={permit.description} />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <DetailItem label="필요 조건" value={permit.required} />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={permit.description} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="필요 조건" value={permit.required} />
+      </Grid>
       {permit.quests_select_one && permit.quests_select_one.length > 0 && (
-        <Box mt={3}>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             퀘스트 (선택 1)
           </Typography>
           <QuestsTable data={permit.quests_select_one} />
-        </Box>
+        </Grid>
       )}
 
       {permit.fame_per_nation &&
         Object.keys(permit.fame_per_nation).length > 0 && (
-          <Box mt={3}>
+          <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
             <Typography variant="h5" gutterBottom>
               국가별 명성
             </Typography>
             <FameTable data={permit.fame_per_nation} />
-          </Box>
+          </Grid>
         )}
-    </Box>
+    </Grid>
   );
 }

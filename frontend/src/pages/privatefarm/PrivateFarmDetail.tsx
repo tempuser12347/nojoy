@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Table,
   TableBody,
@@ -160,55 +158,44 @@ export default function PrivateFarmDetail({ data }: { data?: PrivateFarm }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {farm.name}
-      </Typography>
-      <Typography variant="body1" gutterBottom>
-        {farm.description}
-      </Typography>
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="지역"
-                value={
-                  farm.region ? renderObjectChip(farm.region, navigate) : null
-                }
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="해역"
-                value={
-                  farm.sea_area
-                    ? renderObjectChip(farm.sea_area, navigate)
-                    : null
-                }
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="body1" gutterBottom>
+          {farm.description}
+        </Typography>
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="지역"
+          value={farm.region ? renderObjectChip(farm.region, navigate) : null}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="해역"
+          value={
+            farm.sea_area ? renderObjectChip(farm.sea_area, navigate) : null
+          }
+        />
+      </Grid>
 
       {farm.facilities && (
-        <>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             시설
           </Typography>
           <FacilitiesTable data={farm.facilities} />
-        </>
+        </Grid>
       )}
 
       {farm.products && (
-        <Box mt={3}>
+        <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
           <Typography variant="h5" gutterBottom>
             생산품
           </Typography>
           <ProductsTable data={farm.products} />
-        </Box>
+        </Grid>
       )}
-    </Box>
+    </Grid>
   );
 }
