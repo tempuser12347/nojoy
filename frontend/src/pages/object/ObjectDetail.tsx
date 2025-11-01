@@ -209,7 +209,7 @@ const typeNameMapping: { [key: string]: string } = {
   debatecombo: '논전콤보',
 };
 
-const fetchTitleName = (data: any, type: string)=>{
+const fetchTitleName = (data: any, type: string|null)=>{
   if(data.name){
     return data.name;
   }
@@ -226,6 +226,7 @@ export default function ObjectDetail() {
   const [msg, setMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -238,6 +239,7 @@ export default function ObjectDetail() {
         console.log(response.data);
         setData(response.data.data);
         setType(response.data.type);
+        setCompleted(response.data.completed);
         response.data.msg ? setMsg(response.data.msg) : setMsg(null);
       } catch (err) {
         setError("Failed to load object details");
@@ -251,6 +253,21 @@ export default function ObjectDetail() {
       fetchData();
     }
   }, [id]);
+
+  const handleCompletedChange = async (newCompleted: boolean) => {
+    setCompleted(newCompleted);
+    try {
+      await api.post('/api/completed', {
+        id: id,
+        name: fetchTitleName(data, type),
+        is_completed: newCompleted,
+      });
+    } catch (error) {
+      console.error('Failed to update completed status', error);
+      // Revert the state if the API call fails
+      setCompleted(!newCompleted);
+    }
+  };
 
   if (loading) {
     return (
@@ -304,7 +321,12 @@ export default function ObjectDetail() {
   }
 
   return <Box sx={{width: '100%', p: 3 }}>
-    <DetailPageTitle title={fetchTitleName(data, type)} typename={typeNameMapping[type]} />
-<DetailComponent data={data} type={typeNameMapping[type]} />
+    <DetailPageTitle
+      title={fetchTitleName(data, type)}
+      typename={typeNameMapping[type]}
+      completed={completed}
+      onCompletedChange={handleCompletedChange}
+    />
+    <DetailComponent data={data} type={typeNameMapping[type]} />
     </Box>;
 }

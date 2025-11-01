@@ -5,14 +5,22 @@ import json
 import asyncio
 import os
 
-router = APIRouter()
+router = APIRouter(prefix='/api', tags=['completed'])
 
 COMPLETED_FILE = "completed.json"
 completed_ids: Set[str] = set()
 completed_ids_dirty: bool = False
 
+def check_completed_of_id(_id: int):
+    if _id in completed_ids:
+        return True
+    else:
+        return False
+
+
 class CompletedStatusUpdate(BaseModel):
-    item_id: int
+    id: int
+    name: str
     is_completed: bool
 
 def load_completed_ids():
@@ -48,16 +56,23 @@ async def save_completed_ids_periodically():
 
 @router.post("/completed")
 async def update_completed_status(update: CompletedStatusUpdate):
+    print(update)
     global completed_ids_dirty
     if update.is_completed:
-        if update.item_id not in completed_ids:
-            completed_ids.add(update.item_id)
+        if update.id not in completed_ids:
+            completed_ids.add(update.id)
             completed_ids_dirty = True
+            print('added to completed')
+        else:
+            print('already in completed')
     else:
-        if update.item_id in completed_ids:
-            completed_ids.remove(update.item_id)
+        if update.id in completed_ids:
+            completed_ids.remove(update.id)
             completed_ids_dirty = True
-    return {"message": "Completed status updated", "item_id": update.item_id, "is_completed": update.is_completed}
+            print('removed from completed')
+        else:
+            print('not in completed')
+    return {"message": "Completed status updated", "item_id": update.id, "is_completed": update.is_completed}
 
 @router.get("/completed")
 async def get_completed_ids():

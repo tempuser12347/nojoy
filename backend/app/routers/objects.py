@@ -68,6 +68,7 @@ from .relic import read_relic_core
 from .relicpiece import read_relicpiece_core
 from .memorialalbum import read_memorialalbum_core
 from .debatecombo import read_debatecombo_core
+from .completed import completed_ids, check_completed_of_id
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
@@ -221,5 +222,6 @@ def read_object(obj_id: int, db: Session = Depends(get_db)):
         return {"type": None, "data": None, "msg": "no detail found"}
     else:
         deatil_data = fetch_fn(obj_id, db)
-        print(f"deatil_data: {deatil_data}")
-        return {"type": result.category, "data": deatil_data}
+
+        completed = check_completed_of_id(obj_id)
+        return {"type": result.category, "data": deatil_data, "completed": completed}
