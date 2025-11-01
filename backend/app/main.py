@@ -87,8 +87,8 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    completed.load_completed_ids()
-    asyncio.create_task(completed.save_completed_ids_periodically())
+    completed.load_completed_data()
+    asyncio.create_task(completed.save_completed_data_periodically())
 
 @app.on_event("shutdown")
 async def shutdown_event():

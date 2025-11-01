@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import Set
+from typing import Dict, List
 import json
 import asyncio
 import os
@@ -8,14 +8,12 @@ import os
 router = APIRouter(prefix='/api', tags=['completed'])
 
 COMPLETED_FILE = "completed.json"
-completed_ids: Set[str] = set()
-completed_ids_dirty: bool = False
+# Store as a dictionary {id: name}
+completed_data: Dict[int, str] = {}
+completed_data_dirty: bool = False
 
-def check_completed_of_id(_id: int):
-    if _id in completed_ids:
-        return True
-    else:
-        return False
+def check_completed_of_id(_id: int) -> bool:
+    return _id in completed_data
 
 
 class CompletedStatusUpdate(BaseModel):
@@ -23,57 +21,63 @@ class CompletedStatusUpdate(BaseModel):
     name: str
     is_completed: bool
 
-def load_completed_ids():
-    global completed_ids
+def load_completed_data():
+    global completed_data
     if os.path.exists(COMPLETED_FILE):
-        with open(COMPLETED_FILE, "r") as f:
+        with open(COMPLETED_FILE, "r", encoding='utf-8') as f:
             try:
                 data = json.load(f)
-                completed_ids = set(data.get('completed_ids', []))
-            except json.JSONDecodeError:
-                completed_ids = set()
+                completed_items = data.get('completed_items', [])
+                completed_data = {item['id']: item['name'] for item in completed_items}
+            except (json.JSONDecodeError, KeyError, TypeError):
+                completed_data = {}
     else:
-        completed_ids = set()
+        completed_data = {}
 
-def save_completed_ids():
-    global completed_ids_dirty
-    with open(COMPLETED_FILE, "w") as f:
+def save_completed_data():
+    global completed_data_dirty
+    with open(COMPLETED_FILE, "w", encoding='utf-8') as f:
+        items_list = [{"id": id, "name": name} for id, name in completed_data.items()]
+        items_list.sort(key=lambda x: x['id'])
+        
         data = {
-            "schema_version": "1.0.0",
-            "completed_ids": list(completed_ids)
+            "schema_version": "1.1.0",
+            "completed_items": items_list
         }
-        # sort the ids before saving for consistency
-        data["completed_ids"].sort()
         json.dump(data, f, indent=4, ensure_ascii=False)
-    completed_ids_dirty = False
+    completed_data_dirty = False
 
-async def save_completed_ids_periodically():
-    global completed_ids_dirty
+async def save_completed_data_periodically():
+    global completed_data_dirty
     while True:
         await asyncio.sleep(3)
-        if completed_ids_dirty:
-            save_completed_ids()
+        if completed_data_dirty:
+            save_completed_data()
 
 @router.post("/completed")
 async def update_completed_status(update: CompletedStatusUpdate):
     print(update)
-    global completed_ids_dirty
+    global completed_data_dirty
     if update.is_completed:
-        if update.id not in completed_ids:
-            completed_ids.add(update.id)
-            completed_ids_dirty = True
-            print('added to completed')
+        if completed_data.get(update.id) != update.name:
+            completed_data[update.id] = update.name
+            completed_data_dirty = True
+            print(f'Added/updated id {update.id} with name {update.name}')
         else:
-            print('already in completed')
+            print(f'id {update.id} already present with the same name.')
     else:
-        if update.id in completed_ids:
-            completed_ids.remove(update.id)
-            completed_ids_dirty = True
-            print('removed from completed')
+        if update.id in completed_data:
+            del completed_data[update.id]
+            completed_data_dirty = True
+            print(f'removed {update.id} from completed')
         else:
-            print('not in completed')
-    return {"message": "Completed status updated", "item_id": update.id, "is_completed": update.is_completed}
+            print(f'{update.id} not in completed')
+            
+    return {"message": "Completed status updated", "item_id": update.id, "completed": update.is_completed}
 
 @router.get("/completed")
-async def get_completed_ids():
-    return list(completed_ids)
+async def get_completed_data():
+    items_list = [{"id": id, "name": name} for id, name in completed_data.items()]
+    items_list.sort(key=lambda x: x['id'])
+    return items_list
+

@@ -68,7 +68,7 @@ from .relic import read_relic_core
 from .relicpiece import read_relicpiece_core
 from .memorialalbum import read_memorialalbum_core
 from .debatecombo import read_debatecombo_core
-from .completed import completed_ids, check_completed_of_id
+from .completed import  check_completed_of_id
 
 
 router = APIRouter(prefix="/api/obj", tags=["objects"])
