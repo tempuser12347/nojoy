@@ -87,7 +87,7 @@ function App() {
               <Route path="/발견물" element={<Discoveries />} />
               <Route path="/퀘스트" element={<Quests />} />
               <Route path="/도시" element={<Cities />} />
-              <Route path="/레시피" element={<Recipes />} />
+              <Route path="/recipes" element={<Recipes />} />
               <Route path="/shipwrecks" element={<Shipwrecks />} />
               <Route path="/소비품" element={<Consumables />} />
               <Route path="/선박" element={<Ships />} />
