@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
 } from "@mui/material";
@@ -64,22 +62,13 @@ export default function ProtectionDetail({ data }: { data?: Protection }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {protection.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={protection.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{xs:12}}>
-              <DetailItem label="효과" value={protection.effect} />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={protection.description} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="효과" value={protection.effect} />
+      </Grid>
+    </Grid>
   );
 }

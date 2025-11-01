@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -200,58 +198,49 @@ export default function DungeonDetail({ data }: { data?: Dungeon }) {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {dungeon.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={dungeon.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="분류" value={dungeon.category} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="층수" value={dungeon.floors} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="랭크" value={dungeon.dungeon_rank} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="유적 탐험도" value={dungeon.dungeon_exploration} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="승선권" value={dungeon.boarding_pass} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="입구"
-                value={dungeon.entrance ? renderObjectChip(dungeon.entrance, navigate) : null}
-              />
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                요구 사항
-              </Typography>
-              {dungeon.requirements && renderRequirements(dungeon.requirements)}
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                발견물
-              </Typography>
-              {dungeon.discoveries && renderDiscoveries(dungeon.discoveries)}
-            </Grid>
-            <Grid size={{ xs: 12 }}>
-              <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                획득 아이템
-              </Typography>
-              {dungeon.acquisition_items && renderAcquisitionItems(dungeon.acquisition_items)}
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={dungeon.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="분류" value={dungeon.category} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="층수" value={dungeon.floors} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="랭크" value={dungeon.dungeon_rank} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="유적 탐험도" value={dungeon.dungeon_exploration} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="승선권" value={dungeon.boarding_pass} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="입구"
+          value={dungeon.entrance ? renderObjectChip(dungeon.entrance, navigate) : null}
+        />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+          요구 사항
+        </Typography>
+        {dungeon.requirements && renderRequirements(dungeon.requirements)}
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+          발견물
+        </Typography>
+        {dungeon.discoveries && renderDiscoveries(dungeon.discoveries)}
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+          획득 아이템
+        </Typography>
+        {dungeon.acquisition_items && renderAcquisitionItems(dungeon.acquisition_items)}
+      </Grid>
+    </Grid>
   );
 }

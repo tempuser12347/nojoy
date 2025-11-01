@@ -3,12 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
+  Grid,
 } from "@mui/material";
 import api from "../../api";
 import "../../common/innertable.css";
+import DetailItem from "../../components/DetailItem";
 
 interface TreasureBox {
   name: string;
@@ -73,24 +73,6 @@ const renderItems = (
   );
 };
 
-const DetailItem = ({
-  label,
-  value,
-}: {
-  label: string;
-  value: React.ReactNode;
-}) =>
-  value ? (
-    <Box>
-      <Typography variant="h6" color="text.secondary">
-        {label}
-      </Typography>
-      <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
-        {value}
-      </Typography>
-    </Box>
-  ) : null;
-
 export default function TreasureBoxDetail() {
   const { id } = useParams<{ id: string }>();
   const [treasureBox, setTreasureBox] = useState<TreasureBox | null>(null);
@@ -141,36 +123,22 @@ export default function TreasureBoxDetail() {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {treasureBox.name}
-      </Typography>
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "1fr 1fr",
-              },
-            }}
-          >
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <DetailItem label="설명" value={treasureBox.description} />
-            </Box>
-            <DetailItem label="판매 기간" value={treasureBox.sell_period} />
-            <DetailItem label="가격" value={treasureBox.price} />
-            <Box sx={{ gridColumn: "1 / -1" }}>
-              <DetailItem
-                label="아이템"
-                value={renderItems(treasureBox.items, navigate)}
-              />
-            </Box>
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={treasureBox.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="판매 기간" value={treasureBox.sell_period} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="가격" value={treasureBox.price} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem
+          label="아이템"
+          value={renderItems(treasureBox.items, navigate)}
+        />
+      </Grid>
+    </Grid>
   );
 }
