@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
 } from "@mui/material";
@@ -71,45 +69,35 @@ export default function RelicPieceDetail({
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {relicPiece.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={relicPiece.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="랭크" value={relicPiece.piece_rank} />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="테마"
-                value={relicPiece.theme ? renderObjectChip(relicPiece.theme, navigate) : null}
-              />
-            </Grid>
-            {relicPiece.quest ?
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <DetailItem
-                  label="퀘스트"
-                  value={relicPiece.quest ? renderObjectChip(relicPiece.quest, navigate) : null}
-                />
-              </Grid> : null
-            }
-            {relicPiece.associated_relic ?
-
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <DetailItem
-                  label="관련 렐릭"
-                  value={relicPiece.associated_relic ? renderObjectChip(relicPiece.associated_relic, navigate) : null}
-                />
-              </Grid> : null
-            }
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={relicPiece.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="랭크" value={relicPiece.piece_rank} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="테마"
+          value={relicPiece.theme ? renderObjectChip(relicPiece.theme, navigate) : null}
+        />
+      </Grid>
+      {relicPiece.quest ?
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <DetailItem
+            label="퀘스트"
+            value={relicPiece.quest ? renderObjectChip(relicPiece.quest, navigate) : null}
+          />
+        </Grid> : null
+      }
+      {relicPiece.associated_relic ?
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <DetailItem
+            label="관련 렐릭"
+            value={relicPiece.associated_relic ? renderObjectChip(relicPiece.associated_relic, navigate) : null}
+          />
+        </Grid> : null
+      }
+    </Grid>
   );
 }

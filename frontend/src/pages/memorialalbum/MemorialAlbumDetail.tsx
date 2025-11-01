@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -85,61 +83,52 @@ export default function MemorialAlbumDetail({
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {memorialAlbum.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={memorialAlbum.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{xs: 12, sm: 6}}>
-              <DetailItem label="카테고리" value={memorialAlbum.category} />
-            </Grid>
-            <Grid size={{xs: 12, sm: 6}} >
-              <DetailItem
-                label="보상 NPC"
-                value={memorialAlbum.reward_npc ? renderObjectChip(memorialAlbum.reward_npc, navigate) : null}
-              />
-            </Grid>
-            <Grid size={{xs: 12, sm: 6}} >
-              <DetailItem
-                label="보상 아이템"
-                value={memorialAlbum.reward_item ? renderObjectChip(memorialAlbum.reward_item, navigate) : null}
-              />
-            </Grid>
-            {memorialAlbum.items && memorialAlbum.items.length > 0 && (
-              <Grid size={{xs: 12}}>
-                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                  아이템 목록
-                </Typography>
-                <TableContainer component={Paper}>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>아이템</TableCell>
-                        <TableCell>설명</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {memorialAlbum.items.map((item, index) => (
-                        <TableRow key={index}>
-                          <TableCell>
-                            {renderObjectChip(item.item, navigate)}
-                          </TableCell>
-                          <TableCell>{item.explanation}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-            )}
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={memorialAlbum.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="카테고리" value={memorialAlbum.category} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }} >
+        <DetailItem
+          label="보상 NPC"
+          value={memorialAlbum.reward_npc ? renderObjectChip(memorialAlbum.reward_npc, navigate) : null}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }} >
+        <DetailItem
+          label="보상 아이템"
+          value={memorialAlbum.reward_item ? renderObjectChip(memorialAlbum.reward_item, navigate) : null}
+        />
+      </Grid>
+      {memorialAlbum.items && memorialAlbum.items.length > 0 && (
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+            아이템 목록
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>아이템</TableCell>
+                  <TableCell>설명</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {memorialAlbum.items.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      {renderObjectChip(item.item, navigate)}
+                    </TableCell>
+                    <TableCell>{item.explanation}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      )}
+    </Grid>
   );
 }

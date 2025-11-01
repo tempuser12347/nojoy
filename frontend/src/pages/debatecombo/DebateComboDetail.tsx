@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -84,60 +82,51 @@ export default function DebateComboDetail({
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {debateCombo.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={debateCombo.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{xs:12, sm: 6}}>
-              <DetailItem
-                label="카테고리"
-                value={debateCombo.category_info ? debateCombo.category_info.category : null}
-              />
-            </Grid>
-            <Grid size={{xs:12, sm: 6}}>
-              <DetailItem
-                label="보너스"
-                value={debateCombo.category_info ? debateCombo.category_info.bonus : null}
-              />
-            </Grid>
-            <Grid size={{xs:12, sm: 6}}>
-              <DetailItem label="총 포인트" value={debateCombo.total_points} />
-            </Grid>
-            {debateCombo.discovery_cards &&
-              debateCombo.discovery_cards.length > 0 && (
-                <Grid size={{xs:12}}>
-                  <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                    발견물 카드
-                  </Typography>
-                  <TableContainer component={Paper}>
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>이름</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {debateCombo.discovery_cards.map((card, index) => (
-                          <TableRow key={index}>
-                            <TableCell>
-                              {renderObjectChip(card, navigate)}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Grid>
-              )}
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={debateCombo.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="카테고리"
+          value={debateCombo.category_info ? debateCombo.category_info.category : null}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="보너스"
+          value={debateCombo.category_info ? debateCombo.category_info.bonus : null}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="총 포인트" value={debateCombo.total_points} />
+      </Grid>
+      {debateCombo.discovery_cards &&
+        debateCombo.discovery_cards.length > 0 && (
+          <Grid size={{ xs: 12 }}>
+            <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+              발견물 카드
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>이름</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {debateCombo.discovery_cards.map((card, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        {renderObjectChip(card, navigate)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+        )}
+    </Grid>
   );
 }

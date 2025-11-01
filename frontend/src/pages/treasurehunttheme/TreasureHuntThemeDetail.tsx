@@ -4,8 +4,6 @@ import {
   Box,
   Paper,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   TableContainer, Table, TableHead, TableBody, TableCell, TableRow
@@ -135,25 +133,16 @@ export default function TreasureHuntThemeDetail({
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {treasureHuntTheme.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={treasureHuntTheme.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem label="테마 랭크" value={treasureHuntTheme.theme_rank} />
-            </Grid>
-            {treasureHuntTheme.requirements ? <Grid size={{ xs: 12 }}>
-              <DetailItem label='요구사항' value={renderRequirements(treasureHuntTheme.requirements)} />
-            </Grid> : null}
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={treasureHuntTheme.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="테마 랭크" value={treasureHuntTheme.theme_rank} />
+      </Grid>
+      {treasureHuntTheme.requirements ? <Grid size={{ xs: 12 }}>
+        <DetailItem label='요구사항' value={renderRequirements(treasureHuntTheme.requirements)} />
+      </Grid> : null}
+    </Grid>
   );
 }

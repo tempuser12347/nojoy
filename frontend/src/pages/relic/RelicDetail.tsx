@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -82,77 +80,68 @@ export default function RelicDetail({ data }: { data?: Relic }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {relic.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={relic.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{xs: 12, sm: 6}}>
-              <DetailItem label="테마" value={relic.theme ? renderObjectChip(relic.theme, navigate) : null} />
-            </Grid>
-            {relic.relic_pieces && relic.relic_pieces.length > 0 && (
-              <Grid size={{xs: 12}}>
-                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                  렐릭 피스
-                </Typography>
-                <TableContainer component={Paper}>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>랭크</TableCell>
-                        <TableCell>렐릭 피스</TableCell>
-                        <TableCell>퀘스트</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {relic.relic_pieces.map((rp, index) => {
-                        const currentRowRank = rp.rank;
-                        const previousRowRank = index > 0 ? relic.relic_pieces[index - 1].rank : undefined;
-                        const isFirstOfGroup = currentRowRank !== previousRowRank;
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={relic.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="테마" value={relic.theme ? renderObjectChip(relic.theme, navigate) : null} />
+      </Grid>
+      {relic.relic_pieces && relic.relic_pieces.length > 0 && (
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+            렐릭 피스
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>랭크</TableCell>
+                  <TableCell>렐릭 피스</TableCell>
+                  <TableCell>퀘스트</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {relic.relic_pieces.map((rp, index) => {
+                  const currentRowRank = rp.rank;
+                  const previousRowRank = index > 0 ? relic.relic_pieces[index - 1].rank : undefined;
+                  const isFirstOfGroup = currentRowRank !== previousRowRank;
 
-                        let rowSpan = 1;
-                        if (isFirstOfGroup) {
-                          for (let i = index + 1; i < relic.relic_pieces.length; i++) {
-                            if (relic.relic_pieces[i].rank === currentRowRank) {
-                              rowSpan++;
-                            } else {
-                              break;
-                            }
-                          }
-                        }
+                  let rowSpan = 1;
+                  if (isFirstOfGroup) {
+                    for (let i = index + 1; i < relic.relic_pieces.length; i++) {
+                      if (relic.relic_pieces[i].rank === currentRowRank) {
+                        rowSpan++;
+                      } else {
+                        break;
+                      }
+                    }
+                  }
 
-                        return (
-                          <TableRow key={index}>
-                            {isFirstOfGroup && (
-                              <TableCell rowSpan={rowSpan}>{rp.rank}</TableCell>
-                            )}
-                            <TableCell>
-                              {renderObjectChip(rp.relic_piece, navigate)}
-                            </TableCell>
-                            <TableCell>
-                              {rp.quest
-                                ? renderObjectChip(rp.quest, navigate)
-                                : "-"}
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-            )}
-            <Grid size={{xs: 12}}>
-              <DetailItem label="모험담" value={relic.adventure_log} />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+                  return (
+                    <TableRow key={index}>
+                      {isFirstOfGroup && (
+                        <TableCell rowSpan={rowSpan}>{rp.rank}</TableCell>
+                      )}
+                      <TableCell>
+                        {renderObjectChip(rp.relic_piece, navigate)}
+                      </TableCell>
+                      <TableCell>
+                        {rp.quest
+                          ? renderObjectChip(rp.quest, navigate)
+                          : "-"}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      )}
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="모험담" value={relic.adventure_log} />
+      </Grid>
+    </Grid>
   );
 }
