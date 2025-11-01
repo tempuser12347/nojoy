@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -145,43 +143,33 @@ export default function LegacyDetail({ data }: { data?: Legacy }) {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {legacy.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={legacy.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <DetailItem
-                label="테마"
-                value={legacy.theme ? renderObjectChip(legacy.theme, navigate) : null}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }} >
-              <DetailItem label="위치" value={legacy.destination ? renderObjectChip(legacy.destination, navigate) : null} />
-            </Grid>
-            {legacy.requirements ?
-
-              <Grid size={{ xs: 12 }}>
-                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                  요구 사항
-                </Typography>
-                {renderRequirements(legacy.requirements)}
-              </Grid>
-              : null}
-            <Grid size={{ xs: 12 }}>
-              <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                보상
-              </Typography>
-              {legacy.rewards && renderRewards(legacy.rewards)}
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={legacy.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="테마"
+          value={legacy.theme ? renderObjectChip(legacy.theme, navigate) : null}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }} >
+        <DetailItem label="위치" value={legacy.destination ? renderObjectChip(legacy.destination, navigate) : null} />
+      </Grid>
+      {legacy.requirements ?
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+            요구 사항
+          </Typography>
+          {renderRequirements(legacy.requirements)}
+        </Grid>
+        : null}
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+          보상
+        </Typography>
+        {legacy.rewards && renderRewards(legacy.rewards)}
+      </Grid>
+    </Grid>
   );
 }

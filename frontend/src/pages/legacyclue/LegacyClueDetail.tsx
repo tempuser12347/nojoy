@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
 } from "@mui/material";
@@ -68,42 +66,33 @@ export default function LegacyClueDetail({ data }: { data?: LegacyClue }) {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {legacyClue.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={legacyClue.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid size={{xs:12, sm:6}}>
-              <DetailItem
-                label="테마"
-                value={legacyClue.theme ? renderObjectChip(legacyClue.theme, navigate) : null}
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={legacyClue.description} />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem
+          label="테마"
+          value={legacyClue.theme ? renderObjectChip(legacyClue.theme, navigate) : null}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <DetailItem label="획득 방법" value={legacyClue.acquisition_method} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem
+          label="획득 방법 상세"
+          value={
+            legacyClue.acquisition_method_detail ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: legacyClue.acquisition_method_detail,
+                }}
               />
-            </Grid>
-            <Grid size={{xs:12, sm:6}}>
-              <DetailItem label="획득 방법" value={legacyClue.acquisition_method} />
-            </Grid>
-            <Grid size={{xs:12}}>
-              <DetailItem
-                label="획득 방법 상세"
-                value={
-                  legacyClue.acquisition_method_detail ? (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: legacyClue.acquisition_method_detail,
-                      }}
-                    />
-                  ) : null
-                }
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+            ) : null
+          }
+        />
+      </Grid>
+    </Grid>
   );
 }

@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -106,25 +104,16 @@ export default function LegacyThemeDetail({ data }: { data?: LegacyTheme }) {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {legacyTheme.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={legacyTheme.description} />
-          </Box>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                요구 사항
-              </Typography>
-              {legacyTheme.requirements && renderRequirements(legacyTheme.requirements)}
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={legacyTheme.description} />
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+        <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+          요구 사항
+        </Typography>
+        {legacyTheme.requirements && renderRequirements(legacyTheme.requirements)}
+      </Grid>
+    </Grid>
   );
 }
