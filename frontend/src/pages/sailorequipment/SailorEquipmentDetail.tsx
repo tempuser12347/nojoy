@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -92,65 +90,53 @@ export default function SailorEquipmentDetail({ data }: { data?: SailorEquipment
   const filteredStats = Object.fromEntries(Object.entries(stats).filter(([_, v]) => v !== null && v !== undefined));
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        {sailorEquipment.name}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Box sx={{ mb: 2 }}>
-            <DetailItem label="설명" value={sailorEquipment.description} />
-          </Box>
-          <Grid container spacing={2}>
-
-          {Object.keys(filteredStats).length > 0 &&
-            <Grid size={{xs: 12}}>
-              <Typography variant="h6" gutterBottom>
-                성능
-              </Typography>
-              <TableContainer component={Paper}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      {Object.keys(filteredStats).map((key) => (
-                        <TableCell key={key}>{key}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      {Object.values(filteredStats).map((value, index) => (
-                        <TableCell key={index}>{value}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12 }}>
+        <DetailItem label="설명" value={sailorEquipment.description} />
+      </Grid>
+      {Object.keys(filteredStats).length > 0 &&
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="h6" gutterBottom>
+            성능
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  {Object.keys(filteredStats).map((key) => (
+                    <TableCell key={key}>{key}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  {Object.values(filteredStats).map((value, index) => (
+                    <TableCell key={index}>{value}</TableCell>
+                  ))}
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      }
+      <Grid size={{ xs: 12 }} >
+        <DetailItem
+          label="장비 효과"
+          value={
+            sailorEquipment.equipment_effect ? renderObjectChip(sailorEquipment.equipment_effect, navigate) : null
           }
-
-            <Grid size={{xs:12}} >
-                <DetailItem
-                    label="장비 효과"
-                    value={
-                    sailorEquipment.equipment_effect ? renderObjectChip(sailorEquipment.equipment_effect, navigate) : null
-                    }
-                />
-            </Grid>
-
-            {sailorEquipment.obtain_method && (
-              <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
-                <DetailItem
-                  label="획득 방법"
-                  value={
-                    <ObtainMethodTabs data={sailorEquipment.obtain_method} />
-                  }
-                />
-              </Grid>
-            )}
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+        />
+      </Grid>
+      {sailorEquipment.obtain_method && (
+        <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
+          <DetailItem
+            label="획득 방법"
+            value={
+              <ObtainMethodTabs data={sailorEquipment.obtain_method} />
+            }
+          />
+        </Grid>
+      )}
+    </Grid>
   );
 }
