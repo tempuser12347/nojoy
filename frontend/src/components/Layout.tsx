@@ -49,7 +49,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               href={newVersionAvailable ? "https://github.com/tempuser12347/nojoy/releases/latest" : null}
               target="_blank"
               rel="noopener noreferrer"
-              disabled={newVersionAvailable}
               sx={{
                 color: 'white',
                 opacity: 0.7,
