@@ -32,8 +32,10 @@ jobs:
       - name: Copy additional files
         run: |
           mkdir package
-          xcopy dist package\\dist /E /I /Y
-          if exist dhoDatabase.sqlite3 copy dhoDatabase.sqlite3 package\\dhoDatabase.sqlite3
+          xcopy dist package\dist /E /I /Y
+          if (Test-Path "dhoDatabase.sqlite3") {
+            Copy-Item "dhoDatabase.sqlite3" "package\dhoDatabase.sqlite3"
+          }
 
       - name: Create ZIP archive
         run: |
