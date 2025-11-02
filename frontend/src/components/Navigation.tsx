@@ -83,9 +83,11 @@ const sections = {
     "입항허가",
     "정기선",
   ],
+  설정: ["발견완료 설정"],
 };
 
 const availableSections = [
+  "발견완료 설정",
   "발견물",
   "퀘스트",
   "보물지도",
@@ -359,6 +361,9 @@ const availableSections = [
               break;
             case "논전 콤보":
               subsection = "debatecombos";
+              break;
+            case "발견완료 설정":
+              subsection = "completed-settings";
               break;
             default:
               break;

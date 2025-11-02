@@ -72,6 +72,7 @@ import Relics from "./pages/relic/Relics";
 import RelicPieces from "./pages/relicpiece/RelicPieces";
 import MemorialAlbums from "./pages/memorialalbum/MemorialAlbums";
 import DebateCombos from "./pages/debatecombo/DebateCombos";
+import CompletedSettings from "./pages/completed/CompletedSettings";
 
 const queryClient = new QueryClient();
 
@@ -122,7 +123,7 @@ function App() {
               <Route path="/titles" element={<Titles />} />
               <Route path="/courtranks" element={<CourtRanks />} />
               <Route path="/aides" element={<Aides />} />
-              <Route path="/pets" element={<Pets />} />
+                            <Route path="/pets" element={<Pets />} />
               <Route path="/shipmaterials" element={<ShipMaterials />} />
               <Route path="/shipskills" element={<ShipSkills />} />
               <Route path="/shipbasematerials" element={<ShipBaseMaterials />} />
@@ -153,6 +154,7 @@ function App() {
               <Route path="/relicpieces" element={<RelicPieces />} />
               <Route path="/memorialalbums" element={<MemorialAlbums />} />
               <Route path="/debatecombos" element={<DebateCombos />} />
+              <Route path="/completed-settings" element={<CompletedSettings />} />
 
               <Route path="/obj/:id" element={<ObjectDetail />} />
               <Route path="*" element={<NotFound />} />
