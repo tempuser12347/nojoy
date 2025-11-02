@@ -14,7 +14,6 @@ import {
   Paper,
 } from "@mui/material";
 import api from "../../api";
-import DetailItem from "../../components/DetailItem";
 import { renderObjectChip } from "../../common/render";
 
 interface Sea {

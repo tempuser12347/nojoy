@@ -20,7 +20,7 @@ import { renderObjectChip } from "../../common/render";
 interface RelicPiece {
   rank: number;
   relic_piece: { id: number; name: string };
-  quest: {id: number; name: string} | null;
+  quest: { id: number; name: string } | null;
 }
 
 interface Relic {
@@ -28,7 +28,7 @@ interface Relic {
   name: string;
   extraname: string | null;
   description: string | null;
-  theme: {id: number, name: string} | null;
+  theme: { id: number, name: string } | null;
   relic_pieces: RelicPiece[] | null;
   adventure_log: string | null;
 }
@@ -104,16 +104,20 @@ export default function RelicDetail({ data }: { data?: Relic }) {
               <TableBody>
                 {relic.relic_pieces.map((rp, index) => {
                   const currentRowRank = rp.rank;
-                  const previousRowRank = index > 0 ? relic.relic_pieces[index - 1].rank : undefined;
+                  const previousRowRank = index > 0 ? relic.relic_pieces?.[index - 1].rank : undefined;
                   const isFirstOfGroup = currentRowRank !== previousRowRank;
 
                   let rowSpan = 1;
                   if (isFirstOfGroup) {
-                    for (let i = index + 1; i < relic.relic_pieces.length; i++) {
-                      if (relic.relic_pieces[i].rank === currentRowRank) {
-                        rowSpan++;
-                      } else {
-                        break;
+                    if (relic.relic_pieces == null) {
+                    }
+                    else {
+                      for (let i = index + 1; i < relic.relic_pieces.length; i++) {
+                        if (relic.relic_pieces[i].rank === currentRowRank) {
+                          rowSpan++;
+                        } else {
+                          break;
+                        }
                       }
                     }
                   }

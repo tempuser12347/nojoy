@@ -10,13 +10,6 @@ import {
 import DataTable from '../../components/DataTable';
 import api from '../../api';
 
-const parseSortValue = (value: any) => {
-  if (typeof value === 'string') {
-    const match = value.match(/^(-?\d+)/);
-    return match ? parseInt(match[1], 10) : value;
-  }
-  return value;
-};
 
 const columns = [
   { id: 'name', label: '이름', minWidth: 170 },

@@ -160,7 +160,7 @@ const Furnitures: React.FC = () => {
         가구
       </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={4} sx={{ justifyContent: "center", alignItems: "center", display: "flex" }}>
+        <Grid size={{xs:12, md: 4}} sx={{ justifyContent: "center", alignItems: "center", display: "flex" }}>
           <TextField
             label="가구 이름 검색"
             variant="outlined"
@@ -170,7 +170,7 @@ const Furnitures: React.FC = () => {
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
         </Grid>
-        <Grid item xs={12} md={8} sx={{ justifyContent: "center", alignItems: "center", display: "flex", border: '1px solid #ccc', borderRadius: '4px', padding: '8px' }}>
+        <Grid size={{xs: 12, md: 8}} sx={{ justifyContent: "center", alignItems: "center", display: "flex", border: '1px solid #ccc', borderRadius: '4px', padding: '8px' }}>
           <FormControl component="fieldset">
             <FormLabel component="legend">카테고리</FormLabel>
             <FormGroup row>
@@ -190,7 +190,7 @@ const Furnitures: React.FC = () => {
             </FormGroup>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sx={{ justifyContent: "center", alignItems: "center", display: "flex", gap: 1 }}>
+        <Grid size={{xs: 12}} sx={{ justifyContent: "center", alignItems: "center", display: "flex", gap: 1 }}>
           <Button variant="contained" onClick={handleSearch}>
             검색
           </Button>

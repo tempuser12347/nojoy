@@ -46,9 +46,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Tooltip title={newVersionAvailable ? "새로운 버전이 있습니다." : "최신 버전입니다."}>
             <IconButton
               color="inherit"
-              href={newVersionAvailable ? "https://github.com/tempuser12347/nojoy/releases/latest" : null}
-              target="_blank"
-              rel="noopener noreferrer"
+              // **Only include href, target, and rel when newVersionAvailable is true**
+              {...(newVersionAvailable && {
+                href: "https://github.com/tempuser12347/nojoy/releases/latest",
+                target: "_blank",
+                rel: "noopener noreferrer",
+              })}
               sx={{
                 color: 'white',
                 opacity: 0.7,

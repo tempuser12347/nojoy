@@ -4,8 +4,6 @@ import {
   Box,
   Typography,
   Paper,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   TableRow,

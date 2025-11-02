@@ -7,8 +7,6 @@ import {
   TableHead,
   TableRow,
   TableCell,
-  Card,
-  CardContent,
   CircularProgress,
   Chip,
   Grid,
@@ -42,23 +40,6 @@ interface Discovery {
   coordinates: string | null;
 }
 
-// const DetailItem = ({
-//   label,
-//   value,
-// }: {
-//   label: string;
-//   value: React.ReactNode;
-// }) =>
-//   value ? (
-//     <Box>
-//       <Typography variant="h6" color="text.secondary">
-//         {label}
-//       </Typography>
-//       <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
-//         {value}
-//       </Typography>
-//     </Box>
-//   ) : null;
 
 const generateDiscoveryLocationPrefixString = (
   method: string,

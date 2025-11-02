@@ -67,7 +67,7 @@ const Relics: React.FC = () => {
 
   const columns = [
     { id: "name", label: "이름", minWidth: 170 },
-    { id: "theme", label: "테마", minWidth: 100, format: value => value ? renderObjectChip(value, navigate): null },
+    { id: "theme", label: "테마", minWidth: 100, format: (value: {id: number, name: string}) => value ? renderObjectChip(value, navigate): null },
   ];
 
   const handleSearchInputChange = (

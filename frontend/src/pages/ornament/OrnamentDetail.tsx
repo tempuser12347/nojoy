@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-  Divider,
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -19,7 +16,6 @@ import {
 import api from "../../api";
 import DetailItem from "../../components/DetailItem";
 import { renderObjectChip } from "../../common/render";
-import DetailPageTitle from "../../components/DetailPageTitle";
 
 interface Ornament {
   id: number;
@@ -33,7 +29,7 @@ interface Ornament {
   cost: { value: number; unit: string } | null;
 }
 
-export default function OrnamentDetail({ data, type }: { data?: Ornament, type: string }) {
+export default function OrnamentDetail({ data }: { data?: Ornament }) {
   const { id } = useParams<{ id: string }>();
   const [ornament, setOrnament] = useState<Ornament | null>(data || null);
   const [loading, setLoading] = useState(!data);

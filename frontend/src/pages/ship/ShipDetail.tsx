@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   CircularProgress,
   Grid,
   Table,
@@ -19,7 +17,6 @@ import api from "../../api";
 import DetailItem from "../../components/DetailItem";
 import { renderObjectChip, renderObjectsToChips } from "../../common/render";
 import ObtainMethodTabs from "../../components/ObtainMethodTabs";
-import DetailPageTitle from "../../components/DetailPageTitle";
 
 interface Ship {
   id: number;
@@ -97,7 +94,7 @@ interface Ship {
   obtain_method: any[] | null
 }
 
-export default function ShipDetail({ data , type }: { data?: Ship, type: string }) {
+export default function ShipDetail({ data }: { data?: Ship }) {
   const { id } = useParams<{ id: string }>();
   const [ship, setShip] = useState<Ship | null>(data || null);
   const [loading, setLoading] = useState(!data);
