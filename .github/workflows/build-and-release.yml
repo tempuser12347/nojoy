@@ -56,7 +56,8 @@ jobs:
 
       - name: Create ZIP archive
         run: |
-          powershell Compress-Archive -Path package\\* -DestinationPath nojoy.zip
+          $tag = "${{ github.event.inputs.tag_name || github.ref_name }}"
+          powershell Compress-Archive -Path package\\* -DestinationPath "nojoy-$tag.zip"
 
       - name: Upload ZIP artifact
         uses: actions/upload-artifact@v4
