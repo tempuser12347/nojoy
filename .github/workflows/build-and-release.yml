@@ -80,7 +80,7 @@ jobs:
         with:
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           name: ${{ github.event.inputs.tag_name || github.ref_name }}
-          files: nojoy.zip
+          files: nojoy-${{ github.event.inputs.tag_name || github.ref_name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
