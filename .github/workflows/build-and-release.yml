@@ -21,6 +21,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Get tag name
+        id: get_tag
+        run: |
+          if ($env:GITHUB_REF -match 'refs/tags/(.+)') {
+            echo "tag=$($matches[1])" >> $env:GITHUB_OUTPUT
+          } elseif ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
+            echo "tag=${{ github.event.inputs.tag_name }}" >> $env:GITHUB_OUTPUT
+          }
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -34,11 +43,12 @@ jobs:
 
       - name: Build EXE with PyInstaller
         run: |
-          pyinstaller --onefile backend/run.py --name my_app
+          pyinstaller --onefile backend/run.py --distpath=pyexe/ --name nojoy
 
       - name: Copy additional files
         run: |
           mkdir package
+          copy pyexe\nojoy.exe package\nojoy.exe
           xcopy dist package\dist /E /I /Y
           if (Test-Path "dhoDatabase.sqlite3") {
             Copy-Item "dhoDatabase.sqlite3" "package\dhoDatabase.sqlite3"
@@ -68,8 +78,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name || github.event.inputs.tag_name }}
-          name: Release ${{ github.ref_name || github.event.inputs.tag_name }}
+          tag_name: ${{ needs.build.outputs.tag_name }}
+          name: ${{ needs.build.outputs.tag_name }}
           files: nojoy.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
