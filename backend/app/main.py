@@ -1,3 +1,4 @@
+import sys
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -164,8 +165,10 @@ app.include_router(memorialalbum.router)
 app.include_router(debatecombo.router)
 app.include_router(completed.router)
 
-
-dist_dir = "dist"
+if getattr(sys, 'frozen', False):
+    dist_dir = "dist"
+else:
+    dist_dir = '../dist'
 app.mount(
     "/assets", StaticFiles(directory=os.path.join(dist_dir, "assets")), name="assets"
 )

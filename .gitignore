@@ -8,4 +8,8 @@ backend/frontend
 teststuff
 .vscode
 GEMINI.md
+
+**/build/
+**/run/
+**/pyexe/
 completed.json
