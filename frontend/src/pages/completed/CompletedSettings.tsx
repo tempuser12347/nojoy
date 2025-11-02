@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography, Box, Modal, Alert } from '@mui/material';
+import { TextField, Button, Container, Typography, Box, Modal, Alert, IconButton } from '@mui/material';
+import { ContentCopy } from '@mui/icons-material';
 import api from '../../api';
 
 interface MatchedItem {
@@ -21,7 +22,6 @@ const CompletedSettings: React.FC = () => {
 
   const handleCheckNames = async () => {
     try {
-      console.log(text)
       const response = await api.post('/api/completed/check_names', { names: text });
       setResult(response.data);
       setOpen(true);
@@ -47,8 +47,14 @@ const CompletedSettings: React.FC = () => {
     setOpen(false);
   };
 
+  const handleCopyErrors = () => {
+    if (result && result.error_names.length > 0) {
+      navigator.clipboard.writeText(result.error_names.join('\n'));
+    }
+  };
+
   return (
-    <Container sx={{p: 2}}>
+    <Container>
       <Typography variant="h4" gutterBottom>
         발견완료 일괄 설정
       </Typography>
@@ -84,7 +90,12 @@ const CompletedSettings: React.FC = () => {
               <Typography>실패: {result.error_count}건</Typography>
               {result.error_count > 0 && (
                 <>
-                  <Typography variant="subtitle1" sx={{ mt: 2 }}>실패 목록:</Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+                    <Typography variant="subtitle1">실패 목록:</Typography>
+                    <IconButton onClick={handleCopyErrors} size="small">
+                      <ContentCopy />
+                    </IconButton>
+                  </Box>
                   <Box sx={{ maxHeight: 150, overflow: 'auto', border: '1px solid grey', p: 1, mt: 1 }}>
                     {result.error_names.map((name, index) => (
                       <Typography key={index}>{name}</Typography>
