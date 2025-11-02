@@ -27,7 +27,7 @@ jobs:
 
       - name: Build EXE with PyInstaller
         run: |
-          pyinstaller --onefile backend/src/run.py --name my_app
+          pyinstaller --onefile backend/run.py --name my_app
 
       - name: Copy additional files
         run: |
