@@ -56,7 +56,7 @@ const CompletedSettings: React.FC = () => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
-        발견완료 일괄 설정
+        발견완료 일괄 등록
       </Typography>
       <TextField
         multiline
