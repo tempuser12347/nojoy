@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Dict, List, Any
 import json
@@ -66,6 +67,11 @@ async def save_completed_data_periodically():
         await asyncio.sleep(3)
         if completed_data_dirty:
             save_completed_data()
+
+@router.get("/completed/export")
+async def export_completed_json():
+    save_completed_data() # Ensure the file is up-to-date
+    return FileResponse(COMPLETED_FILE, media_type='application/json', filename='completed.json')
 
 @router.post("/completed/check_names")
 async def check_names(namelist: NameList, db: Session = Depends(get_db)):

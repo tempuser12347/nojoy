@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography, Box, Modal, Alert, IconButton } from '@mui/material';
+import { Divider, TextField, Button, Container, Typography, Box, Modal, Alert, IconButton } from '@mui/material';
 import { ContentCopy } from '@mui/icons-material';
 import api from '../../api';
 
@@ -53,6 +53,14 @@ const CompletedSettings: React.FC = () => {
     }
   };
 
+  const handleExport = () => {
+    const link = document.createElement('a');
+    link.href = `/api/completed/export`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
@@ -69,6 +77,17 @@ const CompletedSettings: React.FC = () => {
       />
       <Button variant="contained" onClick={handleCheckNames} sx={{ mt: 2 }}>
         확인
+      </Button>
+
+      <Divider sx={{ mt: 4 }} />
+
+      <Box sx={{ my: 4 }} />
+
+      <Typography variant="h4" gutterBottom>
+        완료목록 파일 내보내기
+      </Typography>
+      <Button variant="contained" onClick={handleExport}>
+        다운로드
       </Button>
 
       <Modal open={open} onClose={handleClose}>
